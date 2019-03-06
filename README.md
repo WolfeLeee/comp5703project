@@ -1,16 +1,16 @@
-## CS9 - Kinder Food Finder
+# CS9 - Kinder Food Finder
 
-# Background
+## Background
 In Australia and around the world, public concern for animal welfare has grown, and people increasingly want to acquire animal-based products that have been produced more humanely. An Australian survey found that 71% of respondents agreed that farm animal welfare matters to them when purchasing animal-based products (Coleman, Hay, & Toukhsati, 2005). Also, the organic and free-range food markets are some of the fastest growing sectors in Australia. For example, free-range eggs have increased from 14.5% in 2005 to 39% in 2015 (AECL, 2015).
 
 But do our concerns lead us to adopt animal welfare-friendly behaviours in the supermarket? Often, they don’t, revealing a so-called attitude-behaviour gap between our attitudes towards animal welfare and our purchase decisions at the checkout. Thus, while shoppers are concerned about the welfare of the animals they eat, they can struggle to find welfare-friendly products that come from animals that have had optimal welfare. Contemporary consumers are often far removed from food production and, as a result, may have a poor understanding of animal welfare issues in animal production.
 
-# Definition of the Problem
+## Definition of the Problem
 Despite extensive research confirming that the public are increasingly concerned about animal welfare in food production, the attitude-behaviour gap (Carrington, Neville, & Whitwell, 2010)   means that concerned consumers are unable to make food choices that match their values. Some of the reasons for this gap persisting include inconvenience, lack of knowledge and information, distrust in claims such as “free-range”, and confusion around product labels and marketing claims (Bray, Johns, & Kilburn, 2011).
 
 These days, meat, dairy and egg products increasingly come with a barrage of labels, claims or certifications on products at the supermarket. What was historically an easy process that involved minimal decision-making, can now be a confusing experience requiring consumers to decipher, understand and recall a long string of labels, such as organic, grass-fed, cage-free, free-range, vegetarian-fed, humane or humanely raised. As consumers’ concern about animal welfare grows, such labels, claims or certifications are also expanding, and, despite their intended purpose, these devices often just increase confusion, distrust and resentment on the part of the consumer at the lack of transparency regarding the living conditions of farm animals. So, while many producers and retailers want to support best practice in the production and supply of animal-based foods, the challenges of labeling are rendering the intentions of consumers and suppliers virtually meaningless.
 
-# Project Aim
+## Project Aim
 To develop a user-friendly app that provides ratings of Avoid, Good, or Best based on the animal welfare conditions for egg, poultry and pork products. To inform users about which local stores such products can be found, with the functionality of users being able to input when they find certain products into the app.
 
 The Kinder Food Finder app will enable users to ‘search by product name’ to identify egg, poultry and pork products according to ratings of Avoid, Good, or Best based on the relevant animal welfare conditions. Also, the app will enable users to ‘find these products’ providing information about local stores in which such products can be found (using Google maps and the user’s current location). Users will also be able to upload information about where they found certain products (this will enable us to crowd-source data on product outlets).
