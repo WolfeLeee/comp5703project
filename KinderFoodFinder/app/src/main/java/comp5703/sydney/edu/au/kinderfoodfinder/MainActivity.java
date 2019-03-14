@@ -61,9 +61,9 @@ public class MainActivity extends AppCompatActivity
                 case R.id.navigation_report:
                     selectedFragment = reportFragment;
                     break;
-                case R.id.navigation_our_rating:
-                    selectedFragment = ourRatingFragment;
-                    break;
+//                case R.id.navigation_our_rating:
+//                    selectedFragment = ourRatingFragment;
+//                    break;
                 case R.id.navigation_more:
                     selectedFragment = moreFragment;
                     break;
