@@ -4,15 +4,23 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 
-public class SearchFragment extends Fragment
+import java.util.ArrayList;
+import java.util.List;
+
+public class SearchFragment extends Fragment implements GetProductsData.OnDataAvailable
 {
     // defined variables
-    SearchView searchView;
+    private static final String TAG = "SearchFragment";
+    private SearchView searchView;
+    private ProductsRecyclerViewAdapter mProductsRecyclerViewAdapter;
 
 
     @Nullable
@@ -25,8 +33,30 @@ public class SearchFragment extends Fragment
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onViewCreated: starts");
         super.onViewCreated(view, savedInstanceState);
         searchView = (SearchView) view.findViewById(R.id.searchProduct);
         searchView.setIconified(false);
+        RecyclerView recyclerView =(RecyclerView) view.findViewById(R.id.productRecyclerview);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        recyclerView.addOnItemTouchListener(new RecyclerItemClicklistener(getActivity(),recyclerView,getActivity()));
+
+        mProductsRecyclerViewAdapter = new ProductsRecyclerViewAdapter(new ArrayList<Products>(),getContext());
+        recyclerView.setAdapter(mProductsRecyclerViewAdapter);
+        Log.d(TAG, "onViewCreated: ends");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        GetProductsData getProductsData = new GetProductsData(this);
+        getProductsData.execute("something");
+    }
+
+    @Override
+    public void onDataAvailable(List<Products> data) {
+        Log.d(TAG, "onDataAvailable: starts");
+        mProductsRecyclerViewAdapter.loadNewData(data);
+        Log.d(TAG, "onDataAvailable: ends");
     }
 }
