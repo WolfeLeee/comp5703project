@@ -16,6 +16,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider
+            android:name="comp5703.sydney.edu.au.kinderfoodfinder.AppProvider"
+            android:authorities="comp5703.sydney.edu.au.kinderfoodfinder.provider"
+            android:exported ="false"
+            />
     </application>
 
 </manifest>
