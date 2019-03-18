@@ -12,7 +12,7 @@ import android.widget.SearchView;
 public class SearchFragment extends Fragment
 {
     // defined variables
-    SearchView searchView;
+    private SearchView searchView;
 
 
     @Nullable
@@ -20,13 +20,17 @@ public class SearchFragment extends Fragment
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
+
+        searchView = (SearchView) view.findViewById(R.id.searchProduct);
+        searchView.setIconified(false);
+
         return view;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        searchView = (SearchView) view.findViewById(R.id.searchProduct);
-        searchView.setIconified(false);
-    }
+//    @Override
+//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+//        super.onViewCreated(view, savedInstanceState);
+//        searchView = (SearchView) view.findViewById(R.id.searchProduct);
+//        searchView.setIconified(false);
+//    }
 }
