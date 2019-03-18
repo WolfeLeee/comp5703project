@@ -1,5 +1,9 @@
 package comp5703.sydney.edu.au.kinderfoodfinder;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -43,6 +47,34 @@ public class SearchFragment extends Fragment implements GetProductsData.OnDataAv
 
         mProductsRecyclerViewAdapter = new ProductsRecyclerViewAdapter(new ArrayList<Products>(),getContext());
         recyclerView.setAdapter(mProductsRecyclerViewAdapter);
+
+
+        String[] projection = {ProductsContract.Columns._ID,
+        ProductsContract.Columns.BRAND_NAME,
+        ProductsContract.Columns.BRAND_RATING,
+        ProductsContract.Columns.BRAND_SORTORDER};
+        ContentResolver contentResolver = getContext().getContentResolver();
+
+        ContentValues values = new ContentValues();
+        values.put(ProductsContract.Columns.BRAND_NAME,"Beef loin chop 200kg");
+        values.put(ProductsContract.Columns.BRAND_RATING,"Best");
+        values.put(ProductsContract.Columns.BRAND_SORTORDER,"1");
+        Uri uri = contentResolver.insert(ProductsContract.CONTENT_URI,values);
+
+        Cursor cursor = contentResolver.query(ProductsContract.CONTENT_URI,projection,null,null,ProductsContract.Columns.BRAND_SORTORDER);
+
+        if(cursor != null){
+            Log.d(TAG, "onViewCreated: number of rows: "+cursor.getCount());
+            while(cursor.moveToNext()){
+                for(int i = 0; i<cursor.getColumnCount();i++){
+                    Log.d(TAG, "onViewCreated: "+cursor.getColumnName(i)+": "+cursor.getString(i));
+                }
+                Log.d(TAG, "onViewCreated: =================================================");
+            }
+        }
+
+
+
         Log.d(TAG, "onViewCreated: ends");
     }
 
