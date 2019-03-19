@@ -12,14 +12,19 @@
         android:title="@string/title_search" />
 
     <item
+        android:id="@+id/navigation_browse"
+        android:icon="@drawable/ic_library_books_black_24dp"
+        android:title="@string/title_browse" />
+
+    <item
         android:id="@+id/navigation_locate"
         android:icon="@drawable/ic_location_on_black_24dp"
         android:title="@string/title_locate" />
 
-    <item
-        android:id="@+id/navigation_report"
-        android:icon="@drawable/ic_assignment_black_24dp"
-        android:title="@string/title_report" />
+    <!--<item-->
+        <!--android:id="@+id/navigation_report"-->
+        <!--android:icon="@drawable/ic_assignment_black_24dp"-->
+        <!--android:title="@string/title_report" />-->
 
     <!--<item-->
         <!--android:id="@+id/navigation_our_rating"-->

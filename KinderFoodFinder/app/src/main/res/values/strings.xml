@@ -2,6 +2,7 @@
     <string name="app_name">KinderFoodFinder</string>
     <string name="title_home">HOME</string>
     <string name="title_search">SEARCH</string>
+    <string name="title_browse">BROWSE</string>
     <string name="title_locate">LOCATE</string>
     <string name="title_report">REPORT</string>
     <string name="title_our_rating">OUR RATING</string>

@@ -13,6 +13,7 @@ public class MainActivity extends AppCompatActivity
     private Fragment selectedFragment;
     private Fragment homeFragment;
     private Fragment searchFragment;
+    private Fragment browseFragment;
     private Fragment locateFragment;
     private Fragment reportFragment;
     private Fragment ourRatingFragment;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity
 
         homeFragment = new HomeFragment();
         searchFragment = new SearchFragment();
+        browseFragment = new BrowseFragment();
         locateFragment = new LocateFragment();
         reportFragment = new ReportFragment();
         ourRatingFragment = new OurRatingFragment();
@@ -55,15 +57,18 @@ public class MainActivity extends AppCompatActivity
                 case R.id.navigation_search:
                     selectedFragment = searchFragment;
                     break;
+                case R.id.navigation_browse:
+                    selectedFragment = browseFragment;
+                    break;
                 case R.id.navigation_locate:
                     selectedFragment = locateFragment;
                     break;
                 case R.id.navigation_report:
                     selectedFragment = reportFragment;
                     break;
-//                case R.id.navigation_our_rating:
-//                    selectedFragment = ourRatingFragment;
-//                    break;
+                case R.id.navigation_our_rating:
+                    selectedFragment = ourRatingFragment;
+                    break;
                 case R.id.navigation_more:
                     selectedFragment = moreFragment;
                     break;
