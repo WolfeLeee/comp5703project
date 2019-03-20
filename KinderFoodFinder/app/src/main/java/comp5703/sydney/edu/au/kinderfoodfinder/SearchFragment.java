@@ -75,14 +75,6 @@ public class SearchFragment extends Fragment implements GetProductsData.OnDataAv
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
-    {
-        super.onViewCreated(view, savedInstanceState);
-        searchView = (SearchView) view.findViewById(R.id.searchProduct);
-        searchView.setIconified(false);
-    }
-
-    @Override
     public void onResume()
     {
         super.onResume();
