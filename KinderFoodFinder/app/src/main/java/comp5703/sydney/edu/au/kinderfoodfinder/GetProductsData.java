@@ -39,7 +39,6 @@ public class GetProductsData extends AsyncTask<String, Void, List<Products>> {
     @Override
     protected List<Products> doInBackground(String... strings) {
         Log.d(TAG, "doInBackground: starts");
-
         String[] projection = {ProductsContract.Columns._ID,
                 ProductsContract.Columns.BRAND_NAME,
                 ProductsContract.Columns.BRAND_RATING,
@@ -47,21 +46,20 @@ public class GetProductsData extends AsyncTask<String, Void, List<Products>> {
         ContentResolver contentResolver = mContext.getContentResolver();
         String selection = ProductsContract.Columns.BRAND_NAME+" LIKE '%"+strings[0]+"%' " ;
         Cursor cursor = contentResolver.query(ProductsContract.CONTENT_URI, projection, selection, null, ProductsContract.Columns.BRAND_SORTORDER);
-
         if (cursor != null) {
             Log.d(TAG, "doInBackground: number of rows: "+cursor.getCount());
 
             while (cursor.moveToNext()) {
-                String brandname =null;
+                String brandname = null;
                 String rating = null;
                 for (int i = 0; i < cursor.getColumnCount(); i++) {
-                    Log.d(TAG, "doInBackground: "+ cursor.getColumnName(i) + ": " + cursor.getString(i));
                     if(cursor.getColumnName(i).equalsIgnoreCase("Brand")){
                         brandname = cursor.getString(i);
                     }
                     else if (cursor.getColumnName(i).equalsIgnoreCase("Rating")){
                         rating = cursor.getString(i);
                     }
+                    Log.d(TAG, "doInBackground: "+ cursor.getColumnName(i)+": "+cursor.getString(i));
                 }
                 if(brandname != null & brandname.length() >0 && rating != null && brandname.length() >0){
                     Products products = new Products(brandname,rating);
@@ -70,10 +68,6 @@ public class GetProductsData extends AsyncTask<String, Void, List<Products>> {
                 Log.d(TAG, "doInBackground: ======================================================");
             }
         }
-//        Products product1 = new Products("Chicken","Good");
-//        Products product2 = new Products("Pork","Avoid");
-//        productsList.add(product1);
-//        productsList.add(product2);
         Log.d(TAG, "doInBackground: ends");
         return productsList;
     }

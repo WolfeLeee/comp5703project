@@ -55,14 +55,6 @@ public class SearchFragment extends Fragment implements GetProductsData.OnDataAv
                 return false;
             }
         });
-
-
-
-
-
-
-
-
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.productRecyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 //        recyclerView.addOnItemTouchListener(new RecyclerItemClicklistener(getActivity(),recyclerView,getActivity()));
