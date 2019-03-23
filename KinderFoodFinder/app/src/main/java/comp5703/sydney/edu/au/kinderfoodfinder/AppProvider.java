@@ -23,6 +23,9 @@ public class AppProvider extends ContentProvider {
 
     private static final int BRANDS = 100;
     private static final int BRANDS_ID = 101;
+    private static final int ACCREDITATION = 200;
+    private static final int ACCREDITATION_ID = 201;
+
 
     private static UriMatcher buildUriMatcher(){
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -30,6 +33,10 @@ public class AppProvider extends ContentProvider {
         matcher.addURI(CONTENT_AUTHORITY, ProductsContract.TABLE_NAME,BRANDS);
         //eg. content://comp5703.sydney.edu.au.kinderfoodfinder.provider/FoodProducts/#
         matcher.addURI(CONTENT_AUTHORITY,ProductsContract.TABLE_NAME+"/#",BRANDS_ID);
+        //eg. content://comp5703.sydney.edu.au.kinderfoodfinder.provider/FoodProducts/#
+        matcher.addURI(CONTENT_AUTHORITY,AccreditationContract.TABLE_NAME,ACCREDITATION);
+        //eg. content://comp5703.sydney.edu.au.kinderfoodfinder.provider/FoodProducts/#
+        matcher.addURI(CONTENT_AUTHORITY,AccreditationContract.TABLE_NAME+"/#",ACCREDITATION_ID);
         return matcher;
     }
 
@@ -56,6 +63,13 @@ public class AppProvider extends ContentProvider {
                 long productId = ProductsContract.getProductId(uri);
                 queryBuilder.appendWhere(ProductsContract.Columns._ID+" = "+productId); //if the Uri does have the id -> append the where id = productId
                 break;
+            case ACCREDITATION:
+                queryBuilder.setTables(AccreditationContract.TABLE_NAME);break;
+            case ACCREDITATION_ID:
+                queryBuilder.setTables(AccreditationContract.TABLE_NAME);
+                long accreditationIdId = AccreditationContract.getAccreditationId(uri);
+                queryBuilder.appendWhere(AccreditationContract.Columns._ID+" = "+accreditationIdId); //if the Uri does have the id -> append the where id = productId
+                break;
             default:
                 throw new IllegalArgumentException("Unknown URI: "+uri);
         }
@@ -72,6 +86,10 @@ public class AppProvider extends ContentProvider {
                 return ProductsContract.CONTENT_TYPE;
             case BRANDS_ID:
                 return ProductsContract.CONTENT_ITEM_TYPE;
+            case ACCREDITATION:
+                return AccreditationContract.CONTENT_TYPE;
+            case ACCREDITATION_ID:
+                return AccreditationContract.CONTENT_ITEM_TYPE;
             default:
                 throw new IllegalArgumentException("Unknown Uri: "+uri);
         }
@@ -92,6 +110,16 @@ public class AppProvider extends ContentProvider {
                 recordId = db.insert(ProductsContract.TABLE_NAME,null,values);
                 if(recordId >=0){
                     returnUri = ProductsContract.buildTaskUri(recordId);
+                }
+                else {
+                    throw new android.database.SQLException("Failed to insert into "+uri.toString());
+                }
+                break;
+            case ACCREDITATION:
+                db = mOpenHelper.getWritableDatabase();
+                recordId = db.insert(AccreditationContract.TABLE_NAME,null,values);
+                if(recordId >=0){
+                    returnUri = AccreditationContract.buildAccreditationUri(recordId);
                 }
                 else {
                     throw new android.database.SQLException("Failed to insert into "+uri.toString());
@@ -129,6 +157,19 @@ public class AppProvider extends ContentProvider {
                 }
                 count = db.delete(ProductsContract.TABLE_NAME,selectionCriteria,selectionArgs);
                 break;
+            case ACCREDITATION:
+                db = mOpenHelper.getWritableDatabase();
+                count = db.delete(AccreditationContract.TABLE_NAME,selection,selectionArgs);
+                break;
+            case ACCREDITATION_ID:
+                db = mOpenHelper.getWritableDatabase();
+                long accreditationId = AccreditationContract.getAccreditationId(uri);
+                selectionCriteria = AccreditationContract.Columns._ID + " = "+accreditationId;
+                if((selection !=null) && (selection.length() >0)){
+                    selectionCriteria += " AND (" + selection +")";
+                }
+                count = db.delete(AccreditationContract.TABLE_NAME,selectionCriteria,selectionArgs);
+                break;
             default:
                 throw new IllegalArgumentException("Unknown uri: "+uri);
         }
@@ -159,6 +200,19 @@ public class AppProvider extends ContentProvider {
                     selectionCriteria += " AND (" + selection +")";
                 }
                 count = db.update(ProductsContract.TABLE_NAME,values,selection,selectionArgs);
+                break;
+            case ACCREDITATION:
+                db = mOpenHelper.getWritableDatabase();
+                count = db.update(AccreditationContract.TABLE_NAME,values,selection,selectionArgs);
+                break;
+            case ACCREDITATION_ID:
+                db = mOpenHelper.getWritableDatabase();
+                long accreditationId = AccreditationContract.getAccreditationId(uri);
+                selectionCriteria = AccreditationContract.Columns._ID + " = "+accreditationId;
+                if((selection != null)&&(selection.length()>0)){
+                    selectionCriteria += " AND (" + selection +")";
+                }
+                count = db.update(AccreditationContract.TABLE_NAME,values,selection,selectionArgs);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown uri: "+uri);

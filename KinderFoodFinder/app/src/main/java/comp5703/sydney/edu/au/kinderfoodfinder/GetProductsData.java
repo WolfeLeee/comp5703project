@@ -41,7 +41,6 @@ public class GetProductsData extends AsyncTask<String, Void, List<Products>> {
         Log.d(TAG, "doInBackground: starts");
         String[] projection = {ProductsContract.Columns._ID,
                 ProductsContract.Columns.BRAND_NAME,
-                ProductsContract.Columns.BRAND_RATING,
                 ProductsContract.Columns.BRAND_SORTORDER};
         ContentResolver contentResolver = mContext.getContentResolver();
         String selection = ProductsContract.Columns.BRAND_NAME+" LIKE '%"+strings[0]+"%' " ;

@@ -6,10 +6,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.security.AccessControlContext;
+
 /**
  *
  * Basic local database class for the application
- * The only class the should use this is {@link AppProvider}
+ * The only class that should use this is {@link AppProvider}
  */
 
 public class AppDatabase extends SQLiteOpenHelper {
@@ -47,14 +49,22 @@ public class AppDatabase extends SQLiteOpenHelper {
         String sSQL; //Use a string variable to facilitate logging
 
         sSQL =
-//                "DROP TABLE "+ProductsContract.TABLE_NAME +";"+
+//                "DROP TABLE "+ProductsContract.TABLE_NAME +";" +
                 "CREATE TABLE " + ProductsContract.TABLE_NAME + "("
                 + ProductsContract.Columns._ID + " INTEGER PRIMARY KEY NOT NULL, "
-                + ProductsContract.Columns.BRAND_NAME + " TEXT NOT NULL, "
-                + ProductsContract.Columns.BRAND_RATING + " TEXT NOT NULL, "
+                + ProductsContract.Columns.BRAND_NAME + " TEXT UNIQUE NOT NULL, "
                 + ProductsContract.Columns.BRAND_SORTORDER + " INTEGER);";
         Log.d(TAG, sSQL);
         db.execSQL(sSQL);
+
+        sSQL = "CREATE TABLE " + AccreditationContract.TABLE_NAME + "("
+                + AccreditationContract.Columns._ID + " INTEGER PRIMARY KEY NOT NULL, "
+                + AccreditationContract.Columns.ACCREDITATION + " TEXT NOT NULL, "
+                + AccreditationContract.Columns.RATING + " TEXT NOT NULL, "
+                + AccreditationContract.Columns.BRAND + " TEXT NOT NULL, "
+                + "FOREIGN KEY ("+AccreditationContract.Columns.BRAND +") REFERENCES "+ProductsContract.TABLE_NAME+" ("+ProductsContract.Columns.BRAND_NAME +"));";
+        db.execSQL(sSQL);
+
     }
 
     @Override
