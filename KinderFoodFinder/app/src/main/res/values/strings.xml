@@ -7,4 +7,8 @@
     <string name="title_report">REPORT</string>
     <string name="title_our_rating">OUR RATING</string>
     <string name="title_more">MORE</string>
+    
+    <string name="radio_male">Male</string>
+    <string name="radio_female">Female</string>
+    <string name="radio_not_disclose">Not Disclose</string>
 </resources>

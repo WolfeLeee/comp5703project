@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp"
+    android:background="@color/lighterOrange">
+
+    <TextView
+        android:id="@+id/textBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back"
+        android:layout_gravity="right"
+        android:textSize="20dp"
+        android:textColor="@color/orange" />
+
+    <EditText
+        android:id="@+id/inputName"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="Name..."
+        android:layout_gravity="center" />
+
+    <RadioGroup
+        android:id="@+id/radioGender"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" >
+
+        <RadioButton
+            android:id="@+id/radioMale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/radio_male"
+            android:checked="true" />
+
+        <RadioButton
+            android:id="@+id/radioFemale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/radio_female" />
+
+        <RadioButton
+            android:id="@+id/radioNotClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/radio_not_disclose" />
+
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/inputEmail"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="Email..."
+        android:layout_gravity="center" />
+
+    <EditText
+        android:id="@+id/inputPwd"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="Password..."
+        android:layout_gravity="center" />
+
+    <EditText
+        android:id="@+id/inputPwdConfirm"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="Confirm Password..."
+        android:layout_gravity="center" />
+
+    <EditText
+        android:id="@+id/inputBirthday"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="Birthday..."
+        android:layout_gravity="center"
+        android:ems="10"
+        android:inputType="date" />
+
+    <!--<Button-->
+        <!--android:id="@+id/btnLogin"-->
+        <!--android:layout_width="300dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="15dp"-->
+        <!--android:background="@drawable/button_style"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:text="Login" />-->
+
+    <Button
+    android:id="@+id/btnRegister"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="15dp"
+    android:background="@drawable/button_style"
+    android:layout_gravity="center"
+    android:text="Register" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Or you can login with the way below"
+        android:layout_gravity="center"
+        android:textSize="15dp"
+        android:layout_marginTop="10dp"/>
+
+    <Button
+        android:id="@+id/btnFbLogin"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@drawable/button_style"
+        android:layout_gravity="center"
+        android:text="Facebook (change later)" />
+
+</LinearLayout>
