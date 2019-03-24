@@ -20,8 +20,10 @@
         android:id="@+id/inputName"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="Name..."
-        android:layout_gravity="center" />
+        android:hint="Name..."
+        android:layout_gravity="center"
+        android:maxLines="1"
+        android:inputType="text" />
 
     <RadioGroup
         android:id="@+id/radioGender"
@@ -51,31 +53,37 @@
     </RadioGroup>
 
     <EditText
-        android:id="@+id/inputEmail"
+        android:id="@+id/inputEmailR"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="Email..."
-        android:layout_gravity="center" />
+        android:hint="Email..."
+        android:layout_gravity="center"
+        android:maxLines="1"
+        android:inputType="text" />
 
     <EditText
-        android:id="@+id/inputPwd"
+        android:id="@+id/inputPwdR"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="Password..."
-        android:layout_gravity="center" />
+        android:hint="Password..."
+        android:layout_gravity="center"
+        android:maxLines="1"
+        android:inputType="text" />
 
     <EditText
         android:id="@+id/inputPwdConfirm"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="Confirm Password..."
-        android:layout_gravity="center" />
+        android:hint="Confirm Password..."
+        android:layout_gravity="center"
+        android:maxLines="1"
+        android:inputType="text" />
 
     <EditText
         android:id="@+id/inputBirthday"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="Birthday..."
+        android:hint="Birthday..."
         android:layout_gravity="center"
         android:ems="10"
         android:inputType="date" />

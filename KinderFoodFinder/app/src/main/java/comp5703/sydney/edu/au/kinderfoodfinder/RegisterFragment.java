@@ -32,16 +32,21 @@ public class RegisterFragment extends Fragment
 
         // set up
         fragmentLogin = new LoginFragment();
-        btnRegister = (Button) view.findViewById(R.id.btnLogin);
-        textBack = (TextView) view.findViewById(R.id.textRegister);
+
+        btnRegister = (Button) view.findViewById(R.id.btnRegister);
+        textBack = (TextView) view.findViewById(R.id.textBack);
+
         inputName = (EditText) view.findViewById(R.id.inputName);
-        inputEmail = (EditText) view.findViewById(R.id.inputEmail);
-        inputPwd = (EditText) view.findViewById(R.id.inputPwd);
+        inputEmail = (EditText) view.findViewById(R.id.inputEmailR);
+        inputPwd = (EditText) view.findViewById(R.id.inputPwdR);
         inputConfirmPwd = (EditText) view.findViewById(R.id.inputPwdConfirm);
         inputBirthday = (EditText) view.findViewById(R.id.inputBirthday);
 
+        radioGroup = (RadioGroup) view.findViewById(R.id.radioGender);
         int selectedId = radioGroup.getCheckedRadioButtonId();
         radioButton = (RadioButton) view.findViewById(selectedId);
+
+        // testing only
         Toast.makeText(getActivity(), radioButton.getText(), Toast.LENGTH_SHORT).show();
 
         // button on click listeners

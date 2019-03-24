@@ -18,8 +18,8 @@
 
     <ImageView
         android:id="@+id/logoImg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
         android:contentDescription="logo"
         android:layout_gravity="center"
         android:layout_marginTop="15dp"
@@ -30,15 +30,19 @@
         android:id="@+id/inputEmail"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="Email..."
-        android:layout_gravity="center"/>
+        android:hint="Email..."
+        android:layout_gravity="center"
+        android:maxLines="1"
+        android:inputType="text" />
 
     <EditText
         android:id="@+id/inputPwd"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="Password..."
-        android:layout_gravity="center" />
+        android:hint="Password..."
+        android:layout_gravity="center"
+        android:maxLines="1"
+        android:inputType="text" />
 
     <Button
         android:id="@+id/btnLogin"
@@ -75,6 +79,26 @@
         android:layout_gravity="center"
         android:text="Facebook (change later)" />
 
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="For developers:"
+        android:layout_gravity="center"
+        android:textSize="15dp"
+        android:layout_marginTop="10dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email: test"
+        android:layout_gravity="center"
+        android:textSize="15dp"
+        android:layout_marginTop="10dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Password: test"
+        android:layout_gravity="center"
+        android:textSize="15dp"
+        android:layout_marginTop="5dp"/>
 
 </LinearLayout>
