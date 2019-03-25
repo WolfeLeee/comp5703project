@@ -1,18 +1,25 @@
 package comp5703.sydney.edu.au.kinderfoodfinder;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class RegisterFragment extends Fragment
 {
@@ -21,8 +28,11 @@ public class RegisterFragment extends Fragment
     private Button btnRegister;
     private TextView textBack;
     private EditText inputName, inputEmail, inputPwd, inputConfirmPwd, inputBirthday;
+    private CheckBox checkAgreement;
     private RadioGroup radioGroup;
     private RadioButton radioButton;
+
+    private ProgressDialog registerProgressDialog;
 
     @Nullable
     @Override
@@ -42,6 +52,8 @@ public class RegisterFragment extends Fragment
         inputConfirmPwd = (EditText) view.findViewById(R.id.inputPwdConfirm);
         inputBirthday = (EditText) view.findViewById(R.id.inputBirthday);
 
+        checkAgreement = (CheckBox) view.findViewById(R.id.checkAgreement);
+
         radioGroup = (RadioGroup) view.findViewById(R.id.radioGender);
         int selectedId = radioGroup.getCheckedRadioButtonId();
         radioButton = (RadioButton) view.findViewById(selectedId);
@@ -55,7 +67,7 @@ public class RegisterFragment extends Fragment
             @Override
             public void onClick(View v)
             {
-
+                
 
 
             }
@@ -68,10 +80,56 @@ public class RegisterFragment extends Fragment
             public void onClick(View v)
             {
                 // go to register fragment
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentLogin).commit();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                        .replace(R.id.fragment_container, fragmentLogin).commit();
             }
         });
 
         return view;
+    }
+
+    /* * * * * * * * * * * *
+     * Register Functions  *
+     * * * * * * * * * * * */
+    private void registerUser(String name, String email, String pwd, String confirmPwd, Date birthday)
+    {
+        // check if the texts are empty
+        if(TextUtils.isEmpty(name))
+        {
+            Toast.makeText(getActivity(), "Please enter your name!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(TextUtils.isEmpty(email))
+        {
+            Toast.makeText(getActivity(), "Please enter your email!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(TextUtils.isEmpty(pwd))
+        {
+            Toast.makeText(getActivity(), "Please enter your password!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(TextUtils.isEmpty(confirmPwd))
+        {
+            Toast.makeText(getActivity(), "Please enter your password again!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        // check pwd equals to confirm pwd
+        if(!pwd.equals(confirmPwd))
+        {
+            Toast.makeText(getActivity(), "Confirmed password is not matched!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // if all validations above are passed, show the progress dialog
+        registerProgressDialog.setMessage("Registering...");
+        registerProgressDialog.show();
+
+        // create the user data
+        String timeStamp = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+
+        registerProgressDialog.dismiss();
+        Toast.makeText(getActivity(), "Registered Successfully!", Toast.LENGTH_SHORT).show();
     }
 }

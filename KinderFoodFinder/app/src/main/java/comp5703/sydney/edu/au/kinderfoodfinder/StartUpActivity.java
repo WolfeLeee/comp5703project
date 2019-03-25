@@ -24,6 +24,7 @@ public class StartUpActivity extends AppCompatActivity
         fragmentLogin = new LoginFragment();
 
         // directly make the view to login fragment first
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentLogin).commit();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragmentLogin).commit();
     }
 }

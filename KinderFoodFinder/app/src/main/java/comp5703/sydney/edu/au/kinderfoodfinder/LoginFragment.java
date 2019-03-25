@@ -59,7 +59,9 @@ public class LoginFragment extends Fragment
             public void onClick(View v)
             {
                 // go to register fragment
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentRegister).commit();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragment_container, fragmentRegister).commit();
             }
         });
 
