@@ -5,7 +5,9 @@ import android.app.SearchableInfo;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,15 +21,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchFragment extends Fragment implements GetProductsData.OnDataAvailable
+public class SearchFragment extends Fragment implements GetProductsData.OnDataAvailable, RecyclerItemClickListener.OnRecyclerClickListener
 {
     // defined variables
     private static final String TAG = "SearchFragment";
     private SearchView searchView;
     private ProductsRecyclerViewAdapter mProductsRecyclerViewAdapter;
+    static final String PRODUCT_DETAIL = "PRODUCT_DETAIL";
+    static final String IMAGE_DETAIL = "IMAGE_DETAIL";
 
     @Nullable
     @Override
@@ -57,7 +62,8 @@ public class SearchFragment extends Fragment implements GetProductsData.OnDataAv
         });
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.productRecyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        recyclerView.addOnItemTouchListener(new RecyclerItemClicklistener(getActivity(),recyclerView,getActivity()));
+
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(),recyclerView,this));
         mProductsRecyclerViewAdapter = new ProductsRecyclerViewAdapter(new ArrayList<Products>(), getContext());
         recyclerView.setAdapter(mProductsRecyclerViewAdapter);
 
@@ -80,4 +86,16 @@ public class SearchFragment extends Fragment implements GetProductsData.OnDataAv
         Log.d(TAG, "onDataAvailable: ends");
     }
 
+    @Override
+    public void onItemClick(View view, int position) {
+        Intent intent = new Intent(getContext(), ProductDetailActivity.class);
+        Products pseudoproduct = mProductsRecyclerViewAdapter.getProducts(position);
+        Products passingproducts = new Products(pseudoproduct.getCategory(),pseudoproduct.getBrand());
+        intent.putExtra(PRODUCT_DETAIL,passingproducts);
+        ByteArrayOutputStream bStream = new ByteArrayOutputStream();
+        pseudoproduct.getImage().compress(Bitmap.CompressFormat.PNG,0,bStream);
+        byte[] byteArray = bStream.toByteArray();
+        intent.putExtra(IMAGE_DETAIL,byteArray);
+        startActivity(intent);
+    }
 }

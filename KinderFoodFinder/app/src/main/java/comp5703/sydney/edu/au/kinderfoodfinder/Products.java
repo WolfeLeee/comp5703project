@@ -1,12 +1,14 @@
 package comp5703.sydney.edu.au.kinderfoodfinder;
 
 import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.io.Serializable;
 
 public class Products implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    static final long serialVersionUID = 20190326;
 
     private String brand;
 //    private String rating;
@@ -19,6 +21,13 @@ public class Products implements Serializable {
         this.category = category;
         this.image = image;
     }
+
+    public Products (String category, String brand){
+        this.brand = brand;
+        this.category = category;
+    }
+
+
 
     public String getBrand() {
         return brand;
