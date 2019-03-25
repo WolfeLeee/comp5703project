@@ -61,9 +61,6 @@ public class SearchFragment extends Fragment implements GetProductsData.OnDataAv
         mProductsRecyclerViewAdapter = new ProductsRecyclerViewAdapter(new ArrayList<Products>(), getContext());
         recyclerView.setAdapter(mProductsRecyclerViewAdapter);
 
-
-
-
         Log.d(TAG, "onViewCreated: ends");
         return view;
     }

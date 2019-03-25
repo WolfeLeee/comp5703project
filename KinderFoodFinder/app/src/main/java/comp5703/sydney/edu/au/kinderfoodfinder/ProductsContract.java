@@ -17,6 +17,8 @@ public class ProductsContract {
         public static final String BRAND_NAME = "Brand";
         public static final String BRAND_RATING = "Rating";
         public static final String BRAND_SORTORDER = "SortOrder";
+        public static final String BRAND_CATEGORY = "Category";
+        public static final String IMAGE = "image";
 
         private Columns(){
             //private constructor to prevent instantiation

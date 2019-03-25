@@ -52,7 +52,9 @@ public class AppDatabase extends SQLiteOpenHelper {
 //                "DROP TABLE "+ProductsContract.TABLE_NAME +";" +
                 "CREATE TABLE " + ProductsContract.TABLE_NAME + "("
                 + ProductsContract.Columns._ID + " INTEGER PRIMARY KEY NOT NULL, "
+                + ProductsContract.Columns.BRAND_CATEGORY + " INTEGER NOT NULL, "
                 + ProductsContract.Columns.BRAND_NAME + " TEXT UNIQUE NOT NULL, "
+                        + ProductsContract.Columns.IMAGE + " BLOB, "
                 + ProductsContract.Columns.BRAND_SORTORDER + " INTEGER);";
         Log.d(TAG, sSQL);
         db.execSQL(sSQL);
@@ -66,6 +68,8 @@ public class AppDatabase extends SQLiteOpenHelper {
         db.execSQL(sSQL);
 
     }
+
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

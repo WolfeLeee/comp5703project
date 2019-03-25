@@ -1,12 +1,14 @@
 package comp5703.sydney.edu.au.kinderfoodfinder;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -35,9 +37,9 @@ public class ProductsRecyclerViewAdapter extends RecyclerView.Adapter<ProductsRe
         if(productsList != null && (productsList.size() != 0)){
             Products products = productsList.get(position);
             Log.d(TAG, "onBindViewHolder: "+products.getBrand()+" -----> "+position);
-            productsViewHolder.brand.setText(products.getBrand());
-            productsViewHolder.rating.setText(products.getRating());
-
+            productsViewHolder.Brand_Category.setText(products.getCategory());
+            productsViewHolder.Brand_Title.setText(products.getBrand());
+            productsViewHolder.Brand_Image.setImageBitmap(products.getImage());
         }
     }
 
@@ -57,13 +59,15 @@ public class ProductsRecyclerViewAdapter extends RecyclerView.Adapter<ProductsRe
 
     static class ProductsViewHolder extends RecyclerView.ViewHolder{
         private static final String TAG = "ProductsViewHolder";
-        TextView brand = null;
-        TextView rating = null;
+        TextView Brand_Category = null;
+        TextView Brand_Title = null;
+        ImageView Brand_Image = null;
 
         public ProductsViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.brand = (TextView) itemView.findViewById(R.id.brand);
-            this.rating = (TextView) itemView.findViewById(R.id.rating);
+            this.Brand_Category = (TextView) itemView.findViewById(R.id.Brand_Category);
+            this.Brand_Title = (TextView) itemView.findViewById(R.id.Brand_Title);
+            this.Brand_Image = (ImageView) itemView.findViewById(R.id.Brand_Image);
         }
     }
 }

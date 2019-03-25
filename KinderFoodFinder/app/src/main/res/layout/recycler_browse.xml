@@ -5,27 +5,61 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/brand"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/Brand_Image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
+        android:contentDescription="@string/Brand_Image"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="TextView" />
+        app:srcCompat="@android:drawable/ic_menu_report_image" />
 
     <TextView
-        android:id="@+id/rating"
+        android:id="@+id/Brand_Category"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/brand"
+        android:layout_marginRight="8dp"
+        android:textColor="@android:color/tertiary_text_light"
+        android:textSize="14sp"
+        android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/brand"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/Brand_Image"
+        app:layout_constraintTop_toTopOf="@+id/Brand_Image"
+        tools:text="TextView" />
+
+    <TextView
+        android:id="@+id/Brand_Title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/Brand_Category"
+        app:layout_constraintStart_toStartOf="@+id/Brand_Category"
+        app:layout_constraintTop_toBottomOf="@+id/Brand_Category"
+        tools:text="TextView" />
+
+    <TextView
+        android:id="@+id/Brand_Rating"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:textColor="@android:color/holo_red_light"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/Brand_Image"
+        app:layout_constraintEnd_toEndOf="@+id/Brand_Title"
+        app:layout_constraintStart_toStartOf="@+id/Brand_Title"
+        app:layout_constraintTop_toBottomOf="@+id/Brand_Title"
         tools:text="TextView" />
 </android.support.constraint.ConstraintLayout>
