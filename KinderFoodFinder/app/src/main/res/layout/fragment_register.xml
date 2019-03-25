@@ -11,10 +11,11 @@
         android:id="@+id/textBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Back"
+        android:text="BACK"
         android:layout_gravity="right"
         android:textSize="20dp"
-        android:textColor="@color/orange" />
+        android:textColor="@color/orange"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/inputName"
@@ -88,14 +89,12 @@
         android:ems="10"
         android:inputType="date" />
 
-    <!--<Button-->
-        <!--android:id="@+id/btnLogin"-->
-        <!--android:layout_width="300dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_margin="15dp"-->
-        <!--android:background="@drawable/button_style"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:text="Login" />-->
+    <CheckBox android:id="@+id/checkAgreement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="I have agreed that my info will be collected\nby the app for statistics."
+        android:layout_marginBottom="10dp"/>
 
     <Button
     android:id="@+id/btnRegister"
