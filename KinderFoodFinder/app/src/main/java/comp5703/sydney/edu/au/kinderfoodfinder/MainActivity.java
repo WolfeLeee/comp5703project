@@ -1,7 +1,9 @@
 package comp5703.sydney.edu.au.kinderfoodfinder;
 
+import android.Manifest;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,6 +26,10 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ActivityCompat.requestPermissions(MainActivity.this,
+                new String[]{Manifest.permission.INTERNET},
+                1);
 
         // set up
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);

@@ -11,4 +11,5 @@
     <string name="radio_male">Male</string>
     <string name="radio_female">Female</string>
     <string name="radio_not_disclose">Not Disclose</string>
+    <string name="Brand_Image">Image of a Brand</string>
 </resources>
