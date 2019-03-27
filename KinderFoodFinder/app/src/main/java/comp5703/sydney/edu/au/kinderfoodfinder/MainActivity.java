@@ -7,7 +7,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -17,30 +20,35 @@ public class MainActivity extends AppCompatActivity
     private Fragment searchFragment;
     private Fragment browseFragment;
     private Fragment locateFragment;
-    private Fragment reportFragment;
-    private Fragment ourRatingFragment;
     private Fragment moreFragment;
+
+    private Toolbar toolbar;
+    private BottomNavigationView navigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         ActivityCompat.requestPermissions(MainActivity.this,
                 new String[]{Manifest.permission.INTERNET},
                 1);
 
+        // set up tool bar
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        toolbar.setVisibility(View.GONE);
+
         // set up
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         homeFragment = new HomeFragment();
         searchFragment = new SearchFragment();
         browseFragment = new BrowseFragment();
         locateFragment = new LocateFragment();
-        reportFragment = new ReportFragment();
-        ourRatingFragment = new OurRatingFragment();
         moreFragment = new MoreFragment();
         selectedFragment = homeFragment;
 
@@ -69,12 +77,6 @@ public class MainActivity extends AppCompatActivity
                 case R.id.navigation_locate:
                     selectedFragment = locateFragment;
                     break;
-//                case R.id.navigation_report:
-//                    selectedFragment = reportFragment;
-//                    break;
-//                case R.id.navigation_our_rating:
-//                    selectedFragment = ourRatingFragment;
-//                    break;
                 case R.id.navigation_more:
                     selectedFragment = moreFragment;
                     break;

@@ -11,8 +11,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
+//import com.squareup.picasso.Picasso;
+//import com.squareup.picasso.Target;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

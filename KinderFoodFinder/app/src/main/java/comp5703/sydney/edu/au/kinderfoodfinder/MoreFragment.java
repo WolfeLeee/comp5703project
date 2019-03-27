@@ -1,5 +1,6 @@
 package comp5703.sydney.edu.au.kinderfoodfinder;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -7,11 +8,22 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 public class MoreFragment extends Fragment
 {
     // defined variables
-
+    private TextView rating;
+    private TextView account;
+    private TextView report;
+    private TextView aboutus;
+    private TextView faqs;
+    private TextView share;
+    private TextView signout;
+    private Fragment fragmentOurRating;
+    private Fragment fragmentLogin;
+    private Fragment fragmentaboutus;
+    private Fragment fragmentfaqs;
 
     @Nullable
     @Override
@@ -19,7 +31,63 @@ public class MoreFragment extends Fragment
     {
         View view = inflater.inflate(R.layout.fragment_more, container, false);
 
+        fragmentOurRating = new OurRatingFragment();
+        fragmentLogin = new LoginFragment();
+        fragmentaboutus = new AboutUsFragment();
+        fragmentfaqs = new FAQsFragment();
 
+        rating = view.findViewById(R.id.tv_rating);
+        report = view.findViewById(R.id.tv_report);
+        signout = view.findViewById(R.id.tv_signout);
+        aboutus = view.findViewById(R.id.tv_aboutus);
+        faqs = view.findViewById(R.id.tv_faqs);
+        share = view.findViewById(R.id.tv_share);
+        account = view.findViewById(R.id.tv_Account);
+
+        rating.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragment_container, fragmentOurRating).commit();
+            }
+        });
+        aboutus.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragment_container, fragmentaboutus).commit();
+            }
+        });
+
+        faqs.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragment_container, fragmentfaqs).commit();
+            }
+        });
+
+        signout.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                // login and register fragment are not in the same activity so need to go to start up activity
+                Intent intent = new Intent(getActivity(), StartUpActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+            }
+        });
 
         return view;
     }

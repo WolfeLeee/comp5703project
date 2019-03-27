@@ -16,6 +16,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,13 +27,15 @@ public class RegisterFragment extends Fragment
     // defined variables
     private Fragment fragmentLogin;
     private Button btnRegister;
-    private TextView textBack;
+//    private TextView textBack;
     private EditText inputName, inputEmail, inputPwd, inputConfirmPwd, inputBirthday;
     private CheckBox checkAgreement;
     private RadioGroup radioGroup;
     private RadioButton radioButton;
 
     private ProgressDialog registerProgressDialog;
+
+    private Toolbar toolbar;
 
     @Nullable
     @Override
@@ -44,7 +47,7 @@ public class RegisterFragment extends Fragment
         fragmentLogin = new LoginFragment();
 
         btnRegister = (Button) view.findViewById(R.id.btnRegister);
-        textBack = (TextView) view.findViewById(R.id.textBack);
+//        textBack = (TextView) view.findViewById(R.id.textBack);
 
         inputName = (EditText) view.findViewById(R.id.inputName);
         inputEmail = (EditText) view.findViewById(R.id.inputEmailR);
@@ -58,8 +61,11 @@ public class RegisterFragment extends Fragment
         int selectedId = radioGroup.getCheckedRadioButtonId();
         radioButton = (RadioButton) view.findViewById(selectedId);
 
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar.setVisibility(View.VISIBLE);
+
         // testing only
-        Toast.makeText(getActivity(), radioButton.getText(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), radioButton.getText(), Toast.LENGTH_SHORT).show();
 
         // button on click listeners
         btnRegister.setOnClickListener(new View.OnClickListener()
@@ -73,16 +79,19 @@ public class RegisterFragment extends Fragment
             }
         });
 
-        // text view on click listener
-        textBack.setOnClickListener(new View.OnClickListener()
+        // tool bar listener
+        toolbar.setNavigationOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                // go to register fragment
+                // go to login fragment
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
                         .replace(R.id.fragment_container, fragmentLogin).commit();
+
+                // remove toolbar again
+                toolbar.setVisibility(View.GONE);
             }
         });
 

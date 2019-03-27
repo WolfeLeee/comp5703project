@@ -11,5 +11,67 @@
     <string name="radio_male">Male</string>
     <string name="radio_female">Female</string>
     <string name="radio_not_disclose">Not Disclose</string>
+
     <string name="Brand_Image">Image of a Brand</string>
+
+    <string name="layinghens">Laying Hens</string>
+    <string name="hens_best">
+        ✔No battery cage
+        ✔5-7 birds/m2 indoors
+        ✔Outdoor access with adequate shade / shelter, 1,000-2,500birds/ha density
+        ✔Nest boxes to lay eggs
+        ✔Perches for roosting
+        ✔ High standard of litter for scratching, foraging / dust bathing
+        ✔No beak-trimming (exceptions allowed by certain accreditations)
+        ✔Regular on-farm assessments and enforcement
+    </string>
+
+    <string name="aim">Our Aim</string>
+    <string name="aim_content">
+        \u0020\u0020Many Australians are concerned about the welfare of the animals we eat, but we can struggle to find welfare-friendly products that come from animals that have had optimal welfare.\n
+        \n\u0020\u0020That’s because animal-based products come with a barrage of labels, claims or certifications, such as organic, cage-free, free-range, vegetarian-fed, humane or humanely raised.\n
+        \n\u0020\u0020In Australia, legislation does not require producers to adequately disclose information about farm production methods. So, while many producers and retailers want to support best practice in the production and supply of animal-based foods, the challenges of labelling are rendering the intentions of consumers and suppliers meaningless.\n
+        \n\u0020\u0020Kinder Food Finder will help you decipher these accreditations by providing ratings of Avoid, Good, or Best that tell you all you need to know regarding the animal welfare conditions behind them. We reduce the confusion and give you the power to make kinder choices.
+    </string>
+    <string name="who">Who We Are</string>
+    <string name="who_content"> \u0020\u0020Kinder Food Finder was created by students at the University of Sydney.</string>
+
+    <string name="q1">Who decided on the ratings?</string>
+    <string name="a1"> \u0020\u0020Our ratings are based on animal welfare criteria that were created by students and staff at the University of Sydney.</string>
+
+    <string name="q2">What do our ratings means?</string>
+    <string name="a2"> \u0020\u0020<u>See Our Ratings</u></string>
+
+    <string name="q3">Where do we get our information?</string>
+    <string name="a3">
+        \u0020\u0020Our ratings are based on the information provided by independent, third party accreditations, such as RSPCA Approved Farming Scheme, Humane Choice, and Australian Certified Organic, to name a few.\n
+        \n\u0020\u0020Third-party accreditations are the most transparent animal welfare labels on the market. When a product is not covered by an independent accreditation, we cannot verify the animal welfare conditions behind the product.
+    </string>
+
+    <string name="q4">Why should you use Kinder Food Finder?</string>
+    <string name="a4">
+        \u0020\u0020We know people care about the animal welfare conditions of the food they eat and they want to find animal-based products that have been produced more humanely. However, sometimes it’s too hard for people to make good food choices. Animal-based products come with so many confusing labels, claims or certifications on products at the supermarket, and there simply isn’t time for most of us to do in-depth research on every item of food we buy.\n
+        \n\u0020\u0020We decipher these accreditations for you by providing ratings of Avoid, Good, or Best, that tell you all you need to know regarding the animal welfare conditions behind them.
+    </string>
+
+    <string name="q5">Why did you give a rating of Good to an accreditation that allows beak trimming?</string>
+    <string name="a5"> \u0020\u0020Beak-trimming is the partial removal of a layer hen\'s beak and it is done to avoid injuries from hens pecking each other, sometimes to death. Unfortunately, feather pecking can occur in any layer hen housing system, especially non-cage systems. Therefore, when there is the risk of feather pecking and potential death to many hens, we believe beak-trimming is necessary to prevent or control it.</string>
+
+    <string name="q6">Why did you give a rating of Good to an accreditation that doesn’t allow outdoor access?</string>
+    <string name="a6"> \u0020\u0020We believe an enhanced, well-managed indoor system can achieve good welfare for farmed animals. </string>
+
+    <string name="q7">In which countries is Kinder Food Finder available?</string>
+    <string name="a7"> \u0020\u0020Currently, it is available only in Australia. We’d love to expand globally in the future. </string>
+
+    <string name="q8">Will we rate other animal-based products?</string>
+    <string name="a8">
+         \u0020\u0020The welfare issues we address are non-exhaustive and limited to the most widespread and prevalent issues that pose the greatest threat to the welfare of production animals.\n
+         \n\u0020\u0020Currently, we cover only the production of eggs, chicken and pig products. The decision to focus on these products was made because of the seriousness and prevalence of welfare issues facing laying hens, broilers (meat chickens) and pigs. We plan to expand to include other animal production systems in later versions.
+    </string>
+    <string name="q9">Have a question for us?</string>
+    <string name="a9"> \u0020\u0020Get in touch by emailing us as @</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

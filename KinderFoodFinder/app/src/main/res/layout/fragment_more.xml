@@ -3,18 +3,144 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:padding="5dp">
+    android:padding="3dp">
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp"
         android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:background="@color/lighterOrange"
+        android:padding="15dp" >
 
+        <ImageView
+            android:id="@+id/logoImg"
+            android:layout_width="300dp"
+            android:layout_height="200dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/logo"
+            android:layout_marginTop="20dp"/>
 
+        <TextView
+            android:id="@+id/tv_UserInfo"
+            android:layout_width="match_parent"
+            android:layout_marginTop="60dp"
+            android:layout_height="30dp"
+            android:layout_margin="3dp"
+            android:textSize="18sp"
+            android:gravity="center_vertical"
+            android:text="User Profile"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_Account"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:paddingLeft="15dp"
+            android:textSize="20sp"
+            android:background="@color/lightOrange"
+            android:gravity="center_vertical"
+            android:text="My Account"/>
+
+        <TextView
+            android:id="@+id/tv_otherfunctions"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_margin="3dp"
+            android:textSize="18sp"
+            android:gravity="center_vertical"
+            android:text="Other Functions"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_report"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="3dp"
+            android:layout_marginTop="20dp"
+            android:paddingLeft="15dp"
+            android:textSize="20sp"
+            android:background="@color/lightOrange"
+            android:gravity="center_vertical"
+            android:text="Report"/>
+
+        <TextView
+            android:id="@+id/tv_rating"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="3dp"
+            android:paddingLeft="15dp"
+            android:textSize="20sp"
+            android:background="@color/lightOrange"
+            android:gravity="center_vertical"
+            android:text="Our Rating"/>
+
+        <TextView
+            android:id="@+id/tv_more"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_margin="3dp"
+            android:textSize="18sp"
+            android:layout_gravity="center_vertical"
+            android:text="More"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_aboutus"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="3dp"
+            android:paddingLeft="15dp"
+            android:textSize="20sp"
+            android:background="@color/lightOrange"
+            android:gravity="center_vertical"
+            android:text="About Us"/>
+
+        <TextView
+            android:id="@+id/tv_faqs"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="3dp"
+            android:paddingLeft="15dp"
+            android:textSize="20sp"
+            android:background="@color/lightOrange"
+            android:gravity="center_vertical"
+            android:text="FAQS"/>
+
+        <TextView
+            android:id="@+id/tv_glossary"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="3dp"
+            android:paddingLeft="15dp"
+            android:textSize="20sp"
+            android:background="@color/lightOrange"
+            android:gravity="center_vertical"
+            android:text="Glossary of Term"/>
+
+        <TextView
+            android:id="@+id/tv_share"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:paddingLeft="15dp"
+            android:layout_margin="3dp"
+            android:textSize="20sp"
+            android:background="@color/lightOrange"
+            android:gravity="center_vertical"
+            android:text="Share"/>
+
+        <TextView
+            android:id="@+id/tv_signout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:paddingLeft="15dp"
+            android:layout_margin="3dp"
+            android:textSize="20sp"
+            android:background="@color/lightOrange"
+            android:gravity="center_vertical"
+            android:text="Sign Out"/>
 
     </LinearLayout>
 
