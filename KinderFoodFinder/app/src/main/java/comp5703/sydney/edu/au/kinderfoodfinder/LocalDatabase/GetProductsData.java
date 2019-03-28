@@ -1,22 +1,16 @@
-package comp5703.sydney.edu.au.kinderfoodfinder;
+package comp5703.sydney.edu.au.kinderfoodfinder.LocalDatabase;
 
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
 //import com.squareup.picasso.Picasso;
 //import com.squareup.picasso.Target;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,7 +1,6 @@
-package comp5703.sydney.edu.au.kinderfoodfinder;
+package comp5703.sydney.edu.au.kinderfoodfinder.LocalDatabase;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
+
+import comp5703.sydney.edu.au.kinderfoodfinder.R;
 
 public class ProductsRecyclerViewAdapter extends RecyclerView.Adapter<ProductsRecyclerViewAdapter.ProductsViewHolder> {
 

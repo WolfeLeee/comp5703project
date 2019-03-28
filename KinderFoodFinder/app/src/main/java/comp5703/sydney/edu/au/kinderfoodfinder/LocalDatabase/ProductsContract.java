@@ -1,11 +1,11 @@
-package comp5703.sydney.edu.au.kinderfoodfinder;
+package comp5703.sydney.edu.au.kinderfoodfinder.LocalDatabase;
 
 import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import static comp5703.sydney.edu.au.kinderfoodfinder.AppProvider.CONTENT_AUTHORITY;
-import static comp5703.sydney.edu.au.kinderfoodfinder.AppProvider.CONTENT_AUTHORITY_URI;
+import static comp5703.sydney.edu.au.kinderfoodfinder.LocalDatabase.AppProvider.CONTENT_AUTHORITY;
+import static comp5703.sydney.edu.au.kinderfoodfinder.LocalDatabase.AppProvider.CONTENT_AUTHORITY_URI;
 
 public class ProductsContract {
 

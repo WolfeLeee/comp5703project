@@ -1,19 +1,15 @@
-package comp5703.sydney.edu.au.kinderfoodfinder;
+package comp5703.sydney.edu.au.kinderfoodfinder.LocalDatabase;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import comp5703.sydney.edu.au.kinderfoodfinder.R;
 
 import static comp5703.sydney.edu.au.kinderfoodfinder.SearchFragment.IMAGE_DETAIL;
 import static comp5703.sydney.edu.au.kinderfoodfinder.SearchFragment.PRODUCT_DETAIL;

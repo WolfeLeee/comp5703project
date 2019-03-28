@@ -22,10 +22,10 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" />
-        <activity android:name=".ProductDetailActivity"
+        <activity android:name=".LocalDatabase.ProductDetailActivity"
             android:label = "KinderFoodFinder"/>
         <provider
-            android:name="comp5703.sydney.edu.au.kinderfoodfinder.AppProvider"
+            android:name="comp5703.sydney.edu.au.kinderfoodfinder.LocalDatabase.AppProvider"
             android:authorities="comp5703.sydney.edu.au.kinderfoodfinder.provider"
             android:exported ="false"
             />

@@ -1,4 +1,4 @@
-package comp5703.sydney.edu.au.kinderfoodfinder;
+package comp5703.sydney.edu.au.kinderfoodfinder.LocalDatabase;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
