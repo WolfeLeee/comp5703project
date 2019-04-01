@@ -1,6 +1,9 @@
 package comp5703.sydney.edu.au.kinderfoodfinder;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,13 +14,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -26,11 +32,12 @@ public class RegisterFragment extends Fragment
     // defined variables
     private Fragment fragmentLogin;
     private Button btnRegister;
-//    private TextView textBack;
     private EditText inputName, inputEmail, inputPwd, inputConfirmPwd, inputBirthday;
-    private CheckBox checkAgreement;
+    private CheckBox checkAgreement, checkIfDiscloseDOB;
     private RadioGroup radioGroup;
     private RadioButton radioButton;
+    private ImageView datePicker;
+    private DatePickerDialog.OnDateSetListener mDateSetListener;
 
     private ProgressDialog registerProgressDialog;
 
@@ -45,26 +52,58 @@ public class RegisterFragment extends Fragment
         // set up
         fragmentLogin = new LoginFragment();
 
-        btnRegister = (Button) view.findViewById(R.id.btnRegister);
-//        textBack = (TextView) view.findViewById(R.id.textBack);
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar.setVisibility(View.VISIBLE);
 
         inputName = (EditText) view.findViewById(R.id.inputName);
-        inputEmail = (EditText) view.findViewById(R.id.inputEmailR);
-        inputPwd = (EditText) view.findViewById(R.id.inputPwdR);
-        inputConfirmPwd = (EditText) view.findViewById(R.id.inputPwdConfirm);
-        inputBirthday = (EditText) view.findViewById(R.id.inputBirthday);
-
-        checkAgreement = (CheckBox) view.findViewById(R.id.checkAgreement);
 
         radioGroup = (RadioGroup) view.findViewById(R.id.radioGender);
         int selectedId = radioGroup.getCheckedRadioButtonId();
         radioButton = (RadioButton) view.findViewById(selectedId);
 
-        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setVisibility(View.VISIBLE);
+        inputEmail = (EditText) view.findViewById(R.id.inputEmailR);
+        inputPwd = (EditText) view.findViewById(R.id.inputPwdR);
+        inputConfirmPwd = (EditText) view.findViewById(R.id.inputPwdConfirm);
+        inputBirthday = (EditText) view.findViewById(R.id.inputBirthday);
+        datePicker = (ImageView) view.findViewById(R.id.datePicker);
+        
+        checkIfDiscloseDOB = (CheckBox) view.findViewById(R.id.checkIfDiscloseDOB);
+        checkAgreement = (CheckBox) view.findViewById(R.id.checkAgreement);
+
+        btnRegister = (Button) view.findViewById(R.id.btnRegister);
 
         // testing only
 //        Toast.makeText(getActivity(), radioButton.getText(), Toast.LENGTH_SHORT).show();
+
+        // image view of date picker click listener
+        datePicker.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dialog = new DatePickerDialog(getActivity(),
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        mDateSetListener,
+                        year, month, day);
+
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
+        mDateSetListener = new DatePickerDialog.OnDateSetListener()
+        {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth)
+            {
+                String date = dayOfMonth + "/" + month + "/" + year;
+                inputBirthday.setText(date);
+            }
+        };
 
         // button on click listeners
         btnRegister.setOnClickListener(new View.OnClickListener()
