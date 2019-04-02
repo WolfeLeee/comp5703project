@@ -25,10 +25,12 @@
 
     <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/touchInterceptor"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_above="@id/navigation"
-        android:layout_below="@+id/toolbar" >
+        android:layout_below="@+id/toolbar"
+        android:background="@color/lighterOrange">
 
         <FrameLayout
             android:id="@+id/fragment_container"

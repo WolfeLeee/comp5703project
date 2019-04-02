@@ -66,7 +66,7 @@ public class RegisterFragment extends Fragment
         inputConfirmPwd = (EditText) view.findViewById(R.id.inputPwdConfirm);
         inputBirthday = (EditText) view.findViewById(R.id.inputBirthday);
         datePicker = (ImageView) view.findViewById(R.id.datePicker);
-        
+
         checkIfDiscloseDOB = (CheckBox) view.findViewById(R.id.checkIfDiscloseDOB);
         checkAgreement = (CheckBox) view.findViewById(R.id.checkAgreement);
 

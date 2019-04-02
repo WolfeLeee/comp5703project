@@ -21,16 +21,6 @@
         android:icon="@drawable/ic_location_on_black_24dp"
         android:title="@string/title_locate" />
 
-    <!--<item-->
-        <!--android:id="@+id/navigation_report"-->
-        <!--android:icon="@drawable/ic_assignment_black_24dp"-->
-        <!--android:title="@string/title_report" />-->
-
-    <!--<item-->
-        <!--android:id="@+id/navigation_our_rating"-->
-        <!--android:icon="@drawable/ic_library_music_black_24dp"-->
-        <!--android:title="@string/title_our_rating" />-->
-
     <item
         android:id="@+id/navigation_more"
         android:icon="@drawable/ic_more_horiz_black_24dp"

@@ -14,7 +14,9 @@ import android.view.WindowManager;
 
 public class MainActivity extends AppCompatActivity
 {
-    // defined variables
+    /* * * * * * * * * * *
+     * Defined Variables *
+     * * * * * * * * * * */
     private Fragment selectedFragment;
     private Fragment homeFragment;
     private Fragment searchFragment;
@@ -25,6 +27,9 @@ public class MainActivity extends AppCompatActivity
     private Toolbar toolbar;
     private BottomNavigationView navigation;
 
+    /* * * * * * * * * * *
+     * On Created Method *
+     * * * * * * * * * * */
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -57,6 +62,9 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    /* * * * * *
+     * Methods *
+     * * * * * */
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener()
     {

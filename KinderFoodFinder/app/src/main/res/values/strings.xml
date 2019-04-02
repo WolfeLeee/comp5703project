@@ -8,6 +8,10 @@
     <string name="title_report">REPORT</string>
     <string name="title_our_rating">OUR RATING</string>
     <string name="title_more">MORE</string>
+
+    <string name="category_egg">EGG</string>
+    <string name="category_chicken">CHICKEN</string>
+    <string name="category_pig">PIG</string>
     
     <string name="radio_male">Male</string>
     <string name="radio_female">Female</string>

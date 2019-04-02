@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/egg_icon"
+        android:title="@string/category_egg" />
+
+    <item
+        android:id="@+id/navigation_search"
+        android:icon="@drawable/chicken_icon"
+        android:title="@string/category_chicken" />
+
+    <item
+        android:id="@+id/navigation_browse"
+        android:icon="@drawable/pig_icon"
+        android:title="@string/category_pig" />
+
+</menu>
