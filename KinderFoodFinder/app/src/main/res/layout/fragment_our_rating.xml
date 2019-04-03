@@ -1,21 +1,96 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:padding="5dp">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="10dp"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="0.1dp"
+        android:background="@color/green">
 
 
+        <RelativeLayout
+            android:id="@+id/rating_best"
+            android:layout_width="85dp"
+            android:layout_height="38dp"
+            android:layout_marginLeft="45dp"
+            android:background="@drawable/button_rating">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="85dp"
+                android:layout_height="38dp"
+                android:gravity="center"
+                android:text="BEST"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                android:textSize="18sp" />
 
-</ScrollView>
+            <TextView
+                android:id="@+id/rating_tip_best"
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:layout_alignParentBottom="true"
+                android:background="#ffffff" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rating_good"
+            android:layout_width="85dp"
+            android:layout_height="38dp"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="45dp"
+            android:background="@drawable/button_rating">
+
+            <TextView
+                android:layout_width="85dp"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:text="GOOD"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                android:textSize="18sp" />
+            <TextView
+                android:id="@+id/rating_tip_good"
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:layout_alignParentBottom="true"
+                android:background="#ffffff" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rating_avoid"
+            android:layout_width="85dp"
+            android:layout_height="38dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="45dp"
+            android:layout_marginRight="45dp"
+            android:background="@drawable/button_rating">
+
+            <TextView
+                android:layout_width="85dp"
+                android:layout_height="38dp"
+                android:gravity="center"
+                android:text="AVOID"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/rating_tip_avoid"
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:layout_alignParentBottom="true"
+                android:background="#ffffff" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/fl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+</LinearLayout>

@@ -20,10 +20,13 @@ public class MoreFragment extends Fragment
     private TextView faqs;
     private TextView share;
     private TextView signout;
+    private TextView glossary;
     private Fragment fragmentOurRating;
     private Fragment fragmentLogin;
     private Fragment fragmentaboutus;
     private Fragment fragmentfaqs;
+    private Fragment fragmentreport;
+    private Fragment fragmentglossary;
 
     @Nullable
     @Override
@@ -35,6 +38,8 @@ public class MoreFragment extends Fragment
         fragmentLogin = new LoginFragment();
         fragmentaboutus = new AboutUsFragment();
         fragmentfaqs = new FAQsFragment();
+        fragmentreport = new ReportFragment();
+        fragmentglossary = new GlossaryFragment();
 
         rating = view.findViewById(R.id.tv_rating);
         report = view.findViewById(R.id.tv_report);
@@ -43,6 +48,7 @@ public class MoreFragment extends Fragment
         faqs = view.findViewById(R.id.tv_faqs);
         share = view.findViewById(R.id.tv_share);
         account = view.findViewById(R.id.tv_Account);
+        glossary = view.findViewById(R.id.tv_glossary);
 
         rating.setOnClickListener(new View.OnClickListener()
         {
@@ -52,6 +58,26 @@ public class MoreFragment extends Fragment
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.fragment_container, fragmentOurRating).commit();
+            }
+        });
+        report.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragment_container, fragmentreport).commit();
+            }
+        });
+        glossary.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragment_container, fragmentglossary).commit();
             }
         });
         aboutus.setOnClickListener(new View.OnClickListener()

@@ -19,15 +19,28 @@
 
     <string name="Brand_Image">Image of a Brand</string>
 
+
     <string name="layinghens">Laying Hens</string>
     <string name="hens_best">
         ✔No battery cage
-        ✔5-7 birds/m2 indoors
-        ✔Outdoor access with adequate shade / shelter, 1,000-2,500birds/ha density
-        ✔Nest boxes to lay eggs
-        ✔Perches for roosting
-        ✔ High standard of litter for scratching, foraging / dust bathing
-        ✔No beak-trimming (exceptions allowed by certain accreditations)
+        ✔5-7 birds/m2 indoors\n
+        ✔Outdoor access with adequate shade / shelter, 1,000-2,500birds/ha density\n
+        ✔Nest boxes to lay eggs\n
+        ✔Perches for roosting\n
+        ✔High standard of litter for scratching, foraging / dust bathing\n
+        ✔No beak-trimming (exceptions allowed by certain accreditations)\n
+        ✔Regular on-farm assessments and enforcement\n
+    </string>
+    <string name="chickens">Broilers (Meat Chickens)</string>
+    <string name="chickens_best">
+        \n
+        ✔12-14 birds/m2indoors\n
+        ✔Outdoor access with adequate shade &amp;shelter\n
+        ✔Perches for roosting\n
+        ✔High standard of litter for scratching, foraging&amp; dust bathing\n
+        ✔No artificial light to speed up weight gain\n
+        ✗Use of fast-growing breeds\n
+        ✗Slaughtered at 35-70days old (Organic systems require minimum of 70 days)\n
         ✔Regular on-farm assessments and enforcement
     </string>
 
@@ -74,7 +87,20 @@
          \n\u0020\u0020Currently, we cover only the production of eggs, chicken and pig products. The decision to focus on these products was made because of the seriousness and prevalence of welfare issues facing laying hens, broilers (meat chickens) and pigs. We plan to expand to include other animal production systems in later versions.
     </string>
     <string name="q9">Have a question for us?</string>
-    <string name="a9"> \u0020\u0020Get in touch by emailing us as @</string>
+    <string name="a9"> \u0020\u0020Get in touch by emailing us as <u>kinder.foodfinder@gmail.com</u></string>
+
+    <string name="glossary">
+        •	<b>Beak-trimming</b> is the partial removal of a layer hen\'s beak done to avoid injuries from hens pecking each other, sometimes to death. (RSPCA, FREPA and Egg Corp Assured Scheme allow this procedure)
+         \n\n•	<b>Enrichment</b> refers to features of an environment that improve animals\' wellbeing by providing an opportunity to carry out natural behaviours
+        \n\n•	<b>On-farm assessment</b> refers to whether the accreditation visits the farm to ensure they meet the necessary standards
+        \n\n•	<b>Fast-growing breeds</b> refers to the use of chickens bred to grow at unnaturally fast rates (upwards of three times their natural rate). These fast-growing chicken breeds represent the majority of chickens raised for meat in Australia, and result in chickens being killed before reaching maturity, often at around 5-7 weeks of age and up to 8-10 weeks in organic system (broiler chickens\' natural lifespan is up to 8 years)
+        \n\n•	A <b>sow stall</b> is a highly confining type of housing used for pregnant pigs in which the sow (female pig) is unable to turn around
+         \n\n•	A <b>farrowing</b> crate is a highly confining type of housing in which the sow is unable to turn around and in which she is confined for approximately 4 weeks to give birth and suckle her piglets
+        \n\n•	<b>Tail-docking</b> is the removal of a portion of a piglet\'s tail
+        \n\n•	<b>Teeth-clipping</b> is the cutting or clipping of a piglet\'s canine teeth
+        \n\n•	<b>Weaning</b> is when piglets are taken from their mothers and receive nourishment from other food sources other than milk
+
+    </string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
