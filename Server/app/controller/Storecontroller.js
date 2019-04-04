@@ -7,7 +7,7 @@ var async = require("async");
 
 /*RETURN ALL RELEVANT STORES WHICH HAVE A SPECIFIC BRAND*/
 
-exports.storeswithspecificbrand = async function(req,res) {
+exports.storeswithspecificbrand = async function(req,res,next) {
 	var querystring = req.query.query||"";
 	var currentlat = req.query.lat;
 	var currentlong = req.query.long;
@@ -88,7 +88,7 @@ function distance(lat1,lon1,lat2,lon2,unit){
 
 
 /* RETURN STORES WHICH HAVE RELEVANT STREET ADDRESS */
-exports.allstorelocation = async function(req,res) {
+exports.allstorelocation = async function(req,res,next) {
 	var querystring = req.query.query||"";
 	if(querystring.localeCompare("") ==0){
 		try{
@@ -96,7 +96,6 @@ exports.allstorelocation = async function(req,res) {
 			res.send(alldata);
 		}
 		catch(err){
-			
 		}	
 	}
 	else {
@@ -104,14 +103,14 @@ exports.allstorelocation = async function(req,res) {
 			let alldata = await Store.find({"StreetAddress":{"$regex":querystring,"$options":"i"}});
 			res.send(alldata);
 		}
-		catch(errr){
+		catch(err){
 		}
 	}
 }
 
 /* SAVE NEW STORE TO THE DATABASE */
 
-exports.savestorelocation = async function(req,res){
+exports.savestorelocation = async function(req,res,next){
 	var Name = req.body.Name;
 	var StreetAddress = req.body.StreetAddress;
 	var StateTerritory = req.body.StateTerritory;
@@ -147,7 +146,6 @@ exports.savestorelocation = async function(req,res){
 		}
 	}
 	catch (err){
-		
 	}
 	
 }

@@ -6,7 +6,7 @@ var async = require("async");
 
 /*SEARCH BRAND'S RATING BY BRAND NAME*/
 
-exports.searchbrand = async function(req,res) {
+exports.searchbrand = async function(req,res,next) {
 	var searchfilter = req.query.filter||"";
 	var querystring = req.query.query||"";
 	if(querystring.localeCompare("") ==0){
@@ -53,7 +53,7 @@ exports.searchbrand = async function(req,res) {
 
 /*SEARCH BRAND'S RATING BY ACCREDITATION*/
 
-exports.searchaccreditation = async function(req,res) {
+exports.searchaccreditation = async function(req,res,next) {
 	var searchfilter = req.query.filter||"";
 	var querystring = req.query.query||"";
 	if(querystring.localeCompare("") ==0){
