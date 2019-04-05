@@ -121,3 +121,51 @@ exports.searchaccreditation = async function(req,res,next) {
 		}
 	}
 }
+
+/* SAVE NEW BRAND TO THE DATABASE */
+
+exports.savenewbrand = async function(req,res,next) {
+	var name = req.query.Brandname;
+	var category = req.query.Category;
+	var accreditationquery = req.query.Accreditation;
+	var accreditation = [];
+	for(var i =0 ; i< accreditationquery.length;i++){
+		accreditation.push(JSON.parse(accreditationquery[i]));
+	}
+	try{
+		let allbrandname = await Brand.find({}).select({"Name":1,_id:0});
+		var nooverlap = false;
+		
+		for(var i = 0;i<allbrandname;i++){
+			if(allbrandname[i].Name.localeCompare(name)==0){
+				nooverlap = true;
+			}
+		}
+		if(!nooverlap){
+			var Accreditation = [];
+			for (var i =0 ; i<accreditation.length;i++){
+				var singleaccr = {
+						Accreditation:accreditation[i].Accreditation,
+						Rating:accreditation[i].Rating
+				}
+				Accreditation.push(singleaccr);
+			}
+			var newbrand = new Brand({
+				Name:name,
+				Category:category,
+				Accreditation:Accreditation
+			});
+			newbrand.save(function(err,results){
+				if(err){
+					res.status(500).send({Message:"Could not save the new brand data, please try again"});
+				} else {
+					console.log("Succesfully save a new brand");
+					res.status(200).send({Message:"Successfully save a new brand"});
+				}
+			});
+		}
+	}
+	catch(err){
+		res.status(500).send({Message:"Could not save the new brand data, please try again"});
+	}
+}

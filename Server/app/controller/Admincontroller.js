@@ -9,3 +9,7 @@ var async = require("async");
 exports.mainpage = async function(req,res){
 	res.render('mainpage.ejs');
 }
+
+exports.searchpage = async function(req,res){
+	res.render('searchpage.ejs');
+}

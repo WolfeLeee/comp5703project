@@ -4,6 +4,7 @@ var router=express.Router();
 
 router.get('/BrandSearch',controller.searchbrand);
 router.get('/AccreditationSearch',controller.searchaccreditation);
+router.get('/Savenewbrand',controller.savenewbrand);
 
 
-module.exports=router;
+module.exports = router;
