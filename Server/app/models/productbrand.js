@@ -7,7 +7,9 @@ var brandschema = new mongoose.Schema(
 			Accreditation:String,
 			Rating:String
 		}],
-		Image: String,
+		Image: [{
+			type:String
+		}],
 		Category: String
 		})
 
