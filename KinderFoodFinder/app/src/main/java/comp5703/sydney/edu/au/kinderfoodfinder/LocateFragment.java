@@ -76,6 +76,7 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
         return mView;
     }
 
@@ -226,6 +227,7 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback {
                 mMap.getUiSettings().setZoomControlsEnabled(true); // false to disable zoom controls
                 mMap.getUiSettings().setCompassEnabled(true); // false to disable compass
                 mMap.getUiSettings().setRotateGesturesEnabled(true); // false to disable rotate gesture
+
 //                double latitude = mLastKnownLocation.getLatitude();
 //                double longitude = mLastKnownLocation.getLongitude();
 //                Log.d(TAG, "Current Latitude :"+latitude+"Current Longitude :"+longitude);

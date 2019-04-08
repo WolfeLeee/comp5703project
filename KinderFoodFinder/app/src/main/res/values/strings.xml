@@ -19,6 +19,10 @@
 
     <string name="Brand_Image">Image of a Brand</string>
 
+    <string name="google_map_API" templateMergeStrategy="preserve" translatable="false">
+        AIzaSyDQaClsT1yU0a_YtJr7ZpK127W7D8rgBrU
+    </string>
+    <!--AIzaSyCNRgBFgFR5CtaZV0iK0qpgFNYUGpNCdkA (from Penny)-->
 
     <string name="layinghens">Laying Hens</string>
     <string name="hens_best">
