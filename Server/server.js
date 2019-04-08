@@ -7,6 +7,7 @@ var Storerouter=require('./app/router/Storerouter.js');
 var Adminrouter=require('./app/router/Adminrouter.js');
 app.use(bodyparser.json());
 app.set('views',path.join(__dirname,'app/views'));
+app.set('view engine','jade');
 app.use(express.static(path.join(__dirname,'public')));
 app.use(bodyparser.urlencoded());
 app.use('/Searching',Brandrouter);
