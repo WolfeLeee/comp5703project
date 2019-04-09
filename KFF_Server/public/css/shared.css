@@ -1,0 +1,276 @@
+*{
+	box-sizing:border-box;
+	font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;	
+}
+
+html,body{
+	margin:0;
+    padding:0;
+    overflow-x:hidden;
+    width:100%;
+    height:100%;
+    font-size:1vw;
+}
+
+.vertical-align{
+	display:inline-block;
+	vertical-align:middle;
+	height:100%;
+	margin:0;
+	padding:0;
+}
+
+/* HEADER */
+
+.pageheader{
+	width:100%;
+	height:7.5%;
+	position:relative;
+	z-index:1;
+	margin:0;
+	padding:0;
+	background-color:#343a40;
+	color:white;
+}
+
+.pageheader_title{
+	width:30%;
+	height:100%;
+	margin:0;
+	padding:0;
+	padding-left:10%;
+	display:inline-block;	
+	vertical-align:middle;
+}
+
+.pageheader_title__anchor{
+	height:100%;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	width:100%;
+	color:rgba(255,255,255,0.75);
+	text-decoration:none;
+	font-weight:bold;
+}
+
+.pageheader_navigationbar{
+	width: calc(100% - 30%);
+	height:100%;
+	display:inline-block;	
+	vertical-align:middle;
+}
+
+.pageheader_navigationbar__items{
+	width:120%;
+	height:100%;
+	margin:0;
+	padding:0;
+}
+
+.pageheader_navigationbar__item{
+	height:100%;
+	width:calc(100%/5);
+	display:inline-block;
+	vertical-align:middle;
+	list-style:none;
+}
+
+.pageheader_navigationbar__item a{
+	display:block;
+	width:100%;
+	height:100%;
+	text-align:center;
+	text-decoration:none;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	text-decoration:none;
+	color:rgba(255,255,255,0.75);
+	font-weight:bold;
+}
+
+.pageheader_navigationbar__search{
+	height:100%;
+	width:calc(200%/5);
+	display:inline-block;
+	vertical-align:middle;
+	list-style:none;
+	text-align:center;
+}
+
+#pageheader_navigationbar__searchbox{
+	display:inline-block;
+	vertical-align:middle;
+	width:100%;
+	height:50%;
+	padding:1%;
+	font-size:1.2vw;
+	border-bottom-color: #ffffff;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-left-color: #ffffff;
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-right-color: #ffffff;
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-top-color: #ffffff;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-top-style: solid;
+    border-top-width: 1px;
+}
+
+/* BODY */
+
+.pagebody{
+	width:100%;
+	height:calc(100% - 7.5%);
+	margin:0;
+	padding:0;
+}
+
+.pagebody_navigationbar{
+	width:12.5%;
+	height:100%;
+	margin:0;
+	padding:0;
+	padding-left:1.5%;
+	padding-top:1.5%;
+	background-color:#212529;
+	border-right: rgba(0,0,0,0.3) solid .25px;
+	font-size:1.2vw;
+	font-weight:bold;
+	display:inline-block;
+	vertical-align:middle;
+	color: rgba(255,255,255,0.75);
+}
+
+.pagebody_navigationbar__header{
+	width:100%;
+	height:auto;
+	display:inline-block;
+	margin-top:2.5%;
+	font-size:1vw;
+	font-weight:normal;
+}
+
+.pagebody_navigationbar__item{
+	margin-left:10%;
+}
+
+.pagebody_navigationbar__header a{
+	text-decoration:none;
+	color: rgba(255,255,255,0.75);
+}
+
+.pagebody_mainbody{
+	width:calc(100% - 12.5%);
+	height:100%;
+	margin:0;
+	padding:0;
+	padding-left:2.5%;
+	padding-top:1.5%;
+	display:inline-block;
+	vertical-align:middle;
+	background-color:rgba(255,255,255,0.25);
+}
+
+/* BRAND */
+
+.brand{
+	width:95%;
+	height:100%;
+	margin:0;
+	padding:0;
+}
+
+.pagebody_mainbody__sectionheader__brand{
+	width: 100%;
+	height:10%;
+	padding-left:2.5%;
+	background-color:rgba(230,230,230,0.35);
+	border-radius: 6px;
+	display:flex;
+	align-items:center;
+	color:#343a40;
+	font-weight:bold;
+	font-size:1.2vw;
+}
+
+.inputheader{
+	font-size:1vw;
+	font-weight:bold;
+}
+
+
+
+.pagebody_inputform__brand{
+	width:100%;
+	margin-top:.5%;
+	height: calc(100% - 12.5%);
+	background-color:rgba(230,230,230,0.35);
+	padding:2.5%;
+	border-radius: 6px;
+}
+
+.inputform_brand__BrandNameHeader{
+	width:45%;
+	height:5%;
+	display:inline-block;
+}
+
+#inputform_brand__BrandName{
+	font-size:1vw;
+	width:45%;
+	height:7.5%;
+}
+
+.inputform_brand__BrandCategoryHeader{
+	width:25%;
+	height:5%;
+	display:inline-block;	
+}
+
+#inputform_brand__BrandCategory{
+	font-size:1vw;
+	width: 25%;
+	height:7.5%;
+}
+
+.inputform_brand__BrandCategoryHeader{
+	width:25%;
+	height:5%;
+}
+
+.inputform_brand__BrandAccreditationHeader{
+	width: 45%;
+	height:7.5%;
+	display:inline-block;
+}
+
+.inputform_brand__BrandRatingHeader{
+	width: 45%;
+	height:7.5%;
+	display:inline-block;
+}
+
+.inputform_brand__BrandAccreditation{
+	font-size:1vw;
+	width: 45%;
+	height:7.5%;
+}
+
+.inputform_brand__BrandRating{
+	font-size:1vw;
+	width: 45%;
+	height:7.5%;
+}
+
+.inputform_brand__BrandSubmit,.inputform_brand__BrandReset{
+	cursor:pointer;
+}
+

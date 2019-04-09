@@ -1,0 +1,17 @@
+.mainbody_pageoverview__header{
+	font-size:1.2vw;
+	font-weight:bold;
+}
+
+.mainbody_pageoverview__content{
+	margin-top:1%;
+	display:block;
+	width:75%;
+}
+
+#mainbody_searchbox{
+	margin-top:2.5%;
+	width:60%;
+	line-height:2.5vw;
+	font-size:2.5vw;
+}
