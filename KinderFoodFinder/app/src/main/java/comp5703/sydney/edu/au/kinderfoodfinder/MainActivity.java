@@ -60,6 +60,45 @@ public class MainActivity extends AppCompatActivity
         // make the navigation page when first to using app
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
 
+        int id = getIntent().getIntExtra("id", 0);
+        if (id == 1) {
+//            getSupportFragmentManager()
+//                    .beginTransaction()
+//                    .replace(R.id.fragment_container,new LocateFragment())
+//                    .addToBackStack(null)
+//                    .commit();
+//            selectedFragment=locateFragment;
+//
+//            getSupportFragmentManager().beginTransaction()
+//                    .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+//                    .replace(R.id.fragment_container, selectedFragment).commit();
+            navigation.setSelectedItemId(R.id.navigation_locate);
+        }
+
+        if (id == 2) {
+            navigation.setSelectedItemId(R.id.navigation_more);
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container,new ReportFragment())
+                    .addToBackStack(null)
+                    .commit();
+//            selectedFragment=locateFragment;
+//
+//            getSupportFragmentManager().beginTransaction()
+//                    .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+//                    .replace(R.id.fragment_container, selectedFragment).commit();
+
+        }
+
+
+        if (id == 3) {
+
+            navigation.setSelectedItemId(R.id.navigation_more);
+        }
+
+
+
+
     }
 
     /* * * * * *
@@ -97,4 +136,7 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
     };
+
+
+
 }

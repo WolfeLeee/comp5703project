@@ -1,48 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="10dp">
 
-    <SearchView
-        android:id="@+id/searchProduct"
+    <TextView
+        android:id="@+id/text_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:iconifiedByDefault="false"
-        android:queryHint="Search Product ..."
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/style_shadow" />
+        android:text="TextView" />
+
+    <ImageView
+        android:id="@+id/image_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/farm1" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:background="@drawable/style_shadow"
+        android:orientation="horizontal"
         android:padding="8dp">
 
         <LinearLayout
             android:id="@+id/categoryEgg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_weight="0.35"
+            android:orientation="vertical"
             android:padding="2dp">
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:background="@drawable/egg_icon"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                android:background="@drawable/egg_icon" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:text="EGG"
-                android:textSize="16dp"
                 android:textAlignment="center"
-                android:layout_gravity="center"/>
+                android:textSize="16dp" />
 
         </LinearLayout>
 
@@ -50,23 +54,23 @@
             android:id="@+id/categoryChicken"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_weight="0.2"
+            android:orientation="vertical"
             android:padding="2dp">
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:background="@drawable/chicken_icon"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                android:background="@drawable/chicken_icon" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:text="CHICKEN"
-                android:textSize="16dp"
                 android:textAlignment="center"
-                android:layout_gravity="center"/>
+                android:textSize="16dp" />
 
         </LinearLayout>
 
@@ -74,26 +78,47 @@
             android:id="@+id/categoryPig"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_weight="0.35"
+            android:orientation="vertical"
             android:padding="2dp">
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:background="@drawable/pig_icon"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                android:background="@drawable/pig_icon" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:text="PIG"
-                android:textSize="16dp"
                 android:textAlignment="center"
-                android:layout_gravity="center"/>
+                android:textSize="16dp" />
 
         </LinearLayout>
     </LinearLayout>
+
+    <SearchView
+        android:id="@+id/searchProduct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/style_shadow"
+        android:iconifiedByDefault="false"
+        android:queryHint="Search Product ..." />
+
+    <ListView
+        android:id="@+id/productListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible" />
+
+    <fragment
+        android:id="@+id/fragment2"
+        android:name="comp5703.sydney.edu.au.kinderfoodfinder.SearchResultFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <!--<android.support.v7.widget.RecyclerView-->
         <!--android:id="@+id/productRecyclerview"-->
