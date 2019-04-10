@@ -1,6 +1,7 @@
 package comp5703.sydney.edu.au.kinderfoodfinder;
 
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,10 +10,18 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -26,13 +35,29 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.mancj.materialsearchbar.MaterialSearchBar;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import comp5703.sydney.edu.au.kinderfoodfinder.Adapter.SearchAdapter;
+import comp5703.sydney.edu.au.kinderfoodfinder.LocalDatabase.Database;
+import comp5703.sydney.edu.au.kinderfoodfinder.Model.Product_Info;
 
 public class LocateFragment extends Fragment implements OnMapReadyCallback {
 
+//    private static final String TAG = "LocateFragment";
     private GoogleMap mMap;
     private CameraPosition mCameraPosition;
-    private TextView locationTextView;
-    private static final String TAG = "LocateFragment";
+
+    MaterialSearchBar materialSearchBar;
+    RecyclerView recyclerView;
+    RecyclerView.LayoutManager layoutManager;
+    List<String> suggestList = new ArrayList<>();
+    SearchAdapter adapter;
+
+
+    private Database database;
 
     // The entry point to the Fused Location Provider.
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -77,7 +102,87 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback {
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        // Init View
+        recyclerView = mView.findViewById(R.id.recycler_search);
+        layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+
+        materialSearchBar = mView.findViewById(R.id.search_bar);
+
+        // Init DB
+        database = new Database(getActivity());
+
+        // Setup search bar
+
+        materialSearchBar.setHint("Search Brand Name...");
+        materialSearchBar.setCardViewElevation(10);
+        loadSuggestList();
+        materialSearchBar.addTextChangeListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                List<String> suggest = new ArrayList<>();
+                for(String search:suggestList) {
+                    if (search != null) {
+                        if (search.toLowerCase().contains(materialSearchBar.getText().toLowerCase()))
+                        {
+                            suggest.add(search);
+                        } materialSearchBar.setLastSuggestions(suggest);
+                    }
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
+            @Override
+            public void onSearchStateChanged(boolean enabled) {
+                if(!enabled)
+                    recyclerView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onSearchConfirmed(CharSequence text) {
+                startSearch(text.toString());
+
+            }
+
+            @Override
+            public void onButtonClicked(int buttonCode) {
+
+            }
+        });
+
+
+        // Init Adapter default set all result
+        adapter = new SearchAdapter(getActivity(),database.getProducts());
+        recyclerView.setAdapter(adapter);
+
         return mView;
+    }
+
+    private void startSearch(String text) {
+        adapter = new SearchAdapter(getActivity(),database.getProductByBrandName(text));
+        recyclerView.setAdapter(adapter);
+
+        MarkerOptions markers = new MarkerOptions().position(
+                new LatLng(-33.8836587, 151.1939730));
+        mMap.addMarker(markers);
+    }
+
+    private void loadSuggestList() {
+        suggestList = database.getBrandName();
+        materialSearchBar.setLastSuggestions(suggestList);
     }
 
 
@@ -228,9 +333,6 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback {
                 mMap.getUiSettings().setCompassEnabled(true); // false to disable compass
                 mMap.getUiSettings().setRotateGesturesEnabled(true); // false to disable rotate gesture
 
-//                double latitude = mLastKnownLocation.getLatitude();
-//                double longitude = mLastKnownLocation.getLongitude();
-//                Log.d(TAG, "Current Latitude :"+latitude+"Current Longitude :"+longitude);
             } else {
                 mMap.setMyLocationEnabled(false);
                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
