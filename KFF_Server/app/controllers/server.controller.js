@@ -245,9 +245,14 @@ module.exports.importCSVFile = function(req, res, next)
                                 if(err) throw err;
                             });
                             // import the products into mongoDB
-                            Product.create(products, function(err, documents)
+                            Product.create(products, function(error, documents)
                             {
-                                if(err) throw err;
+                                if(error)
+                                {
+                                    var err = new Error('You are importing csv with wrong format!');
+                                    err.status = 400;
+                                    return next(err);
+                                }
                             });
                             res.render('successImport.pug', {numProducts: products.length});
                             // res.send(products.length + " products have been successfully uploaded.");
