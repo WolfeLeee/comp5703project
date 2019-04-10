@@ -237,24 +237,39 @@ module.exports.importCSVFile = function(req, res, next)
                             data['_id'] = new mongoose.Types.ObjectId();
                             products.push(data);
                         })
+                        .on("error", function()
+                        {
+                            res.send("You are importing csv with wrong format!");
+                        })
                         .on("end", function()
                         {
                             // remove the original documents first
-                            Product.remove({}, function(err, documents)
+                            Product.remove({}, function(errRemove, documents)
                             {
-                                if(err) throw err;
-                            });
-                            // import the products into mongoDB
-                            Product.create(products, function(error, documents)
-                            {
-                                if(error)
+                                if(errRemove)
                                 {
-                                    var err = new Error('You are importing csv with wrong format!');
+                                    var err = new Error('Something wrong when remove all documents!');
                                     err.status = 400;
                                     return next(err);
                                 }
+                                else
+                                {
+                                    // import the products into mongoDB
+                                    Product.create(products, function(errCreate, documents)
+                                    {
+                                        if(errCreate)
+                                        {
+                                            var err = new Error('Something wrong when import all documents!');
+                                            err.status = 400;
+                                            return res.send(err);
+                                        }
+                                        else
+                                        {
+                                            res.render('successImport.pug', {numProducts: products.length});
+                                        }
+                                    });
+                                }
                             });
-                            res.render('successImport.pug', {numProducts: products.length});
                             // res.send(products.length + " products have been successfully uploaded.");
                             // console.log(products);
                         });
