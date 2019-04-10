@@ -1,0 +1,62 @@
+doctype html
+
+html
+head
+    title Login Page
+    //link(rel="shortcut icon" href="images/Wikilatic_logo_Final_Colour_Transparent.png" type="image/png")
+    link(href="css/styleMain.css" rel="stylesheet" type="text/css")
+    script(src="http://code.jquery.com/jquery-1.9.1.min.js")
+    script(src="js/landingFunction.js" type="text/javascript")
+    script(src="js/formValidation.js" type="text/javascript")
+    script.
+        window.jQuery || document.write('script(src="js/jquery.js")');
+        var user = !{JSON.stringify(users).replace(/<\//g, '<\\/')}; // get the user object list from express
+body
+    div(class="landing_page")
+        div(class="landing_page_header")
+            h1 Kinder Food Finder - Server Site
+            div(class="upper_right")
+                div(class="upper_right_buttons")
+                    button(onclick="document.getElementById('modal-wrapper').style.display='block'" class="login_register_button") Login
+                    div(id="modal-wrapper" class="modal" style="text-align:center")
+                        form(class="modal-content animateLOGIN" action="/" method="post" onsubmit="return checkValidationLogin()")
+                            div(class="imgcontainer")
+                                span(onclick="document.getElementById('modal-wrapper').style.display='none'" class="close" title="Close PopUp") &times;
+                                h1(style="text-align:center") LOG IN
+                                img(src="../images/login.png" class="loginImage")
+                            div(class="container")
+                                div(class="login_field")
+                                    label(for="usernameLogin") Username
+                                    input(type="text" id="usernameLogin" name="logusername" placeholder="Username" required onblur="checkUsernameLogin(this)" size="25")
+                                    span
+                                div(class="login_field")
+                                    label(for="passwordLogin") Password
+                                    input(type="password" id="passwordLogin" name="logpassword" placeholder="Password" required onblur="checkPassword(this)" size="25")
+                                    span
+                                div
+                                    input(type="submit" value="LOGIN" class="login_register_box_button")
+                    button(onclick="document.getElementById('modal-reset').style.display='block'" class="login_register_button") Reset
+                    div(id="modal-reset" class="modal" style="text-align:center")
+                        form(class="modal-content animateLOGIN" action="/" method="post")
+                            div(class="imgcontainer")
+                                span(onclick="document.getElementById('modal-reset').style.display='none'" class="close" title="Close PopUp") &times;
+                                h1(style="text-align:center") RESET
+                                img(src="../images/login.png" class="loginImage")
+                            div(class="container")
+                                div(class="login_field")
+                                    label(for="usernameLoginR") New Username
+                                    input(type="text" id="usernameLoginR" name="logusernameR" placeholder="New Username" required onblur="checkUsernameLogin(this)" size="25")
+                                    span
+                                div(class="login_field")
+                                    label(for="passwordLoginR") New Password
+                                    input(type="password" id="passwordLoginR" name="logpasswordR" placeholder="New Password" required onblur="checkPassword(this)" size="25")
+                                    span
+                                div
+                                    input(type="submit" value="RESET" class="login_register_box_button")
+        div(class="landing_page_body")
+            div(class="middle_body")
+                div(class="overall_feature")
+                    img(src="../images/home_img.png" alt="Oops, image not found!" class="landingImage_size")
+        div(class="landing_page_footer")
+            div(class="bottom_copyright")
+                p &copy; 2019 IT Capstone Project - KinderFoodFinder. All rights reserved | Design by Team 2 - COMP5703

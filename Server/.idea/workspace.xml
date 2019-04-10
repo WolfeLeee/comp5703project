@@ -106,11 +106,19 @@
       </list>
     </option>
   </component>
+<<<<<<< HEAD
+  <component name="ProjectFrameBounds">
+    <option name="x" value="254" />
+    <option name="y" value="26" />
+    <option name="width" value="1186" />
+    <option name="height" value="808" />
+=======
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="240" />
     <option name="y" value="127" />
     <option name="width" value="1440" />
     <option name="height" value="774" />
+>>>>>>> 24c15c84903257054e64454511586687fd0e00f0
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
