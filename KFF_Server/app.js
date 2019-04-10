@@ -9,6 +9,7 @@ var mongoose = require('mongoose');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var fileUpload = require('express-fileupload');
+var User = require("./app/models/user");
 
 //connect to MongoDB
 mongoose.connect('mongodb://localhost/kff', function ()
@@ -20,7 +21,7 @@ var db = mongoose.connection;
 
 //use sessions for tracking login and they will expire after 1 hour (1*60*60*1000)
 app.use(session({
-    secret: 'wikilatic app user shhhh!',
+    secret: 'KFF app user shhhh!',
     cookie: {maxAge: 3600000},
     resave: true,
     saveUninitialized: false,
@@ -28,6 +29,9 @@ app.use(session({
         mongooseConnection: db
     })
 }));
+
+// create users collection for later use
+mongoose.model('users', User.schema);
 
 // parse incoming requests
 app.use(bodyParser.json());
@@ -66,7 +70,7 @@ app.use(function (err, req, res, next)
 // console msg if all ready
 app.listen(3000, function ()
 {
-    console.log('WikiLatic app listening on port 3000!')
+    console.log('KFF app listening on port 3000!')
 });
 	
 module.exports = app;

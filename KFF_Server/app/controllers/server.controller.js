@@ -9,7 +9,44 @@ var adminId = "";
 // Basic pages with login and register
 module.exports.goToLogin = function(req, res, next)
 {
-    res.redirect('/landing');
+    User.count(function(error, count)
+    {
+        if (error)
+        {
+            //var err = new Error('Username has been used!');
+            error.status = 400;
+            return next(error);
+        }
+        else
+        {
+            if(count == 0)
+            {
+                // create admin acc at the beginning
+                var userData = {
+                    username: "admin",
+                    password: "admin"
+                };
+
+                User.create(userData, function (error, user)
+                {
+                    if (error)
+                    {
+                        //var err = new Error('Username has been used!');
+                        error.status = 400;
+                        return next(error);
+                    }
+                    else
+                    {
+                        res.redirect('/landing');
+                    }
+                });
+            }
+            else
+            {
+                res.redirect('/landing');
+            }
+        }
+    });
 };
 
 module.exports.showLandingPage = function(req, res, next)

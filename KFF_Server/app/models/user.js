@@ -7,20 +7,6 @@ var mongoose = require('mongoose');
 //var bcrypt = require('bcrypt-nodejs');
 
 var UserSchema = new mongoose.Schema({
-    firstName:
-        {
-            type: String,
-            unique: true,
-            required: true,
-            trim: true
-        },
-    lastName:
-        {
-            type: String,
-            unique: true,
-            required: true,
-            trim: true
-        },
     username:
         {
             type: String,
@@ -32,20 +18,49 @@ var UserSchema = new mongoose.Schema({
         {
             type: String,
             required: true
-        },
-    passwordConfirm:
-        {
-            type: String,
-            required: true
-        },
-    email:
-        {
-            type: String,
-            unique: true,
-            required: true,
-            trim: true
         }
 });
+
+// var UserSchema = new mongoose.Schema({
+//     firstName:
+//         {
+//             type: String,
+//             unique: true,
+//             required: true,
+//             trim: true
+//         },
+//     lastName:
+//         {
+//             type: String,
+//             unique: true,
+//             required: true,
+//             trim: true
+//         },
+//     username:
+//         {
+//             type: String,
+//             unique: true,
+//             required: true,
+//             trim: true
+//         },
+//     password:
+//         {
+//             type: String,
+//             required: true
+//         },
+//     passwordConfirm:
+//         {
+//             type: String,
+//             required: true
+//         },
+//     email:
+//         {
+//             type: String,
+//             unique: true,
+//             required: true,
+//             trim: true
+//         }
+// });
 
 // create index
 UserSchema.index({username: 1});
