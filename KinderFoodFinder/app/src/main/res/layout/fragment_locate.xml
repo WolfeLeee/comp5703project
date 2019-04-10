@@ -1,25 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/lighterOrange"
     android:padding="10dp">
 
-    <SearchView
-        android:id="@+id/searchAddress"
+    <com.mancj.materialsearchbar.MaterialSearchBar
+        android:id="@+id/search_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:iconifiedByDefault="false"
-        android:queryHint="Search Address..."
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/style_shadow" />
+        app:mt_speechMode="false"
+        app:mt_hint="Search Brand Name..."
+        app:mt_maxSuggestionsCount="10"/>
 
     <fragment
         android:id="@+id/map"
+        android:layout_below="@+id/search_bar"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="390dp"
-        android:layout_height="400dp" />
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_marginTop="10dp"/>
 
-</LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_search"
+        android:layout_below="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginTop="10dp"/>
+
+</RelativeLayout>
