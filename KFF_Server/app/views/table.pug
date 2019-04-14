@@ -111,8 +111,9 @@ html
                                                  - for(var i = 0; i < displaydata.length ; i++)
                                                     tr(role="row", class="odd")
                                                         td #{displaydata[i].Brand_Name}
-                                                        td #{displaydata[i].Accreditation}
-                                                        td #{displaydata[i].Rating}
+                                                        td
+                                                            - for( var j = 0 ;j < displaydata[i].Accreditation.length ; j++ )
+                                                                div #{displaydata[i].Accreditation[j].Accreditation} - #{displaydata[i].Accreditation[j].Rating}
                                                         td #{displaydata[i].Category}
                                                         td.updatetd Update
                                                         td.deletecheckbox
