@@ -55,7 +55,8 @@ body
                         label.deletebutton_button.deletebutton_selectall.button Select All
                             input.button_selectall(type='checkbox')
                             span.checkmark
-                        div.deletebutton_button.deletebutton_deletemarked
+                        - var id = brandid
+                        div.deletebutton_button.deletebutton_deletemarked(value=id)
                             svg(xmlns="http://www.w3.org/2000/svg",width="24",height="24",viewBox = "0 0 24 24")
                                 path(d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z")
 
@@ -81,7 +82,8 @@ body
                                             a(href="/detailproductPage_Accreditation__Modify?productid=" +id+"no=" + i) #{accreditation[i].Rating}
                                         td.accreditationlist_table__item.accreditationlist_table__Accreditation
                                             label.button
-                                                input.accreditationlist_table__Delete(type='checkbox')
+                                                - var accrid = accreditation[i]._id
+                                                input.accreditationlist_table__Delete(value = accrid, type='checkbox')
                                                 span.checkmark
 
     div(class="feature_page_footer")

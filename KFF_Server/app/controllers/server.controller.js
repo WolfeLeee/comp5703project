@@ -3,6 +3,7 @@ var Product = require("../models/product");
 
 var mongoose = require('mongoose');
 var csv = require('fast-csv');
+var ObjectId = require('mongodb').ObjectID;
 
 var adminId = "";
 
@@ -611,6 +612,47 @@ module.exports.ProductDetailPage_Accreditation = async function(req,res,next){
             }
         });
 }
+
+/** Delete accreditations in a particular Brand
+ */
+module.exports.ProductDetailPage_Accreditation__Delete = async function(req,res,next){
+    var accrids = req.query.accrids.split(',');
+    Product.update({_id:req.query.productid},{$pull:{Accreditation:{_id:{$in:accrids}}}})
+        .exec(function(errProduct)
+        {
+            if(errProduct)
+            {
+                return next(errProduct);
+            }
+            else
+            {
+                res.redirect('/');
+            }
+        });
+
+
+    // Product.findById(req.query.productid)
+    //     .exec(function(errProduct,product){
+    //         if(errProduct)
+    //         {
+    //             return next(errProduct);
+    //         }
+    //         else
+    //         {
+    //             if(product === null)
+    //             {
+    //                 res.redirect('/');
+    //             }
+    //             else
+    //             {
+    //                 console.log(product);
+    //             }
+    //
+    //         }
+    //     });
+}
+
+
 
 // module.exports.databaseManagement = async function(req, res)
 // {
