@@ -11,6 +11,7 @@ html
         link(rel='stylesheet',type='text/css',href='css/dataTables/dataTables.bootstrap4.css')
         link(rel='stylesheet',type='text/css', href='css/shared.css')
         link(rel='stylesheet',type='text/css',href='css/sb-admin.min.css')
+        link(rel='stylesheet',type='text/css',href='css/table_brand.css')
     body
         header.pageheader
             div.pageheader_title
@@ -83,18 +84,7 @@ html
                                                         colspan="1",
                                                         aria-sort="ascending",
                                                         aria-label="Brand Name: activate to sort column descending",
-                                                        style = "width:55px;") Rating
-                                                    th.sorting(tabindex="0",
-                                                        aria-controls="dataTable",
-                                                        rowspan="1",
-                                                        colspan="1",
-                                                        aria-sort="ascending",
-                                                        aria-label="Brand Name: activate to sort column descending",
                                                         style = "width:55px;") Category
-                                                    th(tabindex="0",
-                                                        rowspan="1",
-                                                        colspan="1",
-                                                        style = "width:55px;") Update
                                                     th(tabindex="0",
                                                         rowspan="1",
                                                         colspan="1",
@@ -103,19 +93,18 @@ html
                                                 tr
                                                     th(rowspan="1", colspan="1") Brand Name
                                                     th(rowspan="1", colspan="1") Accreditation
-                                                    th(rowspan="1", colspan="1") Rating
                                                     th(rowspan="1", colspan="1") Category
-                                                    th(rowspan="1", colspan="1") Update
                                                     th(rowspan="1", colspan="1") Delete
                                             tbody
                                                  - for(var i = 0; i < displaydata.length ; i++)
                                                     tr(role="row", class="odd")
-                                                        td #{displaydata[i].Brand_Name}
+                                                        td.Table_Brand_Name
+                                                            - var id = displaydata[i]._id
+                                                            a(href = "/detailproductPage?productid="+id)    #{displaydata[i].Brand_Name}
                                                         td
                                                             - for( var j = 0 ;j < displaydata[i].Accreditation.length ; j++ )
                                                                 div #{displaydata[i].Accreditation[j].Accreditation} - #{displaydata[i].Accreditation[j].Rating}
                                                         td #{displaydata[i].Category}
-                                                        td.updatetd Update
                                                         td.deletecheckbox
                                                             - var id = displaydata[i]._id
                                                             input(type="checkbox", value=id)

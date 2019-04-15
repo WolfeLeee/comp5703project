@@ -1,0 +1,9 @@
+.Table_Brand_Name a{
+    text-decoration: none;
+    color:#212529;
+}
+
+.Table_Brand_Name a:active,.Table_Brand_Name a:hover{
+    color:rgb(103,105,106);
+}
+

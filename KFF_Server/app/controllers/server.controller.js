@@ -345,8 +345,8 @@ module.exports.importCSVFile = function(req, res, next)
 
                                                 if(updateproducts.length>0){
                                                     for(var i = 0 ; i< updateproducts.length ; i++){
-                                                        await Product.update({_id:updateproducts[i].brandid},{$push:{Accreditation:updateproducts[i].Accreditation}});
                                                     }
+                                                    await Product.update({_id:updateproducts[i].brandid},{$push:{Accreditation:updateproducts[i].Accreditation}});
                                                 }
 
                                                 res.render('successImport.pug', {numProducts: insertproducts.length});
@@ -436,6 +436,39 @@ module.exports.goToImportPage = function(req, res, next)
         });
 };
 
+/** Direct user to the product detail page.
+ * Hence, the product page that will be displayed depends on the productid that is passed to this module
+ */
+
+
+module.exports.goToProductDetailPage = function (req,res,next)
+{
+    Product.findById(req.query.productid)
+        .exec(function(errorProduct, product)
+        {
+           if (errorProduct)
+           {
+               return next(errorProduct);
+           }
+           else
+           {
+               if(product === null)
+               {
+                   res.redirect('/');
+               }
+               else
+               {
+                   res.render('productDetailPage/productDetailPage.pug',{
+                       brandid: product._id,
+                       brandname : product.Brand_Name,
+                       brandcategory: product.Category,
+                       accreditacount: product.Accreditation.length
+                   });
+               }
+           }
+        });
+}
+
 // Revision.findArticleHighestRev(function(errorArticleHighestRev, resultArticleHighestRev)
 // {
 //     if(errorArticleHighestRev || !resultArticleHighestRev)
@@ -510,6 +543,40 @@ module.exports.goToImportPage = function(req, res, next)
 /* * * * * * * * * *
  * Jordan's coding *
  * * * * * * * * * */
+/** Update brand's summary information: Name, Category, Image,
+ */
+
+module.exports.ProductDetailPage_updateBrandSummary = async function(req,res,next){
+    var Brand_Name = req.query.brand_name;
+    var Brand_Category = req.query.brand_category;
+    var Brand_Id = req.query.brand_id;
+    Product.findById(Brand_Id)
+        .exec(function(errorBrand,brand)
+        {
+            if(errorBrand)
+            {
+                return next(errorBrand);
+            }
+            else
+            {
+                Product.update({_id:Brand_Id},{$set:{Brand_Name:Brand_Name,Category:Brand_Category}})
+                    .exec(function(errorUpdate){
+                        if(errorUpdate){
+                            return next(errorUpdate);
+                        }
+                        else {
+                            console.log('successfully update brand')
+                            res.redirect('/detailproductPage?productid='+Brand_Id);
+                        }
+                    });
+            }
+        });
+
+}
+
+
+
+
 
 module.exports.databaseManagement = async function(req,res)
 {
