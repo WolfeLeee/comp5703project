@@ -1,0 +1,185 @@
+.pagebody_mainbody__infodisplay__searchinput{
+    display:inline-block;
+    vertical-align:middle;
+    width:80%;
+    height:7.5%;
+    padding:1%;
+    font-size:1.2vw;
+    border-bottom-color: #ffffff;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-left-color: #ffffff;
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-right-color: #ffffff;
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-top-color: #ffffff;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-top-style: solid;
+    border-top-width: 1px;
+}
+
+.pagebody_mainbody_infodisplay__searchsubmitbutton{
+    width: 20%;
+    height:7.5%;
+    display:inline-block;
+    vertical-align: middle;
+    text-align:center;
+    border-radius: 6px;
+    border-color:#212529;
+    cursor:pointer;
+    text-transform:uppercase;
+    font-size:1.2vw;
+    font-weight:400;
+    color:#FFFFFF;
+    background-color:#212529;
+    box-shadow:inset 0 -0.6em 0 -0.35em rgba(0,0,0,0.17);
+}
+.pagebody_mainbody_infodisplay__searchsubmitbutton:hover{
+    background-color:rgb(53,55,56);
+}
+
+.pagebody_mainbody_infodisplay__searchsubmitbutton:active{
+    padding-top: 1px;
+}
+
+/**
+STYLE THE DATA TABLE
+ */
+
+.accreditationlist_table {
+    margin-top:2.5%;
+    height:100%;
+    width:100%;
+}
+
+.accreditationlist_table {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+
+    text-align:left;
+}
+
+.accreditationlist_table__item{
+    height: 2.5em;
+    padding:.5% 1.5% .5% 1.5%;
+    border-bottom: 1px solid rgba(190,190,190,0.35);
+}
+
+.accreditationlist_table__Accreditation{
+    cursor:pointer;
+}
+
+.accreditationlist_table__Accreditation a{
+    width:100%;
+    display:block;
+    height:100%;
+    text-decoration:none;
+    color:#343a40;
+}
+
+.accreditationlist_table__Delete{
+    text-align:center;
+}
+
+/**
+STYLE THE DELETE BUTTONS
+ */
+.pagebody_mainbody_infodisplay__deletebutton{
+    width:100%;
+    height:12.5%;
+}
+
+.deletebutton_button{
+    display:inline-flex;
+    justify-content:center;
+    align-items:center;
+    margin:2.5%;
+    vertical-align: top;
+
+}
+
+.button {
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 1vw;
+    font-weight:bold;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.button input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #ccc;
+}
+
+.button:hover input ~ .checkmark {
+    background-color: #aaa;
+}
+
+/* When the checkbox is checked, add a blue background */
+.button input:checked ~ .checkmark {
+    background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.button input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.button .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.deletebutton_deletemarked{
+    padding-left:1%;
+    border-left: 1px solid rgba(230,230,230,0.75);
+    width: 7.5%;
+    cursor:pointer;
+    visibility:hidden;
+}
+
+.deletebutton_deletemarked:hover :first-child{
+    box-shadow:inset 0 -0.6em 0 -0.35em rgba(0,0,0,0.17);
+}
+
+.deletebutton_deletemarked:active :first-child{
+    margin-top:1px;
+}
+

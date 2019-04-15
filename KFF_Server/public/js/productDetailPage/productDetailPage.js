@@ -75,11 +75,13 @@ $(document).ready(function()
             post('/detailproductPage_updateBrandSummary',params,'get');
         })
 
+        $('.infodisplay_settings__resetbutton').on("click",function(){
+            location.reload();
+        })
+
         /** Post function
          *
          */
-
-
         function post(path, params, method) {
             method = method || "get"; // Set method to post by default if not specified.
 

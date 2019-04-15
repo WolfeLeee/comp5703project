@@ -328,7 +328,6 @@ module.exports.importCSVFile = function(req, res, next)
                                             insertproducts.push(products[i]);
                                         }
                                     }
-                                    console.log(updateproducts.length);
                                     // import the products into mongoDB,
                                     // Check whether the insertproducts array is empty
                                     if(insertproducts.length > 0){
@@ -439,8 +438,6 @@ module.exports.goToImportPage = function(req, res, next)
 /** Direct user to the product detail page.
  * Hence, the product page that will be displayed depends on the productid that is passed to this module
  */
-
-
 module.exports.goToProductDetailPage = function (req,res,next)
 {
     Product.findById(req.query.productid)
@@ -572,6 +569,47 @@ module.exports.ProductDetailPage_updateBrandSummary = async function(req,res,nex
             }
         });
 
+}
+
+
+/** Display all accreditations available for a product,
+ * This view also enables the admin to edit an accreditation of a brand or add more accreditation(s) to the brand
+ */
+module.exports.ProductDetailPage_Accreditation = async function(req,res,next){
+    Product.findById(req.query.productid)
+        .exec(function(errProduct,product)
+        {
+            if(errProduct)
+            {
+                return next(errProduct);
+            }
+            else
+            {
+                if(product === null)
+                {
+                    res.redirect('/');
+                }
+                else
+                {
+                    var perPage = 25 || req.query.perPage;
+                    var page = (parseInt(req.query.page)) || 1;
+                    var displayaccreditation = [];
+                    for( var i = ((perPage * page) - perPage) ; i< product.Accreditation.length ; i++)
+                    {
+                        displayaccreditation.push(product.Accreditation[i]);
+                    }
+
+                    res.render('productDetailPage/productDetailPage_Accreditation.pug'
+                        ,{
+                        brandid: product._id,
+                        brandname : product.Brand_Name,
+                        brandcategory: product.Category,
+                        accreditation: displayaccreditation
+                    }
+                    );
+                }
+            }
+        });
 }
 
 // module.exports.databaseManagement = async function(req, res)
