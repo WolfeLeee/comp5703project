@@ -224,7 +224,8 @@ module.exports.importCSVFile = function(req, res, next)
 
                     var productFile = req.files.file;
 
-                    var products = [];
+                    var temproducts = [];
+                    var products =[];
 
                     csv
                         .fromString(productFile.data.toString(),
@@ -235,7 +236,7 @@ module.exports.importCSVFile = function(req, res, next)
                         .on("data", function(data)
                         {
                             data['_id'] = new mongoose.Types.ObjectId();
-                            products.push(data);
+                            temproducts.push(data);
                         })
                         .on("error", function()
                         {
@@ -243,31 +244,127 @@ module.exports.importCSVFile = function(req, res, next)
                         })
                         .on("end", function()
                         {
-                            // remove the original documents first
-                            Product.remove({}, function(errRemove, documents)
+                            // For each data in the temproducts, the server will check for identical brand before importing in the database
+                            // In specific, brands with identical name will be checked whether or not there is different in their accreditation
+                            // If there is difference in Accreditation, the new Accreditation will be pushed into that brand value
+                            // instead of creating a new brand
+                            temproducts.forEach(function(data){
+                                var identicalbrand = false;
+                                var identicalaccreditation = false;
+                                var position = null;
+                                for(var i =0 ; i< products.length; i++){
+                                    if(data.Brand_Name.localeCompare(products[i].Brand_Name)==0){
+                                        identicalbrand = true;
+                                        position = i;
+                                        for(var j = 0 ; j < products[i].Accreditation.length ; j++){
+                                            if( data.Accreditation.localeCompare(products[i].Accreditation[j].Accreditation) == 0){
+                                                identicalaccreditation = true;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if(identicalbrand && !identicalaccreditation){
+                                    products[position].Accreditation.push({
+                                        Accreditation: data.Accreditation,
+                                        Rating: data.Rating
+                                    });
+                                }
+                                else if (!identicalaccreditation) {
+                                    var newdata = {
+                                        Brand_Name: data.Brand_Name,
+                                        Available: data.Available,
+                                        Category: data.Category,
+                                        Accreditation:[]
+                                    }
+                                    newdata.Accreditation.push({
+                                        Accreditation: data.Accreditation,
+                                        Rating: data.Rating
+                                    })
+                                    products.push(newdata);
+                                }
+                            })
+
+
+                            // Search for all documents currently in the database
+                            // Identical brand will not be added to the database
+                            Product.find({}, async function(err, documents)
                             {
-                                if(errRemove)
+                                var insertproducts = [];
+                                var updateproducts = [];
+                                if(err)
                                 {
-                                    var err = new Error('Something wrong when remove all documents!');
+                                    var err = new Error('Something wrong when query all documents!');
                                     err.status = 400;
                                     return next(err);
                                 }
                                 else
                                 {
-                                    // import the products into mongoDB
-                                    Product.create(products, function(errCreate, documents)
-                                    {
-                                        if(errCreate)
-                                        {
-                                            var err = new Error('Something wrong when import all documents!');
-                                            err.status = 400;
-                                            return res.send(err);
+                                    // Check for identical data
+                                    for(var i = 0 ; i< products.length ; i++){
+                                        var identicalName = false;
+                                        for(var j = 0; j < documents.length ; j++){
+                                            if(products[i].Brand_Name.localeCompare(documents[j].Brand_Name) == 0){
+                                                identicalName = true;
+                                                // Check for identical Accreditation value,
+                                                // if there is a new Accreditation, the new Accreditation will be pushed to updateproducts Array
+                                                for(var k = 0 ; k <products[i].Accreditation.length ; k ++){
+                                                    var identicalAccreditation = false;
+                                                    for(var l = 0 ; l < documents[j].Accreditation.length; l++){
+                                                        if(products[i].Accreditation[k].Accreditation.localeCompare(documents[j].Accreditation[l].Accreditation) == 0){
+                                                            identicalAccreditation = true;
+                                                        }
+                                                    }
+                                                    if(!identicalAccreditation){
+                                                        updateproducts.push({
+                                                            Accreditation:products[i].Accreditation,
+                                                            brandid:documents[j]._id
+                                                        })
+                                                    }
+                                                }
+                                            }
                                         }
-                                        else
-                                        {
-                                            res.render('successImport.pug', {numProducts: products.length});
+                                        if(!identicalName){
+                                            insertproducts.push(products[i]);
                                         }
-                                    });
+                                    }
+                                    console.log(updateproducts.length);
+                                    // import the products into mongoDB,
+                                    // Check whether the insertproducts array is empty
+                                    if(insertproducts.length > 0){
+                                        Product.create(insertproducts, async function(errCreate, documents)
+                                        {
+                                            if(errCreate)
+                                            {
+                                                var err = new Error('Something wrong when import all documents!');
+                                                err.status = 400;
+                                                return res.send(err);
+                                            }
+                                            else
+                                            {
+
+                                                if(updateproducts.length>0){
+                                                    for(var i = 0 ; i< updateproducts.length ; i++){
+                                                        await Product.update({_id:updateproducts[i].brandid},{$push:{Accreditation:updateproducts[i].Accreditation}});
+                                                    }
+                                                }
+
+                                                res.render('successImport.pug', {numProducts: insertproducts.length, numUpdates: updateproducts.length});
+                                            }
+                                        });
+                                    }
+                                    else if(updateproducts.length > 0) {
+                                        for(var i = 0 ; i< updateproducts.length ; i++){
+                                            await Product.update({_id:updateproducts[i].brandid},{$push:{Accreditation:updateproducts[i].Accreditation}});
+                                        }
+                                        console.log("Update "+updateproducts.length+" collection(s) in the database");
+                                        res.render('successImport.pug',{numProducts:insertproducts.length, numUpdates: updateproducts.length});
+                                    }
+                                    else if(updateproducts.length == 0 && insertproducts.length == 0) {
+                                        console.log("Nothing to update");
+                                        res.render('successImport.pug',{numProducts:insertproducts.length, numUpdates: updateproducts.length});
+                                    }
+
                                 }
                             });
                             // res.send(products.length + " products have been successfully uploaded.");
@@ -414,19 +511,76 @@ module.exports.goToImportPage = function(req, res, next)
  * Jordan's coding *
  * * * * * * * * * */
 
-module.exports.databaseManagement = async function(req,res)
+// module.exports.databaseManagement = async function(req, res)
+// {
+//     var perPage = 25;
+//     var page = (parseInt(req.query.page)) || 1;
+//     let displaydata = Product.find({}).limit(perPage).skip((perPage * page) - perPage);
+//     let count = await Product.count({});
+//     let countentries = await Product.count({}).limit(perPage).skip((perPage * page) - perPage);
+//     res.render('table.pug', {
+//         displaydata: displaydata,
+//         count: count,
+//         current: page,
+//         pages: Math.ceil(count/ perPage),
+//         countentries: countentries
+//     });
+// }
+
+module.exports.databaseManagement = function(req, res, next)
 {
-    var perPage = 25;
-    var page = (parseInt(req.query.page)) || 1;
-    let displaydata = await Product.find({}).limit(perPage).skip((perPage * page) - perPage);
-    // console.log(displaydata[0].Brand_Name);
-    let count = await Product.count({});
-    let countentries = await Product.count({}).limit(perPage).skip((perPage * page) - perPage);
-    res.render('table.pug', {
-        displaydata: displaydata,
-        count: count,
-        current: page,
-        pages: Math.ceil(count/ perPage),
-        countentries: countentries
-    });
+    User.findById(req.session.userId)
+        .exec(function (errorUser, user)
+        {
+            if (errorUser)
+            {
+                return next(errorUser);
+            }
+            else
+            {
+                if (user === null)
+                {
+                    res.redirect('/');
+                }
+                else
+                {
+                    var perPage = 25;
+                    var page = (parseInt(req.query.page)) || 1;
+                    Product.find({}).limit(perPage).skip((perPage * page) - perPage)
+                        .exec(function(errFind, dataProducts)
+                        {
+                            if(errFind)
+                                return next(errFind);
+                            else
+                            {
+                                Product.count({})
+                                    .exec(function(errCount, numOfProducts)
+                                    {
+                                        if(errCount)
+                                            return next(errCount);
+                                        else
+                                        {
+                                            Product.count({}).limit(perPage).skip((perPage * page) - perPage)
+                                                .exec(function(errCountLimit, numOfLimitedProducts)
+                                                {
+                                                    if(errCountLimit)
+                                                        return next(errCountLimit);
+                                                    else
+                                                    {
+                                                        res.render('table.pug', {
+                                                            displaydata: dataProducts,
+                                                            count: numOfProducts,
+                                                            current: page,
+                                                            pages: Math.ceil(numOfProducts/ perPage),
+                                                            countentries: numOfLimitedProducts
+                                                        });
+                                                    }
+                                                });
+                                        }
+                                    });
+                            }
+                        });
+                }
+            }
+        });
 }

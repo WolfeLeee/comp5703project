@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.SearchView;
@@ -30,6 +31,7 @@ public class SearchFragment extends Fragment
 
     private SearchView searchView;
     private ScrollView touchInterceptor;
+    private ImageView imageView;
 
     private LinearLayout categoryEgg, categoryChicken, categoryPig;
     private int categoryID;
@@ -55,6 +57,8 @@ public class SearchFragment extends Fragment
         categoryPig = (LinearLayout) view.findViewById(R.id.categoryPig);
         categoryID = 0; // 0 = no select, 1 = egg selected, 2 = chicken selected, 3 = pig selected
 
+        imageView=view.findViewById( R.id.image_search );
+
         /* * * * * * *
          * Listeners *
          * * * * * * */
@@ -78,6 +82,7 @@ public class SearchFragment extends Fragment
                 categoryEgg.setBackgroundColor(getResources().getColor(R.color.darkOrange));
                 categoryChicken.setBackgroundColor(getResources().getColor(R.color.white));
                 categoryPig.setBackgroundColor(getResources().getColor(R.color.white));
+                imageView.setImageResource( R.drawable.farm3 );
             }
         });
         categoryChicken.setOnClickListener(new View.OnClickListener()
@@ -89,6 +94,7 @@ public class SearchFragment extends Fragment
                 categoryEgg.setBackgroundColor(getResources().getColor(R.color.white));
                 categoryChicken.setBackgroundColor(getResources().getColor(R.color.darkOrange));
                 categoryPig.setBackgroundColor(getResources().getColor(R.color.white));
+                imageView.setImageResource( R.drawable.farm2 );
             }
         });
         categoryPig.setOnClickListener(new View.OnClickListener()
@@ -100,6 +106,7 @@ public class SearchFragment extends Fragment
                 categoryEgg.setBackgroundColor(getResources().getColor(R.color.white));
                 categoryChicken.setBackgroundColor(getResources().getColor(R.color.white));
                 categoryPig.setBackgroundColor(getResources().getColor(R.color.darkOrange));
+                imageView.setImageResource( R.drawable.farm1 );
             }
         });
 
