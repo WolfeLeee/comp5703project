@@ -254,7 +254,7 @@ module.exports.importCSVFile = function(req, res, next)
                                 var identicalaccreditation = false;
                                 var position = null;
                                 for(var i =0 ; i< products.length; i++){
-                                    if(data.Brand_Name.localeCompare(products[i].Brand_Name)==0){
+                                    if(data.Brand_Name.localeCompare(products[i].Brand_Name)==0 && data.Category.localeCompare(products[i].Category) == 0){
                                         identicalbrand = true;
                                         position = i;
                                         for(var j = 0 ; j < products[i].Accreditation.length ; j++){
@@ -305,7 +305,7 @@ module.exports.importCSVFile = function(req, res, next)
                                     for(var i = 0 ; i< products.length ; i++){
                                         var identicalName = false;
                                         for(var j = 0; j < documents.length ; j++){
-                                            if(products[i].Brand_Name.localeCompare(documents[j].Brand_Name) == 0){
+                                            if(products[i].Brand_Name.localeCompare(documents[j].Brand_Name) == 0 && products[i].Category.localeCompare(documents[j].Category) == 0){
                                                 identicalName = true;
                                                 // Check for identical Accreditation value,
                                                 // if there is a new Accreditation, the new Accreditation will be pushed to updateproducts Array
