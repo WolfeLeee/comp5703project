@@ -1,0 +1,190 @@
+/**
+STYLE THE LEFT SETTINGS PANEL IN THE DETAIL PAGE PRODUCT
+ */
+
+.pagebody_controlpanel{
+    width:25%;
+    margin-top:.5%;
+    height: calc(100% - 12.5%);
+    display:inline-block;
+    background-color:rgba(230,230,230,0.35);
+    padding:2.5% .5% 2.5% .5%;
+    border-radius: 6px;
+    vertical-align: top;
+}
+
+.pagebody_controlpanel_item{
+    display:flex;
+    width:100%;
+    height:7.5%;
+    padding:2%;
+    align-items:center;
+    text-decoration: none;
+    color:#212529;
+    margin-bottom:4.5%;
+    font-size: 1.2vw;
+}
+
+.pagebody_controlpanel_item:hover, .pagebody_controlpanel_item:active{
+    color:rgb(103,105,106);
+    font-weight:bold;
+}
+
+.selected_item{
+    cursor: not-allowed;
+    pointer-events: none;
+    font-weight: bold;
+    background-color:rgba(220,220,220,0.75);
+}
+
+/**
+STYLE THE RIGHT DIV ELEMENT WHERE INFORMATION REGARDING A BRAND IS DISPLAYED
+ */
+
+.pagebody_mainbody__infodisplay{
+    width: calc(100% - 25.5%);
+    margin-top:.5%;
+    margin-left:.5%;
+    height: calc(100% - 12.5%);
+    display:inline-block;
+    background-color:rgba(230,230,230,0.35);
+    padding:2.5%;
+    border-radius: 6px;
+    vertical-align: top;
+}
+
+.pagebody_mainbody__infodisplay__span{
+    width:100%;
+    height:10%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    cursor:pointer;
+}
+
+.pagebody_mainbody__infodisplay__span__nonclickable{
+    width:100%;
+    height:10%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.pagebody_mainbody__infodisplay__span:hover,.pagebody_mainbody__infodisplay__span:active{
+    background-color:rgba(220,220,220,0.35);
+}
+
+/**
+STYLE EACH ITEM DISPLAYED IN THE RIGHT DIV ELEMENT
+ */
+
+.infodisplay_settings_item{
+    display:inline-block;
+    width:calc(100%/3);
+    font-weight:bold;
+    padding:2.5%;
+}
+
+.infodisplay_settings_editable{
+    text-align:center;
+    color: rgb(103,105,106);
+}
+
+.infodisplay_settings_center{
+    text-align:center;
+}
+
+.infodisplay_settings_right{
+    text-align:right;
+}
+
+.infodisplay_settings_edittext{
+    text-align:right;
+    font-weight: normal;
+    color:blue;
+}
+
+/**
+STYLE THE EDITBOX THAT APPEAR WHEN THE ADMIN DOUBLE CLICKS ON THE EDITABLE CLASS DIV ELEMENT OR CLICK ON THE EDIT TEXT
+ */
+
+.editBox{
+    width:100%;
+    height:auto;
+    display:block;
+}
+
+.infodisplay_settings_edittext:hover, .infodisplay_settings_edittext:active{
+    text-decoration: underline;
+}
+
+/**
+STYLE THE SUBMIT AND RESET BUTTON AREA
+ */
+
+.pagebody_mainbody__infodisplay__span__submit{
+    width:100%;
+    height:5%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin-top:5%;
+}
+
+/**
+STYLE THE SUBMIT AND RESET BUTTON
+ */
+
+.infodisplay_settings__submitbutton{
+    width: 15%;
+    height:100%;
+    margin-right:2.5%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    border-radius: 6px;
+    cursor:pointer;
+    text-transform:uppercase;
+    font-size:1.2vw;
+    font-weight:400;
+    color:#FFFFFF;
+    background-color:#3369ff;
+    box-shadow:inset 0 -0.6em 0 -0.35em rgba(0,0,0,0.17);
+}
+
+.display_none{
+    visibility: hidden;
+}
+
+.infodisplay_settings__resetbutton{
+    width: 15%;
+    height:100%;
+    margin-right:2.5%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    border-radius: 6px;
+    cursor:pointer;
+    text-transform:uppercase;
+    font-size:1.2vw;
+    font-weight:400;
+    color:#FFFFFF;
+    background-color:rgb(255,105,51);
+    box-shadow:inset 0 -0.6em 0 -0.35em rgba(0,0,0,0.17);
+}
+
+.infodisplay_settings__submitbutton:hover{
+    background-color:rgb(101,155,255);
+}
+
+.infodisplay_settings__submitbutton:active{
+    margin-top:.5em;
+}
+
+.infodisplay_settings__resetbutton:active,.infodisplay_settings__resetbutton:hover{
+    background-color:rgb(255,155,101);
+}
+
+.infodisplay_settings__resetbutton:active{
+    margin-top:.5em;
+}

@@ -11,7 +11,7 @@ window.onload = function()
         }
         if (event.target === modalReset)
         {
-            modalReset.style.display = "none";
+            modalResetB.style.display = "none";
         }
         // if (event.target === modalRegister)
         // {
