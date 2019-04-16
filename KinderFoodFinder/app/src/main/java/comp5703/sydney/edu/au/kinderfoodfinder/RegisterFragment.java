@@ -55,22 +55,22 @@ public class RegisterFragment extends Fragment
         toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setVisibility(View.VISIBLE);
 
-        inputName = (EditText) view.findViewById(R.id.inputName);
+        inputName = (EditText) view.findViewById(R.id.name);
 
         radioGroup = (RadioGroup) view.findViewById(R.id.radioGender);
         int selectedId = radioGroup.getCheckedRadioButtonId();
         radioButton = (RadioButton) view.findViewById(selectedId);
 
-        inputEmail = (EditText) view.findViewById(R.id.inputEmailR);
-        inputPwd = (EditText) view.findViewById(R.id.inputPwdR);
-        inputConfirmPwd = (EditText) view.findViewById(R.id.inputPwdConfirm);
+        inputEmail = (EditText) view.findViewById(R.id.email);
+        inputPwd = (EditText) view.findViewById(R.id.password);
+        inputConfirmPwd = (EditText) view.findViewById(R.id.confirm_password);
         inputBirthday = (EditText) view.findViewById(R.id.inputBirthday);
         datePicker = (ImageView) view.findViewById(R.id.datePicker);
 
         checkIfDiscloseDOB = (CheckBox) view.findViewById(R.id.checkIfDiscloseDOB);
         checkAgreement = (CheckBox) view.findViewById(R.id.checkAgreement);
 
-        btnRegister = (Button) view.findViewById(R.id.btnRegister);
+        btnRegister = (Button) view.findViewById(R.id.signup);
 
         // testing only
 //        Toast.makeText(getActivity(), radioButton.getText(), Toast.LENGTH_SHORT).show();

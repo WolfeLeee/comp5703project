@@ -28,6 +28,18 @@ public class MoreFragment extends Fragment
     private Fragment fragmentreport;
     private Fragment fragmentglossary;
 
+
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        name = getArguments().getString("name");
+//
+//        id=getArguments().getString( "id" );
+
+
+
+
+//    }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -49,6 +61,11 @@ public class MoreFragment extends Fragment
         share = view.findViewById(R.id.tv_share);
         account = view.findViewById(R.id.tv_Account);
         glossary = view.findViewById(R.id.tv_glossary);
+
+        Intent intent=getActivity().getIntent();
+        String name = intent.getStringExtra("fb_name");
+        String fb_id = intent.getStringExtra("fb_id");
+        account.setText( name );
 
         rating.setOnClickListener(new View.OnClickListener()
         {
