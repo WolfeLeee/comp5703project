@@ -563,7 +563,6 @@ module.exports.ProductDetailPage_updateBrandSummary = async function(req,res,nex
                             return next(errorUpdate);
                         }
                         else {
-                            console.log('successfully update brand')
                             res.redirect('/detailproductPage?productid=' + Brand_Id);
                         }
                     });
@@ -626,30 +625,39 @@ module.exports.ProductDetailPage_Accreditation__Delete = async function(req,res,
             }
             else
             {
-                res.redirect('/');
+                res.redirect('/detailproductPage_Accreditation?productid='+req.query.productid);
             }
         });
+}
 
+/** Displays update view for one accreditation in a Brand
+ */
 
-    // Product.findById(req.query.productid)
-    //     .exec(function(errProduct,product){
-    //         if(errProduct)
-    //         {
-    //             return next(errProduct);
-    //         }
-    //         else
-    //         {
-    //             if(product === null)
-    //             {
-    //                 res.redirect('/');
-    //             }
-    //             else
-    //             {
-    //                 console.log(product);
-    //             }
-    //
-    //         }
-    //     });
+module.exports.ProductDetailPage_Accreditation__Update = async function(req,res,next){
+    Product.findById(req.query.productid)
+        .exec(function(errProduct,product)
+        {
+            if(errProduct)
+            {
+                return next(errProduct);
+            }
+            else
+            {
+                if(product == null)
+                {
+                    res.redirect('/');
+
+                }
+                else
+                {
+                    res.render("productDetailPage_Update.pug",
+                        {
+                            product:product,
+                            accreditation:product.Accreditation[parseInt(req.query.no)]
+                    });
+                }
+            }
+        });
 }
 
 

@@ -55,36 +55,65 @@ $(document).ready(function()
             }
         }
 
-        $('.deletebutton_deletemarked').on("click",function(){
+        $('.deletebutton_deletemarked').on("click",function(e){
             var checkedboxes = $('.accreditationlist_table__Delete:checked');
-            var accrids = [];
-            for(var i = 0 ; i < checkedboxes.length; i++)
-            {
-                accrids.push(checkedboxes.get(i).getAttribute('value'));
+            var confirmation = confirm('Do you want to delete this(these) '+checkedboxes.length+' Accreditation(s)?');
+            if(confirmation == true){
+                var accrids = [];
+                for(var i = 0 ; i < checkedboxes.length; i++)
+                {
+                    accrids.push(checkedboxes.get(i).getAttribute('value'));
+                }
+                var params = {
+                    accrids: accrids,
+                    productid : $(this).attr('value')
+                };
+                post('/detailproductPage_Accreditation__Delete',params,"get");
             }
-            var params = {
-                accrids: accrids,
-                productid : $(this).attr('value')
-            };
-            post('/detailproductPage_Accreditation__Delete',params,"get");
+            else {
+                e.preventDefault();
+            }
+
         })
 
+        /** Function to transform the Accreditation and Rating table cell into textarea;
+         * When the admin double clicks on a row,
+         * The system will check whether the textarea ".EditBox" is available.
+         * If it is true, nothing will happen;
+         * Otherwise, two textarea elements will be pushed to the Accreditation and Rating cells.
+         */
 
+            $('.accreditationlist_table_tablerow').dblclick(function(){
+               var editableaccr = $(this).children().eq(0);
+               var editablerating = $(this).children().eq(1);
+               if($(this).children().eq(0).find('.editBox').length == 0){
+                   var editboxaccr = '<textarea class="editBox">' + editableaccr.html() + '</textarea>';
+                   editableaccr.html(editboxaccr);
+                   var editboxrating = '<input autocomplete="off" list="browsers" class="editBox" name="browser"><datalist id="browsers"><option selected value="Good"><option value="Best"><option value="Avoid"></datalist>'
+                   editablerating.html(editboxrating);
+               }
+            });
 
-        // $('.deletebutton_deletemarked').click(function(){
-        //     var checkedboxes = $('.accreditationlist_table__Delete:checked');
-        //     var accrids = [];
-        //     for(var i = 0 ; i < checkedboxes.length; i++)
-        //     {
-        //         accrposition.push(checkedboxes.get(i).getAttribute('value'));
-        //     }
-        //     var params = {
-        //         accrids: accrids,
-        //         brandid : $(this).getAttribute('value');
-        //     }
-        //     post('/detailproductPage_Accreditation__Delete',params,"get");
-        //
-        // });
+        /** When user clicks enter in the textarea ".editBox",
+         * The textarea will disappear; Hence, the value of the editable div will be replaced by the textarea value
+         */
+
+        $('.accreditationlist_table__Accreditation').on("keypress", function(event){
+            if(event.which == 13){
+                var editableaccr = $(this).parent().children().eq(0);
+                var editablerating = $(this).parent().children().eq(1);
+                var $text1 = editableaccr.find('.editBox').first().val();
+                var $text2 = editablerating.find('.editBox').first().val();
+                if($text2.localeCompare("") == 0){
+                    alert("Please choose a rating");
+                    event.preventDefault();
+                }
+                else {
+                    editableaccr.html($text1);
+                    editablerating.html($text2);
+                }
+            }
+        })
 
         /** Post function
          *
