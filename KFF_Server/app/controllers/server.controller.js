@@ -1,5 +1,6 @@
 var User = require("../models/user");
 var Product = require("../models/product");
+var AppUser = require("../models/appUser");
 
 var mongoose = require('mongoose');
 var csv = require('fast-csv');
@@ -436,39 +437,6 @@ module.exports.goToImportPage = function(req, res, next)
         });
 };
 
-/** Direct user to the product detail page.
- * Hence, the product page that will be displayed depends on the productid that is passed to this module
- */
-
-
-module.exports.goToProductDetailPage = function (req,res,next)
-{
-    Product.findById(req.query.productid)
-        .exec(function(errorProduct, product)
-        {
-           if (errorProduct)
-           {
-               return next(errorProduct);
-           }
-           else
-           {
-               if(product === null)
-               {
-                   res.redirect('/');
-               }
-               else
-               {
-                   res.render('productDetailPage/productDetailPage.pug',{
-                       brandid: product._id,
-                       brandname : product.Brand_Name,
-                       brandcategory: product.Category,
-                       accreditacount: product.Accreditation.length
-                   });
-               }
-           }
-        });
-}
-
 // Revision.findArticleHighestRev(function(errorArticleHighestRev, resultArticleHighestRev)
 // {
 //     if(errorArticleHighestRev || !resultArticleHighestRev)
@@ -544,6 +512,37 @@ module.exports.goToProductDetailPage = function (req,res,next)
  * Jordan's coding *
  * * * * * * * * * */
 
+/** Direct user to the product detail page.
+ * Hence, the product page that will be displayed depends on the productid that is passed to this module
+ */
+module.exports.goToProductDetailPage = function (req,res,next)
+{
+    Product.findById(req.query.productid)
+        .exec(function(errorProduct, product)
+        {
+            if (errorProduct)
+            {
+                return next(errorProduct);
+            }
+            else
+            {
+                if(product === null)
+                {
+                    res.redirect('/');
+                }
+                else
+                {
+                    res.render('productDetailPage/productDetailPage.pug',{
+                        brandid: product._id,
+                        brandname : product.Brand_Name,
+                        brandcategory: product.Category,
+                        accreditacount: product.Accreditation.length
+                    });
+                }
+            }
+        });
+};
+
 /** Update brand's summary information: Name, Category, Image, */
 module.exports.ProductDetailPage_updateBrandSummary = async function(req,res,next)
 {
@@ -572,7 +571,7 @@ module.exports.ProductDetailPage_updateBrandSummary = async function(req,res,nex
             }
         });
 
-}
+};
 
 // module.exports.databaseManagement = async function(req, res)
 // {
@@ -588,7 +587,7 @@ module.exports.ProductDetailPage_updateBrandSummary = async function(req,res,nex
 //         pages: Math.ceil(count/ perPage),
 //         countentries: countentries
 //     });
-// }
+// };
 
 module.exports.databaseManagement = function(req, res, next)
 {
@@ -646,4 +645,91 @@ module.exports.databaseManagement = function(req, res, next)
                 }
             }
         });
-}
+};
+
+/* * * * * * * * * * * * * * * * * *
+ * Communication with Android app  *
+ * * * * * * * * * * * * * * * * * */
+
+// only for testing
+// var http = require("http");
+//
+// http.createServer(function(request, response)
+// {
+//     var data;
+//     request.addListener("data", function(postDataChunk)
+//     {
+//         data += postDataChunk;
+//     });
+//
+//     request.addListener("end", function()
+//     {
+//         console.log('KFF app listening on port 8888!');
+//         console.log("data: " + data);
+//     });
+// }).listen(8888);
+
+module.exports.registerAndroidAppUsers = function(req, res, next)
+{
+    // set up and receive the user info
+    var name = req.query.name;
+    var gender = req.query.gender;
+    var email = req.query.email;
+    var password = req.query.password;
+    var birthday = req.query.birthday;
+    console.log(name);
+
+    var appUserData = {
+        name: req.query.name,
+        gender: req.query.gender,
+        email: req.query.email,
+        password: req.query.password,
+        birthday: req.query.birthday
+    };
+
+    AppUser.create(appUserData, function (error, appUser)
+    {
+        if (error)
+        {
+            var err = new Error('User info is invalid!');
+            err.status = 400;
+            return next(err);
+        }
+        else
+        {
+            res.send("Server has got your data!");
+        }
+    });
+
+    // req.addListener("data", function(postDataChunk)
+    // {
+    //     // data += postDataChunk;
+    //     data = req.query.name;
+    // });
+    //
+    // req.addListener("end", function()
+    // {
+    //     console.log('Welcome to register server!');
+    //     console.log("data: " + data);
+    // });
+};
+
+module.exports.loginAndroidAppUsers = function(req, res, next)
+{
+    // set up and receive the user info
+    var email = req.query.email;
+    var password = req.query.password;
+    console.log(email);
+
+    AppUser.authenticate(email, password, function (error, user)
+    {
+        if (error || !user)
+        {
+            res.send("No");
+        }
+        else
+        {
+            res.send("Yes");
+        }
+    });
+};
