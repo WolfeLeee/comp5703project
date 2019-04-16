@@ -15,7 +15,10 @@ router.get('/backFromSuccess', controller.backFromSuccess);
 
 router.get('/importPage', controller.goToImportPage);
 router.get('/dbmanagement', controller.databaseManagement);
+
 router.get('/detailproductPage', controller.goToProductDetailPage);
+router.get('/detailproductPage_Accreditation', controller.ProductDetailPage_Accreditation);
+router.get('/detailproductPage_Accreditation__Delete', controller.ProductDetailPage_Accreditation__Delete);
 router.get('/detailproductPage_updateBrandSummary', controller.ProductDetailPage_updateBrandSummary);
 
 // Retrieve messages from Android app

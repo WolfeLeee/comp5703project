@@ -4,6 +4,7 @@ var AppUser = require("../models/appUser");
 
 var mongoose = require('mongoose');
 var csv = require('fast-csv');
+var ObjectId = require('mongodb').ObjectID;
 
 var adminId = "";
 
@@ -254,7 +255,7 @@ module.exports.importCSVFile = function(req, res, next)
                                 var identicalaccreditation = false;
                                 var position = null;
                                 for(var i =0 ; i< products.length; i++){
-                                    if(data.Brand_Name.localeCompare(products[i].Brand_Name)==0){
+                                    if(data.Brand_Name.localeCompare(products[i].Brand_Name)==0 && data.Category.localeCompare(products[i].Category) == 0){
                                         identicalbrand = true;
                                         position = i;
                                         for(var j = 0 ; j < products[i].Accreditation.length ; j++){
@@ -305,7 +306,7 @@ module.exports.importCSVFile = function(req, res, next)
                                     for(var i = 0 ; i< products.length ; i++){
                                         var identicalName = false;
                                         for(var j = 0; j < documents.length ; j++){
-                                            if(products[i].Brand_Name.localeCompare(documents[j].Brand_Name) == 0){
+                                            if(products[i].Brand_Name.localeCompare(documents[j].Brand_Name) == 0 && products[i].Category.localeCompare(documents[j].Category) == 0){
                                                 identicalName = true;
                                                 // Check for identical Accreditation value,
                                                 // if there is a new Accreditation, the new Accreditation will be pushed to updateproducts Array
@@ -329,7 +330,6 @@ module.exports.importCSVFile = function(req, res, next)
                                             insertproducts.push(products[i]);
                                         }
                                     }
-                                    console.log(updateproducts.length);
                                     // import the products into mongoDB,
                                     // Check whether the insertproducts array is empty
                                     if(insertproducts.length > 0){
@@ -541,7 +541,7 @@ module.exports.goToProductDetailPage = function (req,res,next)
                 }
             }
         });
-};
+}
 
 /** Update brand's summary information: Name, Category, Image, */
 module.exports.ProductDetailPage_updateBrandSummary = async function(req,res,next)
@@ -572,6 +572,88 @@ module.exports.ProductDetailPage_updateBrandSummary = async function(req,res,nex
         });
 
 };
+
+
+/** Display all accreditations available for a product,
+ * This view also enables the admin to edit an accreditation of a brand or add more accreditation(s) to the brand
+ */
+module.exports.ProductDetailPage_Accreditation = async function(req,res,next){
+    Product.findById(req.query.productid)
+        .exec(function(errProduct,product)
+        {
+            if(errProduct)
+            {
+                return next(errProduct);
+            }
+            else
+            {
+                if(product === null)
+                {
+                    res.redirect('/');
+                }
+                else
+                {
+                    var perPage = 25 || req.query.perPage;
+                    var page = (parseInt(req.query.page)) || 1;
+                    var displayaccreditation = [];
+                    for( var i = ((perPage * page) - perPage) ; i< product.Accreditation.length ; i++)
+                    {
+                        displayaccreditation.push(product.Accreditation[i]);
+                    }
+
+                    res.render('productDetailPage/productDetailPage_Accreditation.pug'
+                        ,{
+                        brandid: product._id,
+                        brandname : product.Brand_Name,
+                        brandcategory: product.Category,
+                        accreditation: displayaccreditation
+                    }
+                    );
+                }
+            }
+        });
+}
+
+/** Delete accreditations in a particular Brand
+ */
+module.exports.ProductDetailPage_Accreditation__Delete = async function(req,res,next){
+    var accrids = req.query.accrids.split(',');
+    Product.update({_id:req.query.productid},{$pull:{Accreditation:{_id:{$in:accrids}}}})
+        .exec(function(errProduct)
+        {
+            if(errProduct)
+            {
+                return next(errProduct);
+            }
+            else
+            {
+                res.redirect('/');
+            }
+        });
+
+
+    // Product.findById(req.query.productid)
+    //     .exec(function(errProduct,product){
+    //         if(errProduct)
+    //         {
+    //             return next(errProduct);
+    //         }
+    //         else
+    //         {
+    //             if(product === null)
+    //             {
+    //                 res.redirect('/');
+    //             }
+    //             else
+    //             {
+    //                 console.log(product);
+    //             }
+    //
+    //         }
+    //     });
+}
+
+
 
 // module.exports.databaseManagement = async function(req, res)
 // {
