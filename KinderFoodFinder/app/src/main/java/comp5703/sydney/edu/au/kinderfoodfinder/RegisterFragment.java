@@ -61,20 +61,20 @@ public class RegisterFragment extends Fragment
         toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setVisibility(View.VISIBLE);
 
-        inputName = (EditText) view.findViewById(R.id.name);
+        inputName = (EditText) view.findViewById(R.id.inputName);
 
         radioGroup = (RadioGroup) view.findViewById(R.id.radioGender);
 
-        inputEmail = (EditText) view.findViewById(R.id.email);
-        inputPwd = (EditText) view.findViewById(R.id.password);
-        inputConfirmPwd = (EditText) view.findViewById(R.id.confirm_password);
+        inputEmail = (EditText) view.findViewById(R.id.inputEmailR);
+        inputPwd = (EditText) view.findViewById(R.id.inputPwdR);
+        inputConfirmPwd = (EditText) view.findViewById(R.id.inputPwdConfirm);
         inputBirthday = (EditText) view.findViewById(R.id.inputBirthday);
         datePicker = (ImageView) view.findViewById(R.id.datePicker);
 
         checkIfDiscloseDOB = (CheckBox) view.findViewById(R.id.checkIfDiscloseDOB);
         checkAgreement = (CheckBox) view.findViewById(R.id.checkAgreement);
 
-        btnRegister = (Button) view.findViewById(R.id.signup);
+        btnRegister = (Button) view.findViewById(R.id.btnRegister);
 
         // testing only
 //        Toast.makeText(getActivity(), radioButton.getText(), Toast.LENGTH_SHORT).show();
@@ -211,7 +211,7 @@ public class RegisterFragment extends Fragment
         String ipAddress = "172.20.10.4";  //100.101.72.250 Here should be changed to your server IP
         if(!showBirthday)
             url = "http://" + ipAddress + ":3000/android-app-register?name=" + name + "&gender=" + genderModified + "&email=" +
-                email + "&password=" + pwd + "&birthday=" + birthdayModified;
+                    email + "&password=" + pwd + "&birthday=" + birthdayModified;
         else
             url = "http://" + ipAddress + ":3000/android-app-register?name=" + name + "&gender=" + genderModified + "&email=" +
                     email + "&password=" + pwd + "&birthday=Not+Disclose";
@@ -232,16 +232,16 @@ public class RegisterFragment extends Fragment
             }
         },
                 new Response.ErrorListener()  //Create an error listener to handle errors appropriately.
-        {
-            @Override
-            public void onErrorResponse(VolleyError error)
-            {
-                //This code is executed if there is an error.
-                registerProgressDialog.dismiss();
-                Toast.makeText(getActivity(), "Registered Failed!", Toast.LENGTH_SHORT).show();
-                Log.d("Send query error:", error.toString());
-            }
-        });
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error)
+                    {
+                        //This code is executed if there is an error.
+                        registerProgressDialog.dismiss();
+                        Toast.makeText(getActivity(), "Registered Failed!", Toast.LENGTH_SHORT).show();
+                        Log.d("Send query error:", error.toString());
+                    }
+                });
         ExampleRequestQueue.add(ExampleStringRequest);
     }
 }
