@@ -7,8 +7,6 @@ var mongoose = require('mongoose');
 var ProductSchema = new mongoose.Schema(
     {
         Brand_Name: String,
-        // Accreditation: String,
-        // Rating: String,
         Accreditation:[{
             Accreditation:String,
             Rating:String

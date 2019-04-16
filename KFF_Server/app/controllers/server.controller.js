@@ -691,7 +691,7 @@ module.exports.databaseManagement = function(req, res, next)
                     var perPage = 25;
                     var page = (parseInt(req.query.page)) || 1;
                     Product.find({}).limit(perPage).skip((perPage * page) - perPage)
-                        .exec(function(errFind, dataProducts)
+                        .exec(function(errFind, dataProductsPerPage)
                         {
                             if(errFind)
                                 return next(errFind);
@@ -711,13 +711,23 @@ module.exports.databaseManagement = function(req, res, next)
                                                         return next(errCountLimit);
                                                     else
                                                     {
-                                                        res.render('table.pug', {
-                                                            displaydata: dataProducts,
-                                                            count: numOfProducts,
-                                                            current: page,
-                                                            pages: Math.ceil(numOfProducts/ perPage),
-                                                            countentries: numOfLimitedProducts
-                                                        });
+                                                        Product.find({})
+                                                            .exec(function(errFindAll, dataAllProducts)
+                                                            {
+                                                               if(errFindAll)
+                                                                   return next(errFindAll);
+                                                               else
+                                                               {
+                                                                   res.render('table.pug', {
+                                                                       displaydata: dataProductsPerPage,
+                                                                       displayAllData: dataAllProducts,
+                                                                       count: numOfProducts,
+                                                                       current: page,
+                                                                       pages: Math.ceil(numOfProducts/ perPage),
+                                                                       countentries: numOfLimitedProducts
+                                                                   });
+                                                               }
+                                                            });
                                                     }
                                                 });
                                         }

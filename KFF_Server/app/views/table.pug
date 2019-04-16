@@ -4,14 +4,17 @@ html
     head
         meta(charset='utf-8')
         title Kinder Food Finder
-        //script(src='table.js')
         script(src="http://code.jquery.com/jquery-1.9.1.min.js")
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+        script(src="js/search.js" type="text/javascript")
         link(rel='stylesheet',type='text/css',href='css/fontawesome-free/all.min.css')
         link(rel='stylesheet',type='text/css',href='css/dataTables/dataTables.bootstrap4.css')
         link(rel='stylesheet',type='text/css', href='css/shared.css')
         link(rel='stylesheet',type='text/css',href='css/sb-admin.min.css')
         link(rel='stylesheet',type='text/css',href='css/table_brand.css')
+        script.
+            window.jQuery || document.write('script(src="js/jquery.js")');
+            var displayAllData = !{JSON.stringify(displayAllData).replace(/<\//g, '<\\/')}; // get the product object list from express
     body
         header.pageheader
             div.pageheader_title
@@ -58,8 +61,8 @@ html
                                                     option(value='200') 200
                                     div.col-sm-12.col-md-6
                                         div#dataTable_filter.dataTables_filter
-                                            label Search
-                                                input(id="searchInput" class="form-control form-control-sm" type='search', aria-controls='dataTable', placeholder="Search a brand....")
+                                            input(id="searchInput" class="form-control form-control-sm" type='search', aria-controls='dataTable', placeholder="Search a brand....")
+                                            input(id="searchButton" type="button" value="Search")
                                 div.row
                                     div.col-sm-12
                                         table.table.table-bordered.dataTable#dataTable(width="100%", cellspacing="0", role="grid" aria-describedby="dataTable_info" style="width: 100%")
@@ -96,14 +99,14 @@ html
                                                     th(rowspan="1", colspan="1") Accreditation
                                                     th(rowspan="1", colspan="1") Category
                                                     th(rowspan="1", colspan="1") Delete
-                                            tbody
+                                            tbody(id="table_body")
                                                  - for(var i = 0; i < displaydata.length ; i++)
                                                     tr(role="row", class="odd")
                                                         td.Table_Brand_Name
                                                             - var id = displaydata[i]._id
-                                                            a(href = "/detailproductPage?productid="+id)    #{displaydata[i].Brand_Name}
+                                                            a(href="/detailproductPage?productid="+id) #{displaydata[i].Brand_Name}
                                                         td
-                                                            - for( var j = 0 ;j < displaydata[i].Accreditation.length ; j++ )
+                                                            - for(var j = 0; j < displaydata[i].Accreditation.length; j++ )
                                                                 div #{displaydata[i].Accreditation[j].Accreditation} - #{displaydata[i].Accreditation[j].Rating}
                                                         td #{displaydata[i].Category}
                                                         td.deletecheckbox
@@ -111,7 +114,7 @@ html
                                                             input(type="checkbox", value=id)
                                 div.row
                                     div.col-sm-12.col-md-5
-                                        div.dataTables_info#datable_info(role="status", aria-live="polite") Showing #{countentries} of #{count}
+                                        div.dataTables_info(id="datable_info" role="status", aria-live="polite") Showing #{countentries} of #{count}
                                     div.col-sm-12.col-md-7
                                         div.dataTables_paginate.paging_simple_numbers#dataTable_paginate
                                             if(pages > 0)
