@@ -5,7 +5,9 @@ head
     title Success Page
 body
     div
-        h1 Successfully Import #{numProducts} Products Into MongoDB!
+        h1 Successfully Import CSV File Into MongoDB:
+        h2 Insert #{numProducts} Products!
+        h2 Update #{numUpdates} Products!
             div
                 form(action="/backFromSuccess" method="get")
                     input(type="submit" value="BACK")

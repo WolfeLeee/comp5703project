@@ -1,0 +1,54 @@
+/**
+STYLE THE LEFT SETTINGS PANEL IN THE DETAIL PAGE PRODUCT
+ */
+
+.pagebody_controlpanel{
+    width:25%;
+    margin-top:.5%;
+    height: calc(100% - 12.5%);
+    display:inline-block;
+    background-color:rgba(230,230,230,0.35);
+    padding:2.5% .5% 2.5% .5%;
+    border-radius: 6px;
+    vertical-align: top;
+}
+
+.pagebody_controlpanel_item{
+    display:flex;
+    width:100%;
+    height:7.5%;
+    padding:2%;
+    align-items:center;
+    text-decoration: none;
+    color:#212529;
+    margin-bottom:4.5%;
+    font-size: 1.2vw;
+}
+
+.pagebody_controlpanel_item:hover, .pagebody_controlpanel_item:active{
+    color:rgb(103,105,106);
+    font-weight:bold;
+}
+
+.selected_item{
+    cursor: not-allowed;
+    pointer-events: none;
+    font-weight: bold;
+    background-color:rgba(220,220,220,0.75);
+}
+
+/**
+STYLE THE RIGHT DIV ELEMENT WHERE INFORMATION REGARDING A BRAND IS DISPLAYED
+ */
+
+.pagebody_mainbody__infodisplay{
+    width: calc(100% - 25.5%);
+    margin-top:.5%;
+    margin-left:.5%;
+    height: calc(100% - 12.5%);
+    display:inline-block;
+    background-color:rgba(230,230,230,0.35);
+    padding:2.5%;
+    border-radius: 6px;
+    vertical-align: top;
+}

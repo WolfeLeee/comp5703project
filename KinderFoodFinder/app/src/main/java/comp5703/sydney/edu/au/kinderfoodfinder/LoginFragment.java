@@ -1,5 +1,6 @@
 package comp5703.sydney.edu.au.kinderfoodfinder;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+<<<<<<< HEAD
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.facebook.AccessToken;
@@ -32,6 +34,14 @@ import org.json.JSONObject;
 import java.util.Arrays;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+=======
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+>>>>>>> 0468133fa64488c82e82d8325905b43126eaa9da
 
 public class LoginFragment extends Fragment
 {
@@ -41,6 +51,7 @@ public class LoginFragment extends Fragment
     private TextView textRegister;
     private EditText inputEmail, inputPwd;
 
+<<<<<<< HEAD
 
     private LoginButton loginButton;
     private CircleImageView circleImageView;
@@ -50,6 +61,9 @@ public class LoginFragment extends Fragment
     String name=new String(  );
     String fb_id =new String(  );
     public final int VIEW_ITEM_REQUEST_CODE = 647;
+=======
+    private ProgressDialog loginProgressDialog;
+>>>>>>> 0468133fa64488c82e82d8325905b43126eaa9da
 
     @Nullable
     @Override
@@ -59,6 +73,8 @@ public class LoginFragment extends Fragment
 
         // set up
         fragmentRegister = new RegisterFragment();
+        loginProgressDialog = new ProgressDialog(getActivity());
+
         btnLogin = (Button) view.findViewById(R.id.btnLogin);
 //        textRegister = (TextView) view.findViewById(R.id.textRegister);
         inputEmail = (EditText) view.findViewById(R.id.input_Email);
@@ -76,16 +92,12 @@ public class LoginFragment extends Fragment
             @Override
             public void onClick(View v)
             {
-                // only for testing *****
+                // set up
                 String email = inputEmail.getText().toString().trim();
                 String pwd = inputPwd.getText().toString().trim();
-                if(email.equals("test") && pwd.equals("test"))
-                {
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    startActivity(intent);
-                    getActivity().finish();
-                }
 
+                // login function
+                loginUser(email, pwd);
             }
         });
 
@@ -139,6 +151,7 @@ public class LoginFragment extends Fragment
         return view;
     }
 
+<<<<<<< HEAD
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -229,5 +242,68 @@ public class LoginFragment extends Fragment
         request.setParameters( parameters );
         request.executeAsync();
 
+=======
+    /* * * * * * * * * *
+     * Login Functions *
+     * * * * * * * * * */
+    private void loginUser(String email, String password)
+    {
+        // show the progress dialog until the login validation is complete
+        loginProgressDialog.setMessage("Login...");
+        loginProgressDialog.show();
+
+        // only for developer to test the app
+        if(email.equals("test") && password.equals("test"))
+        {
+            loginProgressDialog.dismiss();
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            startActivity(intent);
+            getActivity().finish();
+            return;
+        }
+
+        // set up
+        String ipAddress = "172.20.10.4";  //100.101.72.250 Here should be changed to your server IP
+        String url = "http://" + ipAddress + ":3000/android-app-login?email=" + email + "&password=" + password;
+
+        // send the request to the server for checking user login info
+        RequestQueue ExampleRequestQueue = Volley.newRequestQueue(getActivity());
+        StringRequest ExampleStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>()
+        {
+            @Override
+            public void onResponse(String response)
+            {
+                //This code is executed if the server responds, whether or not the response contains data.
+                //The String 'response' contains the server's response.
+                //You can test it by printing response.substring(0,500) to the screen.
+                loginProgressDialog.dismiss();
+                if(response.equals("Yes"))
+                {
+                    Toast.makeText(getActivity(), "Login Successfully!", Toast.LENGTH_SHORT).show();
+                    Log.d("Send query response:", response);
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    startActivity(intent);
+                    getActivity().finish();
+                }
+                else
+                {
+                    Toast.makeText(getActivity(), "Wrong email or password!", Toast.LENGTH_SHORT).show();
+                    Log.d("Send query response:", response);
+                }
+            }
+        },
+                new Response.ErrorListener()  //Create an error listener to handle errors appropriately.
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error)
+                    {
+                        //This code is executed if there is an error.
+                        loginProgressDialog.dismiss();
+                        Toast.makeText(getActivity(), "Login Failed!", Toast.LENGTH_SHORT).show();
+                        Log.d("Send query error:", error.toString());
+                    }
+                });
+        ExampleRequestQueue.add(ExampleStringRequest);
+>>>>>>> 0468133fa64488c82e82d8325905b43126eaa9da
     }
 }
