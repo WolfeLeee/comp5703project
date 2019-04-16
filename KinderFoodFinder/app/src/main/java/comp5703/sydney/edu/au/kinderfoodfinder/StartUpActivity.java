@@ -33,6 +33,9 @@ public class StartUpActivity extends AppCompatActivity
         // set up fragment
         fragmentLogin = new LoginFragment();
 
+
+
+
         // directly make the view to login fragment first
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragmentLogin).commit();

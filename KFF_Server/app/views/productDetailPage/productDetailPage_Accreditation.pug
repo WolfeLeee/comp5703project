@@ -76,10 +76,8 @@ body
                                 - for (var i =0 ; i < accreditation.length ; i++)
                                     tr.accreditationlist_table_tablerow(role="row")
                                         - var id = brandid;
-                                        td.accreditationlist_table__item.accreditationlist_table__Accreditation
-                                            a(href="/detailproductPage_Accreditation__Modify?productid=" +id+"no=" + i) #{accreditation[i].Accreditation}
-                                        td.accreditationlist_table__item.accreditationlist_table__Accreditation
-                                            a(href="/detailproductPage_Accreditation__Modify?productid=" +id+"no=" + i) #{accreditation[i].Rating}
+                                        td.accreditationlist_table__item.accreditationlist_table__Accreditation #{accreditation[i].Accreditation}
+                                        td.accreditationlist_table__item.accreditationlist_table__Accreditation #{accreditation[i].Rating}
                                         td.accreditationlist_table__item.accreditationlist_table__Accreditation
                                             label.button
                                                 - var accrid = accreditation[i]._id

@@ -62,17 +62,24 @@ $(document).ready(function()
          * in the div box will be collected and sent to the server to update that Brand
          */
 
-        $('.infodisplay_settings__submitbutton').on("click",function(){
-            var Brand_Element = $('.infodisplay_settings_editable');
-            var brand_name = Brand_Element.get(0).textContent;
-            var brand_category = Brand_Element.get(1).textContent;
-            var brand_id = $(this).attr('title');
-            var params = {
-                brand_name: brand_name,
-                brand_category: brand_category,
-                brand_id:brand_id
-            };
-            post('/detailproductPage_updateBrandSummary',params,'get');
+        $('.infodisplay_settings__submitbutton').on("click",function(e){
+            var confirmation = confirm("Do you want to update this brand?");
+            if( confirmation == true){
+                var Brand_Element = $('.infodisplay_settings_editable');
+                var brand_name = Brand_Element.get(0).textContent;
+                var brand_category = Brand_Element.get(1).textContent;
+                var brand_id = $(this).attr('title');
+                var params = {
+                    brand_name: brand_name,
+                    brand_category: brand_category,
+                    brand_id:brand_id
+                };
+                post('/detailproductPage_updateBrandSummary',params,'get');
+            }
+            else {
+                e.preventDefault();
+            }
+
         })
 
         $('.infodisplay_settings__resetbutton').on("click",function(){
