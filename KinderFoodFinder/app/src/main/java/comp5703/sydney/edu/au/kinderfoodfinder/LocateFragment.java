@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -29,6 +30,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -59,14 +61,17 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
     private GoogleApiClient mGoogleApiClient;
 
     private double latitude,longitude;
+    private String org_address, des_address;
     private Location mLastLocation;
     private LocationRequest mLocationRequest;
     private Marker mMarker;
+    private Fragment fragmentreport;
 
     IGoogleAPIService mService;
+    MyPlaces currentPlace;
 
 
-
+    ImageView add_report;
     MaterialSearchBar materialSearchBar;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
@@ -100,8 +105,10 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
             checkLocationPermission();
         }
 
+        fragmentreport = new ReportFragment();
 
         // Init View
+        add_report = mView.findViewById(R.id.add_report);
         recyclerView = mView.findViewById(R.id.recycler_search);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -111,6 +118,19 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
 
         // Init DB
         database = new Database(getActivity());
+
+        // Jump to Report Page
+
+        add_report.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragment_container, fragmentreport).commit();
+            }
+        });
 
         // Setup search bar
 
@@ -170,8 +190,9 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
         return mView;
     }
 
+    //get nearby place location from API
     private void nearByPlace(final String placeType) {
-        String url = getUrl(latitude, longitude, placeType);
+        String url = getPlaceUrl(latitude, longitude, placeType);
 
         mService.getNearByPlaces(url)
                 .enqueue(new Callback<MyPlaces>() {
@@ -192,14 +213,14 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
                                 LatLng latLng = new LatLng(lat, lng);
                                 if(placeType.equals("supermarket"))
                                     markerOptions.position(latLng).title(placeName).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                                markerOptions.snippet("Distance : " + getDistance(lat, lng)+ " m "); // show the distance
 
-                                markerOptions.snippet(String.valueOf(i)); //Assign index for marker
                                 //Add to map
                                 mMap.addMarker(markerOptions);
 
                                 //Move Camera
                                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                                mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
+                                mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
                             }
                         }
                     }
@@ -209,17 +230,35 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
 
                     }
                 });
+
+
     }
 
-    private String getUrl(double latitude, double longitude, String placeType) {
+    // calculate the distance between two locations
+    public float getDistance(double lat,double lang) {
+
+        Location current = new Location("");
+        current.setLatitude(mLastLocation.getLatitude());// current latitude
+        current.setLongitude(mLastLocation.getLongitude());// current Longitude
+
+        Location selected = new Location("");
+        selected.setLatitude(lat);
+        selected.setLongitude(lang);
+
+        return current.distanceTo(selected);
+        //  return approximate distance between current location and selected location;
+    }
+
+    private String getPlaceUrl(double latitude, double longitude, String placeType) {
 
         StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         googlePlacesUrl.append("location="+latitude+","+longitude);
-        googlePlacesUrl.append("&radius="+1000);
+        googlePlacesUrl.append("&radius="+2000);
         googlePlacesUrl.append("&type="+ placeType);
         googlePlacesUrl.append("&sensor=true");
         googlePlacesUrl.append("&key="+"AIzaSyBKza1Ni031Lx3HdDZ2d5VJe6HfuwhNNBs");
         Log.d("getUrl", googlePlacesUrl.toString());
+
         return googlePlacesUrl.toString();
     }
 
@@ -296,6 +335,7 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
             }
 
 
+
         }
 
     private synchronized void buildGoogleApiClienr() {
@@ -342,6 +382,7 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
         latitude = location.getLatitude();
         longitude = location.getLongitude();
 
+        // get current location
         LatLng latLng = new LatLng(latitude, longitude);
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(latLng)
@@ -351,7 +392,12 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
 
         //Move Camera
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
+
+        UiSettings uiSettings = mMap.getUiSettings();
+        uiSettings.setZoomControlsEnabled(true);
+        uiSettings.setMyLocationButtonEnabled(true);
+        uiSettings.setZoomGesturesEnabled(true);
 
         if(mGoogleApiClient != null)
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
