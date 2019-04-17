@@ -107,12 +107,51 @@ $(document).ready(function()
                 if($text2.localeCompare("") == 0){
                     alert("Please choose a rating");
                     event.preventDefault();
-                }
+                    }
                 else {
                     editableaccr.html($text1);
                     editablerating.html($text2);
+                    var buttons = $(this).parent().find('.accreditationlist_table__Buttons').first();
+                    if(buttons.css('display').localeCompare('none') == 0){
+                        buttons.css('display','flex');
+                    }
                 }
             }
+        })
+
+        /** Listener function for the edit button
+         * When the admin clicks on the edit button
+         * The system will check whether the textarea ".EditBox" is available.
+         * If it is true, nothing will happen;
+         * Otherwise, two textarea elements will be pushed to the Accreditation and Rating cells.
+         */
+        $('.accreditationlist_table__Edit').on('click',function(){
+            var editableaccr = $(this).parent().parent().children().eq(0);
+            var editablerating = $(this).parent().parent().children().eq(1);
+            if($(this).children().eq(0).find('.editBox').length == 0){
+                var editboxaccr = '<textarea class="editBox">' + editableaccr.html() + '</textarea>';
+                editableaccr.html(editboxaccr);
+                var editboxrating = '<input autocomplete="off" list="browsers" class="editBox" name="browser"><datalist id="browsers"><option selected value="Good"><option value="Best"><option value="Avoid"></datalist>'
+                editablerating.html(editboxrating);
+            }
+        })
+
+        /** Confirm update button listener
+         * When the admins click on the button, any changes that made to the Accreditation will be sent to the server
+         */
+
+        $('.accreditationlist_table__Confirm').on('click',function(){
+            var accreditation = $(this).parent().parent().children().eq(0).html();
+            var rating = $(this).parent().parent().children().eq(1).html()
+            var productid = $(this).val();
+            var accrid = $(this).attr('title');
+            var params = {
+                accreditation: accreditation,
+                rating: rating,
+                productid: productid,
+                accrid: accrid
+            }
+            post('/detailproductPage_Accreditation__Update',params,'get');
         })
 
         /** Post function

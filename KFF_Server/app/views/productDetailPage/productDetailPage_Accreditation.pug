@@ -67,10 +67,14 @@ body
                                     th.accreditationlist_table__item Accreditation
                                     th.accreditationlist_table__item Rating
                                     th.accreditationlist_table__item
+                                    th.accreditationlist_table__item
+                                    th.accreditationlist_table__item
                             tfoot
                                 tr(role="row")
                                     th.accreditationlist_table__item Accreditation
                                     th.accreditationlist_table__item Rating
+                                    th.accreditationlist_table__item
+                                    th.accreditationlist_table__item
                                     th.accreditationlist_table__item
                             tbody
                                 - for (var i =0 ; i < accreditation.length ; i++)
@@ -83,7 +87,12 @@ body
                                                 - var accrid = accreditation[i]._id
                                                 input.accreditationlist_table__Delete(value = accrid, type='checkbox')
                                                 span.checkmark
-
+                                        td.accreditationlist_table__item.accreditationlist_table__Accreditation
+                                            div.accreditationlist_table__Edit Edit
+                                        td.accreditationlist_table__item.accreditationlist_table__Accreditation.accreditationlist_table__Buttons
+                                            - var accrid = accreditation[i]._id
+                                            button.accreditationlist_table__Confirm(value = id, title = accrid) Confirm
+                                            button.accreditationlist_table__Cancel Cancel
     div(class="feature_page_footer")
         div(class="bottom_copyright")
             p &copy; 2019 IT Capstone Project - KinderFoodFinder. All rights reserved | Design by Team 2 - COMP5703

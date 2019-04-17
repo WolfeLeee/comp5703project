@@ -635,30 +635,21 @@ module.exports.ProductDetailPage_Accreditation__Delete = async function(req,res,
  */
 
 module.exports.ProductDetailPage_Accreditation__Update = async function(req,res,next){
-    Product.findById(req.query.productid)
-        .exec(function(errProduct,product)
+    console.log(req.query.accreditation);
+    Product.update(
+        { 'Accreditation._id': req.query.accrid,'_id':req.query.productid},
+        { $set:  { 'Accreditation.$.Accreditation': req.query.accreditation,'Accreditation.$.Rating': req.query.rating }})
+        .exec(function(errProduct)
         {
             if(errProduct)
             {
-                return next(errProduct);
+                return next (errProduct);
             }
             else
             {
-                if(product == null)
-                {
-                    res.redirect('/');
-
-                }
-                else
-                {
-                    res.render("productDetailPage_Update.pug",
-                        {
-                            product:product,
-                            accreditation:product.Accreditation[parseInt(req.query.no)]
-                    });
-                }
+                res.redirect('/detailproductPage_Accreditation?productid='+req.query.productid);
             }
-        });
+        })
 }
 
 
