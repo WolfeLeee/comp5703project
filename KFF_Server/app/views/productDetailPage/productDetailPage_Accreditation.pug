@@ -10,6 +10,9 @@ head
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
     script(src="https://code.jquery.com/ui/1.12.1/jquery-ui.js")
     script(src="js/productDetailPage/productDetailPage_Accreditation.js" type="text/javascript")
+    link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css")
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js")
     script.
         window.jQuery || document.write('script(src="js/jquery.js")')
 body
@@ -56,6 +59,7 @@ body
                             input.button_selectall(type='checkbox')
                             span.checkmark
                         - var id = brandid
+                        div.deletebutton_button.deletebutton_addAccreditation(data-toggle="modal", data-target="#myModal")
                         div.deletebutton_button.deletebutton_deletemarked(value=id)
                             svg(xmlns="http://www.w3.org/2000/svg",width="24",height="24",viewBox = "0 0 24 24")
                                 path(d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z")
@@ -93,6 +97,24 @@ body
                                             - var accrid = accreditation[i]._id
                                             button.accreditationlist_table__Confirm(value = id, title = accrid) Confirm
                                             button.accreditationlist_table__Cancel Cancel
+    div.modal.fade#myModal(role="dialog")
+        div.modal-dialog
+            div.modal-content
+                div.modal-header
+                    button.close(type='button', data-dismiss='modal') x
+                    h4.modal-title Adding an Accreditation to #{brandname}
+                div.modal-body
+                    input.form-control(type='text', placeholder="Enter the Accreditation here")
+                    select.form-control
+                        option Best
+                        option Good
+                        option Avoid
+                    p.alert-paragraph
+                div.modal-footer
+                    - var productid = brandid
+                    button.btn.btn-default.modal-adding__Accreditation(type="button",value = productid) Add
+                    button.btn.btn-default(type="button", data-dismiss = "modal") Close
+
     div(class="feature_page_footer")
         div(class="bottom_copyright")
             p &copy; 2019 IT Capstone Project - KinderFoodFinder. All rights reserved | Design by Team 2 - COMP5703

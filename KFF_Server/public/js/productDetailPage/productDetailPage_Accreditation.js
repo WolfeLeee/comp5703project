@@ -154,6 +154,30 @@ $(document).ready(function()
             post('/detailproductPage_Accreditation__Update',params,'get');
         })
 
+
+        /** Function to send new accreditation to the server
+         * when the admin click the Add button in the modal
+         */
+
+        $(".modal-adding__Accreditation").on("click",function(event){
+            var modalbody = $(this).parent().parent().children().eq(1);
+            if(modalbody.children().eq(0).val().localeCompare("")==0 || modalbody.children().eq(1).val().localeCompare("")==0)
+            {
+                modalbody.children().eq(2).html("Please enter the Accreditation and the Rating you want to add to this brand");
+            }
+            else
+            {
+                params = {
+                    accreditation: modalbody.children().eq(0).val(),
+                    rating: modalbody.children().eq(1).val(),
+                    productid: $(this).attr("value")
+                }
+                post('/detailproductPage_Accreditation__Insert',params,"get");
+            }
+        })
+
+
+
         /** Post function
          *
          */

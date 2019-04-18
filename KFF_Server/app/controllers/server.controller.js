@@ -631,14 +631,38 @@ module.exports.ProductDetailPage_Accreditation__Delete = async function(req,res,
         });
 }
 
-/** Displays update view for one accreditation in a Brand
+/** Update on accreditation in a particular brand
  */
 
 module.exports.ProductDetailPage_Accreditation__Update = async function(req,res,next){
-    console.log(req.query.accreditation);
     Product.update(
         { 'Accreditation._id': req.query.accrid,'_id':req.query.productid},
         { $set:  { 'Accreditation.$.Accreditation': req.query.accreditation,'Accreditation.$.Rating': req.query.rating }})
+        .exec(function(errProduct)
+        {
+            if(errProduct)
+            {
+                return next (errProduct);
+            }
+            else
+            {
+                res.redirect('/detailproductPage_Accreditation?productid='+req.query.productid);
+            }
+        })
+}
+
+/** Insert new Accreditation to a particular brand
+ */
+
+module.exports.ProductDetailPage_Accreditation__Insert = async function(req,res,next){
+    var newAccreditation = {
+        Accreditation:req.query.accreditation,
+        Rating:req.query.rating,
+        _id: new mongoose.mongo.ObjectId()
+    }
+    Product.update(
+        { '_id':req.query.productid},
+        { $push:  { 'Accreditation': newAccreditation }})
         .exec(function(errProduct)
         {
             if(errProduct)
