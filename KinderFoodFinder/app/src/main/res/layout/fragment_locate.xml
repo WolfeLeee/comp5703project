@@ -23,11 +23,22 @@
         android:layout_height="350dp"
         android:layout_marginTop="10dp"/>
 
+    <ImageView
+        android:id="@+id/add_report"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/map"
+        android:layout_marginTop="5dp"
+        android:layout_alignParentRight="true"
+        android:contentDescription="Report"
+        android:src="@drawable/ic_add_circle_black_24dp"
+        android:layout_alignParentEnd="true" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_search"
-        android:layout_below="@+id/map"
+        android:layout_below="@+id/add_report"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="5dp"/>
 
 </RelativeLayout>
