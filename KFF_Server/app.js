@@ -68,7 +68,7 @@ app.use(function (err, req, res, next)
 });
 
 // console msg if all ready
-app.listen(3000, function ()
+app.listen(3000, function()
 {
     console.log('KFF app listening on port 3000!')
 });

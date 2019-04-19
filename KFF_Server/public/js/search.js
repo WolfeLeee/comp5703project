@@ -8,7 +8,7 @@ $(document).ready(function()
 		event.preventDefault();
 
 		// get the text from search
-		var searchText = $("#searchInput").val();
+		var searchText = $("#searchInput").val().toString().toLowerCase();
 		// $("#searchInput").val("");
 		// console.log(displayAllData.length);
 
@@ -21,7 +21,7 @@ $(document).ready(function()
 		var numOfSearchProducts = 0;
 		for(var i = 0; i < displayAllData.length; i++)
 		{
-			var brandName = displayAllData[i].Brand_Name;
+			var brandName = displayAllData[i].Brand_Name.toString().toLowerCase();
 			if(brandName.startsWith(searchText))
 			{
 				tr = tbody.insertRow(numOfRows++);
