@@ -176,6 +176,100 @@ $(document).ready(function()
             }
         })
 
+        /** Search box listener
+         * When the admin type in the search box and press "enter"/ or click the Search button
+         *
+         */
+
+        $('.pagebody_mainbody__infodisplay__searchinput').on("keypress",function(event){
+            if(event.which == 13){
+                var params = {
+                    productid: $(this).attr('title'),
+                    searchstring: $(this).val()
+                }
+                post('/detailproductPage_Accreditation',params,"get");
+            }
+        })
+
+        $('.pagebody_mainbody_infodisplay__searchsubmitbutton').on('click',function(event){
+            var params = {
+                productid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr('title'),
+                searchstring: $('.pagebody_mainbody__infodisplay__searchinput').first().val()
+            }
+            post('/detailproductPage_Accreditation',params,"get");
+        })
+
+        /**
+         * paginationbutton listener
+         */
+
+        $('.pagination_button.page-item').on('click',function(event){
+            var searchstring = $(this).attr('title');
+            if($(this).children().eq(0).text().toLowerCase().localeCompare(("Next").toLowerCase()) == 0)
+            {
+                var page = parseInt($('.pagination>.active>a').text()) + 1;
+                if(searchstring == null)
+                {
+                    var params = {
+                        page : page,
+                        productid: $('.modal-adding__Accreditation').first().attr("value")
+                    }
+                    post('/detailproductPage_Accreditation',params,"get");
+                }
+                else
+                {
+                    var params = {
+                        page : page,
+                        searchstring: searchstring,
+                        productid: $('.modal-adding__Accreditation').first().attr("value")
+                    }
+                    post('/detailproductPage_Accreditation',params,"get");
+                }
+            }
+            else if($(this).children().eq(0).text().toLowerCase().localeCompare(("Previous").toLowerCase()) == 0)
+            {
+                var page = parseInt($('.pagination>.active>a').text()) - 1;
+                if(searchstring == null)
+                {
+                    var params = {
+                        page : page,
+                        productid: $('.modal-adding__Accreditation').first().attr("value")
+                    }
+                    post('/detailproductPage_Accreditation',params,"get");
+                }
+                else
+                {
+                    var params = {
+                        page : page,
+                        searchstring: searchstring,
+                        productid: $('.modal-adding__Accreditation').first().attr("value")
+                    }
+                    post('/detailproductPage_Accreditation',params,"get");
+                }
+            }
+            else
+            {
+                if(searchstring == null)
+                {
+                    var params = {
+                        page : $(this).children().eq(0).text(),
+                        productid: $('.modal-adding__Accreditation').first().attr("value")
+                    }
+                    post('/detailproductPage_Accreditation',params,"get");
+                }
+                else
+                {
+                    var params = {
+                        page : $(this).children().eq(0).text(),
+                        searchstring: searchstring,
+                        productid: $('.modal-adding__Accreditation').first().attr("value")
+                    }
+                    post('/detailproductPage_Accreditation',params,"get");
+                }
+
+            }
+        })
+
 
 
         /** Post function

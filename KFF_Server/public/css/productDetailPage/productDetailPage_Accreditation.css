@@ -244,3 +244,68 @@ STYLE THE MODAL
     color:red;
     font-weight:bold;
 }
+
+/*PAGINATION TEXT-CENTER*/
+.pagination.text-center{
+    text-align:center;
+}
+
+.pagination{
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start:0;
+    margin-inline-end:0;
+    padding-inline-start: 40px;
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
+}
+
+li{
+    text-align: -webkit-match-parent;
+}
+.pagination>li{
+    display:inline;
+}
+
+.pagination> li:first-child > a{
+    margin-left:0;
+    border-top-left-radius:4px;
+    border-bottom-left-radius:4px;
+}
+
+.pagination>.disabled>a{
+    color:#777;
+    cursor:not-allowed;
+    pointer-events: none;
+    background-color:#fff;
+    border-color: #ddd;
+}
+
+.pagination>.active>a{
+    z-index:3;
+    color:#fff;
+    cursor:not-allowed;
+    pointer-events: none;
+    background-color:#337ab7;
+    border-color: #337ab7;
+}
+
+.pagination>li>a{
+    position:relative;
+    float:left;
+    padding:6px 12px;
+    margin-left:-1px;
+    line-height:1.428;
+    text-decoration:none;
+    border: 1px solid #ddd;
+}
+
+.pagination>li>a{
+    position:relative;
+    float:left;
+    padding: 6px 12px;
+    margin-left:-1px;
+    line-height: 1.428;
+    text-decoration:none;
+    border: 1px solid #ddd;
+}

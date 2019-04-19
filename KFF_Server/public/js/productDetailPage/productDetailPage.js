@@ -85,7 +85,6 @@ $(document).ready(function()
         $('.infodisplay_settings__resetbutton').on("click",function(){
             location.reload();
         })
-
         /** Post function
          *
          */
@@ -112,10 +111,5 @@ $(document).ready(function()
             document.body.appendChild(form);
             form.submit();
         }
-
-
-
-
-
     }
 )

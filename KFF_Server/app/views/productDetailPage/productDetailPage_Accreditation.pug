@@ -52,7 +52,8 @@ body
                     a.pagebody_controlpanel_item.selected_item(href="/detailproductPage_Accreditation?productid=" + id) Accreditation
                     a.pagebody_controlpanel_item(href="/detailproductPage_Store?productid=" + id) Store
                 div(class="pagebody_mainbody__infodisplay")
-                    input.pagebody_mainbody__infodisplay__searchinput(type="search", placeholder ="Please enter the Accreditation . . .")
+                    - var id = brandid
+                    input.pagebody_mainbody__infodisplay__searchinput(type="search",title = id, placeholder ="Please enter the Accreditation . . .")
                     div.pagebody_mainbody_infodisplay__searchsubmitbutton Search
                     div.pagebody_mainbody_infodisplay__deletebutton
                         label.deletebutton_button.deletebutton_selectall.button Select All
@@ -97,6 +98,35 @@ body
                                             - var accrid = accreditation[i]._id
                                             button.accreditationlist_table__Confirm(value = id, title = accrid) Confirm
                                             button.accreditationlist_table__Cancel Cancel
+                        if(pages > 0)
+                            ul.pagination
+                                if(current == 1)
+                                    li.pagination_button.page-item.previous#dataTable_previous.disabled(title = searchstring)
+                                        a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0") Previous
+                                else
+                                    li.pagination_button.page-item.previous#dataTable_previous(title = searchstring)
+                                        a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0") Previous
+                                - var j = ( current > 5 ? current - 4 : 1)
+                                    if (j !== 1)
+                                        li.pagination_button.page-item.disabled(title = searchstring)
+                                            a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0") ...
+                                    - for(; j <= (Number(current) + 4) && j <= pages; j++)
+                                        if(j == current)
+                                             li.pagination_button.page-item.active(title = searchstring)
+                                                a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0") #{j}
+                                        else
+                                            li.pagination_button.page-item(title = searchstring)
+                                                a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0") #{j}
+                                        if(j == current + 4 && j < pages)
+                                            li.pagination_button.page-item.disabled(title = searchstring)
+                                                a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0") ...
+                                    if (current == pages)
+                                        li.pagination_button.page-item.next#dataTable_next.disabled(title = searchstring)
+                                            a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0") Next
+                                    else
+                                        li.pagination_button.page-item.next#dataTable_next(title = searchstring)
+                                            a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0") Next
+
     div.modal.fade#myModal(role="dialog")
         div.modal-dialog
             div.modal-content
