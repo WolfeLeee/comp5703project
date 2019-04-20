@@ -22,7 +22,7 @@ router.get('/detailproductPage_Accreditation', controller.ProductDetailPage_Accr
 router.get('/detailproductPage_Accreditation__Delete', controller.ProductDetailPage_Accreditation__Delete);
 router.get('/detailproductPage_Accreditation__Update', controller.ProductDetailPage_Accreditation__Update);
 router.get('/detailproductPage_Accreditation__Insert', controller.ProductDetailPage_Accreditation__Insert);
-router.get('/detailproductPage_updateBrandSummary', controller.ProductDetailPage_updateBrandSummary);
+router.post('/detailproductPage_updateBrandSummary', controller.ProductDetailPage_updateBrandSummary);
 
 // Retrieve messages from Android app
 router.get('/android-app-register', controller.registerAndroidAppUsers);

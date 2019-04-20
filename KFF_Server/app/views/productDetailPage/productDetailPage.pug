@@ -48,6 +48,13 @@ body
                     a.pagebody_controlpanel_item(href="/detailproductPage_Accreditation?productid=" + id) Accreditation
                     a.pagebody_controlpanel_item(href="/detailproductPage_Store?productid=" + id) Store
                 div(class="pagebody_mainbody__infodisplay")
+                    span.pagebody_mainbody__infodisplay__span.pagebody_mainbody__infodisplay__image
+                        - var image = brandimage
+                        - var name = brandname
+                            if(image.localeCompare("null") == 0)
+                                img(src="../images/no-image.png", alt="Oops, Image not found!")
+                            else
+                                img(src="../uploads/" + image+".jpg", alt= name)
                     span.pagebody_mainbody__infodisplay__span
                         div.infodisplay_settings_item Brand name
                         div.infodisplay_settings_item.infodisplay_settings_editable #{brandname}
@@ -56,6 +63,12 @@ body
                         div.infodisplay_settings_item Category
                         div.infodisplay_settings_item.infodisplay_settings_editable #{brandcategory}
                         div.infodisplay_settings_item.infodisplay_settings_edittext Edit
+                    span.pagebody_mainbody__infodisplay__span__nonclickable
+                        div.infodisplay_settings_item Image
+                        div.infodisplay_settings_item
+                            form#infodisplay_settings_item__form(action="/detailproductPage_updateBrandSummary" method="post" enctype="multipart/form-data")
+                                input#infodisplay_settings_item__form__File(type="file" accept="image/*" name="Image" class="inputform_brand__BrandImage")
+                        div.infodisplay_settings_item
                     span.pagebody_mainbody__infodisplay__span__nonclickable
                         div.infodisplay_settings_item There are
                         div.infodisplay_settings_item.infodisplay_settings_center #{accreditacount}

@@ -4,7 +4,9 @@ var AppUser = require("../models/appUser");
 
 var mongoose = require('mongoose');
 var csv = require('fast-csv');
-var ObjectId = require('mongodb').ObjectID;
+var fs = require('fs');
+var formidable = require('formidable');
+
 
 var adminId = "";
 
@@ -277,7 +279,8 @@ module.exports.importCSVFile = function(req, res, next)
                                         Brand_Name: data.Brand_Name,
                                         Available: data.Available,
                                         Category: data.Category,
-                                        Accreditation:[]
+                                        Accreditation:[],
+                                        Image:null
                                     }
                                     newdata.Accreditation.push({
                                         Accreditation: data.Accreditation,
@@ -517,7 +520,7 @@ module.exports.goToImportPage = function(req, res, next)
  */
 module.exports.goToProductDetailPage = function (req,res,next)
 {
-    Product.findById(req.query.productid)
+        Product.findById(req.query.productid)
         .exec(function(errorProduct, product)
         {
             if (errorProduct)
@@ -532,12 +535,26 @@ module.exports.goToProductDetailPage = function (req,res,next)
                 }
                 else
                 {
-                    res.render('productDetailPage/productDetailPage.pug',{
-                        brandid: product._id,
-                        brandname : product.Brand_Name,
-                        brandcategory: product.Category,
-                        accreditacount: product.Accreditation.length
-                    });
+                    console.log(product);
+                    if(product.Image == null || product.Image.localeCompare("")==0){
+                        res.render('productDetailPage/productDetailPage.pug',{
+                            brandid: product._id,
+                            brandname : product.Brand_Name,
+                            brandcategory: product.Category,
+                            brandimage: "null",
+                            accreditacount: product.Accreditation.length
+                        });
+                    }
+                    else {
+                        res.render('productDetailPage/productDetailPage.pug',{
+                            brandid: product._id,
+                            brandname : product.Brand_Name,
+                            brandcategory: product.Category,
+                            brandimage: product.Image,
+                            accreditacount: product.Accreditation.length
+                        });
+                    }
+
                 }
             }
         });
@@ -546,9 +563,10 @@ module.exports.goToProductDetailPage = function (req,res,next)
 /** Update brand's summary information: Name, Category, Image, */
 module.exports.ProductDetailPage_updateBrandSummary = async function(req,res,next)
 {
-    var Brand_Name = req.query.brand_name;
-    var Brand_Category = req.query.brand_category;
-    var Brand_Id = req.query.brand_id;
+    var Brand_Name = req.body.brand_name;
+    var Brand_Category = req.body.brand_category;
+    var Brand_Id = req.body.brand_id;
+
     Product.findById(Brand_Id)
         .exec(function(errorBrand, brand)
         {
@@ -558,18 +576,46 @@ module.exports.ProductDetailPage_updateBrandSummary = async function(req,res,nex
             }
             else
             {
-                Product.update({_id:Brand_Id},{$set:{Brand_Name:Brand_Name, Category:Brand_Category}})
-                    .exec(function(errorUpdate){
-                        if(errorUpdate){
-                            return next(errorUpdate);
-                        }
-                        else {
-                            res.redirect('/detailproductPage?productid=' + Brand_Id);
-                        }
-                    });
+                if(req.files.Image !== null)
+                {
+                    Product.update({_id:Brand_Id},{$set:{Brand_Name:Brand_Name, Category:Brand_Category,Image:Brand_Id}})
+                        .exec(function(errorUpdate){
+                            if(errorUpdate){
+                                return next(errorUpdate);
+                            }
+                            else
+                            {
+                                var image = req.files.Image;
+                                var buf = new Buffer(image.data, 'base64');
+                                fs.writeFile('public/uploads/'+Brand_Id+".jpg",buf,function(err){
+                                    if(err)
+                                    {
+                                        return next(err);
+                                    }
+                                    else
+                                    {
+                                        res.redirect('/detailproductPage?productid=' + Brand_Id);
+                                    }
+                                })
+                            }
+                        });
+                }
+                else
+                {
+                    Product.update({_id:Brand_Id},{$set:{Brand_Name:Brand_Name, Category:Brand_Category}})
+                        .exec(function(errorUpdate){
+                            if(errorUpdate){
+                                return next(errorUpdate);
+                            }
+                            else
+                            {
+                                res.redirect('/detailproductPage?productid=' + Brand_Id);
+                            }
+                        });
+                }
+
             }
         });
-
 };
 
 
@@ -694,23 +740,6 @@ module.exports.ProductDetailPage_Accreditation__Insert = async function(req,res,
         })
 }
 
-
-
-// module.exports.databaseManagement = async function(req, res)
-// {
-//     var perPage = 25;
-//     var page = (parseInt(req.query.page)) || 1;
-//     let displaydata = Product.find({}).limit(perPage).skip((perPage * page) - perPage);
-//     let count = await Product.count({});
-//     let countentries = await Product.count({}).limit(perPage).skip((perPage * page) - perPage);
-//     res.render('table.pug', {
-//         displaydata: displaydata,
-//         count: count,
-//         current: page,
-//         pages: Math.ceil(count/ perPage),
-//         countentries: countentries
-//     });
-// };
 
 module.exports.databaseManagement = function(req, res, next)
 {

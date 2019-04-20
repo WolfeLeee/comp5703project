@@ -10,16 +10,19 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
-    "bluebird": "^3.5.1",
-    "body-parser": "^1.18.2",
+    "bluebird": "^3.5.4",
+    "body-parser": "^1.18.3",
     "connect-mongo": "^2.0.1",
     "ejs": "^2.5.9",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
-    "mongoose": "^5.0.17",
+    "mongoose": "^5.5.2",
     "path": "^0.12.7",
     "pug": "^2.0.3",
     "express-fileupload": "^1.1.4",
-    "fast-csv": "^2.4.1"
+    "fast-csv": "^2.4.1",
+    "fs": "0.0.2",
+    "formidable": "^1.2.1",
+    "async": "^2.6.2"
   }
 }

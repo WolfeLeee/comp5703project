@@ -69,12 +69,33 @@ $(document).ready(function()
                 var brand_name = Brand_Element.get(0).textContent;
                 var brand_category = Brand_Element.get(1).textContent;
                 var brand_id = $(this).attr('title');
-                var params = {
-                    brand_name: brand_name,
-                    brand_category: brand_category,
-                    brand_id:brand_id
-                };
-                post('/detailproductPage_updateBrandSummary',params,'get');
+                if($('#infodisplay_settings_item__form__File')[0].files[0] == null)
+                {
+                    var params = {
+                        brand_name: brand_name,
+                        brand_category: brand_category,
+                        brand_id:brand_id
+                    };
+                    post('/detailproductPage_updateBrandSummary',params,'post');
+                }
+                else
+                {
+                    var params = {
+                        brand_name: brand_name,
+                        brand_category: brand_category,
+                        brand_id:brand_id,
+                    };
+                    var form = $('#infodisplay_settings_item__form');
+                    for(var key in params) {
+                        if(params.hasOwnProperty(key)) {
+                            var input = $("<input>").attr("type", "hidden").attr("name", key).val(params[key]);
+                            $(form).append($(input));
+                        }
+                    }
+                    $(form).submit();
+                    post('/detailproductPage_updateBrandSummary',params,'post',$('.inputform_brand__BrandImage')[0].files[0]);
+                }
+
             }
             else {
                 e.preventDefault();
@@ -88,28 +109,32 @@ $(document).ready(function()
         /** Post function
          *
          */
-        function post(path, params, method) {
+        function post(path, params, method,image) {
             method = method || "get"; // Set method to post by default if not specified.
 
             // The rest of this code assumes you are not using a library.
             // It can be made less wordy if you use one.
-            var form = document.createElement("form");
-            form.setAttribute("method", method);
-            form.setAttribute("action", path);
+            var form = $(document.createElement('form'));
+            $(form).attr("action", path);
+            $(form).attr("method", method);
+            $(form).attr("enctype","multipart/form-data");
+
 
             for(var key in params) {
                 if(params.hasOwnProperty(key)) {
-                    var hiddenField = document.createElement("input");
-                    hiddenField.setAttribute("type", "hidden");
-                    hiddenField.setAttribute("name", key);
-                    hiddenField.setAttribute("value", params[key]);
 
-                    form.appendChild(hiddenField);
+                    var input = $("<input>").attr("type", "hidden").attr("name", key).val(params[key]);
+                    $(form).append($(input));
+
                 }
             }
-
-            document.body.appendChild(form);
-            form.submit();
+            if(image != null)
+            {
+                var input = $("<input>").attr("type", "file").attr("name", "Image").val(image);
+                $(form).append($(input));
+            }
+            $(document.body).append(form);
+            $(form).submit();
         }
     }
 )

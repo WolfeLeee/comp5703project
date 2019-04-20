@@ -35,7 +35,7 @@ mongoose.model('users', User.schema);
 
 // parse incoming requests
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded());
 app.use(fileUpload());
 
 var path = require('path');

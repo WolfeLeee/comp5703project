@@ -19,6 +19,24 @@
     background-color:rgba(220,220,220,0.35);
 }
 
+/*
+STYLE THE IMAGE
+ */
+
+.pagebody_mainbody__infodisplay__image{
+    height:50%;
+    object-fit: contain;
+    cursor:default;
+}
+
+.pagebody_mainbody__infodisplay__image:hover,.pagebody_mainbody__infodisplay__image:active{
+    background-color:transparent;
+}
+
+.pagebody_mainbody__infodisplay__image img{
+    height:100%;
+}
+
 /**
 STYLE EACH ITEM DISPLAYED IN THE RIGHT DIV ELEMENT
  */
