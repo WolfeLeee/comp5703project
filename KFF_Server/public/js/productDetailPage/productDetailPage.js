@@ -58,6 +58,14 @@ $(document).ready(function()
             }
         })
 
+        /**
+         * on Change listener for the file input element
+         */
+
+        $('#infodisplay_settings_item__form__File').on("change",function(){
+            showButton();
+        })
+
         /** When user clicks submit button, all the information regarding that brand
          * in the div box will be collected and sent to the server to update that Brand
          */

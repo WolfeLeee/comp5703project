@@ -128,7 +128,7 @@ $(document).ready(function()
         $('.accreditationlist_table__Edit').on('click',function(){
             var editableaccr = $(this).parent().parent().children().eq(0);
             var editablerating = $(this).parent().parent().children().eq(1);
-            if($(this).children().eq(0).find('.editBox').length == 0){
+            if($(this).parent().parent().children().eq(0).find('.editBox').length == 0){
                 var editboxaccr = '<textarea class="editBox">' + editableaccr.html() + '</textarea>';
                 editableaccr.html(editboxaccr);
                 var editboxrating = '<input autocomplete="off" list="browsers" class="editBox" name="browser"><datalist id="browsers"><option selected value="Good"><option value="Best"><option value="Avoid"></datalist>'

@@ -322,10 +322,11 @@ module.exports.importCSVFile = function(req, res, next)
                                                     }
                                                     if(!identicalAccreditation){
                                                         updateproducts.push({
-                                                            Accreditation:products[i].Accreditation,
+                                                            Accreditation:products[i].Accreditation[k],
                                                             brandid:documents[j]._id
                                                         })
                                                     }
+
                                                 }
                                             }
                                         }
@@ -333,6 +334,7 @@ module.exports.importCSVFile = function(req, res, next)
                                             insertproducts.push(products[i]);
                                         }
                                     }
+                                    console.log(updateproducts);
                                     // import the products into mongoDB,
                                     // Check whether the insertproducts array is empty
                                     if(insertproducts.length > 0){
@@ -535,7 +537,6 @@ module.exports.goToProductDetailPage = function (req,res,next)
                 }
                 else
                 {
-                    console.log(product);
                     if(product.Image == null || product.Image.localeCompare("")==0){
                         res.render('productDetailPage/productDetailPage.pug',{
                             brandid: product._id,
@@ -576,7 +577,7 @@ module.exports.ProductDetailPage_updateBrandSummary = async function(req,res,nex
             }
             else
             {
-                if(req.files.Image !== null)
+                if(req.files !== null)
                 {
                     Product.update({_id:Brand_Id},{$set:{Brand_Name:Brand_Name, Category:Brand_Category,Image:Brand_Id}})
                         .exec(function(errorUpdate){
