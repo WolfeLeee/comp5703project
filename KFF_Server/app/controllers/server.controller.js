@@ -215,8 +215,6 @@ module.exports.goToFeature = function(req, res, next)
 
 module.exports.insertnewBrand = async function (req,res,next)
 {
-    console.log(req.body);
-    console.log(req.files);
     var newproduct = {
         _id: new mongoose.mongo.ObjectId(),
         Brand_Name: req.body.brandname,

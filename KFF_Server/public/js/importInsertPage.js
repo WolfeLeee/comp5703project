@@ -45,7 +45,7 @@ $(document).ready(function()
             var identicalname = false;
             for(var i = 0 ; i < branddata.length ; i ++)
             {
-                if(new String(branddata[i].Brand_Name.toLowerCase()).valueOf() == new String(brand_name.toLowerCase()).valueOf())
+                if(new String(branddata[i].Brand_Name.toLowerCase()).valueOf() == new String(brand_name.toLowerCase()).valueOf() && new String(branddata[i].Category.toLowerCase()).valueOf() == new String(brand_category.toLowerCase()).valueOf() )
                 {
                     identicalname = true;
                 }
@@ -56,7 +56,7 @@ $(document).ready(function()
                 $('.pagebody_inputform__errordialog').append("<b>"+"Please enter all the required information;"+"</b><br>");
                 if(identicalname)
                 {
-                    $('.pagebody_inputform__errordialog').append("<b>"+"This name has already been used;"+"</b><br>");
+                    $('.pagebody_inputform__errordialog').append("<b>"+"This name and category have already been used;"+"</b><br>");
                 }
             }
             else if (identicalname)
