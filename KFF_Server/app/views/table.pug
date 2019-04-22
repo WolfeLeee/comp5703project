@@ -52,11 +52,30 @@ html
                                     div.col-sm-12.col-md-6
                                         div.dataTables_length#dataTable_length
                                             label Show
-                                                select.custom-select.custom-select-sm.form-control.form-control-sm(name="dataTable_length", aria-controls="dataTable")
-                                                    option(value='25') 25
-                                                    option(value='50') 50
-                                                    option(value='100') 100
-                                                    option(value='200') 200
+                                                - if(numPerPage == 25)
+                                                    select.custom-select.custom-select-sm.form-control.form-control-sm(name="dataTable_length", aria-controls="dataTable")
+                                                        option(value='/dbmanagement?product=25' selected="selected") 25
+                                                        option(value='/dbmanagement?product=50') 50
+                                                        option(value='/dbmanagement?product=100') 100
+                                                        option(value='/dbmanagement?product=200') 200
+                                                - if(numPerPage == 50)
+                                                    select.custom-select.custom-select-sm.form-control.form-control-sm(name="dataTable_length", aria-controls="dataTable")
+                                                        option(value='/dbmanagement?product=25') 25
+                                                        option(value='/dbmanagement?product=50' selected="selected") 50
+                                                        option(value='/dbmanagement?product=100') 100
+                                                        option(value='/dbmanagement?product=200') 200
+                                                - if(numPerPage == 100)
+                                                    select.custom-select.custom-select-sm.form-control.form-control-sm(name="dataTable_length", aria-controls="dataTable")
+                                                        option(value='/dbmanagement?product=25') 25
+                                                        option(value='/dbmanagement?product=50') 50
+                                                        option(value='/dbmanagement?product=100' selected="selected") 100
+                                                        option(value='/dbmanagement?product=200') 200
+                                                - if(numPerPage == 200)
+                                                    select.custom-select.custom-select-sm.form-control.form-control-sm(name="dataTable_length", aria-controls="dataTable")
+                                                        option(value='/dbmanagement?product=25') 25
+                                                        option(value='/dbmanagement?product=50') 50
+                                                        option(value='/dbmanagement?product=100') 100
+                                                        option(value='/dbmanagement?product=200' selected="selected") 200
                                     div.col-sm-12.col-md-6
                                         div#dataTable_filter.dataTables_filter
                                             input(id="searchInput" class="form-control form-control-sm" type='search', aria-controls='dataTable', placeholder="Search a brand....")

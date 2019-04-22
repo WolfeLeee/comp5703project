@@ -1,33 +1,53 @@
 /**
- * The admin user model to be created as a collection in mongodb
+ * The app facebook user model to be created as a collection in mongodb
  */
 
-//var mongoose = require('./db');
 var mongoose = require('mongoose');
 //var bcrypt = require('bcrypt-nodejs');
 
-var UserSchema = new mongoose.Schema({
-    username:
+var AppFbUserSchema = new mongoose.Schema({
+    name:
         {
             type: String,
-            unique: true,
+            unique: false,
             required: true,
             trim: true
         },
-    password:
+    gender:
+        {
+            type: String,
+            unique: false,
+            required: true,
+            trim: true
+        },
+    email:
+        {
+            type: String,
+            unique: true,
+            required: false,
+            trim: true
+        },
+    facebookId:
         {
             type: String,
             required: true
-        }
+        },
+    birthday:
+        {
+            type: String,
+            unique: false,
+            required: true,
+            trim: false
+        },
 });
 
 // create index
-UserSchema.index({username: 1});
+AppFbUserSchema.index({facebookId: 1});
 
 //authenticate input against database
-UserSchema.statics.authenticate = function (username, password, callback)
+AppFbUserSchema.statics.authenticate = function (email, password, callback)
 {
-    User.findOne({ username: username })
+    AppFbUser.findOne({ email: email })
         .exec(function (error, user)
         {
             if (error)
@@ -71,9 +91,9 @@ UserSchema.statics.authenticate = function (username, password, callback)
 //     })
 // });
 
-UserSchema.statics.findAllUsers = function (callback)
+AppFbUserSchema.statics.findAllUsers = function (callback)
 {
-    User.find({})
+    AppFbUser.find({})
         .lean()
         .exec(function (error, users)
         {
@@ -88,6 +108,6 @@ UserSchema.statics.findAllUsers = function (callback)
         });
 };
 
-var User = mongoose.model('User', UserSchema, 'users');
+var AppFbUser = mongoose.model('AppFbUser', AppFbUserSchema, 'appFbUsers');
 
-module.exports = User;
+module.exports = AppFbUser;

@@ -1,5 +1,5 @@
 /**
- * The user model to be created as a collection in mongodb
+ * The app user model to be created as a collection in mongodb
  */
 
 var mongoose = require('mongoose');
@@ -42,7 +42,7 @@ var AppUserSchema = new mongoose.Schema({
 });
 
 // create index
-AppUserSchema.index({username: 1});
+AppUserSchema.index({email: 1});
 
 //authenticate input against database
 AppUserSchema.statics.authenticate = function (email, password, callback)

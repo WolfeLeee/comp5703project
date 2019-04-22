@@ -12,16 +12,17 @@ var fileUpload = require('express-fileupload');
 var User = require("./app/models/user");
 
 //connect to MongoDB
-mongoose.connect('mongodb://localhost/kff', function ()
+mongoose.connect('mongodb://localhost/kff', {useNewUrlParser: true}, function ()
 {
     console.log('mongodb connected!');
 });
+mongoose.set('useCreateIndex', true);
 
 var db = mongoose.connection;
 
 //use sessions for tracking login and they will expire after 1 hour (1*60*60*1000)
 app.use(session({
-    secret: 'KFF app user shhhh!',
+    secret: 'KFF server user shhhh!',
     cookie: {maxAge: 3600000},
     resave: true,
     saveUninitialized: false,
@@ -35,7 +36,7 @@ mongoose.model('users', User.schema);
 
 // parse incoming requests
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(fileUpload());
 
 var path = require('path');

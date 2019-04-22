@@ -1,19 +1,28 @@
+// Models
 var User = require("../models/user");
 var Product = require("../models/product");
 var AppUser = require("../models/appUser");
+var AppFbUser = require("../models/appFbUser");
+var Store = require("../models/store");
 
+// External libraries
 var mongoose = require('mongoose');
 var csv = require('fast-csv');
 var fs = require('fs');
 var formidable = require('formidable');
 
-
+// Global variables
 var adminId = "";
+
+
+/* * * * * * * * * *
+ * Wolfe's coding  *
+ * * * * * * * * * */
 
 // Basic pages with login and register
 module.exports.goToLogin = function(req, res, next)
 {
-    User.count(function(error, count)
+    User.countDocuments(function(error, count)
     {
         if (error)
         {
@@ -90,14 +99,14 @@ module.exports.showLandingPage = function(req, res, next)
 module.exports.registerLogin = function(req, res, next)
 {
     // confirm that user typed same password twice if register
-    var pwd = req.body.password;
-    var pwdConf = req.body.passwordConfirm;
-    if (pwd !== pwdConf)
-    {
-        var err = new Error('Password do NOT match!');
-        err.status = 400;
-        return next(err);
-    }
+    // var pwd = req.body.password;
+    // var pwdConf = req.body.passwordConfirm;
+    // if (pwd !== pwdConf)
+    // {
+    //     var err = new Error('Password do NOT match!');
+    //     err.status = 400;
+    //     return next(err);
+    // }
 
     // // register
     // if (req.body.firstName && req.body.lastName && req.body.username && req.body.password && req.body.passwordConfirm && req.body.email)
@@ -820,7 +829,7 @@ module.exports.databaseManagement = function(req, res, next)
                 }
                 else
                 {
-                    var perPage = 25;
+                    var perPage = (parseInt(req.query.product)) || 25;
                     var page = (parseInt(req.query.page)) || 1;
                     Product.find({}).limit(perPage).skip((perPage * page) - perPage)
                         .exec(function(errFind, dataProductsPerPage)
@@ -829,14 +838,14 @@ module.exports.databaseManagement = function(req, res, next)
                                 return next(errFind);
                             else
                             {
-                                Product.count({})
+                                Product.countDocuments({})
                                     .exec(function(errCount, numOfProducts)
                                     {
                                         if(errCount)
                                             return next(errCount);
                                         else
                                         {
-                                            Product.count({}).limit(perPage).skip((perPage * page) - perPage)
+                                            Product.countDocuments({}).limit(perPage).skip((perPage * page) - perPage)
                                                 .exec(function(errCountLimit, numOfLimitedProducts)
                                                 {
                                                     if(errCountLimit)
@@ -853,6 +862,7 @@ module.exports.databaseManagement = function(req, res, next)
                                                                    res.render('table.pug', {
                                                                        displaydata: dataProductsPerPage,
                                                                        displayAllData: dataAllProducts,
+                                                                       numPerPage: perPage,
                                                                        count: numOfProducts,
                                                                        current: page,
                                                                        pages: Math.ceil(numOfProducts/ perPage),

@@ -2,6 +2,10 @@
 
 $(document).ready(function()
 {
+	/* * * * * * * * * * * * * * * *
+	 * Searching function in table *
+	 * * * * * * * * * * * * * * * */
+
 	// search button listener
 	$("#searchButton").click(function(event)
 	{
@@ -57,12 +61,25 @@ $(document).ready(function()
 	});
 	// enter will trigger the search button as well
 	var searchInput = document.getElementById("searchInput");
-	searchInput.addEventListener("keyup", function(event)
+	if(searchInput)
 	{
-		if(event.keyCode === 13)
+		searchInput.addEventListener("keyup", function(event)
 		{
-			event.preventDefault();
-			$("#searchButton").click();
-		}
+			if(event.keyCode === 13)
+			{
+				event.preventDefault();
+				$("#searchButton").click();
+			}
+		});
+	}
+
+	/* * * * * * * * * * * * * * * * *
+	 * Displaying function in table  *
+	 * * * * * * * * * * * * * * * * */
+
+	$("select.custom-select").change(function()
+	{
+		// var selectedNumber = $(this).children("option:selected").text();
+		location.href = $(this).val();
 	});
 });
