@@ -201,76 +201,10 @@ html,body{
 	font-size:1.2vw;
 }
 
-.inputheader{
-	font-size:1vw;
-	font-weight:bold;
-}
-
-
-
 .pagebody_inputform__brand{
 	width:100%;
 	margin-top:.5%;
 	height: calc(100% - 12.5%);
 	background-color:rgba(230,230,230,0.35);
-	padding:2.5%;
 	border-radius: 6px;
 }
-
-.inputform_brand__BrandNameHeader{
-	width:45%;
-	height:5%;
-	display:inline-block;
-}
-
-#inputform_brand__BrandName{
-	font-size:1vw;
-	width:45%;
-	height:7.5%;
-}
-
-.inputform_brand__BrandCategoryHeader{
-	width:25%;
-	height:5%;
-	display:inline-block;	
-}
-
-#inputform_brand__BrandCategory{
-	font-size:1vw;
-	width: 25%;
-	height:7.5%;
-}
-
-.inputform_brand__BrandCategoryHeader{
-	width:25%;
-	height:5%;
-}
-
-.inputform_brand__BrandAccreditationHeader{
-	width: 45%;
-	height:7.5%;
-	display:inline-block;
-}
-
-.inputform_brand__BrandRatingHeader{
-	width: 45%;
-	height:7.5%;
-	display:inline-block;
-}
-
-.inputform_brand__BrandAccreditation{
-	font-size:1vw;
-	width: 45%;
-	height:7.5%;
-}
-
-.inputform_brand__BrandRating{
-	font-size:1vw;
-	width: 45%;
-	height:7.5%;
-}
-
-.inputform_brand__BrandSubmit,.inputform_brand__BrandReset{
-	cursor:pointer;
-}
-

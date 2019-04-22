@@ -204,6 +204,68 @@ module.exports.goToFeature = function(req, res, next)
 
 };
 
+module.exports.insertnewBrand = async function (req,res,next)
+{
+    console.log(req.body);
+    console.log(req.files);
+    var newproduct = {
+        _id: new mongoose.mongo.ObjectId(),
+        Brand_Name: req.body.brandname,
+        Category: req.body.brandcategory,
+        Accreditation: [],
+        Image: null
+    }
+    newproduct.Accreditation.push({
+        Accreditation: req.body.brandaccreditation,
+        Rating: req.body.brandrating
+    })
+    if(req.files == null){
+        Product.create(newproduct, async function(errCreate, documents)
+        {
+            if(errCreate)
+            {
+                var err = new Error('Something wrong when import new document!');
+                err.status = 400;
+                return res.send(err);
+            }
+            else
+            {
+                res.redirect('/detailproductPage?productid=' + newproduct._id);
+            }
+        });
+    }
+    else
+    {
+        newproduct.Image = newproduct._id;
+        Product.create(newproduct, async function(errCreate, documents)
+        {
+            if(errCreate)
+            {
+                var err = new Error('Something wrong when import new document!');
+                err.status = 400;
+                return res.send(err);
+            }
+            else
+            {
+                var image = req.files.brandimage;
+                var buf = new Buffer(image.data, 'base64');
+                fs.writeFile('public/uploads/'+newproduct._id+".jpg",buf,function(err){
+                    if(err)
+                    {
+                        return next(err);
+                    }
+                    else
+                    {
+                        res.redirect('/detailproductPage?productid=' + newproduct._id);
+                    }
+                })
+            }
+        });
+    }
+
+}
+
+
 module.exports.importCSVFile = function(req, res, next)
 {
     User.findById(req.session.userId)
@@ -276,15 +338,15 @@ module.exports.importCSVFile = function(req, res, next)
                                 }
                                 else if (!identicalaccreditation) {
                                     var newdata = {
-                                        Brand_Name: data.Brand_Name,
+                                        Brand_Name: data.Brand_Name.trim(),
                                         Available: data.Available,
-                                        Category: data.Category,
+                                        Category: data.Category.trim(),
                                         Accreditation:[],
                                         Image:null
                                     }
                                     newdata.Accreditation.push({
-                                        Accreditation: data.Accreditation,
-                                        Rating: data.Rating
+                                        Accreditation: data.Accreditation.trim(),
+                                        Rating: data.Rating.trim()
                                     })
                                     products.push(newdata);
                                 }
@@ -334,7 +396,6 @@ module.exports.importCSVFile = function(req, res, next)
                                             insertproducts.push(products[i]);
                                         }
                                     }
-                                    console.log(updateproducts);
                                     // import the products into mongoDB,
                                     // Check whether the insertproducts array is empty
                                     if(insertproducts.length > 0){
@@ -436,7 +497,7 @@ module.exports.goToImportPage = function(req, res, next)
                 }
                 else
                 {
-                    res.render('importPage.pug');
+                    res.render('importInsertPage.pug');
                 }
             }
         });
@@ -896,3 +957,24 @@ module.exports.loginAndroidAppUsers = function(req, res, next)
         }
     });
 };
+
+
+/* * * * * * * * * * * * * * * * * *
+ * Communication with the mongoDB  *
+ * * * * * * * * * * * * * * * * * */
+
+module.exports.GetAllBrand = async function(req, res, next)
+{
+    Product.find()
+        .exec(function(errProduct,Product)
+        {
+            if(errProduct)
+            {
+                return next(errProduct);
+            }
+            else
+            {
+                res.json(Product);
+            }
+        })
+}

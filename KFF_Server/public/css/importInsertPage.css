@@ -1,0 +1,85 @@
+/*
+STYLE THE choose data select element
+ */
+
+.pagebody_inputform__choosedata{
+    width:100%;
+    margin-top:.5%;
+    height: calc(100% - 12.5%);
+    background-color:rgba(230,230,230,0.35);
+    padding:2.5%;
+    border-radius: 6px;
+}
+
+.pagebody_inputform__chosenresult{
+    display:none;
+}
+
+/*
+STYLE THE INPUT FORM
+ */
+
+.pagebody_inputform__section{
+    display:inline-block;
+    vertical-align: top;
+    padding:2.5%;
+    height:100%;
+    width:50%;
+}
+
+.pagebody_inputform__brand__section__first{
+    border-right: 3px solid white;
+}
+.pagebody_inputform__header{
+    text-align:center;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: 1.5vw;
+}
+
+.pagebody_inputform__dialog{
+    font-size:1.1vw;
+    color: rgba(120,120,120);
+}
+
+/*
+STYLE THE INPUT FORM
+ */
+
+.pagebody_inputform__fifty{
+    display:inline-block;
+    width: 50%;
+    margin-right:10%;
+}
+
+.pagebody_inputform__fourty{
+    display:inline-block;
+    width: 40%;
+}
+
+.pagebody_inputform__hundred{
+    display:inline-block;
+    width: 100%;
+}
+
+.pagebody_inputform__inputheader{
+    font-size:1.2vw;
+    font-weight:600;
+    margin-top:2.5%;
+}
+
+.pagebody_inputform__submit{
+    margin-top:2.5%;
+    width:25%;
+    margin-right:2.5%;
+}
+.pagebody_inputform__reset{
+    margin-top:2.5%;
+    width:25%;
+    margin-right:2.5%;
+}
+
+.pagebody_inputform__errordialog{
+    color:red;
+    margin-top:2.5%;
+}
