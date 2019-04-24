@@ -34,5 +34,6 @@ router.get('/android-app-login', controller.loginAndroidAppUsers);
 
 // Get data from the database
 router.get('/GetAllBrand',controller.GetAllBrand);
+router.get('/GetAllStore',controller.GetAllStore);
 
 module.exports = router;

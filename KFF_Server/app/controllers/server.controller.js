@@ -1077,3 +1077,19 @@ module.exports.GetAllBrand = async function(req, res, next)
             }
         })
 }
+
+module.exports.GetAllStore = async function(req, res, next)
+{
+    Store.find()
+        .exec(function(errProduct,Product)
+        {
+            if(errProduct)
+            {
+                return next(errProduct);
+            }
+            else
+            {
+                res.json(Product);
+            }
+        })
+}

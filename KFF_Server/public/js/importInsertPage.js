@@ -93,37 +93,84 @@ $(document).ready(function()
             var store_postcode = $('.pagebody_inputform__storepostcodeinput').first().val();
             var store_address = $('.pagebody_inputform__storeaddressinput').first().val();
 
-            if(new String(store_name).valueOf() == "" || new String(store_postcode).valueOf() == "" || new String(store_address).valueOf() == "")
+            /**
+             * ajax function to gather all the store name in the dabase and call for a callback function
+             * to check whether the name that the admin is typing is identical to any store name in the database
+             */
+
+            var jqxhr = $.get("/GetAllStore")
+                .done(function(data){
+                    IdenticalStoreName(data);
+                })
+                .fail(function(jqXHR) {
+                    console.log(jqXHR.status);
+                })
+
+            function IdenticalStoreName(data)
             {
-                $('.pagebody_inputform__errordialog__store').empty();
-                $('.pagebody_inputform__errordialog__store').append("<b>"+"Please enter all the required information;"+"</b><br>");
-            }
-            else
-            {
-                var address = null;
-                if(new String(store_state).valueOf() == "")
+                if(new String(store_name).valueOf() == "" || new String(store_postcode).valueOf() == "" || new String(store_address).valueOf() == "")
                 {
-                    address = store_address+", "+store_postcode;
+                    $('.pagebody_inputform__errordialog__store').empty();
+                    $('.pagebody_inputform__errordialog__store').append("<b>"+"Please enter all the required information;"+"</b><br>");
+                    var identicalstorename = false;
+                    for(var i = 0 ; i< data.length ; i++)
+                    {
+                        if(new String(store_name).toLowerCase().valueOf() == new String(data[i].storeName).toLowerCase().valueOf())
+                        {
+                            identicalstorename = true;
+                        }
+                    }
+                    if(identicalstorename)
+                    {
+                        $('.pagebody_inputform__errordialog__store').append("<b>"+"This name has already been used;"+"</b><br>");
+                    }
+
                 }
                 else
                 {
-                    address = store_address+", "+store_state+", "+store_postcode;
-                }
-                var jqxhr = $.get("/getLocation?address="+address)
-                    .done(function(data){
-                        if(data.matched)
+                    var identicalstorename = false;
+                    for(var i = 0 ; i< data.length ; i++)
+                    {
+                        if(new String(store_name).toLowerCase().valueOf() == new String(data[i].storeName).toLowerCase().valueOf())
                         {
-                            StoreCallback(data);
+                            identicalstorename = true;
+                        }
+                    }
+                    if(identicalstorename)
+                    {
+                        $('.pagebody_inputform__errordialog__store').empty();
+                        $('.pagebody_inputform__errordialog__store').append("<b>"+"This name has already been used;"+"</b><br>");
+                    }
+                    else
+                    {
+                        $('.pagebody_inputform__errordialog__store').empty();
+                        var address = null;
+                        if(new String(store_state).valueOf() == "")
+                        {
+                            address = store_address+", "+store_postcode;
                         }
                         else
                         {
-                            $('.pagebody_inputform__errordialog__store').empty();
-                            $('.pagebody_inputform__errordialog__store').append("<b>"+"Please enter a valid address;"+"</b><br>");
+                            address = store_address+", "+store_state+", "+store_postcode;
                         }
-                    })
-                    .fail(function(jqXHR) {
-                        console.log(jqXHR.status);
-                    })
+                        var jqxhr = $.get("/getLocation?address="+address)
+                            .done(function(data){
+                                if(data.matched)
+                                {
+                                    StoreCallback(data);
+                                }
+                                else
+                                {
+                                    $('.pagebody_inputform__errordialog__store').empty();
+                                    $('.pagebody_inputform__errordialog__store').append("<b>"+"Please enter a valid address;"+"</b><br>");
+                                }
+                            })
+                            .fail(function(jqXHR) {
+                                console.log(jqXHR.status);
+                            })
+                    }
+
+                }
             }
 
             /**
@@ -199,7 +246,7 @@ $(document).ready(function()
                     latdiv.className += ' modal-body__store__editable';
                     latdiv.title=storelat;
                     $(latdiv).data("second","Lat: ");
-                    longdiv.innerHTML = "Lat: "+ storelat;
+                    latdiv.innerHTML = "Lat: "+ storelat;
 
                     modalbodystore.append(addressdiv);
                     modalbodystore.append(chooseinput);
