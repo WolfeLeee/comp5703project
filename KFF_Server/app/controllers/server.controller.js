@@ -5,11 +5,12 @@ var AppUser = require("../models/appUser");
 var AppFbUser = require("../models/appFbUser");
 var Store = require("../models/store");
 
+
 // External libraries
 var mongoose = require('mongoose');
 var csv = require('fast-csv');
 var fs = require('fs');
-var formidable = require('formidable');
+var request = require('request');
 
 // Global variables
 var adminId = "";
@@ -212,6 +213,42 @@ module.exports.goToFeature = function(req, res, next)
         });
 
 };
+
+/* * * * * * * * * * * * * * * * * *
+ * Insert/ Import data             *
+ * * * * * * * * * * * * * * * * * */
+
+module.exports.insertnewStore = async function(req,res,next)
+{
+    console.log(req.body);
+    var newstore = {
+        storeName: req.body.name,
+        Address: [],
+        Product: [],
+    }
+    var newaddress = {
+        StreetAddress: req.body.address,
+        Postcode: req.body.postcode,
+        State: req.body.state,
+        Lat: req.body.lat,
+        Long: req.body.long
+    }
+    newstore.Address.push(newaddress);
+    Store.create(newstore,async function(errStore,store)
+    {
+        if(errStore)
+        {
+            var err = new Error('Something wrong when insert new store!');
+            err.status = 400;
+            return res.send(err);
+        }
+        else
+        {
+            res.redirect('/');
+        }
+    })
+}
+
 
 module.exports.insertnewBrand = async function (req,res,next)
 {
@@ -448,6 +485,60 @@ module.exports.importCSVFile = function(req, res, next)
             }
         });
 };
+
+/* * * * * * * * * * * * * * * * * *
+ * Communicate with the location API*
+ * * * * * * * * * * * * * * * * * */
+
+module.exports.getLocation = async function (req,res,next)
+{
+    var address = req.query.address;
+    var addressfinder = "https://api.opencagedata.com/geocode/v1/json";
+    var params = [
+        "key=588cf2a44390452a8b410960e33fab66",
+        "language=en",
+        "format=json",
+        "countrycode=au",
+        "q="+ address,
+        "no_annotations=1",
+        "abbr=1"
+    ]
+    var url = addressfinder +"?"+params.join("&");
+    var options = {
+        url: url,
+        Accept:"application/json",
+        'Accept-Charset':'utf-8'
+    }
+    request(options,function(err,rest,data){
+        if(err)
+        {
+            return next(err);
+        }
+        else
+        {
+            json = JSON.parse(data);
+            var senddata = [];
+            var sendgeo = []
+            if(json.results.length > 0)
+            {
+                for(var i = 0 ; i < json.results.length ; i++)
+                {
+                    senddata.push(json.results[i].components);
+                    sendgeo.push(json.results[i].geometry);
+                }
+                res.send({
+                    matched:"true",
+                    address: senddata,
+                    geometry: sendgeo
+                })
+            }
+            else
+            {
+                res.send({matched:"false"});
+            }
+        }
+    })
+}
 
 module.exports.logout = function(req, res, next)
 {

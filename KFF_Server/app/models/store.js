@@ -6,10 +6,9 @@ var mongoose = require('mongoose');
 
 var StoreSchema = new mongoose.Schema(
     {
-        brandId: String,
-        category: String,
         storeName: String,
-        Address: String
+        Address: [{StreetAddress: String, Postcode: String, State: String, Lat: String, Long: String}],
+        Product: [{ProductId: String}]
     },
     {
         versionKey: false

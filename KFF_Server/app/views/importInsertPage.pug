@@ -8,9 +8,11 @@ head
     link(rel='stylesheet',type='text/css', href='css/shared.css')
     link(rel='stylesheet',type='text/css', href='css/importInsertPage.css')
     link(rel='stylesheet',type='text/css',href='css/sb-admin.min.css')
+    link(rel='stylesheet',type='text/css',href='https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css')
     script(src="http://code.jquery.com/jquery-1.9.1.min.js")
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
     script(src="js/importInsertPage.js" type="text/javascript")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
     script.
         window.jQuery || document.write('script(src="js/jquery.js")')
 body
@@ -57,7 +59,7 @@ body
                             form(action="/import" method="post" enctype="multipart/form-data")
                                 input(type="file" id="file" name="file" accept=".csv" class="browse_button")
                                 input(type="submit" value="Upload File" class="upload_button")
-                    div.pagebody_inputform__section.pagebody_inputform__brand__section__first
+                    div.pagebody_inputform__section
                         p.pagebody_inputform__header Insert new brand
                         div.pagebody_inputform__dialog
                             p Guideline: This function enables the admin to insert a new brand to the database. Likewise, only one accreditation should be recorded at this stage. If the admin wants to input more accreditation to a brand, please access the "Accreditation" tab in the "Detail Brand Page" (Update/ Delete Brand > Detail Brand > Accreditation).
@@ -84,6 +86,53 @@ body
                                 input.pagebody_inputform__submit.pagebody_inputform__brandsubmit(type="button" value="Submit")
                                 input.pagebody_inputform__reset(type="reset" value="Reset")
                                 div.pagebody_inputform__hundred.pagebody_inputform__errordialog
+
+                div.pagebody_inputform__store.pagebody_inputform__chosenresult
+                    div.pagebody_inputform__section.pagebody_inputform__brand__section__first
+                        p.pagebody_inputform__header Import CSV file
+                        div.pagebody_inputform__dialog
+                            p Guideline: This function enables the admin to upload a csv file to the database which contains multiple stores data; Hence, the data imported will be recorded in the database.
+                        div.pagebody_inputform__input.pagebody_inputform__inputcsvbrandfile
+                            form(action="/import" method="post" enctype="multipart/form-data")
+                                input(type="file" id="file" name="file" accept=".csv" class="browse_button")
+                                input(type="submit" value="Upload File" class="upload_button")
+                    div.pagebody_inputform__section
+                        p.pagebody_inputform__header Insert new store
+                        div.pagebody_inputform__dialog
+                            p Guideline: This function enables the admin to insert a new store to the database. Likewise, if the admin wants to input the brands which this store have, please access the "Detail Store Page". Furthermore, one name can be used for many stores/ supermarkets (Woolworths, Aldi, .etc). Please access the "Detail Store Page" to add more address to a store.
+                        div.pagebody_inputform__input.pagebody_inputform__inputnewbrand
+                            form(action="/insertnewStore" method="post" enctype="multipart/form-data")
+                                div.pagebody_inputform__fifty.pagebody_inputform__inputheader Store Name (*)
+                                input.pagebody_inputform__fifty.pagebody_inputform__storenameinput(type="text" name="storename" Placeholder = "Please enter the store name...", autocomplete ="off")
+                                div.pagebody_inputform__fifty.pagebody_inputform__inputheader State/ Territory
+                                div.pagebody_inputform__fourty.pagebody_inputform__inputheader Postcode (*)
+                                input.pagebody_inputform__fifty.pagebody_inputform__storestateinput(type="text" name="storestate" Placeholder = "Please enter the state...", autocomplete ="off")
+                                input.pagebody_inputform__twenty.pagebody_inputform__storepostcodeinput(type="text" name="storepostcode" Placeholder = "Enter postcode...", autocomplete ="off", maxlength = "4")
+                                div.pagebody_inputform__hundred.pagebody_inputform__inputheader Street Address (*)
+                                input.pagebody_inputform__hundred.pagebody_inputform__storeaddressinput(type="text" name="storeaddress" Placeholder = "Please enter the store address...", autocomplete ="off")
+                                input.pagebody_inputform__submit.pagebody_inputform__storesubmit(type="button" value="Submit")
+                                input.pagebody_inputform__reset(type="reset" value="Reset")
+                                div.pagebody_inputform__hundred.pagebody_inputform__errordialog__store
+
+    div.modal.fade#exampleModalScrollable(role="dialog",tabindex="-1",aria-hidden="true",)
+        div.modal-dialog.modal-dialog-scrollable.modal-lg(role="document")
+            div.modal-content
+                div.modal-header
+                    h4.modal-title Add new store
+                    button.close(type='button', data-dismiss='modal') x
+                div.modal-body
+                    div.modal-body__store
+                        div.modal-body__store__address.modal-body__store__eighty something
+                        input.modal-body__store__address.modal-body__store__twenty(type='radio')
+                        div.modal-body__store__state.modal-body__store__fifty something
+                        div.modal-body__store__postcode.modal-body__store__fifty something
+                        div.modal-body__store__long.modal-body__store__fifty something
+                        div.modal-body__store__lat.modal-body__store__fifty something
+                div.modal-footer
+                    button.btn.btn-default.modal-adding__Store(type="button") Add
+                    button.btn.btn-default(type="button", data-dismiss = "modal") Close
+
+
     div(class="feature_page_footer")
         div(class="bottom_copyright")
             p &copy; 2019 IT Capstone Project - KinderFoodFinder. All rights reserved | Design by Team 2 - COMP5703

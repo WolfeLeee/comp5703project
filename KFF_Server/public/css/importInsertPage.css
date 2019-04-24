@@ -27,6 +27,21 @@ STYLE THE INPUT FORM
     width:50%;
 }
 
+.pagebody_inputform__brand,.pagebody_inputform__store{
+    width:100%;
+    margin-top:.5%;
+    height: calc(100% - 12.5%);
+    background-color:rgba(230,230,230,0.35);
+    border-radius: 6px;
+}{
+    width:100%;
+    margin-top:.5%;
+    height: calc(100% - 12.5%);
+    background-color:rgba(230,230,230,0.35);
+    border-radius: 6px;
+}
+
+
 .pagebody_inputform__brand__section__first{
     border-right: 3px solid white;
 }
@@ -57,6 +72,11 @@ STYLE THE INPUT FORM
     width: 40%;
 }
 
+.pagebody_inputform__twenty{
+    display:inline-block;
+    width: 20%;
+}
+
 .pagebody_inputform__hundred{
     display:inline-block;
     width: 100%;
@@ -82,4 +102,43 @@ STYLE THE INPUT FORM
 .pagebody_inputform__errordialog{
     color:red;
     margin-top:2.5%;
+}
+
+.pagebody_inputform__errordialog__store{
+    color:red;
+    margin-top:2.5%;
+}
+
+/*
+MODAL
+ */
+.modal-body__store{
+    height:auto;
+    padding: 1% 2.5%;
+    width: 100%;
+    cursor:pointer;
+    margin-bottom:2.5%;
+    background-color:rgba(230,230,230,0.35);
+}
+
+.modal-body__store__eighty{
+    display:inline-block;
+    vertical-align: top;
+    width:75%;
+    margin-right: 5%;
+}
+.modal-body__store__twenty{
+    display:inline-block;
+    vertical-align: top;
+    width:20%;
+}
+.modal-body__store__fifty{
+    display:inline-block;
+    vertical-align: top;
+    width:45%;
+    margin-right:5%;
+}
+
+.editBox{
+    width:100%;
 }

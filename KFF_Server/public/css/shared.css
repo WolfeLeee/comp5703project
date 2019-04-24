@@ -200,11 +200,3 @@ html,body{
 	font-weight:bold;
 	font-size:1.2vw;
 }
-
-.pagebody_inputform__brand{
-	width:100%;
-	margin-top:.5%;
-	height: calc(100% - 12.5%);
-	background-color:rgba(230,230,230,0.35);
-	border-radius: 6px;
-}
