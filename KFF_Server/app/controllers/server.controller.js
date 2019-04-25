@@ -220,7 +220,6 @@ module.exports.goToFeature = function(req, res, next)
 
 module.exports.insertnewStore = async function(req,res,next)
 {
-    console.log(req.body);
     var newstore = {
         storeName: req.body.name,
         Address: [],
@@ -672,9 +671,9 @@ module.exports.goToImportPage = function(req, res, next)
 //     }
 // });
 
-/* * * * * * * * * *
- * Jordan's coding *
- * * * * * * * * * */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Product Detail Page which enables the product to be udpated *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /** Direct user to the product detail page.
  * Hence, the product page that will be displayed depends on the productid that is passed to this module
@@ -899,6 +898,224 @@ module.exports.ProductDetailPage_Accreditation__Insert = async function(req,res,
             }
         })
 }
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Store Detail Page which enables the store to be udpated *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+module.exports.goToStoreDetailPage = async function(req,res,next)
+{
+    Store.findById(req.query.storeid)
+        .exec(function(errorStore,store)
+        {
+          if(errorStore)
+          {
+              return next(errorStore);
+          }
+          else
+          {
+              if(store == null)
+              {
+                  res.redirect('/');
+              }
+              else
+              {
+                  res.render('storeDetailPage/storeDetailPage.pug', {
+                      storeid: store._id,
+                      storename: store.storeName,
+                      addressnumb: store.Address.length,
+                      productnumb: store.Product.length
+                      })
+              }
+          }
+        })
+}
+
+/**
+ * Function to update a Store summary (Name of a store)
+ */
+
+module.exports.StoreDetailPage_updateStoreSummary = async function(req,res,next)
+{
+    var Store_Name = req.body.store_name;
+    var Store_Id = req.body.store_id;
+
+    Store.update({_id:Store_Id},{$set:{storeName: Store_Name}})
+        .exec(function(errorStore) {
+            if (errorStore) {
+                return next(errorStore);
+            } else {
+                res.redirect('/detailstorePage?storeid=' + Store_Id);
+            }
+        });
+}
+
+/** Display all Brands available for a store,
+ * This view also enables the admin to delete and/ or add brands to the store
+ */
+
+module.exports.StoreDetailPage_Brand = async function(req,res,next)
+{
+    Store.findById(req.query.storeid)
+        .exec(function(errStore,store) {
+            if (errStore) {
+                return next(errStore);
+            } else {
+                if (store === null) {
+                    res.redirect('/');
+                } else {
+                    var brand = [];
+                    for (var i = 0; i < store.Product.length; i++) {
+                        brand.push(store.Product[i].ProductId);
+                    }
+                    Product.find({_id:{$in:brand}})
+                        .exec(async function (errProduct, products) {
+                            if (errProduct) {
+                                return next(errProduct);
+                            } else {
+                                var perPage = 25;
+                                var page = (parseInt(req.query.page)) || 1;
+                                var brandlist = [];
+                                var displaybrandlist = []
+                                var brandnotinstore = [];
+                                for (var i = 0; i < products.length; i++) {
+                                    if (req.query.searchstring == null) {
+                                        brandlist.push(products[i]);
+                                    } else {
+                                        if (products[i].Brand_Name.toLowerCase().includes(req.query.searchstring.toLowerCase())) {
+                                            brandlist.push(products[i]);
+                                        }
+                                    }
+                                }
+                                Product.find({})
+                                    .exec(async function(errProduct,products)
+                                    {
+                                        if(errProduct)
+                                        {
+                                            return next(errProduct);
+                                        }
+                                        else
+                                        {
+                                            if(products == null)
+                                            {
+                                                res.redirect('/')
+                                            }
+                                            else
+                                            {
+                                                for(var i = 0 ; i < products.length ; i++)
+                                                {
+                                                    var identical = false;
+                                                    for( var j = 0 ; j < brandlist.length ; j++)
+                                                    {
+                                                        if(new String(products[i]._id).valueOf() == new String(brandlist[j].ProductId).valueOf())
+                                                        {
+                                                            identical = true;
+                                                        }
+                                                    }
+                                                    if(!identical)
+                                                    {
+                                                        brandnotinstore.push(products[i]);
+                                                    }
+                                                }
+                                                for (var i = ((perPage * page) - perPage); i < brandlist.length && i < (perPage * (page + 1) - perPage); i++) {
+                                                    displaybrandlist.push(brandlist[i]);
+                                                }
+                                                var searchstring = req.query.searchstring;
+                                                res.render('storeDetailPage/storeDetailPage_Brand.pug'
+                                                    , {
+                                                        storeid: store._id,
+                                                        searchstring: searchstring,
+                                                        current: page,
+                                                        pages: Math.ceil(brandlist.length / perPage),
+                                                        storename: store.storeName,
+                                                        brand: displaybrandlist,
+                                                        brandnotinstore:brandnotinstore
+                                                    }
+                                                );
+                                            }
+                                        }
+                                    })
+
+                            }
+                        })
+                }
+            }
+        })
+}
+
+/** Delete brands in a particular store
+ */
+module.exports.StoreDetailPage_Brand__Delete = async function(req,res,next){
+    var brids = req.query.brids.split(',');
+    Store.update({_id:req.query.storeid},{$pull:{Product:{ProductId:{$in:brids}}}})
+        .exec(function(errStore)
+        {
+            if(errStore)
+            {
+                return next(errStore);
+            }
+            else
+            {
+                res.redirect('/detailstorePage_Brand?storeid='+req.query.storeid);
+            }
+        });
+}
+
+module.exports.StoreDetailPage_Brand__Insert = async function(req,res,next)
+{
+    var productinstore = {
+        ProductId: req.query.brandid
+    }
+    Store.findById(req.query.storeid)
+        .exec(function(errStore,store)
+        {
+            if(errStore)
+            {
+                res.json({
+                        matched:"This store does not exist"
+                })
+            }
+            else
+            {
+                var identicalbrand = false;
+                for(var i = 0 ; i < store.Product.length; i ++)
+                {
+                    if(new String(req.query.brandid).valueOf() == store.Product[i].ProductId)
+                    {
+                        identicalbrand = true;
+                    }
+                }
+                if(identicalbrand)
+                {
+                    res.json({
+                        matched:"The store already has this brand"
+                    })
+                }
+                else
+                {
+                    Store.update({_id:req.query.storeid},{$push:{Product:productinstore}})
+                        .exec(function(errStore)
+                        {
+                            if(errStore)
+                            {
+                                res.json({
+                                    matched:"Could not insert new brand to the store, an error has occurred"
+                                })
+                            }
+                            else
+                            {
+                                res.json({
+                                    matched:"Successfully insert new brand to the store"
+                                })
+                            }
+                        })
+                }
+
+            }
+        })
+
+}
+
+
 
 
 module.exports.databaseManagement = function(req, res, next)

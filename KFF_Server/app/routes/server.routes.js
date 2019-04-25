@@ -28,6 +28,13 @@ router.get('/detailproductPage_Accreditation__Update', controller.ProductDetailP
 router.get('/detailproductPage_Accreditation__Insert', controller.ProductDetailPage_Accreditation__Insert);
 router.post('/detailproductPage_updateBrandSummary', controller.ProductDetailPage_updateBrandSummary);
 
+// Store Detail Page
+router.get('/detailstorePage', controller.goToStoreDetailPage);
+router.post('/detailstorePage_updateBrandSummary', controller.StoreDetailPage_updateStoreSummary);
+router.get('/detailstorePage_Brand',controller.StoreDetailPage_Brand);
+router.get('/detailstorePage_Brand__Delete',controller.StoreDetailPage_Brand__Delete);
+router.get('/detailstorePage_Brand__Insert', controller.StoreDetailPage_Brand__Insert);
+
 // Retrieve messages from Android app
 router.get('/android-app-register', controller.registerAndroidAppUsers);
 router.get('/android-app-login', controller.loginAndroidAppUsers);

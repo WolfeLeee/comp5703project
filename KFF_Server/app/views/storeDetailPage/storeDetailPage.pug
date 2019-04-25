@@ -1,0 +1,70 @@
+doctype html
+
+html
+head
+    title Main Page
+    link(href="css/shared.css" rel="stylesheet" type="text/css")
+    link(href="css/productDetailPage/productDetailPage.css" rel="stylesheet" type="text/css")
+    link(href="css/productDetailPage/productDetailPage_shared.css" rel="stylesheet" type="text/css")
+    script(src="http://code.jquery.com/jquery-1.9.1.min.js")
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
+    script(src="js/storeDetailPage/storeDetailPage.js" type="text/javascript")
+    script.
+        window.jQuery || document.write('script(src="js/jquery.js")')
+body
+    div(class="pageheader")
+        div(class="pageheader_title")
+            a(href="/feature" class="pageheader_title__anchor") KINDER FOOD FINDER
+            div(class="ertical-align")
+        div(class="pageheader_navigationbar")
+            ul(class="pageheader_navigationbar__items")
+                li(class="pageheader_navigationbar__item")
+                    input(id="pageheader_navigationbar__searchbox" type="text" name="SearchBrandName" Placeholder="Search a brand name...")
+                    div(class="vertical-align")
+                li(class="pageheader_navigationbar__item")
+                    a(href="/feature") ABOUT THE SERVER
+                li(class="pageheader_navigationbar__item")
+                    a(href="/feature") GUIDELINE
+                li(class="pageheader_navigationbar__item")
+                    a(href="/logout") LOGOUT
+    div(class="pagebody")
+        div(class="pagebody_navigationbar")
+            p CONTROL PANEL
+            div(class="pagebody_navigationbar__header")
+                a(href="/feature") Report
+            div(class="pagebody_navigationbar__header")
+                a(href="/importinsertPage") Import/ Insert Data
+            div(class="pagebody_navigationbar__header")
+                a(href="/dbmanagement") Update/ Delete Data
+        div(class="pagebody_mainbody")
+            div(class="brand")
+                div(class="pagebody_mainbody__sectionheader__brand")
+                    p #{storename}
+                div(class="pagebody_controlpanel")
+                    - var id = storeid
+                    a.pagebody_controlpanel_item.selected_item(href="/detailstorePage?storeid=" + id) Store Summary
+                    a.pagebody_controlpanel_item(href="/detailstorePage_Address?storeid=" + id) Address
+                    a.pagebody_controlpanel_item(href="/detailstorePage_Brand?storeid=" + id) Brand
+                div(class="pagebody_mainbody__infodisplay")
+                    span.pagebody_mainbody__infodisplay__span
+                        div.infodisplay_settings_item Store name
+                        div.infodisplay_settings_item.infodisplay_settings_editable #{storename}
+                        div.infodisplay_settings_item.infodisplay_settings_edittext Edit
+                    span.pagebody_mainbody__infodisplay__span__nonclickable
+                        div.infodisplay_settings_item
+                        div.infodisplay_settings_item.infodisplay_settings_center #{addressnumb}
+                        div.infodisplay_settings_item.infodisplay_settings_right address(es) for this store
+                    span.pagebody_mainbody__infodisplay__span__nonclickable
+                        div.infodisplay_settings_item
+                        div.infodisplay_settings_item.infodisplay_settings_center #{productnumb}
+                        div.infodisplay_settings_item.infodisplay_settings_right brand(s) in this store
+                    span.pagebody_mainbody__infodisplay__span__submit
+                        - var id = storeid
+                        div.infodisplay_settings_item.infodisplay_settings__submitbutton.display_none(title = id) Submit
+                        div.infodisplay_settings_item.infodisplay_settings__resetbutton.display_none Reset
+                    span.pagebody_mainbody__infodisplay__span__nonclickable.pagebody_mainbody__infodisplay__span__errorlog
+
+
+    div(class="feature_page_footer")
+        div(class="bottom_copyright")
+            p &copy; 2019 IT Capstone Project - KinderFoodFinder. All rights reserved | Design by Team 2 - COMP5703

@@ -94,6 +94,12 @@ STYLE THE SUBMIT AND RESET BUTTON AREA
     margin-top:2.5%;
 }
 
+.pagebody_mainbody__infodisplay__span__errorlog{
+    text-align:left;
+    color:red;
+}
+
+
 /**
 STYLE THE SUBMIT AND RESET BUTTON
  */
@@ -151,4 +157,6 @@ STYLE THE SUBMIT AND RESET BUTTON
 .infodisplay_settings__resetbutton:active{
     margin-top:.5em;
 }
+
+
 
