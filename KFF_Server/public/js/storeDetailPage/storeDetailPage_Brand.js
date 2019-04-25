@@ -129,7 +129,7 @@ $(document).ready(function()
                 {
                     var params = {
                         page : page,
-                        storeid: $('.modal-adding__Accreditation').first().attr("value")
+                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title")
                     }
                     post('/detailstorePage_Brand',params,"get");
                 }
@@ -138,7 +138,7 @@ $(document).ready(function()
                     var params = {
                         page : page,
                         searchstring: searchstring,
-                        storeid: $('.modal-adding__Accreditation').first().attr("value")
+                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title")
                     }
                     post('/detailstorePage_Brand',params,"get");
                 }
@@ -150,7 +150,7 @@ $(document).ready(function()
                 {
                     var params = {
                         page : page,
-                        storeid: $('.modal-adding__Accreditation').first().attr("value")
+                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title")
                     }
                     post('/detailstorePage_Brand',params,"get");
                 }
@@ -159,7 +159,7 @@ $(document).ready(function()
                     var params = {
                         page : page,
                         searchstring: searchstring,
-                        storeid: $('.modal-adding__Accreditation').first().attr("value")
+                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title")
                     }
                     post('/detailstorePage_Brand',params,"get");
                 }
@@ -170,7 +170,7 @@ $(document).ready(function()
                 {
                     var params = {
                         page : $(this).children().eq(0).text(),
-                        storeid: $('.modal-adding__Accreditation').first().attr("value")
+                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title")
                     }
                     post('/detailstorePage_Brand',params,"get");
                 }
@@ -179,7 +179,7 @@ $(document).ready(function()
                     var params = {
                         page : $(this).children().eq(0).text(),
                         searchstring: searchstring,
-                        storeid: $('.modal-adding__Accreditation').first().attr("value")
+                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title")
                     }
                     post('/detailstorePage_Brand',params,"get");
                 }

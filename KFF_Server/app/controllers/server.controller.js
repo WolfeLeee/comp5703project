@@ -949,6 +949,106 @@ module.exports.StoreDetailPage_updateStoreSummary = async function(req,res,next)
         });
 }
 
+/** Display all Addresses available for a store
+ * This view also enables the admin to delete and/ or add addresses to the store
+ */
+
+module.exports.StoreDetailPage_Address = async function(req,res,next)
+{
+    Store.findById(req.query.storeid)
+        .exec(function(errStore,store)
+        {
+            if(errStore)
+            {
+                return next(errStore);
+            }
+            else
+            {
+                if(store == null)
+                {
+                    res.redirect('/');
+                }
+                else
+                {
+                    var searchstring = req.query.searchstring;
+                    var perPage = 25;
+                    var page = (parseInt(req.query.page)) || 1;
+                    var addresslist = [];
+                    var displayaddresslist = [];
+
+                    for(var i = 0 ; i < store.Address.length ; i ++)
+                    {
+                        if (req.query.searchstring == null) {
+                            addresslist.push(store.Address[i]);
+                        } else {
+                            if (store.Address[i].StreetAddress.toLowerCase().includes(req.query.searchstring.toLowerCase())) {
+                                addresslist.push(store.Address[i]);
+                            }
+                        }
+                    }
+                    for (var i = ((perPage * page) - perPage); i < addresslist.length && i < (perPage * (page + 1) - perPage); i++) {
+                        displayaddresslist.push(addresslist[i]);
+                    }
+                    res.render('storeDetailPage/storeDetailPage_Address.pug'
+                        , {
+                            storeid: store._id,
+                            storename: store.storeName,
+                            searchstring: searchstring,
+                            current: page,
+                            pages: Math.ceil(addresslist.length / perPage),
+                            address: displayaddresslist
+                        });
+                }
+            }
+        })
+}
+
+/** Delete addresses in a particular store
+ */
+module.exports.StoreDetailPage_Address__Delete = async function(req,res,next){
+    var addids = req.query.addids.split(',');
+    Store.update({_id:req.query.storeid},{$pull:{Address:{_id:{$in:addids}}}})
+        .exec(function(errStore)
+        {
+            if(errStore)
+            {
+                return next(errStore);
+            }
+            else
+            {
+                res.redirect('/detailstorePage_Address?storeid='+req.query.storeid);
+            }
+        });
+}
+
+/**
+ * Insert address to a particular store
+ */
+
+module.exports.StoreDetailPage_Address__Insert = async function(req,res,next)
+{
+    var newaddress = {
+        StreetAddress: req.body.address,
+        State:req.body.state,
+        Postcode: req.body.postcode,
+        Lat: req.body.lat,
+        Long: req.body.long
+    }
+    Store.update({_id:req.body.storeid},{$push:{Address:newaddress}})
+        .exec(function(errStore)
+        {
+            if(errStore)
+            {
+                return next(errStore);
+            }
+            else
+            {
+                res.redirect('/detailstorePage_Address?storeid='+req.body.storeid);
+            }
+        })
+}
+
+
 /** Display all Brands available for a store,
  * This view also enables the admin to delete and/ or add brands to the store
  */
@@ -1006,7 +1106,7 @@ module.exports.StoreDetailPage_Brand = async function(req,res,next)
                                                     var identical = false;
                                                     for( var j = 0 ; j < brandlist.length ; j++)
                                                     {
-                                                        if(new String(products[i]._id).valueOf() == new String(brandlist[j].ProductId).valueOf())
+                                                        if(new String(products[i]._id).valueOf() == new String(brandlist[j]._id).valueOf())
                                                         {
                                                             identical = true;
                                                         }
@@ -1307,6 +1407,50 @@ module.exports.GetAllStore = async function(req, res, next)
             else
             {
                 res.json(Product);
+            }
+        })
+}
+
+module.exports.CompareStoreAddress = async function(req,res,next)
+{
+    Store.findById(req.query.storeid)
+        .exec(function(errStore,store)
+        {
+            if(errStore)
+            {
+                return next(errStore);
+            }
+            else
+            {
+                if(store == null)
+                {
+                    res.redirect('/');
+                }
+                else
+                {
+                    console.log(store);
+                    var identicaladdress = false;
+                    for(var i = 0 ; i < store.Address.length ; i++)
+                    {
+                        if(new String(store.Address[i].StreetAddress).toLowerCase().valueOf() == new String(req.query.address).toLowerCase().valueOf() && new String(store.Address[i].Postcode).valueOf() == new String(req.query.postcode))
+                        {
+                            identicaladdress = true;
+                        }
+                    }
+                    if(identicaladdress)
+                    {
+                        res.json({
+                            matched:false,
+                            alert:"This address has already existed"
+                        })
+                    }
+                    else
+                    {
+                        res.json({
+                            matched:true
+                        })
+                    }
+                }
             }
         })
 }

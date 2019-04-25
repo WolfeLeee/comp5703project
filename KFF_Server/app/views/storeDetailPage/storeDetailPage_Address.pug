@@ -6,11 +6,11 @@ head
     link(href="css/shared.css" rel="stylesheet" type="text/css")
     link(href="css/productDetailPage/productDetailPage_shared.css" rel="stylesheet" type="text/css")
     link(href="css/productDetailPage/productDetailPage_Accreditation.css" rel="stylesheet" type="text/css")
-    link(href="css/storeDetailPage/storeDetailPage_Brand.css" rel="stylesheet" type="text/css")
+    link(href="css/storeDetailPage/storeDetailPage_Address.css" rel="stylesheet" type="text/css")
     script(src="http://code.jquery.com/jquery-1.9.1.min.js")
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
     script(src="https://code.jquery.com/ui/1.12.1/jquery-ui.js")
-    script(src="js/storeDetailPage/storeDetailPage_Brand.js" type="text/javascript")
+    script(src="js/storeDetailPage/storeDetailPage_Address.js" type="text/javascript")
     link(rel='stylesheet',type='text/css',href='https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css')
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
@@ -48,8 +48,8 @@ body
                 div(class="pagebody_controlpanel")
                     - var id = storeid
                     a.pagebody_controlpanel_item(href="/detailstorePage?storeid=" + id) Store Summary
-                    a.pagebody_controlpanel_item(href="/detailstorePage_Address?storeid=" + id) Address
-                    a.pagebody_controlpanel_item.selected_item(href="/detailstorePage_Brand?storeid=" + id) Brand
+                    a.pagebody_controlpanel_item.selected_item(href="/detailstorePage_Address?storeid=" + id) Address
+                    a.pagebody_controlpanel_item(href="/detailstorePage_Brand?storeid=" + id) Brand
                 div(class="pagebody_mainbody__infodisplay")
                     - var id = storeid
                     input.pagebody_mainbody__infodisplay__searchinput(type="search",title = id, placeholder ="Please enter the Brand . . .")
@@ -68,24 +68,33 @@ body
                         table.accreditationlist_table
                             thead
                                 tr(role="row")
-                                    th.accreditationlist_table__item Brand Name
-                                    th.accreditationlist_table__item Category
+                                    th.accreditationlist_table__item Address
+                                    th.accreditationlist_table__item State
+                                    th.accreditationlist_table__item PostCode
+                                    th.accreditationlist_table__item Lat
+                                    th.accreditationlist_table__item Long
                                     th.accreditationlist_table__item
                             tfoot
                                 tr(role="row")
-                                    th.accreditationlist_table__item Brand Name
-                                    th.accreditationlist_table__item Category
+                                    th.accreditationlist_table__item Address
+                                    th.accreditationlist_table__item State
+                                    th.accreditationlist_table__item PostCode
+                                    th.accreditationlist_table__item Lat
+                                    th.accreditationlist_table__item Long
                                     th.accreditationlist_table__item
                             tbody
-                                - for (var i =0 ; i < brand.length ; i++)
+                                - for (var i =0 ; i < address.length ; i++)
                                     tr.accreditationlist_table_tablerow(role="row")
                                         - var id = storeid;
-                                        td.accreditationlist_table__item.accreditationlist_table__Accreditation #{brand[i].Brand_Name}
-                                        td.accreditationlist_table__item.accreditationlist_table__Accreditation #{brand[i].Category}
+                                        td.accreditationlist_table__item.accreditationlist_table__Accreditation #{address[i].StreetAddress}
+                                        td.accreditationlist_table__item.accreditationlist_table__Accreditation #{address[i].State}
+                                        td.accreditationlist_table__item.accreditationlist_table__Accreditation #{address[i].Postcode}
+                                        td.accreditationlist_table__item.accreditationlist_table__Accreditation #{address[i].Lat}
+                                        td.accreditationlist_table__item.accreditationlist_table__Accreditation #{address[i].Long}
                                         td.accreditationlist_table__item.accreditationlist_table__Accreditation
                                             label.button
-                                                - var brandid = brand[i]._id
-                                                input.accreditationlist_table__Delete(value = brandid, type='checkbox')
+                                                - var addid = address[i]._id
+                                                input.accreditationlist_table__Delete(value = addid, type='checkbox')
                                                 span.checkmark
                         if(pages > 0)
                             ul.pagination
@@ -119,27 +128,24 @@ body
     div.modal.fade#exampleModalScrollable(role="dialog",tabindex="-1",aria-hidden="true",)
         div.modal-dialog.modal-dialog-scrollable.modal-lg(role="document")
             div.modal-content
-                div.modal-header
-                    h4.modal-title Add brand(s) to the store
+                div.modal-header(data-storeid=storeid)
+                    h4.modal-title Add address(es) to the store
                     button.close(type='button', data-dismiss='modal') x
                 div.modal-body
-                    input.modal-body__search(type="search",placeholder="Search for a brand...")
-                    table.modal-body__store
-                        thead
-                            tr(role="row")
-                                th.modal-body__store__sixty Brand Name
-                                th.modal-body__store__twenty Category
-                                th.modal-body__store__twenty
-                        tbody
-                            - for (var i =0 ; i < brandnotinstore.length ; i++)
-                                tr.modal-body__store__brandnotinstorelist(role="row")
-                                    - var id = storeid;
-                                    td.modal-body__store__sixty #{brandnotinstore[i].Brand_Name}
-                                    td.modal-body__store__twenty #{brandnotinstore[i].Category}
-                                    td.modal-body__store__twenty.modal-body__store__twenty__btn
-                                        input.modal-body__store__insertbrandtostore(type="button",data-storeid=id,data-brandid = brandnotinstore[i]._id,value="Add")
+                    div.modal-body__store__seventy.modal-body__store__header Street Address (*)
+                    div.modal-body__store__thirty.modal-body__store__header State
+                    input.modal-body__store__seventy.pagebody_inputform__storeaddressinput(type="text",placeholder="Enter the address of the store...")
+                    input.modal-body__store__thirty.pagebody_inputform__storestateinput(type="text",placeholder="Enter the state...")
+                    div.modal-body__store__thirty.modal-body__store__header Postcode (*)
+                    div.modal-body__store__seventy.modal-body__store__header
+                    input.modal-body__store__thirty.pagebody_inputform__storepostcodeinput(type="text",placeholder="Enter the post code...")
+                    input.modal-body__store__fifteen.pagebody_inputform__storesubmit(type="button",value="Search address")
+                    div.pagebody_inputform__errordialog__store
+                    div.modal-body__store__addresslist
                 div.modal-footer
+                    button.btn.btn-default.modal-adding__Store(type="button") Add
                     button.btn.btn-default(type="button", data-dismiss = "modal") Close
+
 
     div(class="feature_page_footer")
         div(class="bottom_copyright")

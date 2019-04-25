@@ -1,0 +1,67 @@
+/*
+MODAL
+ */
+.modal-body *{
+    margin:0;
+    padding:0;
+}
+
+.modal-body__store{
+    height:auto;
+    padding: 1% 2.5%;
+    width: 100%;
+    cursor:pointer;
+    margin-bottom:2.5%;
+    background-color:rgba(230,230,230,0.35);
+}
+
+.modal-body__store__eighty{
+    display:inline-block;
+    vertical-align: top;
+    width:77.5%;
+    margin-right: 2.5%;
+}
+
+.modal-body__store__seventy{
+    display:inline-block;
+    vertical-align: top;
+    width:67.5%;
+    margin-right: 2.5%;
+}
+
+.modal-body__store__thirty{
+    display:inline-block;
+    vertical-align: top;
+    width:27.5%;
+    margin-right: 2.5%;
+}
+
+.modal-body__store__twenty{
+    display:inline-block;
+    vertical-align: top;
+    width:17.5%;
+    margin-right: 2.5%;
+}
+
+.modal-body__store__fifteen{
+    display:inline-block;
+    vertical-align: top;
+    width:15%;
+    margin-bottom:2.5%;
+}
+
+.modal-body__store__fifty{
+    display:inline-block;
+    vertical-align: top;
+    width:47.5%;
+    margin-right: 2.5%;
+}
+
+.editBox{
+    width:100%;
+}
+
+.pagebody_inputform__errordialog__store{
+    color:red;
+    margin-top:2.5%;
+}

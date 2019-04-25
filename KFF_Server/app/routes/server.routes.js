@@ -34,6 +34,10 @@ router.post('/detailstorePage_updateBrandSummary', controller.StoreDetailPage_up
 router.get('/detailstorePage_Brand',controller.StoreDetailPage_Brand);
 router.get('/detailstorePage_Brand__Delete',controller.StoreDetailPage_Brand__Delete);
 router.get('/detailstorePage_Brand__Insert', controller.StoreDetailPage_Brand__Insert);
+router.get('/detailstorePage_Address',controller.StoreDetailPage_Address);
+router.get('/detailstorePage_Address__Delete',controller.StoreDetailPage_Address__Delete);
+router.post('/detailstorePage_Address__Insert',controller.StoreDetailPage_Address__Insert);
+
 
 // Retrieve messages from Android app
 router.get('/android-app-register', controller.registerAndroidAppUsers);
@@ -42,5 +46,6 @@ router.get('/android-app-login', controller.loginAndroidAppUsers);
 // Get data from the database
 router.get('/GetAllBrand',controller.GetAllBrand);
 router.get('/GetAllStore',controller.GetAllStore);
+router.get('/CompareStoreAddress',controller.CompareStoreAddress);
 
 module.exports = router;
