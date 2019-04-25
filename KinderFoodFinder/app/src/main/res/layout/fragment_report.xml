@@ -4,111 +4,55 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="3dp"
-    android:gravity="center">
+    android:padding="3dp">
 
     <TextView
-        android:id="@+id/tv_product"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:text="Product :"
-        android:paddingLeft="10dp"
+        android:id="@+id/tv_cate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="80dp"
+        android:layout_marginLeft="93dp"
+        android:layout_marginTop="155dp"
         android:gravity="center_vertical"
-        android:textSize="20sp"/>
-    <EditText
-        android:id="@+id/input_product"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:layout_toRightOf="@+id/tv_product"
-        android:layout_toEndOf="@+id/tv_product"
-        android:hint="Product Category"
-        android:inputType="text"/>
-
-    <TextView
-        android:id="@+id/tv_brand"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:text="Brand :"
         android:paddingLeft="10dp"
-        android:gravity="center_vertical"
-        android:textSize="20sp"
-        android:layout_below="@+id/tv_product"/>
-    <EditText
-        android:id="@+id/input_brand"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:layout_below="@+id/input_product"
-        android:layout_toRightOf="@+id/tv_brand"
-        android:layout_toEndOf="@+id/tv_brand"
-        android:hint="Brand Name"
-        android:inputType="text"/>
-
-    <TextView
-        android:id="@+id/tv_store"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:text="Store :"
-        android:paddingLeft="10dp"
-        android:gravity="center_vertical"
-        android:textSize="20sp"
-        android:layout_below="@+id/tv_brand"/>
-    <EditText
-        android:id="@+id/input_store"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:layout_below="@+id/input_brand"
-        android:layout_toRightOf="@+id/tv_store"
-        android:layout_toEndOf="@+id/tv_store"
-        android:hint="Store Name"
-        android:inputType="text"/>
-
-    <TextView
-        android:id="@+id/tv_location"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:text="Location :"
-        android:paddingLeft="10dp"
-        android:gravity="center_vertical"
-        android:textSize="20sp"
-        android:layout_below="@+id/tv_store"/>
-    <EditText
-        android:id="@+id/input_location"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:layout_below="@+id/input_store"
-        android:layout_toRightOf="@+id/tv_location"
-        android:layout_toEndOf="@+id/tv_location"
-        android:hint="Location"
-        android:inputType="text"/>
-
-    <TextView
-        android:id="@+id/tv_Email"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:text="Email :"
-        android:paddingLeft="10dp"
-        android:gravity="center_vertical"
-        android:textSize="20sp"
-        android:layout_below="@+id/tv_location"/>
-    <EditText
-        android:id="@+id/input_Email"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:layout_below="@+id/input_location"
-        android:layout_toRightOf="@+id/tv_Email"
-        android:layout_toEndOf="@+id/tv_Email"
-        android:hint="Email"
-        android:inputType="textEmailAddress"/>
+        android:text="Choose your Category :"
+        android:textSize="20sp" />
 
     <Button
-        android:id="@+id/btn_submit"
-        android:layout_width="200dp"
+        android:id="@+id/button_egg"
+        android:layout_below="@+id/tv_cate"
+        android:layout_width="160dp"
         android:layout_height="50dp"
-        android:layout_below="@id/tv_Email"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="38dp"
-        android:background="@drawable/button_style"
-        android:text="SUBMIT"
-        android:textSize="20sp"/>
+        android:layout_marginTop="35dp"
+        android:gravity="center"
+        android:layout_marginLeft="110dp"
+        android:text="Eggs"
+        android:background="@drawable/button_style"/>
+
+    <Button
+        android:id="@+id/button_chicken"
+        android:layout_below="@+id/button_egg"
+        android:layout_width="160dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="35dp"
+        android:gravity="center"
+        android:layout_marginLeft="110dp"
+        android:text="Chicken"
+        android:background="@drawable/button_style"/>
+
+    <Button
+        android:id="@+id/button_pork"
+        android:layout_below="@+id/button_chicken"
+        android:layout_width="160dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="35dp"
+        android:gravity="center"
+        android:layout_marginLeft="110dp"
+        android:text="Pork"
+        android:background="@drawable/button_style"/>
+
 
 </RelativeLayout>

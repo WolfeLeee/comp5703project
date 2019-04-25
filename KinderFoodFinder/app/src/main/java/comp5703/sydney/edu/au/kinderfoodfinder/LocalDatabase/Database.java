@@ -73,50 +73,89 @@ public class Database extends SQLiteAssetHelper {
         }
         return result;
     }
-/*
-    //Function get all location's latitude
-    public List<String> getLocationLatitude(){
+
+    // Function get brand name by Eggs
+    public List<Product_Info> getBrandByEggs()
+    {
         SQLiteDatabase db = getReadableDatabase();
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
         //Make sure all is column name in your table
-        String[] sqlSelect = {"Latitude"};
+        String[] sqlSelect = {"product_id","Brand_Name","Category","Accreditation","Rating","Location"};
         String tableName = "products";
 
         qb.setTables(tableName);
-        Cursor cursor = qb.query(db,sqlSelect,null,null,null,null,null);
-        List<String> result = new ArrayList<>();
+
+        Cursor cursor = qb.query(db,sqlSelect,"Category=?",new String[]{"Eggs"},null,null,null);
+        List<Product_Info> result = new ArrayList<>();
         if(cursor.moveToFirst())
         {
             do{
-                result.add(cursor.getString(cursor.getColumnIndex("Latitude")));
+                Product_Info product = new Product_Info();
+                product.setId(cursor.getString(cursor.getColumnIndex("product_id")));
+                product.setBrand_name(cursor.getString(cursor.getColumnIndex("Brand_Name")));
+                product.setCategory(cursor.getString(cursor.getColumnIndex("Category")));
+                result.add(product);
             }while(cursor.moveToNext());
         }
         return result;
     }
 
-    //Function get location's longitude
-    public List<String> getLocationLongitude(){
+    // Function get brand name by Chicken
+    public List<Product_Info> getBrandByChicken()
+    {
         SQLiteDatabase db = getReadableDatabase();
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
         //Make sure all is column name in your table
-        String[] sqlSelect = {"Longitude"};
+        String[] sqlSelect = {"product_id","Brand_Name","Category","Accreditation","Rating","Location"};
         String tableName = "products";
 
         qb.setTables(tableName);
-        Cursor cursor = qb.query(db,sqlSelect,null,null,null,null,null);
-        List<String> result = new ArrayList<>();
+
+        Cursor cursor = qb.query(db,sqlSelect,"Category=?",new String[]{"Chicken"},null,null,null);
+        List<Product_Info> result = new ArrayList<>();
         if(cursor.moveToFirst())
         {
             do{
-                result.add(cursor.getString(cursor.getColumnIndex("Longitude")));
+                Product_Info product = new Product_Info();
+                product.setId(cursor.getString(cursor.getColumnIndex("product_id")));
+                product.setBrand_name(cursor.getString(cursor.getColumnIndex("Brand_Name")));
+                product.setCategory(cursor.getString(cursor.getColumnIndex("Category")));
+                result.add(product);
             }while(cursor.moveToNext());
         }
         return result;
     }
-*/
-    //Function get product by brand name
+
+    // Function get brand name by Pork
+    public List<Product_Info> getBrandByPork()
+    {
+        SQLiteDatabase db = getReadableDatabase();
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+
+        //Make sure all is column name in your table
+        String[] sqlSelect = {"product_id","Brand_Name","Category","Accreditation","Rating","Location"};
+        String tableName = "products";
+
+        qb.setTables(tableName);
+
+        Cursor cursor = qb.query(db,sqlSelect,"Category=?",new String[]{"Pork"},null,null,null);
+        List<Product_Info> result = new ArrayList<>();
+        if(cursor.moveToFirst())
+        {
+            do{
+                Product_Info product = new Product_Info();
+                product.setId(cursor.getString(cursor.getColumnIndex("product_id")));
+                product.setBrand_name(cursor.getString(cursor.getColumnIndex("Brand_Name")));
+                product.setCategory(cursor.getString(cursor.getColumnIndex("Category")));
+                result.add(product);
+            }while(cursor.moveToNext());
+        }
+        return result;
+    }
+
+    // Function get product by brand name
     public List<Product_Info> getProductByBrandName(String brand_name)
     {
         SQLiteDatabase db = getReadableDatabase();

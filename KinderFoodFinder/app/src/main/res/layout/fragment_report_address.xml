@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="50dp"
+    android:paddingRight="50dp"
+    android:paddingTop="50dp"
+    android:background="@color/lighterOrange">
+
+    <TextView
+        android:id="@+id/tv_product"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="Product :"
+        android:paddingLeft="10dp"
+        android:gravity="center_vertical"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/content_product"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_toRightOf="@+id/tv_product"
+        android:layout_toEndOf="@+id/tv_product"
+        android:gravity="center_vertical"
+        android:text=""
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/tv_brand"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="Brand :"
+        android:paddingLeft="10dp"
+        android:gravity="center_vertical"
+        android:textSize="20sp"
+        android:layout_below="@+id/tv_product"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/content_brand"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_below="@+id/content_product"
+        android:layout_toRightOf="@+id/tv_brand"
+        android:layout_toEndOf="@+id/tv_brand"
+        android:gravity="center_vertical"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/tv_store"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="Store :"
+        android:paddingLeft="10dp"
+        android:gravity="center_vertical"
+        android:textSize="20sp"
+        android:layout_below="@+id/tv_brand"
+        android:textStyle="bold"/>
+    <EditText
+        android:id="@+id/input_store"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_toRightOf="@+id/tv_store"
+        android:layout_toEndOf="@+id/tv_store"
+        android:hint="Store Name"
+        android:inputType="text"
+        android:layout_below="@+id/content_brand"/>
+
+    <TextView
+        android:id="@+id/tv_location"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="Location :"
+        android:paddingLeft="10dp"
+        android:gravity="center_vertical"
+        android:textSize="20sp"
+        android:layout_below="@+id/tv_store"
+        android:textStyle="bold"/>
+    <EditText
+        android:id="@+id/input_location"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/input_store"
+        android:layout_toRightOf="@+id/tv_location"
+        android:layout_toEndOf="@+id/tv_location"
+        android:hint="Detailed Address"
+        android:inputType="text"/>
+
+    <Button
+        android:id="@+id/btn_submit"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/tv_location"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="38dp"
+        android:background="@drawable/button_style"
+        android:text="SUBMIT"
+        android:textSize="20sp"/>
+
+</RelativeLayout>
