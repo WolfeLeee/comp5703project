@@ -89,9 +89,6 @@ public class BrowseResultFragment extends Fragment {
         readporkData();
         readChickenData();
 
-        Log.d( "pppp",String.valueOf( bestList.size() ) );
-        Log.d( "pppp",String.valueOf( goodList.size() ) );
-        Log.d( "pppp",String.valueOf(avoidList.size() ) );
 
         toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setVisibility(View.VISIBLE);
