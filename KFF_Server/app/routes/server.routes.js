@@ -16,6 +16,7 @@ router.post('/import', controller.importCSVFile);
 router.get('/backFromSuccess', controller.backFromSuccess);
 router.get('/importinsertPage', controller.goToImportPage);
 router.get('/dbmanagement', controller.databaseManagement);
+router.get('/report', controller.goToReportPage);
 
 // Get location data for a store using external API
 router.get('/getLocation', controller.getLocation );
@@ -38,10 +39,10 @@ router.get('/detailstorePage_Address',controller.StoreDetailPage_Address);
 router.get('/detailstorePage_Address__Delete',controller.StoreDetailPage_Address__Delete);
 router.post('/detailstorePage_Address__Insert',controller.StoreDetailPage_Address__Insert);
 
-
 // Retrieve messages from Android app
 router.get('/android-app-register', controller.registerAndroidAppUsers);
 router.get('/android-app-login', controller.loginAndroidAppUsers);
+router.get('/android-app-report-store', controller.reportedStoreFromAndroidAppUsers);
 
 // Get data from the database
 router.get('/GetAllBrand',controller.GetAllBrand);

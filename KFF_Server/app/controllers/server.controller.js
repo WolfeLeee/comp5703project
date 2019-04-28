@@ -4,6 +4,7 @@ var Product = require("../models/product");
 var AppUser = require("../models/appUser");
 var AppFbUser = require("../models/appFbUser");
 var Store = require("../models/store");
+var ReportedStore = require("../models/reportedStore");
 
 
 // External libraries
@@ -99,44 +100,6 @@ module.exports.showLandingPage = function(req, res, next)
 
 module.exports.registerLogin = function(req, res, next)
 {
-    // confirm that user typed same password twice if register
-    // var pwd = req.body.password;
-    // var pwdConf = req.body.passwordConfirm;
-    // if (pwd !== pwdConf)
-    // {
-    //     var err = new Error('Password do NOT match!');
-    //     err.status = 400;
-    //     return next(err);
-    // }
-
-    // // register
-    // if (req.body.firstName && req.body.lastName && req.body.username && req.body.password && req.body.passwordConfirm && req.body.email)
-    // {
-    //     var userData = {
-    //         firstName: req.body.firstName,
-    //         lastName: req.body.lastName,
-    //         username: req.body.username,
-    //         password: req.body.password,
-    //         passwordConfirm: req.body.passwordConfirm,
-    //         email: req.body.email,
-    //     };
-    //
-    //     User.create(userData, function (error, user)
-    //     {
-    //         if (error)
-    //         {
-    //             //var err = new Error('Username has been used!');
-    //             error.status = 400;
-    //             return next(error);
-    //         }
-    //         else
-    //         {
-    //             req.session.userId = user._id;
-    //             return res.redirect('/feature');
-    //         }
-    //     });
-    //
-    // }
     // login
     if (req.body.logusername && req.body.logpassword)
     {
@@ -307,7 +270,6 @@ module.exports.insertnewBrand = async function (req,res,next)
     }
 
 }
-
 
 module.exports.importCSVFile = function(req, res, next)
 {
@@ -595,6 +557,75 @@ module.exports.goToImportPage = function(req, res, next)
                 else
                 {
                     res.render('importInsertPage.pug');
+                }
+            }
+        });
+};
+
+module.exports.goToReportPage = function(req, res, next)
+{
+    User.findById(req.session.userId)
+        .exec(function (errorUser, user)
+        {
+            if (errorUser)
+            {
+                return next(errorUser);
+            }
+            else
+            {
+                if (user === null)
+                {
+                    res.redirect('/');
+                }
+                else
+                {
+                    var perPage = (parseInt(req.query.stores)) || 25;
+                    var page = (parseInt(req.query.page)) || 1;
+                    ReportedStore.find({}).limit(perPage).skip((perPage * page) - perPage)
+                        .exec(function(errFind, dataStoresPerPage)
+                        {
+                            if(errFind)
+                                return next(errFind);
+                            else
+                            {
+                                ReportedStore.countDocuments({})
+                                    .exec(function(errCount, numOfStores)
+                                    {
+                                        if(errCount)
+                                            return next(errCount);
+                                        else
+                                        {
+                                            ReportedStore.countDocuments({}).limit(perPage).skip((perPage * page) - perPage)
+                                                .exec(function(errCountLimit, numOfLimitedStores)
+                                                {
+                                                    if(errCountLimit)
+                                                        return next(errCountLimit);
+                                                    else
+                                                    {
+                                                        ReportedStore.find({})
+                                                            .exec(function(errFindAll, dataAllStores)
+                                                            {
+                                                                if(errFindAll)
+                                                                    return next(errFindAll);
+                                                                else
+                                                                {
+                                                                    res.render('report.pug', {
+                                                                        displaydata: dataStoresPerPage,
+                                                                        displayAllData: dataAllStores,
+                                                                        numPerPage: perPage,
+                                                                        count: numOfStores,
+                                                                        current: page,
+                                                                        pages: Math.ceil(numOfStores/ perPage),
+                                                                        countentries: numOfLimitedStores
+                                                                    });
+                                                                }
+                                                            });
+                                                    }
+                                                });
+                                        }
+                                    });
+                            }
+                        });
                 }
             }
         });
@@ -1216,8 +1247,6 @@ module.exports.StoreDetailPage_Brand__Insert = async function(req,res,next)
 }
 
 
-
-
 module.exports.databaseManagement = function(req, res, next)
 {
     User.findById(req.session.userId)
@@ -1313,10 +1342,10 @@ module.exports.registerAndroidAppUsers = function(req, res, next)
 {
     // set up and receive the user info
     var name = req.query.name;
-    var gender = req.query.gender;
-    var email = req.query.email;
-    var password = req.query.password;
-    var birthday = req.query.birthday;
+    // var gender = req.query.gender;
+    // var email = req.query.email;
+    // var password = req.query.password;
+    // var birthday = req.query.birthday;
     console.log(name);
 
     var appUserData = {
@@ -1370,6 +1399,39 @@ module.exports.loginAndroidAppUsers = function(req, res, next)
         else
         {
             res.send("Yes");
+        }
+    });
+};
+
+module.exports.reportedStoreFromAndroidAppUsers = function(req, res, next)
+{
+    // set up and receive the user info
+    var storeName = req.query.storeName;
+    // var gender = req.query.gender;
+    // var email = req.query.email;
+    // var password = req.query.password;
+    // var birthday = req.query.birthday;
+    console.log(storeName);
+
+    var reportedStoreData = {
+        storeName: req.query.storeName,
+        streetAddress: req.query.streetAddress,
+        state: req.query.state,
+        postCode: req.query.postCode,
+        productId: req.query.productId
+    };
+
+    ReportedStore.create(reportedStoreData, function (error, reportedStores)
+    {
+        if (error)
+        {
+            var err = new Error('Store info is invalid!');
+            err.status = 400;
+            return next(err);
+        }
+        else
+        {
+            res.send("Server has got your reported store!");
         }
     });
 };
