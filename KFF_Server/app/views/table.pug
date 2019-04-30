@@ -41,8 +41,7 @@ html
                 div.pagebody_navigationbar__header
                     a(href="/dbmanagement") Update/ Delete Data
             div.pagebody_mainbody
-                ol.bread-crumb
-                    li.bread-crumb-item Update/ Delete Data
+                h3 Update/ Delete Data
                 div.card.mb-3
                     div.card-header Brand
                     div.card-body
@@ -136,23 +135,24 @@ html
                                         div.dataTables_paginate.paging_simple_numbers#dataTable_paginate
                                             if(pages > 0)
                                                 ul.pagination
+                                                    - var currentPage = parseInt(current);
                                                     if(current == 1)
                                                         li.pagination_button.page-item.previous#dataTable_previous.disabled
                                                             a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0") Previous
                                                     else
                                                         li.pagination_button.page-item.previous#dataTable_previous
-                                                            a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0") Previous
+                                                            a.page-link(href="/dbmanagement?product="+numPerPage+"&page="+(currentPage-1),aria-controls="dataTable", data-dt-idx="0", tabindex="0") Previous
                                                     - var i = ( current > 5 ? current - 4 :1)
                                                     if (i !== 1)
                                                         li.pagination_button.page-item.disabled
                                                             a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0") ...
                                                     - for(; i <= (current + 4) && i <= pages; i++)
-                                                    if(i == current)
-                                                        li.pagination_button.page-item.active
-                                                            a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0") #{i}
-                                                    else if (i <= 0)
-                                                        li.pagination_button.page-item
-                                                            a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0") #{i}
+                                                        if(i == current)
+                                                            li.pagination_button.page-item.active
+                                                                a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0") #{i}
+                                                        else if (i <= 0)
+                                                            li.pagination_button.page-item
+                                                                a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0") #{i}
                                                     if(i == current + 4 && i < pages)
                                                         li.pagination_button.page-item.disabled
                                                             a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0") ...
@@ -161,4 +161,7 @@ html
                                                             a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0") Next
                                                     else
                                                         li.pagination_button.page-item.next#dataTable_next
-                                                            a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0") Next
+                                                            a.page-link(href="/dbmanagement?product="+numPerPage+"&page="+(currentPage+1),aria-controls="dataTable", data-dt-idx="0", tabindex="0") Next
+                div(class="feature_page_footer" style="text-align:center")
+                    div(class="bottom_copyright" style="display:inline-block")
+                        p &copy; 2019 IT Capstone Project - KinderFoodFinder. All rights reserved | Design by Team 2 - COMP5703
