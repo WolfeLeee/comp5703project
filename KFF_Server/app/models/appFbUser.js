@@ -13,6 +13,12 @@ var AppFbUserSchema = new mongoose.Schema({
             required: true,
             trim: true
         },
+    facebookId:
+        {
+            type: String,
+            required: true,
+            unique: true
+        },
     gender:
         {
             type: String,
@@ -20,23 +26,11 @@ var AppFbUserSchema = new mongoose.Schema({
             required: true,
             trim: true
         },
-    email:
-        {
-            type: String,
-            unique: true,
-            required: false,
-            trim: true
-        },
-    facebookId:
-        {
-            type: String,
-            required: true
-        },
     birthday:
         {
             type: String,
             unique: false,
-            required: true,
+            required: false,
             trim: false
         },
 });
@@ -45,9 +39,9 @@ var AppFbUserSchema = new mongoose.Schema({
 AppFbUserSchema.index({facebookId: 1});
 
 //authenticate input against database
-AppFbUserSchema.statics.authenticate = function (email, password, callback)
+AppFbUserSchema.statics.authenticate = function (facebookId, callback)
 {
-    AppFbUser.findOne({ email: email })
+    AppFbUser.findOne({ facebookId: facebookId })
         .exec(function (error, user)
         {
             if (error)
@@ -60,36 +54,12 @@ AppFbUserSchema.statics.authenticate = function (email, password, callback)
                 err.status = 401;
                 return callback(err);
             }
-
-            if(password === user.password)
-                return callback(null, user);
             else
+            {
                 return callback();
-
-            // bcrypt.compare(password, user.password, function (err, result)
-            // {
-            //     if (result === true)
-            //         return callback(null, user);
-            //     else
-            //         return callback();
-            // });
+            }
         });
 };
-
-//hashing a password before saving it to the database
-// User.pre('save', function (next)
-// {
-//     var user = this;
-//     bcrypt.hash(user.password, 10, function (err, hash)
-//     {
-//         if (err)
-//         {
-//             return next(err);
-//         }
-//         user.password = hash;
-//         next();
-//     })
-// });
 
 AppFbUserSchema.statics.findAllUsers = function (callback)
 {

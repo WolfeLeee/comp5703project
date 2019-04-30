@@ -43,6 +43,8 @@ router.post('/detailstorePage_Address__Insert',controller.StoreDetailPage_Addres
 router.get('/android-app-register', controller.registerAndroidAppUsers);
 router.get('/android-app-login', controller.loginAndroidAppUsers);
 router.get('/android-app-report-store', controller.reportedStoreFromAndroidAppUsers);
+router.get('/android-app-register-fb', controller.registerAndroidAppFbUsers);
+router.get('/android-app-login-fb', controller.loginAndroidAppFbUsers);
 
 // Get data from the database
 router.get('/GetAllBrand',controller.GetAllBrand);

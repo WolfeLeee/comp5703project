@@ -1340,14 +1340,11 @@ module.exports.databaseManagement = function(req, res, next)
 
 module.exports.registerAndroidAppUsers = function(req, res, next)
 {
-    // set up and receive the user info
+    // testing
     var name = req.query.name;
-    // var gender = req.query.gender;
-    // var email = req.query.email;
-    // var password = req.query.password;
-    // var birthday = req.query.birthday;
     console.log(name);
 
+    // set up and receive the user info
     var appUserData = {
         name: req.query.name,
         gender: req.query.gender,
@@ -1356,6 +1353,7 @@ module.exports.registerAndroidAppUsers = function(req, res, next)
         birthday: req.query.birthday
     };
 
+    // create the user account
     AppUser.create(appUserData, function (error, appUser)
     {
         if (error)
@@ -1369,18 +1367,6 @@ module.exports.registerAndroidAppUsers = function(req, res, next)
             res.send("Server has got your data!");
         }
     });
-
-    // req.addListener("data", function(postDataChunk)
-    // {
-    //     // data += postDataChunk;
-    //     data = req.query.name;
-    // });
-    //
-    // req.addListener("end", function()
-    // {
-    //     console.log('Welcome to register server!');
-    //     console.log("data: " + data);
-    // });
 };
 
 module.exports.loginAndroidAppUsers = function(req, res, next)
@@ -1450,6 +1436,55 @@ module.exports.reportedStoreFromAndroidAppUsers = function(req, res, next)
                     res.send("Server has got your reported store!");
                 }
             });
+        }
+    });
+};
+
+module.exports.registerAndroidAppFbUsers = function(req, res, next)
+{
+    // testing
+    var name = req.query.name;
+    console.log(name);
+
+    // set up and receive the user info
+    var appUserData = {
+        name: req.query.name,
+        facebookId: req.query.facebookId,
+        gender: req.query.gender,
+        birthday: req.query.birthday
+    };
+
+    // create the user account
+    AppFbUser.create(appUserData, function (error, appFbUser)
+    {
+        if (error)
+        {
+            var err = new Error('User info is invalid!');
+            err.status = 400;
+            return next(err);
+        }
+        else
+        {
+            res.send("Server has got your data!");
+        }
+    });
+};
+
+module.exports.loginAndroidAppFbUsers = function(req, res, next)
+{
+    // set up and receive the user info
+    var facebookId = req.query.facebookId;
+    console.log(facebookId);
+
+    AppFbUser.authenticate(facebookId, function (error, user)
+    {
+        if (error || !user)
+        {
+            res.send("No");
+        }
+        else
+        {
+            res.send("Yes");
         }
     });
 };
