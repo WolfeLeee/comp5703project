@@ -108,34 +108,22 @@ html
                                                     th(tabindex="0",
                                                         rowspan="1",
                                                         colspan="1",
-                                                        style = "width:55px;") Approval
-                                                    th(tabindex="0",
-                                                        rowspan="1",
-                                                        colspan="1",
-                                                        style = "width:55px;") Delete
+                                                        style = "width:55px;") Select
                                             tfoot
                                                 tr
                                                     th(rowspan="1", colspan="1") Brand Name
                                                     th(rowspan="1", colspan="1") Store
                                                     th(rowspan="1", colspan="1") Address
-                                                    th(rowspan="1", colspan="1") Approval
-                                                    th(rowspan="1", colspan="1") Delete
+                                                    th(rowspan="1", colspan="1") Select
                                             tbody(id="table_body")
                                                 - if(displaydata)
                                                     - for(var i = 0; i < displaydata.length; i++)
                                                         tr(role="row", class="odd")
-                                                            td.Table_Brand_Name
-                                                                - var id = displaydata[i]._id
-                                                                a(href="/detailproductPage?productid="+id) #{displaydata[i].Brand_Name}
-                                                            td
-                                                            - for(var j = 0; j < displaydata[i].Accreditation.length; j++ )
-                                                            div #{displaydata[i].Accreditation[j].Accreditation} - #{displaydata[i].Accreditation[j].Rating}
-                                                            td #{displaydata[i].Category}
+                                                            td #{displaydata[i].brandName}
+                                                            td #{displaydata[i].storeName}
+                                                            td #{displaydata[i].streetAddress}, #{displaydata[i].state}, #{displaydata[i].postCode}
                                                             td.deletecheckbox
-                                                                - var id = displaydata[i]._id
-                                                                input(type="checkbox", value=id)
-                                                            td.deletecheckbox
-                                                                - var id = displaydata[i]._id
+                                                                - var id = displaydata[i].brandId
                                                                 input(type="checkbox", value=id)
                                 div.row
                                     div.col-sm-12.col-md-5

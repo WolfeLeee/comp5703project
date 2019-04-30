@@ -533,7 +533,7 @@ module.exports.backFromSuccess = function(req, res, next)
                 }
                 else
                 {
-                    res.redirect('/importPage');
+                    res.redirect('/importinsertPage');
                 }
             }
         });
@@ -1403,35 +1403,53 @@ module.exports.loginAndroidAppUsers = function(req, res, next)
     });
 };
 
+// to test around this:
+// http://<Server's IP>:3000/android-app-report-store?storeName=coles&streetAddress=broadway&state=NSW&postCode=2007&productId=5cc7da37ba39be1255db1a73
+// the variable of query all you can modify to fit into yours
 module.exports.reportedStoreFromAndroidAppUsers = function(req, res, next)
 {
-    // set up and receive the user info
+    // testing
     var storeName = req.query.storeName;
-    // var gender = req.query.gender;
-    // var email = req.query.email;
-    // var password = req.query.password;
-    // var birthday = req.query.birthday;
     console.log(storeName);
 
-    var reportedStoreData = {
-        storeName: req.query.storeName,
-        streetAddress: req.query.streetAddress,
-        state: req.query.state,
-        postCode: req.query.postCode,
-        productId: req.query.productId
-    };
-
-    ReportedStore.create(reportedStoreData, function (error, reportedStores)
+    // check if the product ID is existing or not in product collection
+    var productIdNumber = req.query.productId;
+    Product.findById(productIdNumber, function(error, product)
     {
-        if (error)
+        if(error)
         {
-            var err = new Error('Store info is invalid!');
-            err.status = 400;
-            return next(err);
+            res.send("Something went wrong while searching the product!");
+        }
+        else if(!product)
+        {
+            res.send("The product is not existing!");
         }
         else
         {
-            res.send("Server has got your reported store!");
+            // set up the store info
+            var reportedStoreData = {
+                storeName: req.query.storeName,
+                streetAddress: req.query.streetAddress,
+                state: req.query.state,
+                postCode: req.query.postCode,
+                brandId: productIdNumber,
+                brandName: product.Brand_Name
+            };
+
+            // create the store document
+            ReportedStore.create(reportedStoreData, function (error, reportedStores)
+            {
+                if (error)
+                {
+                    var err = new Error('Store info is invalid!');
+                    err.status = 400;
+                    return next(err);
+                }
+                else
+                {
+                    res.send("Server has got your reported store!");
+                }
+            });
         }
     });
 };

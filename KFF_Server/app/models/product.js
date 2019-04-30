@@ -3,6 +3,7 @@
  */
 
 var mongoose = require('mongoose');
+// var objectId = mongoose.Types.ObjectId();
 
 var ProductSchema = new mongoose.Schema(
     {
@@ -18,8 +19,6 @@ var ProductSchema = new mongoose.Schema(
     {
         versionKey: false
     });
-
-
 
 
 
