@@ -282,39 +282,12 @@ public class SearchFragment extends Fragment
                 else // nothing selected
                 {
                     Toast.makeText(getActivity(), "Please select the category before searching!", Toast.LENGTH_SHORT).show();
-                    adapter.getFilter().filter(newText);
 
-                    product.setAdapter( adapter );
-                    Utility.setListViewHeightBasedOnChildren(product);
                 }
                 return false;
             }
         });
 
-
-//        product.setOnItemClickListener( new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//                if(categoryID == 1) // egg
-//                {
-//                    Toast.makeText(getActivity(), "Searching egg product...", Toast.LENGTH_SHORT).show();
-//                }
-//                else if(categoryID == 2) // chicken
-//                {
-//                    Toast.makeText(getActivity(), "Searching chicken product...", Toast.LENGTH_SHORT).show();
-//                }
-//                else if(categoryID == 3) // pigs
-//                {
-//                    Toast.makeText(getActivity(), "Searching pig product...", Toast.LENGTH_SHORT).show();
-//                }
-//                else // nothing selected
-//                {
-//                    Toast.makeText(getActivity(), "Please select the category before searching!", Toast.LENGTH_SHORT).show();
-//                }
-//
-//            }
-//        } );
 
         product.setOnItemClickListener( new AdapterView.OnItemClickListener() {
             @Override
@@ -385,63 +358,7 @@ public class SearchFragment extends Fragment
             }
         } );
 
-//        product.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//
-//
-//                }
-//            }
 
-//        product.setOnItemClickListener( new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Items c = new Items();
-//                // search by the input from user
-//                if (categoryID == 1) // egg
-//                {
-//                    c = (Items) eggAdapter.getItem( position );
-//                    Toast.makeText( getActivity(), "Searching egg product...", Toast.LENGTH_SHORT ).show();
-//                } else if (categoryID == 2) // chicken
-//                {
-//                    c = (Items) chickenAdapter.getItem( position );
-//                    Toast.makeText( getActivity(), "Searching chicken product...", Toast.LENGTH_SHORT ).show();
-//                } else if (categoryID == 3) // pigs
-//                {
-//                    c = (Items) pigAdapter.getItem( position );
-//                    Toast.makeText( getActivity(), "Searching pig product...", Toast.LENGTH_SHORT ).show();
-//                } else // nothing selected
-//                {
-//                    Toast.makeText( getActivity(), "Please select the category before searching!", Toast.LENGTH_SHORT ).show();
-//                }
-//
-//
-//                Intent intent = new Intent( getActivity(), DetailActivity.class );
-//                if (intent != null) {
-//
-//                    intent.putExtra( "brand", c.getBrand() );
-//                    intent.putExtra( "type", c.getType() );
-//                    intent.putExtra( "accreditation", c.getAccreditation() );
-//                    intent.putExtra( "rating", c.getRating() );
-//                    intent.putExtra( "location", c.getAvailable() );
-//
-////                    intent.putExtra("img", String.valueOf(c.getImg()));
-//                    startActivityForResult( intent, VIEW_ITEM_REQUEST_CODE );}
-//        } );
-
-
-//        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.productRecyclerview);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//
-//        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(),recyclerView,this));
-//        mProductsRecyclerViewAdapter = new ProductsRecyclerViewAdapter(new ArrayList<Products>(), getContext());
-//        recyclerView.setAdapter(mProductsRecyclerViewAdapter);
-
-
-//        final ItemsAdapter itemsAdapter= new ItemsAdapter( getActivity(),eggsList );
-//        egglv.setAdapter( itemsAdapter );
-//        Utility.setListViewHeightBasedOnChildren(egglv);
 
 
         return view;
@@ -503,8 +420,7 @@ public class SearchFragment extends Fragment
             eggsdata.add( items );
 
         }
-
-        Log.d( "vvvvvvvvvvv", String.valueOf( eggsdata.size() ));
+        
     }
 
 
