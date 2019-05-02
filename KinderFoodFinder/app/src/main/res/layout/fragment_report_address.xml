@@ -72,12 +72,12 @@
         android:id="@+id/tv_location"
         android:layout_width="100dp"
         android:layout_height="50dp"
-        android:text="Location :"
-        android:paddingLeft="10dp"
-        android:gravity="center_vertical"
-        android:textSize="20sp"
         android:layout_below="@+id/tv_store"
-        android:textStyle="bold"/>
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:text="Address :"
+        android:textSize="20sp"
+        android:textStyle="bold" />
     <EditText
         android:id="@+id/input_location"
         android:layout_width="200dp"
@@ -88,11 +88,55 @@
         android:hint="Detailed Address"
         android:inputType="text"/>
 
+    <TextView
+        android:id="@+id/tv_state"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="State :"
+        android:paddingLeft="10dp"
+        android:gravity="center_vertical"
+        android:textSize="20sp"
+        android:layout_below="@+id/tv_location"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:id="@+id/input_state"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/input_location"
+        android:layout_toEndOf="@+id/tv_location"
+        android:layout_toRightOf="@+id/tv_state"
+        android:hint="State"
+        android:inputType="text" />
+
+    <TextView
+        android:id="@+id/tv_postcode"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/tv_state"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:text="PostCode :"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/input_postcode"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/tv_state"
+        android:layout_toEndOf="@+id/tv_location"
+        android:layout_toRightOf="@+id/tv_postcode"
+        android:hint="PostCode"
+        android:inputType="text" />
+
+
+
     <Button
         android:id="@+id/btn_submit"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:layout_below="@id/tv_location"
+        android:layout_below="@id/tv_postcode"
         android:layout_marginLeft="50dp"
         android:layout_marginTop="38dp"
         android:background="@drawable/button_style"

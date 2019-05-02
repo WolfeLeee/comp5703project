@@ -1,6 +1,8 @@
 package comp5703.sydney.edu.au.kinderfoodfinder;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,6 +27,10 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
+import comp5703.sydney.edu.au.kinderfoodfinder.Database.BackgroundTask;
+import comp5703.sydney.edu.au.kinderfoodfinder.Database.ProductContract;
+import comp5703.sydney.edu.au.kinderfoodfinder.Database.ProductDatabase;
+import comp5703.sydney.edu.au.kinderfoodfinder.Database.SearchBackground;
 import comp5703.sydney.edu.au.kinderfoodfinder.LocalDatabase.ProductsRecyclerViewAdapter;
 
 /* * * * * * * * * * *
@@ -57,6 +63,7 @@ public class SearchFragment extends Fragment
     ArrayList<Items> avoidList=new ArrayList<>(  );
     ArrayList<Items> resultList =new ArrayList<>(  );
     public final int VIEW_ITEM_REQUEST_CODE = 647;
+    ArrayList<Items> eggsdata=new ArrayList<>(  );
 
 
     private LinearLayout categoryEgg, categoryChicken, categoryPig;
@@ -73,13 +80,22 @@ public class SearchFragment extends Fragment
     {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        readEggData();
+//        readEggData();
         readChickenData();
         readporkData();
+
+        readProduct();
 
         Log.d("ddddddddd",String.valueOf( eggsList.size() ));
         Log.d("ddddddddd",String.valueOf( chickenList.size() ));
         Log.d("ddddddddd",String.valueOf( pigList.size() ));
+
+//        BackgroundTask backgroundTask1=new BackgroundTask( getActivity() );
+//        backgroundTask1.execute( "read_info");
+
+//        eggsList=searchBackground.get();
+
+
 
 
         // set up
@@ -96,10 +112,16 @@ public class SearchFragment extends Fragment
 
 
         final ItemsAdapter adapter=new ItemsAdapter( getActivity(),itemsArrayList );
-        final ItemsAdapter eggAdapter=new ItemsAdapter( getActivity(),eggsList );
+//        final ItemsAdapter eggAdapter=new ItemsAdapter( getActivity(),eggsList );
         final ItemsAdapter chickenAdapter=new ItemsAdapter( getActivity(),chickenList );
         final ItemsAdapter pigAdapter=new ItemsAdapter( getActivity(),pigList );
+        final ItemsAdapter eggDataAp=new ItemsAdapter( getActivity(),eggsdata );
 
+//        product.setAdapter( adapter );
+//        Utility.setListViewHeightBasedOnChildren(product);
+
+//        egglv=view.findViewById( R.id.egglv );
+//        pigslv=view.findViewById( R.id.piglv );
 //        chickenlv=view.findViewById( R.id.chickenlv );
         imageView=view.findViewById( R.id.image_search );
 
@@ -127,6 +149,7 @@ public class SearchFragment extends Fragment
                 categoryChicken.setBackgroundColor(getResources().getColor(R.color.white));
                 categoryPig.setBackgroundColor(getResources().getColor(R.color.white));
                 imageView.setImageResource( R.drawable.farm3 );
+                product.setAdapter( null );
             }
         });
         categoryChicken.setOnClickListener(new View.OnClickListener()
@@ -139,6 +162,8 @@ public class SearchFragment extends Fragment
                 categoryChicken.setBackgroundColor(getResources().getColor(R.color.darkOrange));
                 categoryPig.setBackgroundColor(getResources().getColor(R.color.white));
                 imageView.setImageResource( R.drawable.farm2 );
+                product.setAdapter( null );
+
             }
         });
         categoryPig.setOnClickListener(new View.OnClickListener()
@@ -151,6 +176,8 @@ public class SearchFragment extends Fragment
                 categoryChicken.setBackgroundColor(getResources().getColor(R.color.white));
                 categoryPig.setBackgroundColor(getResources().getColor(R.color.darkOrange));
                 imageView.setImageResource( R.drawable.farm1 );
+                product.setAdapter( null );
+
             }
         });
 
@@ -182,8 +209,8 @@ public class SearchFragment extends Fragment
                     Toast.makeText(getActivity(), "Searching egg product...", Toast.LENGTH_SHORT).show();
 //                    eggAdapter.getFilter().filter(query);
 //                    egglv.setAdapter( eggAdapter );
-                    eggAdapter.getFilter().filter(query);
-                    product.setAdapter( eggAdapter );
+                    eggDataAp.getFilter().filter(query);
+                    product.setAdapter( eggDataAp );
                     Utility.setListViewHeightBasedOnChildren(product);
 
                     return false;
@@ -227,8 +254,8 @@ public class SearchFragment extends Fragment
                     Toast.makeText(getActivity(), "Searching egg product...", Toast.LENGTH_SHORT).show();
 //                    eggAdapter.getFilter().filter(query);
 //                    egglv.setAdapter( eggAdapter );
-                    eggAdapter.getFilter().filter(newText);
-                    product.setAdapter( eggAdapter );
+                    eggDataAp.getFilter().filter(newText);
+                    product.setAdapter( eggDataAp );
                     Utility.setListViewHeightBasedOnChildren(product);
 
                     return false;
@@ -296,7 +323,7 @@ public class SearchFragment extends Fragment
                 if(categoryID == 1) // egg
                 {
                     Toast.makeText(getActivity(), "Searching egg product...", Toast.LENGTH_SHORT).show();
-                    Items c= (Items) eggAdapter.getItem(position);
+                    Items c= (Items) eggDataAp.getItem(position);
                     Intent intent = new Intent(getActivity(), DetailActivity.class);
                     if (intent != null) {
 
@@ -308,7 +335,7 @@ public class SearchFragment extends Fragment
 
 //                    intent.putExtra("img", String.valueOf(c.getImg()));
                         startActivity( intent );
-                        getActivity().finish();
+
 
                     }
                 }
@@ -327,7 +354,7 @@ public class SearchFragment extends Fragment
 
 //                    intent.putExtra("img", String.valueOf(c.getImg()));
                         startActivity( intent );
-                        getActivity().finish();
+
 
                     }
                     Toast.makeText(getActivity(), "Searching chicken product...", Toast.LENGTH_SHORT).show();
@@ -346,7 +373,6 @@ public class SearchFragment extends Fragment
 
 //                    intent.putExtra("img", String.valueOf(c.getImg()));
                         startActivity( intent );
-                        getActivity().finish();
 
                     }
                     Toast.makeText(getActivity(), "Searching pig product...", Toast.LENGTH_SHORT).show();
@@ -359,7 +385,63 @@ public class SearchFragment extends Fragment
             }
         } );
 
+//        product.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//
+//
+//                }
+//            }
 
+//        product.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Items c = new Items();
+//                // search by the input from user
+//                if (categoryID == 1) // egg
+//                {
+//                    c = (Items) eggAdapter.getItem( position );
+//                    Toast.makeText( getActivity(), "Searching egg product...", Toast.LENGTH_SHORT ).show();
+//                } else if (categoryID == 2) // chicken
+//                {
+//                    c = (Items) chickenAdapter.getItem( position );
+//                    Toast.makeText( getActivity(), "Searching chicken product...", Toast.LENGTH_SHORT ).show();
+//                } else if (categoryID == 3) // pigs
+//                {
+//                    c = (Items) pigAdapter.getItem( position );
+//                    Toast.makeText( getActivity(), "Searching pig product...", Toast.LENGTH_SHORT ).show();
+//                } else // nothing selected
+//                {
+//                    Toast.makeText( getActivity(), "Please select the category before searching!", Toast.LENGTH_SHORT ).show();
+//                }
+//
+//
+//                Intent intent = new Intent( getActivity(), DetailActivity.class );
+//                if (intent != null) {
+//
+//                    intent.putExtra( "brand", c.getBrand() );
+//                    intent.putExtra( "type", c.getType() );
+//                    intent.putExtra( "accreditation", c.getAccreditation() );
+//                    intent.putExtra( "rating", c.getRating() );
+//                    intent.putExtra( "location", c.getAvailable() );
+//
+////                    intent.putExtra("img", String.valueOf(c.getImg()));
+//                    startActivityForResult( intent, VIEW_ITEM_REQUEST_CODE );}
+//        } );
+
+
+//        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.productRecyclerview);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//
+//        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(),recyclerView,this));
+//        mProductsRecyclerViewAdapter = new ProductsRecyclerViewAdapter(new ArrayList<Products>(), getContext());
+//        recyclerView.setAdapter(mProductsRecyclerViewAdapter);
+
+
+//        final ItemsAdapter itemsAdapter= new ItemsAdapter( getActivity(),eggsList );
+//        egglv.setAdapter( itemsAdapter );
+//        Utility.setListViewHeightBasedOnChildren(egglv);
 
 
         return view;
@@ -389,6 +471,41 @@ public class SearchFragment extends Fragment
 //        intent.putExtra(IMAGE_DETAIL,byteArray);
 //        startActivity(intent);
 //    }
+
+
+    private void readProduct() {
+        ProductDatabase productDatabase = new ProductDatabase( getActivity() );
+        SQLiteDatabase database = productDatabase.getReadableDatabase();
+
+        String myname = "eggs";
+
+        String sql = "select * from kkf_table where category='eggs'";
+        Cursor cursor = database.rawQuery( sql,new String[] {});
+
+        String info = "";
+
+        while (cursor.moveToNext()) {
+
+            Items items=new Items(  );
+            String info1 = "";
+            String id = Integer.toString( cursor.getInt( cursor.getColumnIndex( ProductContract.ProductEntry.PRODUCT_ID ) ) );
+            String brand = cursor.getString( cursor.getColumnIndex( ProductContract.ProductEntry.BRAND_NAME ) );
+            String acc = cursor.getString( cursor.getColumnIndex( ProductContract.ProductEntry.ACCREDITATION ) );
+            String rating = cursor.getString( cursor.getColumnIndex( ProductContract.ProductEntry.RATING ) );
+            String available = cursor.getString( cursor.getColumnIndex( ProductContract.ProductEntry.AVAILABLE ) );
+            String category = cursor.getString( cursor.getColumnIndex( ProductContract.ProductEntry.CATEGORY ) );
+//
+            items.setType( category );
+            items.setBrand( brand );
+            items.setAccreditation( acc );
+            items.setRating( rating );
+            items.setAvailable( available );
+            eggsdata.add( items );
+
+        }
+
+        Log.d( "vvvvvvvvvvv", String.valueOf( eggsdata.size() ));
+    }
 
 
     // test the function
@@ -569,5 +686,17 @@ public class SearchFragment extends Fragment
         }
 
 
+    }
+
+    public String itemtoString(int i){
+        Items items=itemsArrayList.get( i );
+//
+        String brand =items.getBrand();
+        String acc=items.getAccreditation();
+        String rating=items.getRating();
+        String available =items.getAvailable();
+        String category=items.getType();
+
+        return String.valueOf( i )+"; "+brand+"; "+acc+"; "+rating+"; "+available+"; "+category;
     }
 }

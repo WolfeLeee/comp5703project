@@ -2,13 +2,13 @@ package comp5703.sydney.edu.au.kinderfoodfinder;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,9 +22,6 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-import android.support.v7.widget.Toolbar;
-
-import java.util.Calendar;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -32,13 +29,24 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.request.RequestOptions;
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 
-public class RegisterFragment extends Fragment
-{
-    // defined variables
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Calendar;
+
+public class FBRegisterFragment extends Fragment {
+    private Toolbar toolbar;
     private Fragment fragmentLogin;
+    private String name,id;
+
     private Button btnRegister;
-    private EditText inputName, inputEmail, inputPwd, inputConfirmPwd, inputBirthday;
+    private EditText  inputBirthday,inputName, inputEmail;
     private CheckBox checkAgreement, checkIfDiscloseDOB;
     private RadioGroup radioGroup;
     private RadioButton radioButton;
@@ -47,28 +55,30 @@ public class RegisterFragment extends Fragment
 
     private ProgressDialog registerProgressDialog;
 
-    private Toolbar toolbar;
+
+
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
-        View view = inflater.inflate(R.layout.fragment_register, container, false);
-
-        // set up
-        fragmentLogin = new LoginFragment();
-        registerProgressDialog = new ProgressDialog(getActivity());
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate( R.layout.fragment_fbregister, container, false );
 
         toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setVisibility(View.VISIBLE);
+//        name=getArguments().getString( "name" );
+//        id=getArguments().getString( "id" );
 
-        inputName = (EditText) view.findViewById(R.id.inputName);
+        registerProgressDialog = new ProgressDialog(getActivity());
+
+
+        inputName = (EditText) view.findViewById(R.id.inputName1);
+
+
+
+        inputEmail = (EditText) view.findViewById(R.id.inputEmailR1);
 
         radioGroup = (RadioGroup) view.findViewById(R.id.radioGender);
 
-        inputEmail = (EditText) view.findViewById(R.id.inputEmailR);
-        inputPwd = (EditText) view.findViewById(R.id.inputPwdR);
-        inputConfirmPwd = (EditText) view.findViewById(R.id.inputPwdConfirm);
         inputBirthday = (EditText) view.findViewById(R.id.inputBirthday);
         datePicker = (ImageView) view.findViewById(R.id.datePicker);
 
@@ -77,8 +87,23 @@ public class RegisterFragment extends Fragment
 
         btnRegister = (Button) view.findViewById(R.id.btnRegister);
 
-        // testing only
-//        Toast.makeText(getActivity(), radioButton.getText(), Toast.LENGTH_SHORT).show();
+        fragmentLogin=new LoginFragment();
+        // tool bar listener
+        toolbar.setNavigationOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                // go to login fragment
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                        .replace(R.id.fragment_container, fragmentLogin).commit();
+
+                // remove toolbar again
+                toolbar.setVisibility(View.GONE);
+            }
+        });
+
 
         // image view of date picker click listener
         datePicker.setOnClickListener(new View.OnClickListener()
@@ -96,7 +121,7 @@ public class RegisterFragment extends Fragment
                         mDateSetListener,
                         year, month, day);
 
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable( Color.TRANSPARENT));
                 dialog.show();
             }
         });
@@ -110,82 +135,63 @@ public class RegisterFragment extends Fragment
             }
         };
 
-        // button on click listeners
-        btnRegister.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                // set up all the inputs
-                int selectedId = radioGroup.getCheckedRadioButtonId();
-                radioButton = (RadioButton) radioGroup.findViewById(selectedId);
-
-                String name = inputName.getText().toString();
-                String gender = radioButton.getText().toString();
-                String email = inputEmail.getText().toString();
-                String password = inputPwd.getText().toString();
-                String passwordConfirm = inputConfirmPwd.getText().toString();
-                String birthday = inputBirthday.getText().toString();
-                boolean showBirthday = checkIfDiscloseDOB.isChecked();
-
-                if(checkAgreement.isChecked())
-                    registerUser(name, gender, email, password, passwordConfirm, birthday, showBirthday);
-                else
-                    Toast.makeText(getActivity(), "Sorry, you have to agree before register!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        // tool bar listener
-        toolbar.setNavigationOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                // go to login fragment
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                        .replace(R.id.fragment_container, fragmentLogin).commit();
-
-                // remove toolbar again
-                toolbar.setVisibility(View.GONE);
-            }
-        });
+//        // button on click listeners
+//        btnRegister.setOnClickListener(new View.OnClickListener()
+//        {
+//            @Override
+//            public void onClick(View v)
+//            {
+//                // set up all the inputs
+//                int selectedId = radioGroup.getCheckedRadioButtonId();
+//                radioButton = (RadioButton) radioGroup.findViewById(selectedId);
+//
+//                String gender = radioButton.getText().toString();
+//                String birthday = inputBirthday.getText().toString();
+//                boolean showBirthday = checkIfDiscloseDOB.isChecked();
+//
+//                if(checkAgreement.isChecked())
+//                    registerUser(name, gender, id, id, birthday, showBirthday);
+//                else
+//                    Toast.makeText(getActivity(), "Sorry, you have to agree before register!", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         return view;
     }
 
+
     /* * * * * * * * * * * *
      * Register Functions  *
      * * * * * * * * * * * */
-    private void registerUser(String name, String gender, String email, String pwd, String confirmPwd, String birthday, boolean showBirthday)
+    private void registerUser(String name, String gender, String email, String pwd,  String birthday, boolean showBirthday)
     {
         // check if the texts are empty
-        if(TextUtils.isEmpty(name))
-        {
-            Toast.makeText(getActivity(), "Please enter your name!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(TextUtils.isEmpty(email))
-        {
-            Toast.makeText(getActivity(), "Please enter your email!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(TextUtils.isEmpty(pwd))
-        {
-            Toast.makeText(getActivity(), "Please enter your password!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(TextUtils.isEmpty(confirmPwd))
-        {
-            Toast.makeText(getActivity(), "Please enter your password again!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        // check pwd equals to confirm pwd
-        if(!pwd.equals(confirmPwd))
-        {
-            Toast.makeText(getActivity(), "Confirmed password is not matched!", Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        if(TextUtils.isEmpty(name))
+//        {
+//            Toast.makeText(getActivity(), "Please enter your name!", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        if(TextUtils.isEmpty(email))
+//        {
+//            Toast.makeText(getActivity(), "Please enter your email!", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        if(TextUtils.isEmpty(pwd))
+//        {
+//            Toast.makeText(getActivity(), "Please enter your password!", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        if(TextUtils.isEmpty(confirmPwd))
+//        {
+//            Toast.makeText(getActivity(), "Please enter your password again!", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        // check pwd equals to confirm pwd
+//        if(!pwd.equals(confirmPwd))
+//        {
+//            Toast.makeText(getActivity(), "Confirmed password is not matched!", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
         if(TextUtils.isEmpty(birthday))
         {
             Toast.makeText(getActivity(), "Please select date for your birthday!", Toast.LENGTH_SHORT).show();
@@ -209,7 +215,7 @@ public class RegisterFragment extends Fragment
 
         // modify the user data to the server
         String url;
-        String ipAddress = "10.16.200.189";  //100.101.72.250 Here should be changed to your server IP
+        String ipAddress = "192.168.20.27";  //100.101.72.250 Here should be changed to your server IP
         if(!showBirthday)
             url = "http://" + ipAddress + ":3000/android-app-register?name=" + name + "&gender=" + genderModified + "&email=" +
                     email + "&password=" + pwd + "&birthday=" + birthdayModified;
@@ -219,7 +225,7 @@ public class RegisterFragment extends Fragment
 
         // send the data to the server
         RequestQueue ExampleRequestQueue = Volley.newRequestQueue(getActivity());
-        StringRequest ExampleStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>()
+        StringRequest ExampleStringRequest = new StringRequest( Request.Method.GET, url, new Response.Listener<String>()
         {
             @Override
             public void onResponse(String response)
@@ -228,9 +234,6 @@ public class RegisterFragment extends Fragment
                 //The String 'response' contains the server's response.
                 //You can test it by printing response.substring(0,500) to the screen.
                 registerProgressDialog.dismiss();
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                startActivity(intent);
-                getActivity().finish();
                 Toast.makeText(getActivity(), "Registered Successfully!", Toast.LENGTH_SHORT).show();
                 Log.d("Send query response:", response);
             }
@@ -248,4 +251,57 @@ public class RegisterFragment extends Fragment
                 });
         ExampleRequestQueue.add(ExampleStringRequest);
     }
+
+
+    AccessTokenTracker tokenTracker=new AccessTokenTracker() {
+        @Override
+        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+
+            if(currentAccessToken==null){
+
+            }
+            else {
+                loadUserProfile( currentAccessToken );
+
+//
+            }
+
+        }
+    };
+
+    private void loadUserProfile(AccessToken newAcceseToken) {
+        GraphRequest request = GraphRequest.newMeRequest( newAcceseToken, new GraphRequest.GraphJSONObjectCallback() {
+            @Override
+            public void onCompleted(JSONObject object, GraphResponse response) {
+
+                try {
+                    String first_name = object.getString( "first_name" );
+                    String last_name = object.getString( "last_name" );
+//                    String email=object.getString( "email" );
+                    String id = object.getString( "id" );
+                    String image_url = "https://graph.facebook.com/" + id + "/picture?type=normal";
+
+                    String name = first_name + " " + last_name;
+                    String fb_id = id;
+//                    inputName.setText( name );
+//                    inputEmail.setText( id );
+                    RequestOptions requestOptions = new RequestOptions();
+                    requestOptions.dontAnimate();
+
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        } );
+
+        Bundle parameters = new Bundle();
+        parameters.putString( "fields", "first_name,last_name,id" );
+        request.setParameters( parameters );
+        request.executeAsync();
+    }
+
 }

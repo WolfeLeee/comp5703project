@@ -1,11 +1,15 @@
 package comp5703.sydney.edu.au.kinderfoodfinder;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
+
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
 
 public class StartUpActivity extends AppCompatActivity
 {
@@ -37,4 +41,6 @@ public class StartUpActivity extends AppCompatActivity
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragmentLogin).commit();
     }
+
+
 }

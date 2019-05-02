@@ -2,6 +2,7 @@ package comp5703.sydney.edu.au.kinderfoodfinder;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -37,10 +38,12 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
+import comp5703.sydney.edu.au.kinderfoodfinder.UserInfomation.UserDBHelper;
+
 public class LoginFragment extends Fragment {
     // defined variables
     private Fragment fragmentRegister;
-    private Button btnLogin;
+    private Button btnLogin,btnFbLogin;
     private TextView textRegister;
     private EditText inputEmail, inputPwd;
 
@@ -49,6 +52,9 @@ public class LoginFragment extends Fragment {
     private LoginButton fb_loginButton;
     private CallbackManager callbackManager;
     public final int Login_REQUEST_CODE = 647;
+    private Fragment fragmentFBRegister;
+    private boolean fblogin=true;
+
 
     @Nullable
     @Override
@@ -63,6 +69,7 @@ public class LoginFragment extends Fragment {
         textRegister = (TextView) view.findViewById(R.id.textRegister);
         inputEmail = (EditText) view.findViewById(R.id.inputEmail);
         inputPwd = (EditText) view.findViewById(R.id.inputPwd);
+        btnFbLogin=view.findViewById( R.id.btnFbLogin );
 
         fb_loginButton=view.findViewById( R.id.btn_fblogin );
 
@@ -90,6 +97,15 @@ public class LoginFragment extends Fragment {
             }
         });
 
+//                SQLiteDatabase database= contactDbHelper.getWritableDatabase();
+//                contactDbHelper.addContact( Integer.parseInt( id ),name,email,database );
+//                contactDbHelper.close();
+
+
+        UserDBHelper userDBHelper=new UserDBHelper( getActivity() );
+        SQLiteDatabase database=userDBHelper.getReadableDatabase();
+
+
 
         //Login with Facebook
         fb_loginButton=view.findViewById( R.id.btn_fblogin );
@@ -100,10 +116,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onSuccess(LoginResult loginResult) {
 
-
-
-
-
+                loadUserProfile( loginResult.getAccessToken() );
             }
 
             @Override
@@ -116,6 +129,11 @@ public class LoginFragment extends Fragment {
 
             }
         } );
+
+
+
+
+
 
         return view;
     }
@@ -138,7 +156,7 @@ public class LoginFragment extends Fragment {
         }
 
         // set up
-        String ipAddress = "172.20.10.4";  //100.101.72.250 Here should be changed to your server IP
+        String ipAddress = "10.16.200.189";  //100.101.72.250 Here should be changed to your server IP
         String url = "http://" + ipAddress + ":3000/android-app-login?email=" + email + "&password=" + password;
 
         // send the request to the server for checking user login info
@@ -191,7 +209,7 @@ public class LoginFragment extends Fragment {
 
             }
             else {
-                loadUserProfile( currentAccessToken );
+//                loadUserProfile( currentAccessToken );
 
             }
 
@@ -233,17 +251,13 @@ public class LoginFragment extends Fragment {
     }
 
     private void loginFBUser(final String name,final String password) {
-        // show the progress dialog until the login validation is complete
-//        loginProgressDialog.setMessage("Login...");
-//        loginProgressDialog.show();
-
 
         // set up
-        String ipAddress = "192.168.20.27";  //100.101.72.250 Here should be changed to your server IP
+        String ipAddress = "10.16.200.189";  //100.101.72.250 Here should be changed to your server IP
         String url = "http://" + ipAddress + ":3000/android-app-login?email=" + password + "&password=" + password;
 
         // send the request to the server for checking user login info
-        RequestQueue ExampleRequestQueue = Volley.newRequestQueue(getActivity());
+        RequestQueue ExampleRequestQueue = (RequestQueue) Volley.newRequestQueue(getActivity());
         StringRequest ExampleStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -263,8 +277,16 @@ public class LoginFragment extends Fragment {
 
 
                     Log.d("Send query response:", response);
+                    fragmentFBRegister=new FBRegisterFragment();
+
+//                    getActivity().getSupportFragmentManager().beginTransaction()
+//                            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+//                            .replace(R.id.fragment_container, fragmentFBRegister).commit();
+
+                    // remove toolbar again
 
                     Intent intent = new Intent( getActivity(),  FacebookActivity.class );
+
 
                     if (intent != null) {
 
@@ -274,7 +296,8 @@ public class LoginFragment extends Fragment {
                         Log.d( "Face"  , name+"    "+password);
 
 //                    intent.putExtra("img", String.valueOf(c.getImg()));
-                        startActivityForResult( intent, Login_REQUEST_CODE );
+//                        startActivityForResult( intent, Login_REQUEST_CODE );
+
                     }
                     startActivity( intent );
                     getActivity().finish();

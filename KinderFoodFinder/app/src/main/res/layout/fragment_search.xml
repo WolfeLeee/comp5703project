@@ -106,23 +106,18 @@
         android:layout_marginBottom="5dp"
         android:background="@drawable/style_shadow"
         android:iconifiedByDefault="false"
-        android:queryHint="Search Product ..." />
+        android:queryHint="Search Product ..." >
+
+    </SearchView>
 
     <ListView
         android:id="@+id/productListView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="invisible" />
-
-    <fragment
-        android:id="@+id/fragment2"
-        android:name="comp5703.sydney.edu.au.kinderfoodfinder.SearchResultFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent" />
 
     <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:id="@+id/productRecyclerview"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content" />-->
+    <!--android:id="@+id/productRecyclerview"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content" />-->
 
 </LinearLayout>
