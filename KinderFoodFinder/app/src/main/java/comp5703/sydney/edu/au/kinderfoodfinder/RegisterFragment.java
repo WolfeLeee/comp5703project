@@ -209,7 +209,7 @@ public class RegisterFragment extends Fragment
 
         // modify the user data to the server
         String url;
-        String ipAddress = "10.16.200.189";  //100.101.72.250 Here should be changed to your server IP
+        String ipAddress = "192.168.20.30";  //100.101.72.250 Here should be changed to your server IP
         if(!showBirthday)
             url = "http://" + ipAddress + ":3000/android-app-register?name=" + name + "&gender=" + genderModified + "&email=" +
                     email + "&password=" + pwd + "&birthday=" + birthdayModified;

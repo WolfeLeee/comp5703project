@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class Items implements Serializable {
 
 
-    private String type,accreditation,brand,rating,available;
+    private String type,accreditation,brand,rating,available,search;
     private int img;
 
 //    public Items(String type, String accreditation, String brand, String rating, String available, int img) {
@@ -77,5 +77,13 @@ public class Items implements Serializable {
 
     public void setImg(int img) {
         this.img = img;
+    }
+
+    public String getSearch() {
+        return search;
+    }
+
+    public void setSearch(String search) {
+        this.search = search;
     }
 }

@@ -156,7 +156,7 @@ public class LoginFragment extends Fragment {
         }
 
         // set up
-        String ipAddress = "10.16.200.189";  //100.101.72.250 Here should be changed to your server IP
+        String ipAddress = "192.168.20.30";  //100.101.72.250 Here should be changed to your server IP
         String url = "http://" + ipAddress + ":3000/android-app-login?email=" + email + "&password=" + password;
 
         // send the request to the server for checking user login info
@@ -253,7 +253,7 @@ public class LoginFragment extends Fragment {
     private void loginFBUser(final String name,final String password) {
 
         // set up
-        String ipAddress = "10.16.200.189";  //100.101.72.250 Here should be changed to your server IP
+        String ipAddress = "192.168.20.30";  //100.101.72.250 Here should be changed to your server IP
         String url = "http://" + ipAddress + ":3000/android-app-login?email=" + password + "&password=" + password;
 
         // send the request to the server for checking user login info

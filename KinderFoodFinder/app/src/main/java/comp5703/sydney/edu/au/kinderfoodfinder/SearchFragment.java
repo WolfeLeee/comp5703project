@@ -113,9 +113,9 @@ public class SearchFragment extends Fragment
 
         final ItemsAdapter adapter=new ItemsAdapter( getActivity(),itemsArrayList );
 //        final ItemsAdapter eggAdapter=new ItemsAdapter( getActivity(),eggsList );
-        final ItemsAdapter chickenAdapter=new ItemsAdapter( getActivity(),chickenList );
-        final ItemsAdapter pigAdapter=new ItemsAdapter( getActivity(),pigList );
-        final ItemsAdapter eggDataAp=new ItemsAdapter( getActivity(),eggsdata );
+        final SearchAdapter chickenAdapter=new SearchAdapter( getActivity(),chickenList );
+        final SearchAdapter pigAdapter=new SearchAdapter( getActivity(),pigList );
+        final SearchAdapter eggDataAp=new SearchAdapter( getActivity(),eggsdata );
 
 //        product.setAdapter( adapter );
 //        Utility.setListViewHeightBasedOnChildren(product);
