@@ -5,6 +5,7 @@ var AppUser = require("../models/appUser");
 var AppFbUser = require("../models/appFbUser");
 var Store = require("../models/store");
 var ReportedStore = require("../models/reportedStore");
+var Statistic = require("../models/statistic");
 
 
 // External libraries
