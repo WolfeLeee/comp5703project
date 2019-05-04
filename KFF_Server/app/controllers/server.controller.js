@@ -62,21 +62,39 @@ module.exports.goToLogin = function(req, res, next)
                            {
                                if(countVersion == 0)
                                {
-                                   // create default version at the beginning (1.0.0)
-                                   var versionData = {
-                                       version: "1.0.0"
+                                   // create default brand version at the beginning (1.0.0)
+                                   var versionBrandData = {
+                                       version: "1",
+                                       type: "brand"
                                    };
 
-                                   Version.create(versionData, function(errorCreateVersion, version)
+                                   Version.create(versionBrandData, function(errorCreateBrandVersion, versionBrand)
                                    {
-                                      if(errorCreateVersion)
+                                      if(errorCreateBrandVersion)
                                       {
-                                          errorCreateVersion.status = 400;
-                                          return next(errorCreateVersion);
+                                          errorCreateBrandVersion.status = 400;
+                                          return next(errorCreateBrandVersion);
                                       }
                                       else
                                       {
-                                          res.redirect('/landing');
+                                          // create default store version at the beginning
+                                          var versionStoreData = {
+                                              version: "1",
+                                              type: "store"
+                                          };
+
+                                          Version.create(versionStoreData, function(errorCreateStoreVersion, versionStore)
+                                          {
+                                              if(errorCreateStoreVersion)
+                                              {
+                                                  errorCreateStoreVersion.status = 400;
+                                                  return next(errorCreateStoreVersion);
+                                              }
+                                              else
+                                              {
+                                                  res.redirect('/landing');
+                                              }
+                                          });
                                       }
                                    });
                                }
@@ -91,21 +109,39 @@ module.exports.goToLogin = function(req, res, next)
                    {
                        if(countVersion == 0)
                        {
-                           // create default version at the beginning (1.0.0)
-                           var versionData = {
-                               version: "1.0.0"
+                           // create default brand version at the beginning (1.0.0)
+                           var versionBrandData = {
+                               version: "1",
+                               type: "brand"
                            };
 
-                           Version.create(versionData, function(errorCreateVersion, version)
+                           Version.create(versionBrandData, function(errorCreateBrandVersion, versionBrand)
                            {
-                               if(errorCreateVersion)
+                               if(errorCreateBrandVersion)
                                {
-                                   errorCreateVersion.status = 400;
-                                   return next(errorCreateVersion);
+                                   errorCreateBrandVersion.status = 400;
+                                   return next(errorCreateBrandVersion);
                                }
                                else
                                {
-                                   res.redirect('/landing');
+                                   // create default store version at the beginning
+                                   var versionStoreData = {
+                                       version: "1",
+                                       type: "store"
+                                   };
+
+                                   Version.create(versionStoreData, function(errorCreateStoreVersion, versionStore)
+                                   {
+                                       if(errorCreateStoreVersion)
+                                       {
+                                           errorCreateStoreVersion.status = 400;
+                                           return next(errorCreateStoreVersion);
+                                       }
+                                       else
+                                       {
+                                           res.redirect('/landing');
+                                       }
+                                   });
                                }
                            });
                        }
@@ -704,85 +740,76 @@ module.exports.goToPublishPage = function(req, res, next)
                 }
                 else
                 {
-                    res.render('publish.pug');
+                    Version.find({}, function(errorFind, versions)
+                    {
+                        if(errorFind)
+                        {
+                            res.send("Something wrong while finding versions!")
+                        }
+                        else
+                        {
+                            res.render('publish.pug', {versions: versions});
+                        }
+                    });
                 }
             }
         });
 };
 
-// Revision.findArticleHighestRev(function(errorArticleHighestRev, resultArticleHighestRev)
-// {
-//     if(errorArticleHighestRev || !resultArticleHighestRev)
-//     {
-//         var err = new Error('Something wrong or result not found!');
-//         err.status = 401;
-//         return next(errorArticleHighestRev);
-//     }
-//     else
-//     {
-//         Revision.findArticleLargeRegUserEdit(function(errorArticleLargeRegUserEdit, resultArticleLargeRegUserEdit)
-//         {
-//             if(errorArticleLargeRegUserEdit || !resultArticleLargeRegUserEdit)
-//             {
-//                 var err = new Error('Something wrong or result not found!');
-//                 err.status = 401;
-//                 return next(errorArticleLargeRegUserEdit);
-//             }
-//             else
-//             {
-//                 Revision.findArticleLongHistory(function(errorArticleLongHistory, resultArticleLongHistory)
-//                 {
-//                     if(errorArticleLongHistory || !resultArticleLongHistory)
-//                     {
-//                         var err = new Error('Something wrong or result not found!');
-//                         err.status = 401;
-//                         return next(errorArticleLongHistory);
-//                     }
-//                     else
-//                     {
-//                         Revision.findArticleShortHistory(function(errorArticleShortHistory, resultArticleShortHistory)
-//                         {
-//                             if (errorArticleShortHistory || !resultArticleShortHistory)
-//                             {
-//                                 var err = new Error('Something wrong or result not found!');
-//                                 err.status = 401;
-//                                 return next(errorArticleShortHistory);
-//                             }
-//                             else
-//                             {
-//                                 // res.render('feature.pug', {username: user.username, email: user.email,
-//                                 //     firstName: user.firstName, lastName: user.lastName, resultTitleHighestRev:
-//                                 //     resultArticleHighestRev, resultArticleEditedByLargestReUser:
-//                                 //     resultArticleLargeRegUserEdit, resultArticleLongHistory: resultArticleLongHistory,
-//                                 //     resultArticleShortHistory: resultArticleShortHistory});
-//                                 Revision.findAllTitlesRev(function(errorAllTitlesRev, resultAllTitlesRev)
-//                                 {
-//                                     if (errorAllTitlesRev || !resultAllTitlesRev)
-//                                     {
-//                                         var err = new Error('Something wrong or result not found!');
-//                                         err.status = 401;
-//                                         return next(errorAllTitlesRev);
-//                                     }
-//                                     else
-//                                     {
-//                                         res.render('feature.pug', {username: user.username, email: user.email,
-//                                             firstName: user.firstName, lastName: user.lastName, resultTitleHighestRev:
-//                                             resultArticleHighestRev, resultArticleEditedByLargestReUser:
-//                                             resultArticleLargeRegUserEdit, resultArticleLongHistory: resultArticleLongHistory,
-//                                             resultArticleShortHistory: resultArticleShortHistory, resultAllTitlesRev: resultAllTitlesRev});
-//                                     }
-//                                 });
-//                             }
-//                         });
-//                     }
-//                 });
-//             }
-//         });
-//     }
-// });
+module.exports.publishBrandData = function(req, res, next)
+{
+    Version.findOne({type: "brand"}, function(errorFind, version)
+    {
+       if(errorFind)
+       {
+           res.send("Something went wrong while searching the version for brand!");
+       }
+       else
+       {
+            var updateVersion = parseInt(version.version) + 1;
+            Version.updateOne({type: "brand"}, {version: updateVersion.toString()}, function(errorUpdate, version)
+            {
+                if(errorUpdate)
+                {
+                    res.send("Something went wrong while updating the version for brand!");
+                }
+                else
+                {
+                    res.redirect('/publish');
+                }
+            });
+       }
+    });
+};
+
+module.exports.publishStoreData = function(req, res, next)
+{
+    Version.findOne({type: "store"}, function(errorFind, version)
+    {
+        if(errorFind)
+        {
+            res.send("Something went wrong while searching the version for store!");
+        }
+        else
+        {
+            var updateVersion = parseInt(version.version) + 1;
+            Version.updateOne({type: "store"}, {version: updateVersion.toString()}, function(errorUpdate, version)
+            {
+                if(errorUpdate)
+                {
+                    res.send("Something went wrong while updating the version for store!");
+                }
+                else
+                {
+                    res.redirect('/publish');
+                }
+            });
+        }
+    });
+};
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Product Detail Page which enables the product to be udpated *
+ * Product Detail Page which enables the product to be updated *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /** Direct user to the product detail page.
@@ -1583,6 +1610,36 @@ module.exports.loginAndroidAppFbUsers = function(req, res, next)
         else
         {
             res.send("Yes");
+        }
+    });
+};
+
+module.exports.checkBrandVersion = function(req, res, next)
+{
+    Version.findOne({type: "brand"}, function(error, version)
+    {
+        if(error)
+        {
+            res.send("Error");
+        }
+        else
+        {
+            res.send(version.version);
+        }
+    });
+};
+
+module.exports.checkStoreVersion = function(req, res, next)
+{
+    Version.findOne({type: "store"}, function(error, version)
+    {
+        if(error)
+        {
+            res.send("Error");
+        }
+        else
+        {
+            res.send(version.version);
         }
     });
 };

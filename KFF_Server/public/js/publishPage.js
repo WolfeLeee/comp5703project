@@ -20,6 +20,19 @@ $(document).ready(function()
         }
     });
 
+    // publish button listener
+    $("#btnPublishBrand").click(function(event)
+    {
+        event.preventDefault();
 
+        location.href = "/publish/brand-data";
+    });
+
+    $("#btnPublishStore").click(function(event)
+    {
+        event.preventDefault();
+
+        location.href = "/publish/store-data";
+    });
 
 });
