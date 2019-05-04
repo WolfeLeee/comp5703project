@@ -15,7 +15,12 @@ router.post('/insertnewBrand',controller.insertnewBrand);
 router.post('/import', controller.importCSVFile);
 router.get('/backFromSuccess', controller.backFromSuccess);
 router.get('/importinsertPage', controller.goToImportPage);
+
+//Brand dbmanagement view
 router.get('/dbmanagement', controller.databaseManagement);
+router.get('/dbmanagement_Delete',controller.databaseManagement_Delete);
+
+
 router.get('/report', controller.goToReportPage);
 
 // Get location data for a store using external API
