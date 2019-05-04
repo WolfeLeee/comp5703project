@@ -82,4 +82,98 @@ $(document).ready(function()
 		// var selectedNumber = $(this).children("option:selected").text();
 		location.href = $(this).val();
 	});
+
+	/* * * * * * * * * * * * * * * * *
+	 * Delete function in the table  *
+	 * * * * * * * * * * * * * * * * */
+
+	$('.button_selectall').change(function(){
+		if($(this).is(':checked')){
+			$('.accreditationlist_table__Delete').prop('checked',true);
+		}
+		else {
+			$('.accreditationlist_table__Delete').prop('checked',false);
+		}
+		makeappear();
+	});
+
+
+	$('.accreditationlist_table__Delete').change(function(){
+		makeappear();
+	});
+
+	function makeappear(){
+		var Ischeck = false;
+		var Allcheck = false;
+		var checkboxes = $('.accreditationlist_table__Delete:checked');
+		if(checkboxes.length > 0){
+			Ischeck = true;
+			if(checkboxes.length == $('.accreditationlist_table__Delete').length){
+				Allcheck = true;
+			}
+		}
+		if(Ischeck == true)
+		{
+			$('.deletebutton_deletemarked').css('visibility','visible');
+		}
+		else
+		{
+			$('.deletebutton_deletemarked').css('visibility','hidden');
+		}
+		if(Allcheck){
+			$('.button_selectall').prop('checked',true);
+		}
+		else {
+			$('.button_selectall').prop('checked',false);
+		}
+	};
+
+	$('.deletebutton_deletemarked').on("click",function(e){
+		var checkedboxes = $('.accreditationlist_table__Delete:checked');
+		var confirmation = confirm('Do you want to delete this(these) '+checkedboxes.length+' Brand(s)?');
+		if(confirmation == true){
+			var brids = [];
+			for(var i = 0 ; i < checkedboxes.length; i++)
+			{
+				brids.push(checkedboxes.get(i).getAttribute('value'));
+			}
+			var params = {
+				brids: brids,
+			};
+			post('/dbmanagement_Delete',params,"get");
+		}
+		else {
+			e.preventDefault();
+		}
+
+	});
+
+	/** Post function
+	 *
+	 */
+	function post(path, params, method) {
+		method = method || "get"; // Set method to post by default if not specified.
+
+		// The rest of this code assumes you are not using a library.
+		// It can be made less wordy if you use one.
+		var form = document.createElement("form");
+		form.setAttribute("method", method);
+		form.setAttribute("action", path);
+
+		for(var key in params) {
+			if(params.hasOwnProperty(key)) {
+				var hiddenField = document.createElement("input");
+				hiddenField.setAttribute("type", "hidden");
+				hiddenField.setAttribute("name", key);
+				hiddenField.setAttribute("value", params[key]);
+
+				form.appendChild(hiddenField);
+			}
+		}
+
+		document.body.appendChild(form);
+		form.submit();
+	};
+
+
 });

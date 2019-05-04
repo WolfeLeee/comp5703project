@@ -196,7 +196,7 @@ STYLE THE DELETE BUTTONS
 }
 
 .deletebutton_deletemarked:active :first-child{
-    margin-top:1px;
+    padding-top:1px;
 }
 
 /*

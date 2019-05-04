@@ -1395,6 +1395,25 @@ module.exports.databaseManagement = function(req, res, next)
         });
 };
 
+
+module.exports.databaseManagement_Delete = function(req,res,next)
+{
+    var brids = req.query.brids.split(',');
+
+    Product.remove({_id:{$in:brids}})
+        .exec(function(errProduct)
+        {
+            if(errProduct)
+            {
+                return next(errProduct);
+            }
+            else
+            {
+                res.redirect('/dbmanagement');
+            }
+        });
+};
+
 /* * * * * * * * * * * * * * * * * *
  * Communication with Android app  *
  * * * * * * * * * * * * * * * * * */
