@@ -40,6 +40,8 @@ html
                     a(href="/importinsertPage") Import/ Insert Data
                 div.pagebody_navigationbar__header
                     a(href="/dbmanagement") Update/ Delete Data
+                div(class="pagebody_navigationbar__header")
+                    a(href="/publish") Publish
             div.pagebody_mainbody
                 h3 Update/ Delete Data
                 div.card.mb-3
@@ -116,18 +118,19 @@ html
                                                     th(rowspan="1", colspan="1") Category
                                                     th(rowspan="1", colspan="1") Delete
                                             tbody(id="table_body")
-                                                 - for(var i = 0; i < displaydata.length ; i++)
-                                                    tr(role="row", class="odd")
-                                                        td.Table_Brand_Name
-                                                            - var id = displaydata[i]._id
-                                                            a(href="/detailproductPage?productid="+id) #{displaydata[i].Brand_Name}
-                                                        td
-                                                            - for(var j = 0; j < displaydata[i].Accreditation.length; j++ )
-                                                                div #{displaydata[i].Accreditation[j].Accreditation} - #{displaydata[i].Accreditation[j].Rating}
-                                                        td #{displaydata[i].Category}
-                                                        td.deletecheckbox
-                                                            - var id = displaydata[i]._id
-                                                            input(type="checkbox", value=id)
+                                                - if(displaydata)
+                                                     - for(var i = 0; i < displaydata.length ; i++)
+                                                        tr(role="row", class="odd")
+                                                            td.Table_Brand_Name
+                                                                - var id = displaydata[i]._id
+                                                                a(href="/detailproductPage?productid="+id) #{displaydata[i].Brand_Name}
+                                                            td
+                                                                - for(var j = 0; j < displaydata[i].Accreditation.length; j++ )
+                                                                    div #{displaydata[i].Accreditation[j].Accreditation} - #{displaydata[i].Accreditation[j].Rating}
+                                                            td #{displaydata[i].Category}
+                                                            td.deletecheckbox
+                                                                - var id = displaydata[i]._id
+                                                                input(type="checkbox", value=id)
                                 div.row
                                     div.col-sm-12.col-md-5
                                         div.dataTables_info(id="datable_info" role="status", aria-live="polite") Showing #{countentries} of #{count}

@@ -6,7 +6,7 @@ var AppFbUser = require("../models/appFbUser");
 var Store = require("../models/store");
 var ReportedStore = require("../models/reportedStore");
 var Statistic = require("../models/statistic");
-
+var Version = require("../models/version");
 
 // External libraries
 var mongoose = require('mongoose');
@@ -25,42 +25,97 @@ var adminId = "";
 // Basic pages with login and register
 module.exports.goToLogin = function(req, res, next)
 {
-    User.countDocuments(function(error, count)
+    User.countDocuments(function(errorUser, countUser)
     {
-        if (error)
+        if (errorUser)
         {
-            //var err = new Error('Username has been used!');
-            error.status = 400;
-            return next(error);
+            errorUser.status = 400;
+            return next(errorUser);
         }
         else
         {
-            if(count == 0)
+            Version.countDocuments(function(errorVersion, countVersion)
             {
-                // create admin acc at the beginning
-                var userData = {
-                    username: "admin",
-                    password: "admin"
-                };
+               if(errorVersion)
+               {
+                   errorVersion.status = 400;
+                   return next(errorVersion);
+               }
+               else
+               {
+                   if(countUser == 0)
+                   {
+                       // create admin acc at the beginning
+                       var userData = {
+                           username: "admin",
+                           password: "admin"
+                       };
 
-                User.create(userData, function (error, user)
-                {
-                    if (error)
-                    {
-                        //var err = new Error('Username has been used!');
-                        error.status = 400;
-                        return next(error);
-                    }
-                    else
-                    {
-                        res.redirect('/landing');
-                    }
-                });
-            }
-            else
-            {
-                res.redirect('/landing');
-            }
+                       User.create(userData, function(errorCreateUser, user)
+                       {
+                           if (errorCreateUser)
+                           {
+                               errorCreateUser.status = 400;
+                               return next(errorCreateUser);
+                           }
+                           else
+                           {
+                               if(countVersion == 0)
+                               {
+                                   // create default version at the beginning (1.0.0)
+                                   var versionData = {
+                                       version: "1.0.0"
+                                   };
+
+                                   Version.create(versionData, function(errorCreateVersion, version)
+                                   {
+                                      if(errorCreateVersion)
+                                      {
+                                          errorCreateVersion.status = 400;
+                                          return next(errorCreateVersion);
+                                      }
+                                      else
+                                      {
+                                          res.redirect('/landing');
+                                      }
+                                   });
+                               }
+                               else
+                               {
+                                   res.redirect('/landing');
+                               }
+                           }
+                       });
+                   }
+                   else
+                   {
+                       if(countVersion == 0)
+                       {
+                           // create default version at the beginning (1.0.0)
+                           var versionData = {
+                               version: "1.0.0"
+                           };
+
+                           Version.create(versionData, function(errorCreateVersion, version)
+                           {
+                               if(errorCreateVersion)
+                               {
+                                   errorCreateVersion.status = 400;
+                                   return next(errorCreateVersion);
+                               }
+                               else
+                               {
+                                   res.redirect('/landing');
+                               }
+                           });
+                       }
+                       else
+                       {
+                           res.redirect('/landing');
+                       }
+                   }
+               }
+            });
         }
     });
 };
@@ -627,6 +682,29 @@ module.exports.goToReportPage = function(req, res, next)
                                     });
                             }
                         });
+                }
+            }
+        });
+};
+
+module.exports.goToPublishPage = function(req, res, next)
+{
+    User.findById(req.session.userId)
+        .exec(function (errorUser, user)
+        {
+            if (errorUser)
+            {
+                return next(errorUser);
+            }
+            else
+            {
+                if (user === null)
+                {
+                    res.redirect('/');
+                }
+                else
+                {
+                    res.render('publish.pug');
                 }
             }
         });

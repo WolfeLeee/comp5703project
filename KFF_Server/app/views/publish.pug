@@ -32,24 +32,33 @@ body
         div(class="pagebody_navigationbar")
             p CONTROL PANEL
             div(class="pagebody_navigationbar__header")
-                a(href="/importPage") Import CSV file
+                a(href="/report") Report
             div(class="pagebody_navigationbar__header")
-                a(href="/feature") Report
-            div(class="pagebody_navigationbar__header")
-                a(href="/feature") Import/ Insert Data
+                a(href="/importinsertPage") Import/ Insert Data
             div(class="pagebody_navigationbar__header")
                 a(href="/dbmanagement") Update/ Delete Data
+            div(class="pagebody_navigationbar__header")
+                a(href="/publish") Publish
         div(class="pagebody_mainbody")
             div(class="brand")
-                div(class="pagebody_mainbody__sectionheader__brand")
-                    p Import CSV file to the database
+                div(class="pagebody_mainbody__sectionheader__brand") Publish
                 div(class="pagebody_inputform__brand")
-                    div(class="pagebody_inputform__brand__dialog")
-                        p Guideline: This function lets you upload csv file to the database. Please make sure the format of csv file is correct.
-                    div(class="inputform_brand__BrandNameHeader inputheader")
-                        form(action="/import" method="post" enctype="multipart/form-data")
-                            input(type="file" id="file" name="file" accept="*.csv" class="browse_button")
-                            input(type="submit" value="Upload File" class="upload_button")
+                    div(class="pagebody_inputform__brand__dialog") Guideline: ???
+                    div(class="inputform_brand__BrandNameHeader inputheader") ...
+                    div(class="inputform_brand__BrandCategoryHeader inputheader") ...
+                    //input(type="text" name="Brandname" Placeholder = "Please enter the brand name..." id="inputform_brand__BrandName")
+                    //select(name="Category" id="inputform_brand__BrandCategory")
+                    //    option(value="Eggs") Eggs
+                    //    option(value="Eggs") Porks
+                    //    option(value="Eggs") Chicken/ Broilers
+                    //input(type="file" accept="image/*" name="Image" id="inputform_brand__BrandImage")
+                    div(class="inputform_brand__BrandAccreditationHeader inputheader") ...
+                    div(class="inputform_brand__BrandRatingHeader inputheader") ...
+                    //input(type="text" name="Accreditation" Placeholder = "Please enter the accreditation..." class="inputform_brand__BrandAccreditation")
+                    //input(type="text" name="Rating" Placeholder = "Please enter the rating..." class="inputform_brand__BrandRating")
+                    //br
+                    //input(type="button" class="inputform_brand__BrandSubmit" value="Submit")
+                    //input(type="button" class="inputform_brand__BrandReset" value="Reset")
     div(class="feature_page_footer" style="text-align:center")
         div(class="bottom_copyright" style="display:inline-block")
             p &copy; 2019 IT Capstone Project - KinderFoodFinder. All rights reserved | Design by Team 2 - COMP5703

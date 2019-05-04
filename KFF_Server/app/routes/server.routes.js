@@ -17,6 +17,7 @@ router.get('/backFromSuccess', controller.backFromSuccess);
 router.get('/importinsertPage', controller.goToImportPage);
 router.get('/dbmanagement', controller.databaseManagement);
 router.get('/report', controller.goToReportPage);
+router.get('/publish', controller.goToPublishPage);
 
 // Get location data for a store using external API
 router.get('/getLocation', controller.getLocation );
