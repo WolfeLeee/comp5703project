@@ -12,7 +12,7 @@ $(document).ready(function()
 			searchstring: $(this).data('search'),
 			perPage: $(this).data('perpage')
 		}
-		post('/dbmanagement',params,"get");
+		post('/report',params,"get");
 	})
 
 
@@ -47,7 +47,7 @@ $(document).ready(function()
 				searchstring: searchstring,
 				sortquery: $(this).data('sort')
 			}
-			post('/dbmanagement',params,"get");
+			post('/report',params,"get");
 		}
 		else if (new String($(this).text().toLowerCase()).valueOf() == new String("Next").valueOf())
 		{
@@ -58,7 +58,7 @@ $(document).ready(function()
 				searchstring: searchstring,
 				sortquery: $(this).data('sort')
 			}
-			post('/dbmanagement',params,"get");
+			post('/report',params,"get");
 		}
 		else
 		{
@@ -69,7 +69,7 @@ $(document).ready(function()
 				searchstring: searchstring,
 				sortquery: $(this).data('sort')
 			}
-			post('/dbmanagement',params,"get");
+			post('/report',params,"get");
 		}
 	})
 
@@ -82,7 +82,7 @@ $(document).ready(function()
 			perPage: $(this).val(),
 			searchstring: $(this).data("searchstring")
 		}
-		post('/dbmanagement',params,"get");
+		post('/report',params,"get");
 	})
 
 	/* * * * * * * * * * * * * * * * *
@@ -96,7 +96,7 @@ $(document).ready(function()
 				var params = {
 					searchstring: $(this).val()
 				}
-				post('/dbmanagement',params,"get");
+				post('/report',params,"get");
 			}
 		}
 	)
@@ -105,7 +105,7 @@ $(document).ready(function()
 		var params = {
 			searchstring: $('#searchInput').val()
 		}
-		post('/dbmanagement',params,"get");
+		post('/report',params,"get");
 	})
 
 	/* * * * * * * * * * * * * * * * *
@@ -165,7 +165,7 @@ $(document).ready(function()
 			var params = {
 				brids: brids,
 			};
-			post('/dbmanagement_Delete',params,"get");
+			post('/report_Delete',params,"get");
 		}
 		else {
 			e.preventDefault();

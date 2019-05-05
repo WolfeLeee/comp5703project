@@ -657,70 +657,123 @@ module.exports.goToImportPage = function(req, res, next)
 module.exports.goToReportPage = function(req, res, next)
 {
     User.findById(req.session.userId)
-        .exec(function (errorUser, user)
-        {
-            if (errorUser)
-            {
+        .exec(function (errorUser, user) {
+            if (errorUser) {
                 return next(errorUser);
-            }
-            else
-            {
-                if (user === null)
-                {
+            } else {
+                if (user === null) {
                     res.redirect('/');
-                }
-                else
-                {
-                    var perPage = (parseInt(req.query.stores)) || 25;
-                    var page = (parseInt(req.query.page)) || 1;
-                    ReportedStore.find({}).limit(perPage).skip((perPage * page) - perPage)
-                        .exec(function(errFind, dataStoresPerPage)
-                        {
-                            if(errFind)
-                                return next(errFind);
-                            else
-                            {
-                                ReportedStore.countDocuments({})
-                                    .exec(function(errCount, numOfStores)
-                                    {
-                                        if(errCount)
-                                            return next(errCount);
-                                        else
-                                        {
-                                            ReportedStore.countDocuments({}).limit(perPage).skip((perPage * page) - perPage)
-                                                .exec(function(errCountLimit, numOfLimitedStores)
-                                                {
-                                                    if(errCountLimit)
-                                                        return next(errCountLimit);
-                                                    else
-                                                    {
-                                                        ReportedStore.find({})
-                                                            .exec(function(errFindAll, dataAllStores)
-                                                            {
-                                                                if(errFindAll)
-                                                                    return next(errFindAll);
-                                                                else
-                                                                {
-                                                                    res.render('report.pug', {
-                                                                        displaydata: dataStoresPerPage,
-                                                                        displayAllData: dataAllStores,
-                                                                        numPerPage: perPage,
-                                                                        count: numOfStores,
-                                                                        current: page,
-                                                                        pages: Math.ceil(numOfStores/ perPage),
-                                                                        countentries: numOfLimitedStores
-                                                                    });
-                                                                }
-                                                            });
-                                                    }
-                                                });
+                } else {
+                    var sortquery = req.query.sortquery;
+                    var sortString = "";
+                    var sortOrder = 1;
+                    if(new String(sortquery).toLowerCase().valueOf() == new String("Brand1").toLowerCase().valueOf())
+                    {
+                        sortString = {
+                            brandName : 1
+                        };
+                    }
+                    else if(new String(sortquery).toLowerCase().valueOf() == new String("Brand1m").toLowerCase().valueOf())
+                    {
+                        sortString = {
+                            brandName : -1
+                        };
+                    }
+                    else if(new String(sortquery).toLowerCase().valueOf() == new String("StreetAdd1").toLowerCase().valueOf())
+                    {
+                        sortString = {
+                            streetAddress : 1
+                        };
+                    }
+                    else if(new String(sortquery).toLowerCase().valueOf() == new String("StreetAdd1m").toLowerCase().valueOf())
+                    {
+                        sortString = {
+                            streetAddress : -1
+                        };
+                    }
+                    else if(new String(sortquery).toLowerCase().valueOf() == new String("Store1").toLowerCase().valueOf())
+                    {
+                        sortString = {
+                            storeName : 1
+                        };
+                    }
+                    else if(new String(sortquery).toLowerCase().valueOf() == new String("Store1m").toLowerCase().valueOf())
+                    {
+                        sortString = {
+                            storeName : -1
+                        };
+                    }
+                    ReportedStore.find({}).sort(sortString)
+                        .exec(function (errReport, reports) {
+                            if (errReport) {
+                                return next(errReport);
+                            } else {
+                                if (reports === null) {
+                                    res.redirect('/');
+                                } else {
+                                    var perPage = (parseInt(req.query.perPage)) || 25;
+                                    var page = (parseInt(req.query.page)) || 1;
+                                    var displayreports = [];
+                                    var reportsList = [];
+                                    for (var i = 0; i < reports.length; i++) {
+                                        if (req.query.searchstring == null) {
+                                            reportsList.push(reports[i]);
+                                        } else {
+                                            if (reports[i].storeName.toLowerCase().includes(req.query.searchstring.toLowerCase())) {
+                                                reportsList.push(reports[i]);
+                                            }
                                         }
-                                    });
+                                    }
+                                    for (var i = ((perPage * page) - perPage); i < reportsList.length && i < (perPage * (page + 1) - perPage); i++) {
+                                        displayreports.push(reportsList[i]);
+                                    }
+                                    res.render('report_dbmanagement.pug'
+                                        , {
+                                            displaydata: displayreports,
+                                            numPerPage: perPage,
+                                            count: reportsList.length,
+                                            current: page,
+                                            pages: Math.ceil(reportsList.length / perPage),
+                                            countentries: displayreports.length,
+                                            searchstring : req.query.searchstring||"",
+                                            sortquery:req.query.sortquery
+                                        }
+                                    );
+                                }
                             }
                         });
                 }
             }
-        });
+        })
+};
+
+module.exports.ReportPage_Delete = function(req,res,next)
+{
+    var rpids = req.query.rpids.split(',');
+    User.findById(req.session.userId)
+        .exec(function (errorUser, user) {
+            if (errorUser) {
+                return next(errorUser);
+            } else {
+                if (user === null) {
+                    res.redirect('/');
+                }
+                else {
+                    ReportedStore.remove({_id:{$in:rpids}})
+                        .exec(function(errProduct)
+                        {
+                            if(errProduct)
+                            {
+                                return next(errProduct);
+                            }
+                            else
+                            {
+                                res.redirect('/report');
+                            }
+                        });
+                }
+            }
+        })
 };
 
 module.exports.goToPublishPage = function(req, res, next)
@@ -1544,13 +1597,12 @@ module.exports.loginAndroidAppUsers = function(req, res, next)
 };
 
 // to test around this:
-// http://<Server's IP>:3000/android-app-report-store?storeName=coles&streetAddress=broadway&state=NSW&postCode=2007&productId=5cc7da37ba39be1255db1a73
+// http://<Server's IP>:3000/android-app-report-store?storeName=coles&streetAddress=broadway&state=NSW&postCode=2007&productId=5ccd6ad2334d7711a0ff5c12
 // the variable of query all you can modify to fit into yours
 module.exports.reportedStoreFromAndroidAppUsers = function(req, res, next)
 {
     // testing
     var storeName = req.query.storeName;
-    console.log(storeName);
 
     // check if the product ID is existing or not in product collection
     var productIdNumber = req.query.productId;
