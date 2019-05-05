@@ -80,17 +80,25 @@ public class StartUpActivity extends AppCompatActivity
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
         toolbar.setVisibility(View.GONE);
 
+        // check if the file of version.txt has been created
+        File fileVersion = new File(getApplicationContext().getFilesDir(), "version.txt");
+        if(fileVersion.exists())
+        {
+            version = readFromFile();
+            Log.d("VersionDatabase", "Existing!");
+        }
+        else
+        {
+            writeToFile();
+            version = readFromFile();
+            Log.d("VersionDatabase", "Creating!");
+        }
+        Log.d("VersionDatabase", version);
 
-        version="1";
-
-
-
+//        version="1";
 
         checkBrandDatabase();
         Log.d("JSON",jsonString);
-
-//        writeToFile( "1.0.0",context );
-
 
         // set up fragment
         fragmentLogin = new LoginFragment();
@@ -101,60 +109,67 @@ public class StartUpActivity extends AppCompatActivity
                 .replace(R.id.fragment_container, startFragment).commit();
     }
 
+    private String readFromFile()
+    {
+        String ret = "";
+        try
+        {
+            InputStream inputStream = this.openFileInput("version.txt");
 
+            if (inputStream != null )
+            {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
 
+                while ( (receiveString = bufferedReader.readLine()) != null )
+                {
+                    stringBuilder.append(receiveString);
+                }
 
-
-    private void writeToFile(String data, Context context) {
-        try {
-
-//            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("config.txt", Context.MODE_PRIVATE));
-            FileOutputStream fileOutputStream=new FileOutputStream( file );
-
-//            try{
-//                fileOutputStream.write( data );
-//            }finally {
-//                fileOutputStream.close();
-//            }
-
-//            outputStreamWriter.write(data);
-//            outputStreamWriter.close();
+                inputStream.close();
+                ret = stringBuilder.toString();
+            }
         }
-        catch (IOException e) {
+        catch (FileNotFoundException e)
+        {
+            Log.e("login activity", "File not found: " + e.toString());
+        }
+        catch (IOException e)
+        {
+            Log.e("login activity", "Can not read file: " + e.toString());
+        }
+        return ret;
+    }
+
+    private void writeToFile()
+    {
+        String version = "1,1";
+        try
+        {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(this.openFileOutput("version.txt", Context.MODE_PRIVATE));
+            outputStreamWriter.write(version);
+            outputStreamWriter.close();
+        }
+        catch (IOException e)
+        {
             Log.e("Exception", "File write failed: " + e.toString());
         }
     }
-
-//    private String readFromFile(Context context) {
-//
-//        String ret = "";
-//
-//        try {
-////            InputStream inputStream = context.openFileInput("config.txt");
-////            InputStream inputStream =new FileInputStream( file );
-//
-//            if ( inputStream != null ) {
-//                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-//                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-//                String receiveString = "";
-//                StringBuilder stringBuilder = new StringBuilder();
-//
-//                while ( (receiveString = bufferedReader.readLine()) != null ) {
-//                    stringBuilder.append(receiveString);
-//                }
-//
-//                inputStream.close();
-//                ret = stringBuilder.toString();
-//            }
-//        }
-//        catch (FileNotFoundException e) {
-//            Log.e("login activity", "File not found: " + e.toString());
-//        } catch (IOException e) {
-//            Log.e("login activity", "Can not read file: " + e.toString());
-//        }
-//
-//        return ret;
-//    }
+    private void writeToFile(String version)
+    {
+        try
+        {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(this.openFileOutput("version.txt", Context.MODE_PRIVATE));
+            outputStreamWriter.write(version);
+            outputStreamWriter.close();
+        }
+        catch (IOException e)
+        {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+    }
 
     private void checkBrandDatabase()
     {
@@ -206,8 +221,6 @@ public class StartUpActivity extends AppCompatActivity
                 });
         ExampleRequestQueue.add(ExampleStringRequest);
     }
-
-
 
     private class JsonTask extends AsyncTask<String, String, String> {
 
