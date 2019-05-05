@@ -8,7 +8,7 @@ var StatisticSchema = new mongoose.Schema(
     {
         brandName: String,
         brandId: String,
-        week: String,
+        date: String,
         gender: String,
         age: String,
         count: String

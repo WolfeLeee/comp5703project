@@ -51,7 +51,7 @@ router.post('/detailstorePage_Address__Insert',controller.StoreDetailPage_Addres
 router.get('/android-app-register', controller.registerAndroidAppUsers);
 router.get('/android-app-login', controller.loginAndroidAppUsers);
 router.get('/android-app-report-store', controller.reportedStoreFromAndroidAppUsers);
-router.get('/android-app-register-fb', controller.registerAndroidAppFbUsers);
+// router.get('/android-app-register-fb', controller.registerAndroidAppFbUsers);
 router.get('/android-app-login-register-fb', controller.loginRegisterAndroidAppFbUsers);
 router.get('/android-app-check-version-brand', controller.checkBrandVersion);
 router.get('/android-app-check-version-store', controller.checkStoreVersion);
