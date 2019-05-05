@@ -1503,7 +1503,11 @@ module.exports.loginAndroidAppUsers = function(req, res, next)
 
     AppUser.authenticate(email, password, function (error, user)
     {
-        if (error || !user)
+        if (error)
+        {
+            res.send("Error");
+        }
+        else if(!user)
         {
             res.send("No");
         }
@@ -1595,7 +1599,7 @@ module.exports.registerAndroidAppFbUsers = function(req, res, next)
     });
 };
 
-module.exports.loginAndroidAppFbUsers = function(req, res, next)
+module.exports.loginRegisterAndroidAppFbUsers = function(req, res, next)
 {
     // set up and receive the user info
     var facebookId = req.query.facebookId;
@@ -1603,9 +1607,38 @@ module.exports.loginAndroidAppFbUsers = function(req, res, next)
 
     AppFbUser.authenticate(facebookId, function (error, user)
     {
-        if (error || !user)
+        if (error)
         {
-            res.send("No");
+            res.send("Error");
+        }
+        else if(!user)
+        {
+            // testing
+            var name = req.query.name;
+            console.log(name);
+
+            // set up and receive the user info
+            var appUserData = {
+                name: req.query.name,
+                facebookId: req.query.facebookId,
+                gender: req.query.gender,
+                birthday: req.query.birthday
+            };
+
+            // create the user account
+            AppFbUser.create(appUserData, function (error, appFbUser)
+            {
+                if (error)
+                {
+                    var err = new Error('User info is invalid!');
+                    err.status = 400;
+                    return next(err);
+                }
+                else
+                {
+                    res.send("Create");
+                }
+            });
         }
         else
         {
