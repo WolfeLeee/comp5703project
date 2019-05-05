@@ -25,6 +25,10 @@ router.get('/report_Delete', controller.ReportPage_Delete);
 router.get('/dbmanagement', controller.databaseManagement);
 router.get('/dbmanagement_Delete', controller.databaseManagement_Delete);
 
+// Store dbmanagement view
+router.get('/store_dbmanagement', controller.StoredatabaseManagement);
+// router.get('/store_dbmanagement_Delete', controller.StoredatabaseManagement_Delete);
+
 // Publish Brand and Store Data
 router.get('/publish/brand-data', controller.publishBrandData);
 router.get('/publish/store-data', controller.publishStoreData);
