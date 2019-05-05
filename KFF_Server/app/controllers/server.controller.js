@@ -1646,36 +1646,6 @@ module.exports.reportedStoreFromAndroidAppUsers = function(req, res, next)
     });
 };
 
-// module.exports.registerAndroidAppFbUsers = function(req, res, next)
-// {
-//     // testing
-//     var name = req.query.name;
-//     console.log(name);
-//
-//     // set up and receive the user info
-//     var appUserData = {
-//         name: req.query.name,
-//         facebookId: req.query.facebookId,
-//         gender: req.query.gender,
-//         birthday: req.query.birthday
-//     };
-//
-//     // create the user account
-//     AppFbUser.create(appUserData, function (error, appFbUser)
-//     {
-//         if (error)
-//         {
-//             var err = new Error('User info is invalid!');
-//             err.status = 400;
-//             return next(err);
-//         }
-//         else
-//         {
-//             res.send("Server has got your data!");
-//         }
-//     });
-// };
-
 module.exports.loginRegisterAndroidAppFbUsers = function(req, res, next)
 {
     // set up and receive the user info
@@ -1750,6 +1720,11 @@ module.exports.checkStoreVersion = function(req, res, next)
             res.send(version.version);
         }
     });
+};
+
+module.exports.createStatistic = function(req, res, next)
+{
+    
 };
 
 
