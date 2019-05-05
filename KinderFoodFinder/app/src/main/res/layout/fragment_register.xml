@@ -1,10 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="15dp">
+
+
+    <ImageView
+        android:id="@+id/logoImg"
+        android:layout_width="200dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:contentDescription="logo"
+        android:src="@drawable/logo" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="SIGN UP"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/inputName"
@@ -127,7 +150,7 @@
     android:id="@+id/btnRegister"
     android:layout_width="340dp"
     android:layout_height="wrap_content"
-    android:layout_margin="15dp"
+    android:layout_marginTop="10dp"
     android:background="@drawable/button_style"
     android:layout_gravity="center"
     android:text="Register" />
@@ -135,18 +158,20 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Or you can login with the way below"
         android:layout_gravity="center"
-        android:textSize="16dp"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="5dp"
+        android:text="Or"
+        android:textSize="15dp" />
 
-    <Button
-        android:id="@+id/btnFbLogin"
-        android:layout_width="340dp"
+    <TextView
+        android:id="@+id/textLogin"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:background="@drawable/button_style"
         android:layout_gravity="center"
-        android:text="Facebook (change later)" />
+        android:layout_marginTop="5dp"
+        android:text="ALREADY HAVE AN ACCOUNT"
+        android:textColor="@color/orange"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
 </LinearLayout>

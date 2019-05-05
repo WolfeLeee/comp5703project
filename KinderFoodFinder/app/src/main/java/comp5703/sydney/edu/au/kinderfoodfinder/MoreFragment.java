@@ -79,6 +79,9 @@ public class MoreFragment extends Fragment
             @Override
             public void onClick(View v)
             {
+                Bundle bundle=new Bundle(  );
+                bundle.putInt( "key",2 );
+                fragmentreport.setArguments(  bundle);
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.fragment_container, fragmentreport).commit();
@@ -136,12 +139,17 @@ public class MoreFragment extends Fragment
         fb_loginButton.registerCallback( callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+                if(loginResult.getAccessToken()==null){
 
-
+                    Intent intent = new Intent(getActivity(), StartUpActivity.class);
+                    startActivity(intent);
+                    getActivity().finish();
+                }
             }
 
             @Override
             public void onCancel() {
+
 
             }
 
@@ -168,9 +176,7 @@ public class MoreFragment extends Fragment
 
             if(currentAccessToken==null){
 
-                Intent intent = new Intent(getActivity(), StartUpActivity.class);
-                startActivity(intent);
-                getActivity().finish();
+
             }
             else {
 

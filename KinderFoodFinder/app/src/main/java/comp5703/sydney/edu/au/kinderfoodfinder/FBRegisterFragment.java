@@ -2,6 +2,7 @@ package comp5703.sydney.edu.au.kinderfoodfinder;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -57,6 +58,13 @@ public class FBRegisterFragment extends Fragment {
 
 
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate( savedInstanceState );
+        name = getArguments().getString( "fb_name" );
+
+        id = getArguments().getString( "fb_id" );
+    }
 
     @Nullable
     @Override
@@ -68,14 +76,11 @@ public class FBRegisterFragment extends Fragment {
 //        name=getArguments().getString( "name" );
 //        id=getArguments().getString( "id" );
 
+
         registerProgressDialog = new ProgressDialog(getActivity());
 
 
-        inputName = (EditText) view.findViewById(R.id.inputName1);
 
-
-
-        inputEmail = (EditText) view.findViewById(R.id.inputEmailR1);
 
         radioGroup = (RadioGroup) view.findViewById(R.id.radioGender);
 
@@ -98,6 +103,8 @@ public class FBRegisterFragment extends Fragment {
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
                         .replace(R.id.fragment_container, fragmentLogin).commit();
+
+
 
                 // remove toolbar again
                 toolbar.setVisibility(View.GONE);
@@ -135,26 +142,31 @@ public class FBRegisterFragment extends Fragment {
             }
         };
 
-//        // button on click listeners
-//        btnRegister.setOnClickListener(new View.OnClickListener()
-//        {
-//            @Override
-//            public void onClick(View v)
-//            {
-//                // set up all the inputs
-//                int selectedId = radioGroup.getCheckedRadioButtonId();
-//                radioButton = (RadioButton) radioGroup.findViewById(selectedId);
 //
-//                String gender = radioButton.getText().toString();
-//                String birthday = inputBirthday.getText().toString();
-//                boolean showBirthday = checkIfDiscloseDOB.isChecked();
-//
-//                if(checkAgreement.isChecked())
-//                    registerUser(name, gender, id, id, birthday, showBirthday);
-//                else
-//                    Toast.makeText(getActivity(), "Sorry, you have to agree before register!", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        // button on click listeners
+        btnRegister.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                // set up all the inputs
+                int selectedId = radioGroup.getCheckedRadioButtonId();
+                radioButton = (RadioButton) radioGroup.findViewById(selectedId);
+
+                String gender = radioButton.getText().toString();
+                String birthday = inputBirthday.getText().toString();
+                boolean showBirthday = checkIfDiscloseDOB.isChecked();
+
+                if(checkAgreement.isChecked())
+                    registerUser(name, gender, id, birthday, showBirthday);
+                else
+                    Toast.makeText(getActivity(), "Sorry, you have to agree before register!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+        Log.d("facebook",name+"   "+id );
 
         return view;
     }
@@ -163,94 +175,6 @@ public class FBRegisterFragment extends Fragment {
     /* * * * * * * * * * * *
      * Register Functions  *
      * * * * * * * * * * * */
-    private void registerUser(String name, String gender, String email, String pwd,  String birthday, boolean showBirthday)
-    {
-        // check if the texts are empty
-//        if(TextUtils.isEmpty(name))
-//        {
-//            Toast.makeText(getActivity(), "Please enter your name!", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//        if(TextUtils.isEmpty(email))
-//        {
-//            Toast.makeText(getActivity(), "Please enter your email!", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//        if(TextUtils.isEmpty(pwd))
-//        {
-//            Toast.makeText(getActivity(), "Please enter your password!", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//        if(TextUtils.isEmpty(confirmPwd))
-//        {
-//            Toast.makeText(getActivity(), "Please enter your password again!", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//        // check pwd equals to confirm pwd
-//        if(!pwd.equals(confirmPwd))
-//        {
-//            Toast.makeText(getActivity(), "Confirmed password is not matched!", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-        if(TextUtils.isEmpty(birthday))
-        {
-            Toast.makeText(getActivity(), "Please select date for your birthday!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // if all validations above are passed, show the progress dialog
-        registerProgressDialog.setMessage("Registering...");
-        registerProgressDialog.show();
-
-//        String timeStamp = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
-
-        // deal with the gender and birthday format
-        String genderModified, birthdayModified;
-        if(gender.equals("Not Disclose"))
-            genderModified = "Not+Disclose";
-        else
-            genderModified = gender;
-        String[] temp = birthday.split("/");
-        birthdayModified = temp[0] + "-" + temp[1] + "-" + temp[2];
-
-        // modify the user data to the server
-        String url;
-        String ipAddress = "192.168.20.27";  //100.101.72.250 Here should be changed to your server IP
-        if(!showBirthday)
-            url = "http://" + ipAddress + ":3000/android-app-register?name=" + name + "&gender=" + genderModified + "&email=" +
-                    email + "&password=" + pwd + "&birthday=" + birthdayModified;
-        else
-            url = "http://" + ipAddress + ":3000/android-app-register?name=" + name + "&gender=" + genderModified + "&email=" +
-                    email + "&password=" + pwd + "&birthday=Not+Disclose";
-
-        // send the data to the server
-        RequestQueue ExampleRequestQueue = Volley.newRequestQueue(getActivity());
-        StringRequest ExampleStringRequest = new StringRequest( Request.Method.GET, url, new Response.Listener<String>()
-        {
-            @Override
-            public void onResponse(String response)
-            {
-                //This code is executed if the server responds, whether or not the response contains data.
-                //The String 'response' contains the server's response.
-                //You can test it by printing response.substring(0,500) to the screen.
-                registerProgressDialog.dismiss();
-                Toast.makeText(getActivity(), "Registered Successfully!", Toast.LENGTH_SHORT).show();
-                Log.d("Send query response:", response);
-            }
-        },
-                new Response.ErrorListener()  //Create an error listener to handle errors appropriately.
-                {
-                    @Override
-                    public void onErrorResponse(VolleyError error)
-                    {
-                        //This code is executed if there is an error.
-                        registerProgressDialog.dismiss();
-                        Toast.makeText(getActivity(), "Registered Failed!", Toast.LENGTH_SHORT).show();
-                        Log.d("Send query error:", error.toString());
-                    }
-                });
-        ExampleRequestQueue.add(ExampleStringRequest);
-    }
 
 
     AccessTokenTracker tokenTracker=new AccessTokenTracker() {
@@ -261,7 +185,7 @@ public class FBRegisterFragment extends Fragment {
 
             }
             else {
-                loadUserProfile( currentAccessToken );
+
 
 //
             }
@@ -302,6 +226,74 @@ public class FBRegisterFragment extends Fragment {
         parameters.putString( "fields", "first_name,last_name,id" );
         request.setParameters( parameters );
         request.executeAsync();
+    }
+
+    private void registerUser(String name, String gender, String id,  String birthday, boolean showBirthday)
+    {
+
+        if(TextUtils.isEmpty(birthday))
+        {
+            Toast.makeText(getActivity(), "Please select date for your birthday!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // if all validations above are passed, show the progress dialog
+        registerProgressDialog.setMessage("Registering...");
+        registerProgressDialog.show();
+
+//        String timeStamp = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+
+        // deal with the gender and birthday format
+        String genderModified, birthdayModified;
+        if(gender.equals("Not Disclose"))
+            genderModified = "Not+Disclose";
+        else
+            genderModified = gender;
+        String[] temp = birthday.split("/");
+        birthdayModified = temp[0] + "-" + temp[1] + "-" + temp[2];
+
+        // modify the user data to the server
+        String url;
+        String ipAddress = "10.16.81.139";  //100.101.72.250 Here should be changed to your server IP
+        if(!showBirthday)
+            url = "http://" + ipAddress + ":3000/android-app-register-fb?name=" + name + "&facebookId=" + id + "&gender=" +
+                    genderModified +  "&birthday=" + birthdayModified;
+        else
+            url = "http://" + ipAddress + ":3000/android-app-register-fb??name=" + name + "&facebookId=" + id + "&gender=" +
+                    genderModified + "&birthday=Not+Disclose";
+
+        // send the data to the server
+        RequestQueue ExampleRequestQueue = Volley.newRequestQueue(getActivity());
+        StringRequest ExampleStringRequest = new StringRequest( Request.Method.GET, url, new Response.Listener<String>()
+        {
+            @Override
+            public void onResponse(String response)
+            {
+                //This code is executed if the server responds, whether or not the response contains data.
+                //The String 'response' contains the server's response.
+                //You can test it by printing response.substring(0,500) to the screen.
+
+                registerProgressDialog.dismiss();
+
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+                Toast.makeText(getActivity(), "Registered Successfully!", Toast.LENGTH_SHORT).show();
+                Log.d("Send query response:", response);
+            }
+        },
+                new Response.ErrorListener()  //Create an error listener to handle errors appropriately.
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error)
+                    {
+                        //This code is executed if there is an error.
+                        registerProgressDialog.dismiss();
+                        Toast.makeText(getActivity(), "Registered Failed!", Toast.LENGTH_SHORT).show();
+                        Log.d("Send query error:", error.toString());
+                    }
+                });
+        ExampleRequestQueue.add(ExampleStringRequest);
     }
 
 }

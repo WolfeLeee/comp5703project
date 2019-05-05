@@ -17,13 +17,22 @@ import comp5703.sydney.edu.au.kinderfoodfinder.Adapter.BrandAdapter;
 import comp5703.sydney.edu.au.kinderfoodfinder.LocalDatabase.Database;
 
 public class ReportFragment extends Fragment
+
+
 {
     // defined variables
     TextView tv_cate;
     Button button_egg, button_chicken, button_pork;
     private Toolbar toolbar;
     private BottomNavigationView navigation;
-    Fragment fragmentMore, fragmentBrand_eggs, fragmentBrand_Chicken, fragmentBrand_Pork;
+    Fragment fragmentMore, fragmentBrand_eggs, fragmentBrand_Chicken, fragmentBrand_Pork,fragmentLocation;
+    int key;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate( savedInstanceState );
+        key = getArguments().getInt( "key" );
+    }
 
     @Nullable
     @Override
@@ -40,6 +49,7 @@ public class ReportFragment extends Fragment
         fragmentBrand_eggs = new BrandByEggsFragment();
         fragmentBrand_Chicken = new BrandByChickenFragment();
         fragmentBrand_Pork = new BrandByPorkFragment();
+        fragmentLocation=new LocateFragment();
 
 
         button_egg.setOnClickListener(new View.OnClickListener()
@@ -90,9 +100,17 @@ public class ReportFragment extends Fragment
             @Override
             public void onClick(View v) {
                 // go to login fragment
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                        .replace(R.id.fragment_container, fragmentMore).commit();
+                if(key==1){
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                            .replace(R.id.fragment_container,fragmentLocation ).commit();
+
+                }else if(key==2){
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                            .replace(R.id.fragment_container, fragmentMore).commit();
+
+                }
 
                 // remove toolbar again
                 toolbar.setVisibility(View.GONE);

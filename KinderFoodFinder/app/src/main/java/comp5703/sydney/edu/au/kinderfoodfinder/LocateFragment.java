@@ -126,9 +126,13 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
             @Override
             public void onClick(View v)
             {
+                Bundle bundle=new Bundle(  );
+                bundle.putInt( "key",1 );
+                fragmentreport.setArguments( bundle );
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.fragment_container, fragmentreport).commit();
+
             }
         });
 

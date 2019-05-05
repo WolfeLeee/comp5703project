@@ -1688,7 +1688,7 @@ module.exports.loginAndroidAppUsers = function(req, res, next)
         }
         else
         {
-            res.send("Yes");
+            res.send("Yes," + user.gender + "," + user.birthday);
         }
     });
 };
@@ -1743,43 +1743,13 @@ module.exports.reportedStoreFromAndroidAppUsers = function(req, res, next)
     });
 };
 
-module.exports.registerAndroidAppFbUsers = function(req, res, next)
-{
-    // testing
-    var name = req.query.name;
-    console.log(name);
-
-    // set up and receive the user info
-    var appUserData = {
-        name: req.query.name,
-        facebookId: req.query.facebookId,
-        gender: req.query.gender,
-        birthday: req.query.birthday
-    };
-
-    // create the user account
-    AppFbUser.create(appUserData, function (error, appFbUser)
-    {
-        if (error)
-        {
-            var err = new Error('User info is invalid!');
-            err.status = 400;
-            return next(err);
-        }
-        else
-        {
-            res.send("Server has got your data!");
-        }
-    });
-};
-
 module.exports.loginRegisterAndroidAppFbUsers = function(req, res, next)
 {
     // set up and receive the user info
     var facebookId = req.query.facebookId;
     console.log(facebookId);
 
-    AppFbUser.authenticate(facebookId, function (error, user)
+    AppFbUser.findOne({facebookId: facebookId}, function (error, user)
     {
         if (error)
         {
@@ -1792,15 +1762,13 @@ module.exports.loginRegisterAndroidAppFbUsers = function(req, res, next)
             console.log(name);
 
             // set up and receive the user info
-            var appUserData = {
+            var appFbUserData = {
                 name: req.query.name,
-                facebookId: req.query.facebookId,
-                gender: req.query.gender,
-                birthday: req.query.birthday
+                facebookId: req.query.facebookId
             };
 
             // create the user account
-            AppFbUser.create(appUserData, function (error, appFbUser)
+            AppFbUser.create(appFbUserData, function (error, appFbUser)
             {
                 if (error)
                 {
@@ -1849,6 +1817,11 @@ module.exports.checkStoreVersion = function(req, res, next)
             res.send(version.version);
         }
     });
+};
+
+module.exports.createStatistic = function(req, res, next)
+{
+    
 };
 
 

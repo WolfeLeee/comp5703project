@@ -93,6 +93,7 @@ public class ReportAddressFragment extends Fragment {
 
                 // enable navigation bar again
                 navigation.setVisibility(View.VISIBLE);
+                toolbar.setVisibility( View.GONE );
             }
         });
 
@@ -104,8 +105,9 @@ public class ReportAddressFragment extends Fragment {
                 String streetAddress=input_location.getText().toString();
                 String state=input_statae.getText().toString();
                 String postCode =input_postcode.getText().toString();
-                String id ="5cc7da37ba39be1255db1a73";
-                reportInfomation( storeName,streetAddress,state,postCode,id );
+                String id ="5ccd8e9b3e36263b52a8d08f";
+                String brand =content_brand.getText().toString();
+                reportInfomation( storeName,streetAddress,state,postCode,id);
 
             }
         } );
@@ -141,11 +143,11 @@ public class ReportAddressFragment extends Fragment {
         // check pwd equals to confirm pwd
 
 
-        if(TextUtils.isEmpty(productID))
-        {
-//            Toast.makeText(getActivity(), "Please select date for your birthday!", Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        if(TextUtils.isEmpty(productID))
+//        {
+////            Toast.makeText(getActivity(), "Please select date for your birthday!", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 
         // if all validations above are passed, show the progress dialog
 //        reportProgressDialog.setMessage("Report...");
@@ -158,7 +160,7 @@ public class ReportAddressFragment extends Fragment {
 
         // modify the user data to the server
         String url;
-        String ipAddress = "10.16.200.189";  //100.101.72.250 Here should be changed to your server IP
+        String ipAddress = "10.16.81.139";  //100.101.72.250 Here should be changed to your server IP
 
             url = "http://" + ipAddress + ":3000/android-app-report-store?storeName=" + storeName + "&streetAddress=" + streetAddress + "&state=" +
                     state + "&postCode=" + postCode + "&productId=" + productID;
@@ -173,11 +175,7 @@ public class ReportAddressFragment extends Fragment {
                 //This code is executed if the server responds, whether or not the response contains data.
                 //The String 'response' contains the server's response.
                 //You can test it by printing response.substring(0,500) to the screen.
-//                reportProgressDialog.dismiss();
-
-//                Intent intent = new Intent(getActivity(), MainActivity.class);
-//                startActivity(intent);
-//                getActivity().finish();
+//
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
                         .replace(R.id.fragment_container, fragmentReport).commit();
@@ -192,7 +190,7 @@ public class ReportAddressFragment extends Fragment {
                     public void onErrorResponse(VolleyError error)
                     {
                         //This code is executed if there is an error.
-                        reportProgressDialog.dismiss();
+
                         Toast.makeText(getActivity(), "Report Failed!", Toast.LENGTH_SHORT).show();
                         Log.d("Send query error:", error.toString());
                     }
