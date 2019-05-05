@@ -18,21 +18,7 @@ var AppFbUserSchema = new mongoose.Schema({
             type: String,
             required: true,
             unique: true
-        },
-    gender:
-        {
-            type: String,
-            unique: false,
-            required: true,
-            trim: true
-        },
-    birthday:
-        {
-            type: String,
-            unique: false,
-            required: false,
-            trim: false
-        },
+        }
 });
 
 // create index

@@ -15,8 +15,19 @@ router.post('/insertnewBrand',controller.insertnewBrand);
 router.post('/import', controller.importCSVFile);
 router.get('/backFromSuccess', controller.backFromSuccess);
 router.get('/importinsertPage', controller.goToImportPage);
-router.get('/dbmanagement', controller.databaseManagement);
+router.get('/publish', controller.goToPublishPage);
+
+// Report dbmanagement view
 router.get('/report', controller.goToReportPage);
+router.get('/report_Delete', controller.ReportPage_Delete);
+
+// Brand dbmanagement view
+router.get('/dbmanagement', controller.databaseManagement);
+router.get('/dbmanagement_Delete', controller.databaseManagement_Delete);
+
+// Publish Brand and Store Data
+router.get('/publish/brand-data', controller.publishBrandData);
+router.get('/publish/store-data', controller.publishStoreData);
 
 // Get location data for a store using external API
 router.get('/getLocation', controller.getLocation );
@@ -43,8 +54,10 @@ router.post('/detailstorePage_Address__Insert',controller.StoreDetailPage_Addres
 router.get('/android-app-register', controller.registerAndroidAppUsers);
 router.get('/android-app-login', controller.loginAndroidAppUsers);
 router.get('/android-app-report-store', controller.reportedStoreFromAndroidAppUsers);
-router.get('/android-app-register-fb', controller.registerAndroidAppFbUsers);
-router.get('/android-app-login-fb', controller.loginAndroidAppFbUsers);
+router.get('/android-app-login-register-fb', controller.loginRegisterAndroidAppFbUsers);
+router.get('/android-app-check-version-brand', controller.checkBrandVersion);
+router.get('/android-app-check-version-store', controller.checkStoreVersion);
+router.get('/android-app-statistic', controller.createStatistic);
 
 // Get data from the database
 router.get('/GetAllBrand',controller.GetAllBrand);

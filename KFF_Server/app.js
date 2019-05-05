@@ -10,7 +10,7 @@ var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var fileUpload = require('express-fileupload');
 var User = require("./app/models/user");
-var ReportedStore = require("./app/models/reportedStore");
+var Version = require("./app/models/version");
 
 //connect to MongoDB
 mongoose.connect('mongodb://localhost/kff', {useNewUrlParser: true}, function ()
@@ -34,7 +34,7 @@ app.use(session({
 
 // create users collection for later use
 mongoose.model('users', User.schema);
-// mongoose.model('reportedStores', ReportedStore.schema);
+mongoose.model('versions', Version.schema);
 
 // parse incoming requests
 app.use(bodyParser.json());
