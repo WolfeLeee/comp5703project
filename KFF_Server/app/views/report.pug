@@ -6,7 +6,6 @@ html
         title Kinder Food Finder
         script(src="http://code.jquery.com/jquery-1.9.1.min.js")
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
-        script(src="js/search.js" type="text/javascript")
         link(rel='stylesheet',type='text/css',href='css/fontawesome-free/all.min.css')
         link(rel='stylesheet',type='text/css',href='css/dataTables/dataTables.bootstrap4.css')
         link(rel='stylesheet',type='text/css', href='css/shared.css')
@@ -39,7 +38,7 @@ html
                 div.pagebody_navigationbar__header
                     a(href="/importinsertPage") Import/ Insert Data
                 div.pagebody_navigationbar__header
-                    a(href="/dbmanagement") Update/ Delete Data
+                    a(href="/dbmanagement") Update/ Delete Brand
                 div(class="pagebody_navigationbar__header")
                     a(href="/publish") Publish
             div.pagebody_mainbody
@@ -160,7 +159,7 @@ html
                                                             a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0") Next
                                                     else
                                                         li.pagination_button.page-item.next#dataTable_next
-                                                            a.page-link(href="/dbmanagement?product="+numPerPage+"&page="+(currentPage+1),aria-controls="dataTable", data-dt-idx="0", tabindex="0") Next
+                                                            a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0") Next
                 div(class="feature_page_footer" style="text-align:center")
                     div(class="bottom_copyright" style="display:inline-block")
                         p &copy; 2019 IT Capstone Project - KinderFoodFinder. All rights reserved | Design by Team 2 - COMP5703

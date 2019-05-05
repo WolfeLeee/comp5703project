@@ -3,63 +3,24 @@
 $(document).ready(function()
 {
 	/* * * * * * * * * * * * * * * *
-	 * Searching function in table *
+	 * Sort function in the table  *
 	 * * * * * * * * * * * * * * * */
 
-	// search button listener
-	$("#searchButton").click(function(event)
-	{
-		event.preventDefault();
-
-		// get the text from search
-		var searchText = $("#searchInput").val().toString().toLowerCase();
-		// $("#searchInput").val("");
-		// console.log(displayAllData.length);
-
-		// check if match to the search text with product data
-		// and display the matched data in the table
-		var tbody = document.getElementById("table_body");
-		tbody.innerHTML = "";  // empty the original table
-		var tr, td;
-		var numOfRows = 0;
-		var numOfSearchProducts = 0;
-		for(var i = 0; i < displayAllData.length; i++)
-		{
-			var brandName = displayAllData[i].Brand_Name.toString().toLowerCase();
-			if(brandName.startsWith(searchText))
-			{
-				tr = tbody.insertRow(numOfRows++);
-
-				// brand name
-				td = tr.insertCell(0);
-				td.setAttribute("class", "Table_Brand_Name");
-				td.innerHTML = "<a href='/detailproductPage?productid="+displayAllData[i]._id+"'>" + displayAllData[i].Brand_Name + "</a>";
-
-				// accreditation
-				td = tr.insertCell(1);
-				for(var j = 0; j < displayAllData[i].Accreditation.length; j++)
-				{
-					td.innerHTML += "<div>" + displayAllData[i].Accreditation[j].Accreditation + " - " + displayAllData[i].Accreditation[j].Rating + "</div>";
-				}
-
-				// category
-				td = tr.insertCell(2);
-				td.innerHTML = displayAllData[i].Category;
-
-				// delete checkbox
-				td = tr.insertCell(3);
-				td.setAttribute("class", "deletecheckbox");
-				td.innerHTML = "<input type='checkbox' value='"+displayAllData[i]._id+"'>";
-
-				// count the number of searched products
-				numOfSearchProducts++;
-			}
+	$('.sorting').on("click",function(){
+		var params = {
+			sortquery: $(this).data('sort'),
+			searchstring: $(this).data('search'),
+			perPage: $(this).data('perpage')
 		}
+		post('/report',params,"get");
+	})
 
-		// change the number of display products
-		document.getElementById("datable_info").innerHTML = "Showing " + numOfSearchProducts + " of " + displayAllData.length;
-	});
-	// enter will trigger the search button as well
+
+	/* * * * * * * * * * * * * * * * *
+	 * Search function in the table  *
+	 * * * * * * * * * * * * * * * * */
+
+	// enter will trigger the search function
 	var searchInput = document.getElementById("searchInput");
 	if(searchInput)
 	{
@@ -68,20 +29,84 @@ $(document).ready(function()
 			if(event.keyCode === 13)
 			{
 				event.preventDefault();
-				$("#searchButton").click();
+				// $("#searchButton").click();
 			}
 		});
-	}
+	};
+	/* * * * * * * * * * * * * * * * * * * *
+	 * Pagination to navigate through page *
+	 * * * * * * * * * * * * * * * * * * * */
+
+	$('.page-link').click(function(){
+		if(new String($(this).text().toLowerCase()).valueOf() == new String("Previous").valueOf())
+		{
+			var searchstring = $(this).data("search") || "";
+			var params = {
+				perPage: $('.custom-select').children("option:selected").val(),
+				page: parseInt($('.active').first().text()) - 1,
+				searchstring: searchstring,
+				sortquery: $(this).data('sort')
+			}
+			post('/report',params,"get");
+		}
+		else if (new String($(this).text().toLowerCase()).valueOf() == new String("Next").valueOf())
+		{
+			var searchstring = $(this).data("search") || "";
+			var params = {
+				perPage: $('.custom-select').children("option:selected").val(),
+				page: parseInt($('.active').first().text()) + 1,
+				searchstring: searchstring,
+				sortquery: $(this).data('sort')
+			}
+			post('/report',params,"get");
+		}
+		else
+		{
+			var searchstring = $(this).data("search") || "";
+			var params = {
+				perPage: $('.custom-select').children("option:selected").val(),
+				page: parseInt($(this).text()),
+				searchstring: searchstring,
+				sortquery: $(this).data('sort')
+			}
+			post('/report',params,"get");
+		}
+	})
+
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * Change number of products showed in a page function *
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+	$('.custom-select').on('change',function(){
+		var params = {
+			perPage: $(this).val(),
+			searchstring: $(this).data("searchstring")
+		}
+		post('/report',params,"get");
+	})
 
 	/* * * * * * * * * * * * * * * * *
-	 * Displaying function in table  *
+	 * Search function in the table  *
 	 * * * * * * * * * * * * * * * * */
 
-	$("select.custom-select").change(function()
-	{
-		// var selectedNumber = $(this).children("option:selected").text();
-		location.href = $(this).val();
-	});
+	$('#searchInput').keypress(function(e)
+		{
+			if(e.which == 13)
+			{
+				var params = {
+					searchstring: $(this).val()
+				}
+				post('/report',params,"get");
+			}
+		}
+	)
+
+	$('#searchButton').on("click",function(){
+		var params = {
+			searchstring: $('#searchInput').val()
+		}
+		post('/report',params,"get");
+	})
 
 	/* * * * * * * * * * * * * * * * *
 	 * Delete function in the table  *
@@ -140,7 +165,7 @@ $(document).ready(function()
 			var params = {
 				brids: brids,
 			};
-			post('/dbmanagement_Delete',params,"get");
+			post('/report_Delete',params,"get");
 		}
 		else {
 			e.preventDefault();

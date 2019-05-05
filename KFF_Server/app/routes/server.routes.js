@@ -15,8 +15,11 @@ router.post('/insertnewBrand',controller.insertnewBrand);
 router.post('/import', controller.importCSVFile);
 router.get('/backFromSuccess', controller.backFromSuccess);
 router.get('/importinsertPage', controller.goToImportPage);
-router.get('/report', controller.goToReportPage);
 router.get('/publish', controller.goToPublishPage);
+
+// Report dbmanagement view
+router.get('/report', controller.goToReportPage);
+router.get('/report_Delete', controller.ReportPage_Delete);
 
 // Brand dbmanagement view
 router.get('/dbmanagement', controller.databaseManagement);
