@@ -40,6 +40,8 @@ html
                 div.pagebody_navigationbar__header
                     a(href="/dbmanagement") Update/ Delete Brand
                 div(class="pagebody_navigationbar__header")
+                    a(href="/store_dbmanagement") Update/ Delete Store
+                div(class="pagebody_navigationbar__header")
                     a(href="/publish") Publish
             div.pagebody_mainbody
                 h3 Reported stores and brands from users (Waiting for approval from the admin)
@@ -129,7 +131,7 @@ html
                                                             data-sort ="Brand1",
                                                             data-search = search,
                                                             data-perPage = perPage) Brand Name
-                                                    if(sort == "Accreditation1")
+                                                    if(sort == "Store1")
                                                         th.sorting.sorting_asc(tabindex="0",
                                                             aria-controls="dataTable",
                                                             rowspan="1",
@@ -137,10 +139,10 @@ html
                                                             aria-sort="ascending",
                                                             aria-label="Brand Name: activate to sort column descending",
                                                             style = "width:55px;",
-                                                            data-sort ="Accreditation1m",
+                                                            data-sort ="Store1m",
                                                             data-search = search,
-                                                            data-perPage = perPage) Accreditation
-                                                    else if(sort == "Accreditation1m")
+                                                            data-perPage = perPage) Store Name
+                                                    else if(sort == "Store1m")
                                                         th.sorting.sorting_desc(tabindex="0",
                                                             aria-controls="dataTable",
                                                             rowspan="1",
@@ -148,9 +150,9 @@ html
                                                             aria-sort="ascending",
                                                             aria-label="Brand Name: activate to sort column descending",
                                                             style = "width:55px;",
-                                                            data-sort ="Accreditation1",
+                                                            data-sort ="Store1",
                                                             data-search = search,
-                                                            data-perPage = perPage) Accreditation
+                                                            data-perPage = perPage) Store Name
                                                     else
                                                         th.sorting(tabindex="0",
                                                             aria-controls="dataTable",
@@ -159,10 +161,10 @@ html
                                                             aria-sort="ascending",
                                                             aria-label="Brand Name: activate to sort column descending",
                                                             style = "width:55px;",
-                                                            data-sort ="Accreditation1",
+                                                            data-sort ="Store1",
                                                             data-search = search,
-                                                            data-perPage = perPage) Accreditation
-                                                    if(sort == "Category1")
+                                                            data-perPage = perPage) Store Name
+                                                    if(sort == "StreetAdd1")
                                                         th.sorting.sorting_asc(tabindex="0",
                                                             aria-controls="dataTable",
                                                             rowspan="1",
@@ -170,10 +172,10 @@ html
                                                             aria-sort="ascending",
                                                             aria-label="Brand Name: activate to sort column descending",
                                                             style = "width:55px;",
-                                                            data-sort ="Category1m",
+                                                            data-sort ="StreetAdd1m",
                                                             data-search = search,
-                                                            data-perPage = perPage) Category
-                                                    else if(sort == "Category1m")
+                                                            data-perPage = perPage) Address
+                                                    else if(sort == "StreetAdd1m")
                                                         th.sorting.sorting_desc(tabindex="0",
                                                             aria-controls="dataTable",
                                                             rowspan="1",
@@ -181,9 +183,9 @@ html
                                                             aria-sort="ascending",
                                                             aria-label="Brand Name: activate to sort column descending",
                                                             style = "width:55px;",
-                                                            data-sort ="Category1",
+                                                            data-sort ="StreetAdd1",
                                                             data-search = search,
-                                                            data-perPage = perPage) Category
+                                                            data-perPage = perPage) Address
                                                     else
                                                         th.sorting(tabindex="0",
                                                             aria-controls="dataTable",
@@ -192,9 +194,9 @@ html
                                                             aria-sort="ascending",
                                                             aria-label="Brand Name: activate to sort column descending",
                                                             style = "width:55px;",
-                                                            data-sort = "Category1",
+                                                            data-sort = "StreetAdd1",
                                                             data-search = search,
-                                                            data-perPage = perPage) Category
+                                                            data-perPage = perPage) Address
                                                     th(tabindex="0",
                                                         rowspan="1",
                                                         colspan="1",

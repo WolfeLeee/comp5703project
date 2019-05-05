@@ -1405,6 +1405,103 @@ module.exports.StoreDetailPage_Brand__Insert = async function(req,res,next)
 
 }
 
+/** Store databasemanagement function
+ */
+
+module.exports.StoredatabaseManagement = function(req,res,next)
+{
+    User.findById(req.session.userId)
+        .exec(function (errorUser, user) {
+            if (errorUser) {
+                return next(errorUser);
+            } else {
+                if (user === null) {
+                    res.redirect('/');
+                } else {
+                    var sortquery = req.query.sortquery;
+                    var sortString = "";
+                    var sortOrder = 1;
+                    if (new String(sortquery).toLowerCase().valueOf() == new String("Store1").toLowerCase().valueOf()) {
+                        sortString = {
+                            "$sort": {Brand_Name: 1}
+                        };
+                    } else if (new String(sortquery).toLowerCase().valueOf() == new String("Store1m").toLowerCase().valueOf()) {
+                        sortString = {
+                            "$sort": {Brand_Name: -1}
+                        };
+                    } else if (new String(sortquery).toLowerCase().valueOf() == new String("Address1").toLowerCase().valueOf()) {
+                        sortString = {
+                            "$sort": {Address: 1}
+                        };
+                    } else if (new String(sortquery).toLowerCase().valueOf() == new String("Address1m").toLowerCase().valueOf()) {
+                        sortString = {
+                            "$sort": {Address: -1}
+                        };
+                    } else if (new String(sortquery).toLowerCase().valueOf() == new String("BrandCount1").toLowerCase().valueOf()) {
+                        sortString = {
+                            "$sort": {BrandCount: 1}
+                        };
+                    } else if (new String(sortquery).toLowerCase().valueOf() == new String("BrandCount1m").toLowerCase().valueOf()) {
+                        sortString = {
+                            "$sort": {BrandCount: -1}
+                        };
+                    }
+                    var projection = [{
+                        "$project": {
+                            "storeName": 1,
+                            "Address": 1,
+                            "Product": 1,
+                            "BrandCount": {"$size": "$Product"}
+                        }
+                    }];
+                    if (sortString !== "") {
+                        project.push(sortString);
+                    }
+                    Store.aggregate(projection,
+                        function (errStore, stores) {
+                            if (errStore) {
+                                return next(errStore);
+                            } else {
+                                if (stores === null) {
+                                    res.redirect('/');
+                                } else {
+                                    var perPage = (parseInt(req.query.perPage)) || 25;
+                                    var page = (parseInt(req.query.page)) || 1;
+                                    var displaystores = [];
+                                    var storesList = [];
+                                    for (var i = 0; i < stores.length; i++) {
+                                        if (req.query.searchstring == null) {
+                                            storesList.push(stores[i]);
+                                        } else {
+                                            if (stores[i].storeName.toLowerCase().includes(req.query.searchstring.toLowerCase())) {
+                                                storesList.push(stores[i]);
+                                            }
+                                        }
+                                    }
+                                    for (var i = ((perPage * page) - perPage); i < storesList.length && i < (perPage * (page + 1) - perPage); i++) {
+                                        displaystores.push(storesList[i]);
+                                    }
+                                    var searchstring = req.query.searchstring;
+                                    res.render('store_dbmanagement.pug'
+                                        , {
+                                            displaydata: displaystores,
+                                            numPerPage: perPage,
+                                            count: storesList.length,
+                                            current: page,
+                                            pages: Math.ceil(storesList.length / perPage),
+                                            countentries: displaystores.length,
+                                            searchstring: req.query.searchstring || "",
+                                            sortquery: req.query.sortquery
+                                        }
+                                    );
+                                }
+                            }
+                        })
+                }
+            }
+        })
+};
+
 
 module.exports.databaseManagement = function(req, res, next)
 {
