@@ -6,7 +6,7 @@ var AppFbUser = require("../models/appFbUser");
 var Store = require("../models/store");
 var ReportedStore = require("../models/reportedStore");
 var Statistic = require("../models/statistic");
-
+var Version = require("../models/version");
 
 // External libraries
 var mongoose = require('mongoose');
@@ -25,42 +25,133 @@ var adminId = "";
 // Basic pages with login and register
 module.exports.goToLogin = function(req, res, next)
 {
-    User.countDocuments(function(error, count)
+    User.countDocuments(function(errorUser, countUser)
     {
-        if (error)
+        if (errorUser)
         {
-            //var err = new Error('Username has been used!');
-            error.status = 400;
-            return next(error);
+            errorUser.status = 400;
+            return next(errorUser);
         }
         else
         {
-            if(count == 0)
+            Version.countDocuments(function(errorVersion, countVersion)
             {
-                // create admin acc at the beginning
-                var userData = {
-                    username: "admin",
-                    password: "admin"
-                };
+               if(errorVersion)
+               {
+                   errorVersion.status = 400;
+                   return next(errorVersion);
+               }
+               else
+               {
+                   if(countUser == 0)
+                   {
+                       // create admin acc at the beginning
+                       var userData = {
+                           username: "admin",
+                           password: "admin"
+                       };
 
-                User.create(userData, function (error, user)
-                {
-                    if (error)
-                    {
-                        //var err = new Error('Username has been used!');
-                        error.status = 400;
-                        return next(error);
-                    }
-                    else
-                    {
-                        res.redirect('/landing');
-                    }
-                });
-            }
-            else
-            {
-                res.redirect('/landing');
-            }
+                       User.create(userData, function(errorCreateUser, user)
+                       {
+                           if (errorCreateUser)
+                           {
+                               errorCreateUser.status = 400;
+                               return next(errorCreateUser);
+                           }
+                           else
+                           {
+                               if(countVersion == 0)
+                               {
+                                   // create default brand version at the beginning (1.0.0)
+                                   var versionBrandData = {
+                                       version: "1",
+                                       type: "brand"
+                                   };
+
+                                   Version.create(versionBrandData, function(errorCreateBrandVersion, versionBrand)
+                                   {
+                                      if(errorCreateBrandVersion)
+                                      {
+                                          errorCreateBrandVersion.status = 400;
+                                          return next(errorCreateBrandVersion);
+                                      }
+                                      else
+                                      {
+                                          // create default store version at the beginning
+                                          var versionStoreData = {
+                                              version: "1",
+                                              type: "store"
+                                          };
+
+                                          Version.create(versionStoreData, function(errorCreateStoreVersion, versionStore)
+                                          {
+                                              if(errorCreateStoreVersion)
+                                              {
+                                                  errorCreateStoreVersion.status = 400;
+                                                  return next(errorCreateStoreVersion);
+                                              }
+                                              else
+                                              {
+                                                  res.redirect('/landing');
+                                              }
+                                          });
+                                      }
+                                   });
+                               }
+                               else
+                               {
+                                   res.redirect('/landing');
+                               }
+                           }
+                       });
+                   }
+                   else
+                   {
+                       if(countVersion == 0)
+                       {
+                           // create default brand version at the beginning (1.0.0)
+                           var versionBrandData = {
+                               version: "1",
+                               type: "brand"
+                           };
+
+                           Version.create(versionBrandData, function(errorCreateBrandVersion, versionBrand)
+                           {
+                               if(errorCreateBrandVersion)
+                               {
+                                   errorCreateBrandVersion.status = 400;
+                                   return next(errorCreateBrandVersion);
+                               }
+                               else
+                               {
+                                   // create default store version at the beginning
+                                   var versionStoreData = {
+                                       version: "1",
+                                       type: "store"
+                                   };
+
+                                   Version.create(versionStoreData, function(errorCreateStoreVersion, versionStore)
+                                   {
+                                       if(errorCreateStoreVersion)
+                                       {
+                                           errorCreateStoreVersion.status = 400;
+                                           return next(errorCreateStoreVersion);
+                                       }
+                                       else
+                                       {
+                                           res.redirect('/landing');
+                                       }
+                                   });
+                               }
+                           });
+                       }
+                       else
+                       {
+                           res.redirect('/landing');
+                       }
+                   }
+               }
+            });
         }
     });
 };
@@ -632,79 +723,93 @@ module.exports.goToReportPage = function(req, res, next)
         });
 };
 
-// Revision.findArticleHighestRev(function(errorArticleHighestRev, resultArticleHighestRev)
-// {
-//     if(errorArticleHighestRev || !resultArticleHighestRev)
-//     {
-//         var err = new Error('Something wrong or result not found!');
-//         err.status = 401;
-//         return next(errorArticleHighestRev);
-//     }
-//     else
-//     {
-//         Revision.findArticleLargeRegUserEdit(function(errorArticleLargeRegUserEdit, resultArticleLargeRegUserEdit)
-//         {
-//             if(errorArticleLargeRegUserEdit || !resultArticleLargeRegUserEdit)
-//             {
-//                 var err = new Error('Something wrong or result not found!');
-//                 err.status = 401;
-//                 return next(errorArticleLargeRegUserEdit);
-//             }
-//             else
-//             {
-//                 Revision.findArticleLongHistory(function(errorArticleLongHistory, resultArticleLongHistory)
-//                 {
-//                     if(errorArticleLongHistory || !resultArticleLongHistory)
-//                     {
-//                         var err = new Error('Something wrong or result not found!');
-//                         err.status = 401;
-//                         return next(errorArticleLongHistory);
-//                     }
-//                     else
-//                     {
-//                         Revision.findArticleShortHistory(function(errorArticleShortHistory, resultArticleShortHistory)
-//                         {
-//                             if (errorArticleShortHistory || !resultArticleShortHistory)
-//                             {
-//                                 var err = new Error('Something wrong or result not found!');
-//                                 err.status = 401;
-//                                 return next(errorArticleShortHistory);
-//                             }
-//                             else
-//                             {
-//                                 // res.render('feature.pug', {username: user.username, email: user.email,
-//                                 //     firstName: user.firstName, lastName: user.lastName, resultTitleHighestRev:
-//                                 //     resultArticleHighestRev, resultArticleEditedByLargestReUser:
-//                                 //     resultArticleLargeRegUserEdit, resultArticleLongHistory: resultArticleLongHistory,
-//                                 //     resultArticleShortHistory: resultArticleShortHistory});
-//                                 Revision.findAllTitlesRev(function(errorAllTitlesRev, resultAllTitlesRev)
-//                                 {
-//                                     if (errorAllTitlesRev || !resultAllTitlesRev)
-//                                     {
-//                                         var err = new Error('Something wrong or result not found!');
-//                                         err.status = 401;
-//                                         return next(errorAllTitlesRev);
-//                                     }
-//                                     else
-//                                     {
-//                                         res.render('feature.pug', {username: user.username, email: user.email,
-//                                             firstName: user.firstName, lastName: user.lastName, resultTitleHighestRev:
-//                                             resultArticleHighestRev, resultArticleEditedByLargestReUser:
-//                                             resultArticleLargeRegUserEdit, resultArticleLongHistory: resultArticleLongHistory,
-//                                             resultArticleShortHistory: resultArticleShortHistory, resultAllTitlesRev: resultAllTitlesRev});
-//                                     }
-//                                 });
-//                             }
-//                         });
-//                     }
-//                 });
-//             }
-//         });
-//     }
-// });
+module.exports.goToPublishPage = function(req, res, next)
+{
+    User.findById(req.session.userId)
+        .exec(function (errorUser, user)
+        {
+            if (errorUser)
+            {
+                return next(errorUser);
+            }
+            else
+            {
+                if (user === null)
+                {
+                    res.redirect('/');
+                }
+                else
+                {
+                    Version.find({}, function(errorFind, versions)
+                    {
+                        if(errorFind)
+                        {
+                            res.send("Something wrong while finding versions!")
+                        }
+                        else
+                        {
+                            res.render('publish.pug', {versions: versions});
+                        }
+                    });
+                }
+            }
+        });
+};
+
+module.exports.publishBrandData = function(req, res, next)
+{
+    Version.findOne({type: "brand"}, function(errorFind, version)
+    {
+       if(errorFind)
+       {
+           res.send("Something went wrong while searching the version for brand!");
+       }
+       else
+       {
+            var updateVersion = parseInt(version.version) + 1;
+            Version.updateOne({type: "brand"}, {version: updateVersion.toString()}, function(errorUpdate, version)
+            {
+                if(errorUpdate)
+                {
+                    res.send("Something went wrong while updating the version for brand!");
+                }
+                else
+                {
+                    res.redirect('/publish');
+                }
+            });
+       }
+    });
+};
+
+module.exports.publishStoreData = function(req, res, next)
+{
+    Version.findOne({type: "store"}, function(errorFind, version)
+    {
+        if(errorFind)
+        {
+            res.send("Something went wrong while searching the version for store!");
+        }
+        else
+        {
+            var updateVersion = parseInt(version.version) + 1;
+            Version.updateOne({type: "store"}, {version: updateVersion.toString()}, function(errorUpdate, version)
+            {
+                if(errorUpdate)
+                {
+                    res.send("Something went wrong while updating the version for store!");
+                }
+                else
+                {
+                    res.redirect('/publish');
+                }
+            });
+        }
+    });
+};
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Product Detail Page which enables the product to be udpated *
+ * Product Detail Page which enables the product to be updated *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /** Direct user to the product detail page.
@@ -1423,7 +1528,11 @@ module.exports.loginAndroidAppUsers = function(req, res, next)
 
     AppUser.authenticate(email, password, function (error, user)
     {
-        if (error || !user)
+        if (error)
+        {
+            res.send("Error");
+        }
+        else if(!user)
         {
             res.send("No");
         }
@@ -1515,7 +1624,7 @@ module.exports.registerAndroidAppFbUsers = function(req, res, next)
     });
 };
 
-module.exports.loginAndroidAppFbUsers = function(req, res, next)
+module.exports.loginRegisterAndroidAppFbUsers = function(req, res, next)
 {
     // set up and receive the user info
     var facebookId = req.query.facebookId;
@@ -1523,13 +1632,72 @@ module.exports.loginAndroidAppFbUsers = function(req, res, next)
 
     AppFbUser.authenticate(facebookId, function (error, user)
     {
-        if (error || !user)
+        if (error)
         {
-            res.send("No");
+            res.send("Error");
+        }
+        else if(!user)
+        {
+            // testing
+            var name = req.query.name;
+            console.log(name);
+
+            // set up and receive the user info
+            var appUserData = {
+                name: req.query.name,
+                facebookId: req.query.facebookId,
+                gender: req.query.gender,
+                birthday: req.query.birthday
+            };
+
+            // create the user account
+            AppFbUser.create(appUserData, function (error, appFbUser)
+            {
+                if (error)
+                {
+                    var err = new Error('User info is invalid!');
+                    err.status = 400;
+                    return next(err);
+                }
+                else
+                {
+                    res.send("Create");
+                }
+            });
         }
         else
         {
             res.send("Yes");
+        }
+    });
+};
+
+module.exports.checkBrandVersion = function(req, res, next)
+{
+    Version.findOne({type: "brand"}, function(error, version)
+    {
+        if(error)
+        {
+            res.send("Error");
+        }
+        else
+        {
+            res.send(version.version);
+        }
+    });
+};
+
+module.exports.checkStoreVersion = function(req, res, next)
+{
+    Version.findOne({type: "store"}, function(error, version)
+    {
+        if(error)
+        {
+            res.send("Error");
+        }
+        else
+        {
+            res.send(version.version);
         }
     });
 };
