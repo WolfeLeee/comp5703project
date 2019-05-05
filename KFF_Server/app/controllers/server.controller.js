@@ -1251,70 +1251,95 @@ module.exports.StoreDetailPage_Brand__Insert = async function(req,res,next)
 module.exports.databaseManagement = function(req, res, next)
 {
     User.findById(req.session.userId)
-        .exec(function (errorUser, user)
-        {
-            if (errorUser)
-            {
+        .exec(function (errorUser, user) {
+            if (errorUser) {
                 return next(errorUser);
-            }
-            else
-            {
-                if (user === null)
-                {
+            } else {
+                if (user === null) {
                     res.redirect('/');
-                }
-                else
-                {
-                    var perPage = (parseInt(req.query.product)) || 25;
-                    var page = (parseInt(req.query.page)) || 1;
-                    Product.find({}).limit(perPage).skip((perPage * page) - perPage)
-                        .exec(function(errFind, dataProductsPerPage)
-                        {
-                            if(errFind)
-                                return next(errFind);
-                            else
-                            {
-                                Product.countDocuments({})
-                                    .exec(function(errCount, numOfProducts)
-                                    {
-                                        if(errCount)
-                                            return next(errCount);
-                                        else
-                                        {
-                                            Product.countDocuments({}).limit(perPage).skip((perPage * page) - perPage)
-                                                .exec(function(errCountLimit, numOfLimitedProducts)
-                                                {
-                                                    if(errCountLimit)
-                                                        return next(errCountLimit);
-                                                    else
-                                                    {
-                                                        Product.find({})
-                                                            .exec(function(errFindAll, dataAllProducts)
-                                                            {
-                                                               if(errFindAll)
-                                                                   return next(errFindAll);
-                                                               else
-                                                               {
-                                                                   res.render('table.pug', {
-                                                                       displaydata: dataProductsPerPage,
-                                                                       displayAllData: dataAllProducts,
-                                                                       numPerPage: perPage,
-                                                                       count: numOfProducts,
-                                                                       current: page,
-                                                                       pages: Math.ceil(numOfProducts/ perPage),
-                                                                       countentries: numOfLimitedProducts
-                                                                   });
-                                                               }
-                                                            });
-                                                    }
-                                                });
+                } else {
+                    var sortquery = req.query.sortquery;
+                    var sortString = "";
+                    var sortOrder = 1;
+                    if(new String(sortquery).toLowerCase().valueOf() == new String("Brand1").toLowerCase().valueOf())
+                    {
+                        sortString = {
+                            Brand_Name : 1
+                        };
+                    }
+                    else if(new String(sortquery).toLowerCase().valueOf() == new String("Brand1m").toLowerCase().valueOf())
+                    {
+                        sortString = {
+                            Brand_Name : -1
+                        };
+                    }
+                    else if(new String(sortquery).toLowerCase().valueOf() == new String("Category1").toLowerCase().valueOf())
+                    {
+                        sortString = {
+                            Category : 1
+                        };
+                    }
+                    else if(new String(sortquery).toLowerCase().valueOf() == new String("Category1m").toLowerCase().valueOf())
+                    {
+                        sortString = {
+                            Category : -1
+                        };
+                    }
+                    else if(new String(sortquery).toLowerCase().valueOf() == new String("Accreditation1").toLowerCase().valueOf())
+                    {
+                        sortString = {
+                            Accreditation : 1
+                        };
+                    }
+                    else if(new String(sortquery).toLowerCase().valueOf() == new String("Accreditation1m").toLowerCase().valueOf())
+                    {
+                        sortString = {
+                            Accreditation : -1
+                        };
+                    }
+                    Product.find({}).sort(sortString)
+                        .exec(function (errProduct, products) {
+                            if (errProduct) {
+                                return next(errProduct);
+                            } else {
+                                if (products === null) {
+                                    res.redirect('/');
+                                } else {
+                                    var perPage = (parseInt(req.query.perPage)) || 25;
+                                    var page = (parseInt(req.query.page)) || 1;
+                                    var displayproducts = [];
+                                    var productsList = [];
+                                    for (var i = 0; i < products.length; i++) {
+                                        if (req.query.searchstring == null) {
+                                            productsList.push(products[i]);
+                                        } else {
+                                            if (products[i].Brand_Name.toLowerCase().includes(req.query.searchstring.toLowerCase())) {
+                                                productsList.push(products[i]);
+                                            }
                                         }
-                                    });
+                                    }
+                                    for (var i = ((perPage * page) - perPage); i < productsList.length && i < (perPage * (page + 1) - perPage); i++) {
+                                        displayproducts.push(productsList[i]);
+                                    }
+                                    var searchstring = req.query.searchstring;
+                                    res.render('dbmanagement.pug'
+                                        , {
+                                            displaydata: displayproducts,
+                                            numPerPage: perPage,
+                                            count: productsList.length,
+                                            current: page,
+                                            pages: Math.ceil(productsList.length / perPage),
+                                            countentries: displayproducts.length,
+                                            searchstring : req.query.searchstring||"",
+                                            sortquery:req.query.sortquery
+                                        }
+                                    );
+                                }
                             }
                         });
                 }
             }
-        });
+        })
 };
 
 

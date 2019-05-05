@@ -1,0 +1,259 @@
+doctype html
+
+html
+    head
+        meta(charset='utf-8')
+        title Kinder Food Finder
+        script(src="http://code.jquery.com/jquery-1.9.1.min.js")
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+        script(src="js/dbmanagement.js" type="text/javascript")
+        link(rel='stylesheet',type='text/css',href='css/fontawesome-free/all.min.css')
+        link(rel='stylesheet',type='text/css',href='css/dataTables/dataTables.bootstrap4.css')
+        link(rel='stylesheet',type='text/css', href='css/shared.css')
+        link(rel='stylesheet',type='text/css',href='css/sb-admin.min.css')
+        link(rel='stylesheet',type='text/css',href='css/table_brand.css')
+        script.
+            window.jQuery || document.write('script(src="js/jquery.js")');
+    body
+        header.pageheader
+            div.pageheader_title
+                a(href="/").pageheader_title__anchor KINDER FOOD FINDER
+                div.vertical-align
+            nav.pageheader_navigationbar
+                ul.pageheader_navigationbar__items
+                    li.pageheader_navigationbar__item
+                        input(id="pageheader_navigationbar__searchbox" type="text" name="SearchBrandName" Placeholder="Search a brand name...")
+                        div.vertical-align
+                    li.pageheader_navigationbar__item
+                        a(href="/feature") ABOUT THE SERVER
+                    li.pageheader_navigationbar__item
+                        a(href="/feature") GUIDELINE
+                    li.pageheader_navigationbar__item
+                        a(href="/logout") LOGOUT
+        div.pagebody
+            div.pagebody_navigationbar
+                p CONTROL PANEL
+                div.pagebody_navigationbar__header
+                    a(href="/report") Report
+                div.pagebody_navigationbar__header
+                    a(href="/importinsertPage") Import/ Insert Data
+                div.pagebody_navigationbar__header
+                    a(href="/dbmanagement") Update/ Delete Brand
+            div.pagebody_mainbody
+                h3 Update/ Delete Data
+                div.card.mb-3
+                    div.card-header Brand
+                    div.card-body
+                        div.table_responsive
+                            div#dataTable_wrapper.dataTables_wrapper.dt-boottrap4
+                                div.row
+                                    div.col-sm-12.col-md-6
+                                        div.dataTables_length#dataTable_length
+                                            label Show
+                                                - var search = searchstring
+                                                - if(numPerPage == 25)
+                                                    select.custom-select.custom-select-sm.form-control.form-control-sm(name="dataTable_length", aria-controls="dataTable", data-searchstring = search)
+                                                        option(value='25' selected="selected") 25
+                                                        option(value='50') 50
+                                                        option(value='100') 100
+                                                        option(value='200') 200
+                                                - if(numPerPage == 50)
+                                                    select.custom-select.custom-select-sm.form-control.form-control-sm(name="dataTable_length", aria-controls="dataTable", data-searchstring = search)
+                                                        option(value='25') 25
+                                                        option(value='50' selected="selected") 50
+                                                        option(value='100') 100
+                                                        option(value='200') 200
+                                                - if(numPerPage == 100)
+                                                    select.custom-select.custom-select-sm.form-control.form-control-sm(name="dataTable_length", aria-controls="dataTable", data-searchstring = search)
+                                                        option(value='25') 25
+                                                        option(value='50') 50
+                                                        option(value='100' selected="selected") 100
+                                                        option(value='200') 200
+                                                - if(numPerPage == 200)
+                                                    select.custom-select.custom-select-sm.form-control.form-control-sm(name="dataTable_length", aria-controls="dataTable", data-searchstring = search)
+                                                        option(value='25') 25
+                                                        option(value='50') 50
+                                                        option(value='100') 100
+                                                        option(value='200' selected="selected") 200
+                                            label.deletebutton_selectall.button Select All
+                                                input.button_selectall(type='checkbox')
+                                                span.checkmark
+                                            label.deletebutton_deletemarked(value=id)
+                                                svg(xmlns="http://www.w3.org/2000/svg",width="24",height="24",viewBox = "0 0 24 24")
+                                                    path(d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z")
+                                    div.col-sm-12.col-md-6
+                                        div#dataTable_filter.dataTables_filter
+                                            input(id="searchInput" class="form-control form-control-sm" type='search', aria-controls='dataTable', placeholder="Search a brand....")
+                                            input(id="searchButton" type="button" value="Search")
+
+                                div.row
+                                    div.col-sm-12
+                                        table.table.table-bordered.dataTable#dataTable(width="100%", cellspacing="0", role="grid" aria-describedby="dataTable_info" style="width: 100%")
+                                            thead
+                                                tr(role="row")
+                                                    - var sort = sortquery
+                                                    - var search = searchstring;
+                                                    - var perPage = numPerPage;
+                                                    if(sort == "Brand1")
+                                                        th.sorting.sorting_asc(tabindex="0",
+                                                            aria-controls="dataTable",
+                                                            rowspan="1",
+                                                            colspan="1",
+                                                            aria-sort="ascending",
+                                                            aria-label="Brand Name: activate to sort column descending",
+                                                            style = "width:55px;",
+                                                            data-sort ="Brand1m",
+                                                            data-search = search,
+                                                            data-perPage = perPage) Brand Name
+                                                    else if(sort == "Brand1m")
+                                                        th.sorting.sorting_desc(tabindex="0",
+                                                            aria-controls="dataTable",
+                                                            rowspan="1",
+                                                            colspan="1",
+                                                            aria-sort="ascending",
+                                                            aria-label="Brand Name: activate to sort column descending",
+                                                            style = "width:55px;",
+                                                            data-sort ="Brand1",
+                                                            data-search = search,
+                                                            data-perPage = perPage) Brand Name
+                                                    else
+                                                        th.sorting(tabindex="0",
+                                                            aria-controls="dataTable",
+                                                            rowspan="1",
+                                                            colspan="1",
+                                                            aria-sort="ascending",
+                                                            aria-label="Brand Name: activate to sort column descending",
+                                                            style = "width:55px;",
+                                                            data-sort ="Brand1",
+                                                            data-search = search,
+                                                            data-perPage = perPage) Brand Name
+                                                    if(sort == "Accreditation1")
+                                                        th.sorting.sorting_asc(tabindex="0",
+                                                            aria-controls="dataTable",
+                                                            rowspan="1",
+                                                            colspan="1",
+                                                            aria-sort="ascending",
+                                                            aria-label="Brand Name: activate to sort column descending",
+                                                            style = "width:55px;",
+                                                            data-sort ="Accreditation1m",
+                                                            data-search = search,
+                                                            data-perPage = perPage) Accreditation
+                                                    else if(sort == "Accreditation1m")
+                                                        th.sorting.sorting_desc(tabindex="0",
+                                                            aria-controls="dataTable",
+                                                            rowspan="1",
+                                                            colspan="1",
+                                                            aria-sort="ascending",
+                                                            aria-label="Brand Name: activate to sort column descending",
+                                                            style = "width:55px;",
+                                                            data-sort ="Accreditation1",
+                                                            data-search = search,
+                                                            data-perPage = perPage) Accreditation
+                                                    else
+                                                        th.sorting(tabindex="0",
+                                                            aria-controls="dataTable",
+                                                            rowspan="1",
+                                                            colspan="1",
+                                                            aria-sort="ascending",
+                                                            aria-label="Brand Name: activate to sort column descending",
+                                                            style = "width:55px;",
+                                                            data-sort ="Accreditation1",
+                                                            data-search = search,
+                                                            data-perPage = perPage) Accreditation
+                                                    if(sort == "Category1")
+                                                        th.sorting.sorting_asc(tabindex="0",
+                                                            aria-controls="dataTable",
+                                                            rowspan="1",
+                                                            colspan="1",
+                                                            aria-sort="ascending",
+                                                            aria-label="Brand Name: activate to sort column descending",
+                                                            style = "width:55px;",
+                                                            data-sort ="Category1m",
+                                                            data-search = search,
+                                                            data-perPage = perPage) Category
+                                                    else if(sort == "Category1m")
+                                                        th.sorting.sorting_desc(tabindex="0",
+                                                            aria-controls="dataTable",
+                                                            rowspan="1",
+                                                            colspan="1",
+                                                            aria-sort="ascending",
+                                                            aria-label="Brand Name: activate to sort column descending",
+                                                            style = "width:55px;",
+                                                            data-sort ="Category1",
+                                                            data-search = search,
+                                                            data-perPage = perPage) Category
+                                                    else
+                                                        th.sorting(tabindex="0",
+                                                            aria-controls="dataTable",
+                                                            rowspan="1",
+                                                            colspan="1",
+                                                            aria-sort="ascending",
+                                                            aria-label="Brand Name: activate to sort column descending",
+                                                            style = "width:55px;",
+                                                            data-sort = "Category1",
+                                                            data-search = search,
+                                                            data-perPage = perPage) Category
+                                                    th(tabindex="0",
+                                                        rowspan="1",
+                                                        colspan="1",
+                                                        style = "width:55px;") Delete
+                                            tfoot
+                                                tr
+                                                    th(rowspan="1", colspan="1") Brand Name
+                                                    th(rowspan="1", colspan="1") Accreditation
+                                                    th(rowspan="1", colspan="1") Category
+                                                    th(rowspan="1", colspan="1") Delete
+                                            tbody(id="table_body")
+                                                 - for(var i = 0; i < displaydata.length ; i++)
+                                                    tr(role="row", class="odd")
+                                                        td.Table_Brand_Name
+                                                            - var id = displaydata[i]._id
+                                                            a(href="/detailproductPage?productid="+id) #{displaydata[i].Brand_Name}
+                                                        td
+                                                            - for(var j = 0; j < displaydata[i].Accreditation.length; j++ )
+                                                                div #{displaydata[i].Accreditation[j].Accreditation} - #{displaydata[i].Accreditation[j].Rating}
+                                                        td #{displaydata[i].Category}
+                                                        td.deletecheckbox
+                                                            label.button
+                                                                - var id = displaydata[i]._id
+                                                                input.accreditationlist_table__Delete(value = id, type='checkbox')
+                                                                span.checkmark
+                                div.row
+                                    div.col-sm-12.col-md-5
+                                        div.dataTables_info(id="datable_info" role="status", aria-live="polite") Showing #{countentries} of #{count}
+                                    div.col-sm-12.col-md-7
+                                        div.dataTables_paginate.paging_simple_numbers#dataTable_paginate
+                                            if(pages > 0)
+                                                ul.pagination#pagination
+                                                    - var currentPage = parseInt(current);
+                                                    - var search = searchstring;
+                                                    - var sort = sortquery
+                                                    if(current == 1)
+                                                        li.pagination_button.page-item.previous#dataTable_previous.disabled
+                                                            a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0", data-search = search, data-sort = sort) Previous
+                                                    else
+                                                        li.pagination_button.page-item.previous#dataTable_previous
+                                                            a.page-link(href="/dbmanagement?product="+numPerPage+"&page="+(currentPage-1),aria-controls="dataTable", data-dt-idx="0", tabindex="0", data-search = search, data-sort = sort) Previous
+                                                    - var j = ( current > 5 ? current - 4 :1)
+                                                    if (j !== 1)
+                                                        li.pagination_button.page-item.disabled
+                                                            a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0", data-search = search, data-sort = sort) ...
+                                                    - for(; j <= (current + 4) && j <= pages; j++)
+                                                        if(j == current)
+                                                            li.pagination_button.page-item.active
+                                                                a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0", data-search = search, data-sort = sort) #{j}
+                                                        else
+                                                            li.pagination_button.page-item
+                                                                a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0", data-search = search, data-sort = sort) #{j}
+                                                        if (j == current + 4 && j < pages)
+                                                            li.pagination_button.page-item.disabled
+                                                                a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0", data-search = search, data-sort = sort) ...
+                                                    if (current == pages)
+                                                        li.pagination_button.page-item.next#dataTable_next.disabled
+                                                            a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0", data-search = search, data-sort = sort) Next
+                                                    else
+                                                        li.pagination_button.page-item.next#dataTable_next
+                                                            a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0", data-search = search, data-sort = sort) Next
+                div(class="feature_page_footer" style="text-align:center")
+                    div(class="bottom_copyright" style="display:inline-block")
+                        p &copy; 2019 IT Capstone Project - KinderFoodFinder. All rights reserved | Design by Team 2 - COMP5703
