@@ -3,8 +3,8 @@
 $(document).ready(function()
 {
 	/* * * * * * * * * * * * * * * *
-	 * Sort function in the table  *
-	 * * * * * * * * * * * * * * * */
+     * Sort function in the table  *
+     * * * * * * * * * * * * * * * */
 
 	$('.sorting').on("click",function(){
 		var params = {
@@ -12,13 +12,13 @@ $(document).ready(function()
 			searchstring: $(this).data('search'),
 			perPage: $(this).data('perpage')
 		}
-		post('/report',params,"get");
+		post('/store_dbmanagement',params,"get");
 	})
 
 
 	/* * * * * * * * * * * * * * * * *
-	 * Search function in the table  *
-	 * * * * * * * * * * * * * * * * */
+     * Search function in the table  *
+     * * * * * * * * * * * * * * * * */
 
 	// enter will trigger the search function
 	var searchInput = document.getElementById("searchInput");
@@ -34,8 +34,8 @@ $(document).ready(function()
 		});
 	};
 	/* * * * * * * * * * * * * * * * * * * *
-	 * Pagination to navigate through page *
-	 * * * * * * * * * * * * * * * * * * * */
+     * Pagination to navigate through page *
+     * * * * * * * * * * * * * * * * * * * */
 
 	$('.page-link').click(function(){
 		if(new String($(this).text().toLowerCase()).valueOf() == new String("Previous").valueOf())
@@ -47,7 +47,7 @@ $(document).ready(function()
 				searchstring: searchstring,
 				sortquery: $(this).data('sort')
 			}
-			post('/report',params,"get");
+			post('/store_dbmanagement',params,"get");
 		}
 		else if (new String($(this).text().toLowerCase()).valueOf() == new String("Next").valueOf())
 		{
@@ -58,7 +58,7 @@ $(document).ready(function()
 				searchstring: searchstring,
 				sortquery: $(this).data('sort')
 			}
-			post('/report',params,"get");
+			post('/store_dbmanagement',params,"get");
 		}
 		else
 		{
@@ -69,25 +69,25 @@ $(document).ready(function()
 				searchstring: searchstring,
 				sortquery: $(this).data('sort')
 			}
-			post('/report',params,"get");
+			post('/store_dbmanagement',params,"get");
 		}
 	})
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	 * Change number of products showed in a page function *
-	 * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+     * Change number of products showed in a page function *
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 	$('.custom-select').on('change',function(){
 		var params = {
 			perPage: $(this).val(),
 			searchstring: $(this).data("searchstring")
 		}
-		post('/report',params,"get");
+		post('/store_dbmanagement',params,"get");
 	})
 
 	/* * * * * * * * * * * * * * * * *
-	 * Search function in the table  *
-	 * * * * * * * * * * * * * * * * */
+     * Search function in the table  *
+     * * * * * * * * * * * * * * * * */
 
 	$('#searchInput').keypress(function(e)
 		{
@@ -96,7 +96,7 @@ $(document).ready(function()
 				var params = {
 					searchstring: $(this).val()
 				}
-				post('/report',params,"get");
+				post('/store_dbmanagement',params,"get");
 			}
 		}
 	)
@@ -105,12 +105,12 @@ $(document).ready(function()
 		var params = {
 			searchstring: $('#searchInput').val()
 		}
-		post('/report',params,"get");
+		post('/store_dbmanagement',params,"get");
 	})
 
 	/* * * * * * * * * * * * * * * * *
-	 * Delete function in the table  *
-	 * * * * * * * * * * * * * * * * */
+     * Delete function in the table  *
+     * * * * * * * * * * * * * * * * */
 
 	$('.button_selectall').change(function(){
 		if($(this).is(':checked')){
@@ -155,17 +155,17 @@ $(document).ready(function()
 
 	$('.deletebutton_deletemarked').on("click",function(e){
 		var checkedboxes = $('.accreditationlist_table__Delete:checked');
-		var confirmation = confirm('Do you want to delete this(these) '+checkedboxes.length+' Brand(s)?');
+		var confirmation = confirm('Do you want to delete this(these) '+checkedboxes.length+' Report(s)?');
 		if(confirmation == true){
-			var brids = [];
+			var stids = [];
 			for(var i = 0 ; i < checkedboxes.length; i++)
 			{
-				brids.push(checkedboxes.get(i).getAttribute('value'));
+				stids.push(checkedboxes.get(i).getAttribute('value'));
 			}
 			var params = {
-				brids: brids,
+				stids: stids,
 			};
-			post('/report_Delete',params,"get");
+			post('store_dbmanagement_Delete',params,"get");
 		}
 		else {
 			e.preventDefault();

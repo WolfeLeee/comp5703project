@@ -298,7 +298,7 @@ module.exports.insertnewStore = async function(req,res,next)
         }
         else
         {
-            res.redirect('/');
+            res.redirect('/detailstorePage?storeid=' + store._id);
         }
     })
 }
@@ -1423,11 +1423,11 @@ module.exports.StoredatabaseManagement = function(req,res,next)
                     var sortOrder = 1;
                     if (new String(sortquery).toLowerCase().valueOf() == new String("Store1").toLowerCase().valueOf()) {
                         sortString = {
-                            "$sort": {Brand_Name: 1}
+                            "$sort": {storeName: 1}
                         };
                     } else if (new String(sortquery).toLowerCase().valueOf() == new String("Store1m").toLowerCase().valueOf()) {
                         sortString = {
-                            "$sort": {Brand_Name: -1}
+                            "$sort": {storeName: -1}
                         };
                     } else if (new String(sortquery).toLowerCase().valueOf() == new String("Address1").toLowerCase().valueOf()) {
                         sortString = {
@@ -1439,11 +1439,11 @@ module.exports.StoredatabaseManagement = function(req,res,next)
                         };
                     } else if (new String(sortquery).toLowerCase().valueOf() == new String("BrandCount1").toLowerCase().valueOf()) {
                         sortString = {
-                            "$sort": {BrandCount: 1}
+                            "$sort": {BrandCount: -1}
                         };
                     } else if (new String(sortquery).toLowerCase().valueOf() == new String("BrandCount1m").toLowerCase().valueOf()) {
                         sortString = {
-                            "$sort": {BrandCount: -1}
+                            "$sort": {BrandCount: 1}
                         };
                     }
                     var projection = [{
@@ -1455,7 +1455,7 @@ module.exports.StoredatabaseManagement = function(req,res,next)
                         }
                     }];
                     if (sortString !== "") {
-                        project.push(sortString);
+                        projection.push(sortString);
                     }
                     Store.aggregate(projection,
                         function (errStore, stores) {
@@ -1501,6 +1501,34 @@ module.exports.StoredatabaseManagement = function(req,res,next)
             }
         })
 };
+
+module.exports.StoredatabaseManagement_Delete = function(req,res,next)
+{
+    var stids = req.query.stids.split(',');
+    User.findById(req.session.userId)
+        .exec(function(errorUser,user){
+            if (errorUser) {
+                return next(errorUser);
+            } else {
+                if (user === null) {
+                    res.redirect('/');
+                } else {
+                    Store.remove({_id:{$in:stids}})
+                        .exec(function(errStore)
+                        {
+                            if(errStore)
+                            {
+                                return next(errStore);
+                            }
+                            else
+                            {
+                                res.redirect('/store_dbmanagement');
+                            }
+                        });
+                }
+            }
+        })
+}
 
 
 module.exports.databaseManagement = function(req, res, next)
@@ -1841,6 +1869,26 @@ module.exports.GetAllBrand = async function(req, res, next)
             else
             {
                 res.json(Product);
+            }
+        })
+}
+
+module.exports.GetImage = async function(req,res,next)
+{
+    User.findById(req.session.userId)
+        .exec(function(errorUser,user){
+            if (errorUser) {
+                return next(errorUser);
+            } else {
+                if (user === null) {
+                    res.redirect('/');
+                } else {
+                    let imageid = req.query.imageid;
+                    let imagepath = 'public/uploads/' + imageid+".jpg";
+                    let image = fs.readFileSync(imagepath);
+                    // let mime = fileType(image).mime;
+                    res.end(image,'binary');
+                }
             }
         })
 }

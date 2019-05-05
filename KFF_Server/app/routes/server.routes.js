@@ -27,7 +27,7 @@ router.get('/dbmanagement_Delete', controller.databaseManagement_Delete);
 
 // Store dbmanagement view
 router.get('/store_dbmanagement', controller.StoredatabaseManagement);
-// router.get('/store_dbmanagement_Delete', controller.StoredatabaseManagement_Delete);
+router.get('/store_dbmanagement_Delete', controller.StoredatabaseManagement_Delete);
 
 // Publish Brand and Store Data
 router.get('/publish/brand-data', controller.publishBrandData);
@@ -65,6 +65,7 @@ router.get('/android-app-statistic', controller.createStatistic);
 
 // Get data from the database
 router.get('/GetAllBrand',controller.GetAllBrand);
+router.get('/GetImage',controller.GetImage);
 router.get('/GetAllStore',controller.GetAllStore);
 router.get('/CompareStoreAddress',controller.CompareStoreAddress);
 
