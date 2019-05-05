@@ -69,7 +69,6 @@ public class LoginFragment extends Fragment {
         textRegister = (TextView) view.findViewById(R.id.textRegister);
         inputEmail = (EditText) view.findViewById(R.id.inputEmail);
         inputPwd = (EditText) view.findViewById(R.id.inputPwd);
-        btnFbLogin=view.findViewById( R.id.btnFbLogin );
 
         fb_loginButton=view.findViewById( R.id.btn_fblogin );
 
@@ -156,7 +155,7 @@ public class LoginFragment extends Fragment {
         }
 
         // set up
-        String ipAddress = "192.168.20.30";  //100.101.72.250 Here should be changed to your server IP
+        String ipAddress = "10.16.81.139";  //100.101.72.250 Here should be changed to your server IP
         String url = "http://" + ipAddress + ":3000/android-app-login?email=" + email + "&password=" + password;
 
         // send the request to the server for checking user login info
@@ -167,8 +166,10 @@ public class LoginFragment extends Fragment {
                 //This code is executed if the server responds, whether or not the response contains data.
                 //The String 'response' contains the server's response.
                 //You can test it by printing response.substring(0,500) to the screen.
+
+                String[] rep=response.split( "," );
                 loginProgressDialog.dismiss();
-                if (response.equals("Yes")) {
+                if (rep[0].equals("Yes")) {
                     Toast.makeText(getActivity(), "Login Successfully!", Toast.LENGTH_SHORT).show();
                     Log.d("Send query response:", response);
                     Intent intent = new Intent(getActivity(), MainActivity.class);
@@ -176,7 +177,7 @@ public class LoginFragment extends Fragment {
                     getActivity().finish();
                 } else {
                     Toast.makeText(getActivity(), "Wrong email or password!", Toast.LENGTH_SHORT).show();
-                    Log.d("Send query response:", response);
+                    Log.d("Send query response:", rep[0]);
                 }
             }
         },
@@ -234,8 +235,9 @@ public class LoginFragment extends Fragment {
                     RequestOptions requestOptions = new RequestOptions();
                     requestOptions.dontAnimate();
 
-                    loginFBUser( name,id );
+//                    loginFBUser( name,id );
 
+                    loginwithFBUser( name,id );
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -250,59 +252,32 @@ public class LoginFragment extends Fragment {
         request.executeAsync();
     }
 
-    private void loginFBUser(final String name,final String password) {
+
+
+    private void loginwithFBUser(final String name,final String password) {
 
         // set up
-        String ipAddress = "192.168.20.30";  //100.101.72.250 Here should be changed to your server IP
-        String url = "http://" + ipAddress + ":3000/android-app-login?email=" + password + "&password=" + password;
+        String ipAddress = "10.16.81.139";  //100.101.72.250 Here should be changed to your server IP
+        String url = "http://" + ipAddress + ":3000/android-app-login-register-fb?name="+name+"&facebookId=" + password;
 
         // send the request to the server for checking user login info
         RequestQueue ExampleRequestQueue = (RequestQueue) Volley.newRequestQueue(getActivity());
         StringRequest ExampleStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                //This code is executed if the server responds, whether or not the response contains data.
-                //The String 'response' contains the server's response.
-                //You can test it by printing response.substring(0,500) to the screen.
-                loginProgressDialog.dismiss();
-                if (response.equals("Yes")) {
+
+                if (response.equals("Yes")||response.equals( "Create" )) {
                     Toast.makeText(getActivity(), "Login Successfully!", Toast.LENGTH_SHORT).show();
                     Log.d("Send query response:", response);
+
+
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
                     getActivity().finish();
                 } else {
-//                    Toast.makeText(getActivity(), "Wrong email or password!", Toast.LENGTH_SHORT).show();
-
-
-
+                    Toast.makeText(getActivity(), "Login Failed!", Toast.LENGTH_SHORT).show();
                     Log.d("Send query response:", response);
-                    fragmentFBRegister=new FBRegisterFragment();
 
-//                    getActivity().getSupportFragmentManager().beginTransaction()
-//                            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-//                            .replace(R.id.fragment_container, fragmentFBRegister).commit();
-
-                    // remove toolbar again
-
-                    Intent intent = new Intent( getActivity(),  FacebookActivity.class );
-
-
-                    if (intent != null) {
-
-                        intent.putExtra( "fb_name", name );
-                        intent.putExtra( "fb_id", password );
-
-                        Log.d( "Face"  , name+"    "+password);
-
-//                    intent.putExtra("img", String.valueOf(c.getImg()));
-//                        startActivityForResult( intent, Login_REQUEST_CODE );
-
-                    }
-                    startActivity( intent );
-                    getActivity().finish();
-
-//
                 }
             }
         },

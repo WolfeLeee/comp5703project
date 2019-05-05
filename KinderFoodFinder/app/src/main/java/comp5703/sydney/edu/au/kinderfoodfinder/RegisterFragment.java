@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
@@ -44,6 +45,7 @@ public class RegisterFragment extends Fragment
     private RadioButton radioButton;
     private ImageView datePicker;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
+    private TextView logintv;
 
     private ProgressDialog registerProgressDialog;
 
@@ -60,7 +62,7 @@ public class RegisterFragment extends Fragment
         registerProgressDialog = new ProgressDialog(getActivity());
 
         toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setVisibility(View.VISIBLE);
+        toolbar.setVisibility(View.GONE);
 
         inputName = (EditText) view.findViewById(R.id.inputName);
 
@@ -76,6 +78,7 @@ public class RegisterFragment extends Fragment
         checkAgreement = (CheckBox) view.findViewById(R.id.checkAgreement);
 
         btnRegister = (Button) view.findViewById(R.id.btnRegister);
+        logintv=view.findViewById( R.id.textLogin );
 
         // testing only
 //        Toast.makeText(getActivity(), radioButton.getText(), Toast.LENGTH_SHORT).show();
@@ -135,21 +138,30 @@ public class RegisterFragment extends Fragment
             }
         });
 
-        // tool bar listener
-        toolbar.setNavigationOnClickListener(new View.OnClickListener()
-        {
+//        // tool bar listener
+//        toolbar.setNavigationOnClickListener(new View.OnClickListener()
+//        {
+//            @Override
+//            public void onClick(View v)
+//            {
+//                // go to login fragment
+//                getActivity().getSupportFragmentManager().beginTransaction()
+//                        .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+//                        .replace(R.id.fragment_container, fragmentLogin).commit();
+//
+//                // remove toolbar again
+//                toolbar.setVisibility(View.GONE);
+//            }
+//        });
+
+        logintv.setOnClickListener( new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
-                // go to login fragment
+            public void onClick(View v) {
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
                         .replace(R.id.fragment_container, fragmentLogin).commit();
-
-                // remove toolbar again
-                toolbar.setVisibility(View.GONE);
             }
-        });
+        } );
 
         return view;
     }
@@ -209,7 +221,7 @@ public class RegisterFragment extends Fragment
 
         // modify the user data to the server
         String url;
-        String ipAddress = "192.168.20.30";  //100.101.72.250 Here should be changed to your server IP
+        String ipAddress = "10.16.81.139";  //100.101.72.250 Here should be changed to your server IP
         if(!showBirthday)
             url = "http://" + ipAddress + ":3000/android-app-register?name=" + name + "&gender=" + genderModified + "&email=" +
                     email + "&password=" + pwd + "&birthday=" + birthdayModified;

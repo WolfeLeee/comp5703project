@@ -6,26 +6,15 @@
     android:layout_height="match_parent"
     android:padding="15dp">
 
-    <EditText
-        android:id="@+id/inputName1"
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="340dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp"
-        android:hint="Name..."
-        android:inputType="text"
-        android:maxLines="1" />
-
-    <EditText
-        android:id="@+id/inputEmailR1"
-        android:layout_width="340dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="5dp"
-        android:hint="Email..."
-        android:inputType="text"
-        android:maxLines="1" />
+        android:text="Complete Information"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_marginTop="100dp"
+        android:layout_gravity="center"/>
 
     <RadioGroup
         android:id="@+id/radioGender"
@@ -34,7 +23,7 @@
         android:layout_gravity="center"
         android:layout_marginBottom="5dp"
         android:orientation="horizontal"
-        android:layout_marginTop="200dp">
+        android:layout_marginTop="50dp">
 
         <TextView
             android:layout_width="wrap_content"

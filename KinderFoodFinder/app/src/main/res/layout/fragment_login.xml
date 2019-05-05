@@ -1,103 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="15dp">
-
-    <TextView
-        android:id="@+id/textRegister"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="REGISTER"
-        android:layout_gravity="right"
-        android:textSize="20dp"
-        android:textColor="@color/orange"
-        android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/logoImg"
-        android:layout_width="300dp"
-        android:layout_height="200dp"
-        android:contentDescription="logo"
+        android:layout_width="200dp"
+        android:layout_height="70dp"
         android:layout_gravity="center"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="30dp"
         android:layout_marginBottom="20dp"
+        android:contentDescription="logo"
         android:src="@drawable/logo" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"
+        android:text="SIGN IN"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/inputEmail"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:hint="Email..."
         android:layout_gravity="center"
-        android:maxLines="1"
-        android:inputType="text" />
+        android:layout_marginTop="10dp"
+        android:hint="Email..."
+        android:inputType="text"
+        android:maxLines="1" />
 
     <EditText
         android:id="@+id/inputPwd"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:hint="Password..."
         android:layout_gravity="center"
-        android:maxLines="1"
-        android:inputType="text" />
+        android:layout_marginTop="10dp"
+        android:hint="Password..."
+        android:inputType="text"
+        android:maxLines="1" />
 
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:background="@drawable/button_style"
+
         android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/button_style"
         android:text="Login" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Or you can login with the way below"
         android:layout_gravity="center"
-        android:textSize="15dp"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"
+        android:text="Or you can login with FaceBook"
+        android:textSize="15dp" />
 
-    <Button
-        android:id="@+id/btnFbLogin"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:background="@drawable/button_style"
-        android:layout_gravity="center"
-        android:text="Facebook (change later)" />
     <com.facebook.login.widget.LoginButton
         android:id="@+id/btn_fblogin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin" />
+        android:layout_marginTop="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="For developers:"
         android:layout_gravity="center"
-        android:textSize="15dp"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="30dp"
+        android:text="Don't have an account"
+        android:textSize="15dp" />
+
     <TextView
+        android:id="@+id/textRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Email: test"
         android:layout_gravity="center"
-        android:textSize="15dp"
-        android:layout_marginTop="10dp"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Password: test"
-        android:layout_gravity="center"
-        android:textSize="15dp"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginTop="10dp"
+        android:text="REGISTER A NEW ACCOUNT"
+        android:textColor="@color/orange"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
 </LinearLayout>
