@@ -65,7 +65,7 @@ public class StoreDatabase extends SQLiteOpenHelper {
         contentValues.put( StoreContract.StoreEntry.STREET,street );
         contentValues.put( StoreContract.StoreEntry.POSTCODE, postcode );
         contentValues.put( StoreContract.StoreEntry.STATE, state );
-        long result = db.insert( StoreContract.StoreEntry.TABLE_NAME,null,contentValues );
+        long result = db.insertWithOnConflict(TABLE_NAME,null,contentValues, SQLiteDatabase.CONFLICT_IGNORE);
         db.close();
 
         if(result == -1){
@@ -80,7 +80,7 @@ public class StoreDatabase extends SQLiteOpenHelper {
     public ArrayList<String> getAddress(String brand) {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor data = db.rawQuery(
-                "SELECT * FROM kkf_storetable WHERE BRAND_NAME LIKE ?", new String[]{brand});
+                "SELECT * FROM kkf_storetable WHERE BRAND_NAME LIKE ? ORDER BY BRAND_NAME ASC", new String[]{"%"+brand+"%"});
 
         ArrayList<String> LocationList = new ArrayList<>();
 
@@ -93,7 +93,7 @@ public class StoreDatabase extends SQLiteOpenHelper {
                 String postcode = data.getString(data.getColumnIndex("postcode"));
                 String state = data.getString(data.getColumnIndex("state"));
 
-                location = brand.toUpperCase() + ", " + store + ", " + street + ", " + postcode + ", " + state;
+                location = brandname.toUpperCase() + ", " + store + ", " + street + ", " + postcode + ", " + state;
                 LocationList.add(location);
 
             } while (data.moveToNext());
