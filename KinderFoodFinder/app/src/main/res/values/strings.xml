@@ -25,28 +25,110 @@
     </string>
     <!--AIzaSyCNRgBFgFR5CtaZV0iK0qpgFNYUGpNCdkA (from Penny)-->
 
-    <string name="layinghens">Laying Hens</string>
+   <string name="layinghens">Laying Hens</string>
     <string name="hens_best">
-        ✔No battery cage
-        ✔5-7 birds/m2 indoors\n
-        ✔Outdoor access with adequate shade / shelter, 1,000-2,500birds/ha density\n
-        ✔Nest boxes to lay eggs\n
-        ✔Perches for roosting\n
-        ✔High standard of litter for scratching, foraging / dust bathing\n
-        ✔No beak-trimming (exceptions allowed by certain accreditations)\n
-        ✔Regular on-farm assessments and enforcement\n
+        \n
+        √ No battery cage\n
+        √ 5-7 birds/m2 indoors\n
+        √ Outdoor access with adequate shade / shelter, 1,000-2,500birds/ha density\n
+        √ Nest boxes to lay eggs\n
+        √ Perches for roosting\n
+        √ High standard of litter for scratching, foraging / dust bathing\n
+        √ No beak-trimming (exceptions allowed by certain accreditations)\n
+        √ Regular on-farm assessments and enforcement\n
+    </string>
+    <string name="hens_good">
+        \n
+        √ No battery cages\n
+        × 7-9 birds/m2 indoors
+        × No outdoor access with adequate shade &amp; shelter\n
+        √ Nest boxes to lay eggs\n
+        √ Perches for roosting\n
+        √ High standard of litter for scratching, foraging &amp; dust bathing\n
+        × Use of beak-trimming\n
+        √ Regular on-farm assessments and enforcement\n
+    </string>
+    <string name="hens_avoid">
+        \n
+        × Use of battery cages\n
+        × 15 birds/m2 indoors\n
+        × No outdoor access with adequate shade &amp; shelter\n
+        × No nest boxes to lay eggs\n
+        × No perches for roosting\n
+        × No litter for scratching, foraging &amp; dust bathing\n
+        × Use of beak-trimming\n
+        × No regular on-farm assessments and enforcement\n
+
     </string>
     <string name="chickens">Broilers (Meat Chickens)</string>
     <string name="chickens_best">
         \n
-        ✔12-14 birds/m2indoors\n
-        ✔Outdoor access with adequate shade &amp;shelter\n
-        ✔Perches for roosting\n
-        ✔High standard of litter for scratching, foraging&amp; dust bathing\n
-        ✔No artificial light to speed up weight gain\n
-        ✗Use of fast-growing breeds\n
-        ✗Slaughtered at 35-70days old (Organic systems require minimum of 70 days)\n
-        ✔Regular on-farm assessments and enforcement
+        √ 12-14 birds/m2indoors\n
+        √ Outdoor access with adequate shade &amp;shelter\n
+        √ Perches for roosting\n
+        √ High standard of litter for scratching, foraging&amp; dust bathing\n
+        √ No artificial light to speed up weight gain\n
+        × Use of fast-growing breeds\n
+        × Slaughtered at 35-70days old (Organic systems require minimum of 70 days)\n
+        √ Regular on-farm assessments and enforcement\n
+    </string>
+    <string name="chickens_good">
+        \n
+        × 17 birds/m2 indoors\n
+        × No outdoor access with adequate shade &amp; shelter\n
+        √ Perches for roosting\n
+        √ High standard of litter for scratching, foraging &amp; dust bathing\n
+        × Use of artificial light to speed up weight gain\n
+        × Use of fast-growing breeds\n
+        × Slaughtered at 35-55 days old\n
+        √ Regular on-farm assessments and enforcement (RSPCA conducted 2-4 audits per year)\n
+    </string>
+    <string name="chickens_avoid">
+        \n
+        × 20 birds/m2 indoors\n
+        × No outdoor access with adequate shade &amp; shelter\n
+        × No perches for roosting\n
+        √ Litter for scratching, foraging &amp; dust bathing\n
+        × Use of artificial light to speed up weight gain\n
+        × Use of fast-growing breeds\n
+        ×Slaughtered at a minimum of 35 days old\n
+        × No regular on-farm assessments and enforcement\n
+    </string>
+    <string name="pigs">Pigs</string>
+    <string name="pigs_best">
+        \n
+        √ Outdoor access with adequate shade &amp; shelter\n
+        √ No confinement in sow stalls/ gestation stalls or farrowing crates\n
+        √ Enrichment material\n
+        √ No tail-docking for piglets\n
+        √ No teeth-clipping for piglets\n
+        √ No surgical castration for piglets (exceptions allowed by certain accreditations)\n
+        √ No early weaning for piglets\n
+        √ Regular on-farm assessments with enforceable compliance\n
+    </string>
+    <string name="pigs_good">
+        \n
+        √ Limited outdoor access with adequate shade &amp; shelter\n
+        √ No use of confinement in sow stalls/ gestation stalls or farrowing crates\n
+        √ Enrichment material\n
+        √ No tail-docking for piglets (exceptions allowed in APIQP OB and CSC where, if deemed necessary by a Veterinarian, it can be carried out by a suitably qualified person before the pigs are 7 days of age)\n
+        √ No teeth-clipping for piglets\n
+        √ No surgical castration for piglets (exceptions allowed by certain accreditations)\n
+        × Use of early weaning for piglets\n
+        √ Regular on-farm assessments and enforcement\n
+    </string>
+    <string name="pigs_avoid">
+        \n
+        × No outdoor access with adequate shade &amp; shelter\n
+        × Use of confinement in sow stalls/ gestation stalls or farrowing crates\n
+        × No enrichment material\n
+        × Use of tail-docking for piglets\n
+        × Use of teeth-clipping for piglets\n
+        × Use of surgical castration for piglets\n
+        × Use of early weaning for piglets\n
+        × No regular on-farm assessments and enforcement * APIQP does conduct regular independent audits\n
+
+
     </string>
 
     <string name="aim">Our Aim</string>
