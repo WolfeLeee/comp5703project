@@ -132,14 +132,20 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
         ArrayList<String> NearbyList = new ArrayList<>();
 
 
+        // Jump to Report Page
+
         add_report.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
+                Bundle bundle=new Bundle(  );
+                bundle.putInt( "key",1 );
+                fragmentreport.setArguments( bundle );
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.fragment_container, fragmentreport).commit();
+
             }
         });
 
