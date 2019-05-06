@@ -263,6 +263,7 @@ module.exports.goToFeature = function(req, res, next)
                 }
                 else
                 {
+
                     res.render('main.pug');
                 }
             }
@@ -2307,15 +2308,21 @@ module.exports.createStatistic = function(req, res, next)
         age: "20",
         count: "5"
     });
+    test.push({
+        brandId: "5ccd8e9b3e36263b52a8d093",
+        date: "01-05-2019",
+        gender: "Female",
+        age: "21",
+        count: "19"
+    });
     var testJson = JSON.stringify(test);
     // console.log(test);
     // console.log(testJson);
-    // res.redirect('/feature');
 
     // transfer json string back to json array
     var statisticData = JSON.parse(testJson);
-    console.log(statisticData);
-    console.log(statisticData[0].brandId);
+    // console.log(statisticData);
+    // console.log(statisticData[0].brandId);
     // statisticData[0].brandName = "CCC";
     // console.log(statisticData[0]);
 
@@ -2344,16 +2351,86 @@ module.exports.createStatistic = function(req, res, next)
             }
             // console.log(statisticData);
 
-            // create statistic documents into mongo db
-            Statistic.create(statisticData, function(errorCreate, statistics)
+            // check if the statistic data is existing in the database
+            Statistic.find({}, function(errorFindAllSta, statistics)
             {
-                if(errorCreate)
+                if(errorFindAllSta)
                 {
-                    res.send("Something went wrong while creating statistic documents!");
+                    res.send("Something went wrong while searching all statistic documents!");
+                }
+                else if(!statistics)
+                {
+                    // create statistic documents into mongo db
+                    Statistic.create(statisticData, function(errorCreate, result)
+                    {
+                        if(errorCreate)
+                        {
+                            res.send("Something went wrong while creating statistic documents!");
+                        }
+                        else
+                        {
+                            res.send("Server has got your statistic data!");
+                        }
+                    });
                 }
                 else
                 {
-                    res.send("Server has got your statistic data!");
+                    // check
+                    var markStatisticData = [];
+                    for(var i = 0; i < statisticData.length; i++)
+                    {
+                        var check = false;
+                        for(var j = 0; j < statistics.length; j++)
+                        {
+                            if(statisticData[i].brandId == statistics[j].brandId && statisticData[i].date == statistics[j].date
+                            && statisticData[i].gender == statistics[j].gender && statisticData[i].age == statistics[j].age)
+                            {
+                                var sumCount = (parseInt(statisticData[i].count) + parseInt(statistics[j].count)).toString();
+                                check = true;
+                                Statistic.findByIdAndUpdate(statistics[j]._id, {count: sumCount}, function(errorUpdate, updateRes)
+                                {
+                                    if(errorUpdate)
+                                    {
+                                        res.send("Something went wrong while updating statistic document!");
+                                    }
+                                });
+                            }
+                        }
+                        if(check)
+                        {
+                            markStatisticData.push(1);
+                        }
+                        else
+                        {
+                            markStatisticData.push(0);
+                        }
+                    }
+                    console.log(markStatisticData);
+
+                    // remove the elements as they exists in the database
+                    var newStatisticData = [];
+                    for(var i = 0; i < statisticData.length; i++)
+                    {
+                        if(markStatisticData[i] == 0)
+                        {
+                            newStatisticData.push(statisticData[i]);
+                        }
+                    }
+                    console.log(newStatisticData);
+
+                    // add the remain statistic data to the database since they are new
+                    Statistic.create(newStatisticData, function(errorCreate, result)
+                    {
+                        if(errorCreate)
+                        {
+                            res.send("Something went wrong while creating statistic documents!");
+                        }
+                        else
+                        {
+                            // res.redirect('/feature');
+                            res.send("Server has got your statistic data!");
+                        }
+                    });
                 }
             });
         }
