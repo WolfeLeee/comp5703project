@@ -1849,7 +1849,75 @@ module.exports.checkStoreVersion = function(req, res, next)
 
 module.exports.createStatistic = function(req, res, next)
 {
-    
+    // create a fake json string from android app
+    var test = [];
+    test.push({
+        brandId: "5ccd8e9b3e36263b52a8d091",
+        date: "06-05-2019",
+        gender: "Male",
+        age: "26",
+        count: "11"
+    });
+    test.push({
+        brandId: "5ccd8e9b3e36263b52a8d093",
+        date: "07-05-2019",
+        gender: "Male",
+        age: "20",
+        count: "5"
+    });
+    var testJson = JSON.stringify(test);
+    // console.log(test);
+    // console.log(testJson);
+    // res.redirect('/feature');
+
+    // transfer json string back to json array
+    var statisticData = JSON.parse(testJson);
+    console.log(statisticData);
+    console.log(statisticData[0].brandId);
+    // statisticData[0].brandName = "CCC";
+    // console.log(statisticData[0]);
+
+    // add the brand name depending on the brand id
+    Product.find({}, function(errorFindAll, brands)
+    {
+        if(errorFindAll)
+        {
+            res.send("Something went wrong while searching the products!");
+        }
+        else if(!brands)
+        {
+            res.send("Do not have any product!");
+        }
+        else
+        {
+            for(var i = 0; i < statisticData.length; i++)
+            {
+                for(var j = 0; j < brands.length; j++)
+                {
+                    if(statisticData[i].brandId == brands[j]._id.toString())
+                    {
+                        statisticData[i].brandName = brands[j].Brand_Name;
+                    }
+                }
+            }
+            // console.log(statisticData);
+
+            // create statistic documents into mongo db
+            Statistic.create(statisticData, function(errorCreate, statistics)
+            {
+                if(errorCreate)
+                {
+                    res.send("Something went wrong while creating statistic documents!");
+                }
+                else
+                {
+                    res.send("Server has got your statistic data!");
+                }
+            });
+        }
+    });
+
+
 };
 
 
