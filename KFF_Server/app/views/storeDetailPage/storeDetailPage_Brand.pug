@@ -48,7 +48,7 @@ body
         div(class="pagebody_mainbody")
             div(class="brand")
                 div(class="pagebody_mainbody__sectionheader__brand")
-                    p #{storename}
+                    p #{storename} - #{displayaddress.StreetAddress}, #{displayaddress.Postcode}, #{displayaddress.State}
                 div(class="pagebody_controlpanel")
                     - var id = storeid
                     a.pagebody_controlpanel_item(href="/detailstorePage?storeid=" + id) Store Summary
@@ -56,7 +56,7 @@ body
                     a.pagebody_controlpanel_item.selected_item(href="/detailstorePage_Brand?storeid=" + id) Brand
                 div(class="pagebody_mainbody__infodisplay")
                     - var id = storeid
-                    input.pagebody_mainbody__infodisplay__searchinput(type="search",title = id, placeholder ="Please enter the Brand . . .")
+                    input.pagebody_mainbody__infodisplay__searchinput(type="search",title = id,data-addressid= addressid, placeholder ="Please enter the Brand . . .")
                     div.pagebody_mainbody_infodisplay__searchsubmitbutton Search
                     div.pagebody_mainbody_infodisplay__deletebutton
                         label.deletebutton_button.deletebutton_selectall.button Select All
@@ -64,7 +64,7 @@ body
                             span.checkmark
                         - var id = storeid
                         div.deletebutton_button.deletebutton_addAccreditation(data-toggle="modal", data-target="#exampleModalScrollable")
-                        div.deletebutton_button.deletebutton_deletemarked(value=id)
+                        div.deletebutton_button.deletebutton_deletemarked(value=id, data-addressid = addressid)
                             svg(xmlns="http://www.w3.org/2000/svg",width="24",height="24",viewBox = "0 0 24 24")
                                 path(d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z")
 
@@ -89,7 +89,7 @@ body
                                         td.accreditationlist_table__item.accreditationlist_table__Accreditation
                                             label.button
                                                 - var brandid = brand[i]._id
-                                                input.accreditationlist_table__Delete(value = brandid, type='checkbox')
+                                                input.accreditationlist_table__Delete(value = displaybrandinstoreid[i], type='checkbox')
                                                 span.checkmark
                         if(pages > 0)
                             ul.pagination
@@ -141,7 +141,7 @@ body
                                     td.modal-body__store__sixty #{brandnotinstore[i].Brand_Name}
                                     td.modal-body__store__twenty #{brandnotinstore[i].Category}
                                     td.modal-body__store__twenty.modal-body__store__twenty__btn
-                                        input.modal-body__store__insertbrandtostore(type="button",data-storeid=id,data-brandid = brandnotinstore[i]._id,value="Add")
+                                        input.modal-body__store__insertbrandtostore(type="button",data-storeid=id,data-brandid = brandnotinstore[i]._id,data-addressid=addressid,value="Add")
                 div.modal-footer
                     button.btn.btn-default(type="button", data-dismiss = "modal") Close
 

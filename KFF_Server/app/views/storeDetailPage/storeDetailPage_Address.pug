@@ -12,7 +12,6 @@ head
     script(src="https://code.jquery.com/ui/1.12.1/jquery-ui.js")
     script(src="js/storeDetailPage/storeDetailPage_Address.js" type="text/javascript")
     link(rel='stylesheet',type='text/css',href='https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css')
-    script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
     script.
         window.jQuery || document.write('script(src="js/jquery.js")')
@@ -53,10 +52,9 @@ body
                     - var id = storeid
                     a.pagebody_controlpanel_item(href="/detailstorePage?storeid=" + id) Store Summary
                     a.pagebody_controlpanel_item.selected_item(href="/detailstorePage_Address?storeid=" + id) Address
-                    a.pagebody_controlpanel_item(href="/detailstorePage_Brand?storeid=" + id) Brand
                 div(class="pagebody_mainbody__infodisplay")
                     - var id = storeid
-                    input.pagebody_mainbody__infodisplay__searchinput(type="search",title = id, placeholder ="Please enter the Brand . . .")
+                    input.pagebody_mainbody__infodisplay__searchinput(type="search",title = id, placeholder ="Please enter the address . . .")
                     div.pagebody_mainbody_infodisplay__searchsubmitbutton Search
                     div.pagebody_mainbody_infodisplay__deletebutton
                         label.deletebutton_button.deletebutton_selectall.button Select All
@@ -77,6 +75,8 @@ body
                                     th.accreditationlist_table__item PostCode
                                     th.accreditationlist_table__item Lat
                                     th.accreditationlist_table__item Long
+                                    th.accreditationlist_table__item Number of brands
+                                    th.accreditationlist_table__item Add Brand
                                     th.accreditationlist_table__item
                             tfoot
                                 tr(role="row")
@@ -85,16 +85,21 @@ body
                                     th.accreditationlist_table__item PostCode
                                     th.accreditationlist_table__item Lat
                                     th.accreditationlist_table__item Long
+                                    th.accreditationlist_table__item Number of brands
+                                    th.accreditationlist_table__item Add Brand
                                     th.accreditationlist_table__item
                             tbody
                                 - for (var i =0 ; i < address.length ; i++)
                                     tr.accreditationlist_table_tablerow(role="row")
                                         - var id = storeid;
-                                        td.accreditationlist_table__item.accreditationlist_table__Accreditation #{address[i].StreetAddress}
+                                        td.accreditationlist_table__item.accreditationlist_table__Accreditation
+                                            a(href="/detailstorePage_Brand?addressid="+address[i]._id+"&storeid="+id) #{address[i].StreetAddress}
                                         td.accreditationlist_table__item.accreditationlist_table__Accreditation #{address[i].State}
                                         td.accreditationlist_table__item.accreditationlist_table__Accreditation #{address[i].Postcode}
                                         td.accreditationlist_table__item.accreditationlist_table__Accreditation #{address[i].Lat}
                                         td.accreditationlist_table__item.accreditationlist_table__Accreditation #{address[i].Long}
+                                        td.accreditationlist_table__item.accreditationlist_table__Accreditation #{countnumberofbrand[i]}
+                                        td.accreditationlist_table__item.accreditationlist_table__Accreditation.Addbrandtoaddressbutton(data-addressid=address[i]._id,data-storeid=storeid) Add brand
                                         td.accreditationlist_table__item.accreditationlist_table__Accreditation
                                             label.button
                                                 - var addid = address[i]._id
@@ -133,7 +138,7 @@ body
         div.modal-dialog.modal-dialog-scrollable.modal-lg(role="document")
             div.modal-content
                 div.modal-header(data-storeid=storeid)
-                    h4.modal-title Add address(es) to the store
+                    h4.modal-title Add address to the store
                     button.close(type='button', data-dismiss='modal') x
                 div.modal-body
                     div.modal-body__store__seventy.modal-body__store__header Street Address (*)
@@ -149,6 +154,25 @@ body
                 div.modal-footer
                     button.btn.btn-default.modal-adding__Store(type="button") Add
                     button.btn.btn-default(type="button", data-dismiss = "modal") Close
+
+    div.modal.fade#brandinsertModalScrollable(role="dialog",tabindex="-1",aria-hidden="true",)
+        div.modal-dialog.modal-dialog-scrollable.modal-lg(role="document")
+                div.modal-content
+                    div.modal-header
+                        h4.modal-title Add brand(s) to the store
+                        button.close(type='button', data-dismiss='modal') x
+                    div.modal-body
+                        input.modal-body__search(type="search",placeholder="Search for a brand...")
+                        table.modal-body__store
+                            thead
+                                tr(role="row")
+                                    th.modal-body__store__sixty Brand Name
+                                    th.modal-body__store__twenty Category
+                                    th.modal-body__store__twenty
+                            tbody#brandinsertModal-body
+                    div.modal-footer
+                        button.btn.btn-default(type="button", data-dismiss = "modal") Close
+
 
 
     div(class="feature_page_footer")

@@ -309,3 +309,37 @@ li{
     text-decoration:none;
     border: 1px solid #ddd;
 }
+
+.Addbrandtoaddressbutton{
+    color:blue;
+    cursor:pointer;
+}
+
+.Addbrandtoaddressbutton:active, .Addbrandtoaddressbutton:hover{
+    text-decoration: underline;
+}
+
+
+.modal-body__store__sixty{
+    display:inline-block;
+    width:55%;
+    margin-right:5%;
+}
+
+.modal-body__store__twenty{
+    display:inline-block;
+    width:20%;
+}
+
+.modal-body__store__twenty__btn
+{
+    text-align:right;
+}
+
+.modal-body *{
+    margin: 1% auto;
+}
+
+.hoverbutton:active,.hoverbutton:hover{
+    text-decoration: underline;
+}

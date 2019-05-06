@@ -20,6 +20,7 @@ router.get('/publish', controller.goToPublishPage);
 // Report dbmanagement view
 router.get('/report', controller.goToReportPage);
 router.get('/report_Delete', controller.ReportPage_Delete);
+// router.post('/report_Insert', controller.ReportPage_Insert);
 
 // Brand dbmanagement view
 router.get('/dbmanagement', controller.databaseManagement);
@@ -53,6 +54,7 @@ router.get('/detailstorePage_Brand__Insert', controller.StoreDetailPage_Brand__I
 router.get('/detailstorePage_Address',controller.StoreDetailPage_Address);
 router.get('/detailstorePage_Address__Delete',controller.StoreDetailPage_Address__Delete);
 router.post('/detailstorePage_Address__Insert',controller.StoreDetailPage_Address__Insert);
+router.get('/detailstorePage_Address__FindBrandNotInthis',controller.StoreDetailPage_Address__FindBrandNotInthis);
 
 // Retrieve messages from Android app
 router.get('/android-app-register', controller.registerAndroidAppUsers);

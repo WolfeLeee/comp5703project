@@ -48,7 +48,6 @@ body
                     - var id = storeid
                     a.pagebody_controlpanel_item.selected_item(href="/detailstorePage?storeid=" + id) Store Summary
                     a.pagebody_controlpanel_item(href="/detailstorePage_Address?storeid=" + id) Address
-                    a.pagebody_controlpanel_item(href="/detailstorePage_Brand?storeid=" + id) Brand
                 div(class="pagebody_mainbody__infodisplay")
                     span.pagebody_mainbody__infodisplay__span
                         div.infodisplay_settings_item Store name
@@ -60,7 +59,7 @@ body
                         div.infodisplay_settings_item.infodisplay_settings_right address(es) for this store
                     span.pagebody_mainbody__infodisplay__span__nonclickable
                         div.infodisplay_settings_item
-                        div.infodisplay_settings_item.infodisplay_settings_center #{productnumb}
+                        div.infodisplay_settings_item.infodisplay_settings_center #{countnumberofbrand}
                         div.infodisplay_settings_item.infodisplay_settings_right brand(s) in this store
                     span.pagebody_mainbody__infodisplay__span__submit
                         - var id = storeid
