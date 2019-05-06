@@ -177,7 +177,7 @@ $(document).ready(function()
      * Add a report to the database
      */
 
-    $('.addreport-button').on("click",function(){
+    $('.addreport-button').unbind().on("click",function(){
         var trow = $(this).parent().parent();
         var brandId = $(trow).children().eq(0).data('brandid');
         var storeName = $(trow).children().eq(1).text();
@@ -248,7 +248,6 @@ $(document).ready(function()
                 } else if (data.address[i].hasOwnProperty('city')) {
                     storeaddress += ", " + data.address[i].city;
                 }
-
                 var storepostcode = "" + data.address[i].postcode;
                 var storestate = "" + data.address[i].state_code;
                 var storelong = "" + data.geometry[i].lng;
@@ -325,7 +324,7 @@ $(document).ready(function()
             })
 
             //////////// Search address after make any changes to the store//
-            $('.pagebody_inputform__storesubmit').on('click',function(){
+            $('.pagebody_inputform__storesubmit').unbind().on('click',function(){
                 var storeName =  $('.pagebody_inputform__storenameinput').first().text();
                 var storePostCode =  $('.pagebody_inputform__storepostcodeinput').first().text();
                 var storeAddress = $('.pagebody_inputform__storeaddressinput').first().text()
@@ -336,7 +335,7 @@ $(document).ready(function()
 
             ///////////
 
-            $('.modal-body__store__twenty').on('click change', function () {
+            $('.modal-body__store__twenty').unbind().on('click change', function () {
                 $(".modal-body__store__twenty").parent().css('background-color', 'rgba(230,230,230,0.35)');
                 $(".modal-body__store__twenty").parent().removeClass('modal-body__store__selected');
                 $(".modal-body__store__twenty:checked").parent().css('background-color', 'rgba(120,120,255,0.35)');
@@ -359,7 +358,7 @@ $(document).ready(function()
                 }
             })
 
-            $('.modal-adding__Store').on('click', function (event) {
+            $('.modal-adding__Store').unbind().on('click', function (event) {
                 if ($('.modal-body__store__selected').length == 0) {
                     $('.pagebody_inputform__errordialog__store').empty();
                     $('.pagebody_inputform__errordialog__store').append("<b>" + "Please select an address" + "</b><br>");
@@ -380,12 +379,26 @@ $(document).ready(function()
                         identicalStoreName: identicalStoreName,
                         identicalStoreId: identicalStoreId
                     }
-                    post("/report_Insert", params, "POST");
+                    if(identicalStoreName)
+                    {
+                        var confirmidenticalStoreName = confirm("This store name has already been used. We will not create a new store, but add the new address and the new brand to the store. Do you agree with this?")
+                        if(confirmidenticalStoreName)
+                        {
+                            post("/report_Insert", params, "POST");
+                        }
+
+                    }
+                    else
+                    {
+                        post("/report_Insert", params, "POST");
+                    }
+
                 }
             })
 
 
         }
+        //////////////////////////////
     })
 
     function createRadioElement(name, checked) {

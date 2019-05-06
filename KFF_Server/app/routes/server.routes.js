@@ -20,7 +20,7 @@ router.get('/publish', controller.goToPublishPage);
 // Report dbmanagement view
 router.get('/report', controller.goToReportPage);
 router.get('/report_Delete', controller.ReportPage_Delete);
-// router.post('/report_Insert', controller.ReportPage_Insert);
+router.post('/report_Insert', controller.ReportPage_Insert);
 
 // Brand dbmanagement view
 router.get('/dbmanagement', controller.databaseManagement);

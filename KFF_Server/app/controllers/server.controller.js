@@ -778,140 +778,196 @@ module.exports.ReportPage_Delete = function(req,res,next)
         })
 };
 
-// module.exports.ReportPage_Insert = async function(req,res,next)
-// {
-//     User.findById(req.session.userId)
-//         .exec(function (errorUser, user) {
-//             if (errorUser) {
-//                 return next(errorUser);
-//             } else {
-//                 if (user === null) {
-//                     res.redirect('/');
-//                 }
-//                 else {
-//                     // Check whether the store name sent from the front-end is identical to any stores in the db
-//                     if(req.body.identicalStoreName)
-//                     {
-//                         Store.findById(req.body.identicalStoreId)
-//                             .exec(function(errStore,store)
-//                             {
-//                                 if(errStore){
-//                                     return next(errStore);
-//                                 }
-//                                 else
-//                                 {
-//                                     if(store == null)
-//                                     {
-//                                         res.redirect('/');
-//                                     }
-//                                     else
-//                                     {
-//                                         var identicalstoreaddress = false;
-//                                         var identicalbrand = false;
-//                                         for(var i = 0 ; i < store.Address.length ; i++)
-//                                         {
-//                                             if(new String(store.Address[i].StreetAddress).toLowerCase().valueOf() == new String(req.body.address).toLowerCase().valueOf())
-//                                             {
-//                                                 identicalstoreaddress = true;
-//                                             }
-//                                         }
-//                                         for(var i = 0 ; i < store.Product.length ; i++)
-//                                         {
-//                                             if(new String(store.Product[i].ProductId).toLowerCase().valueOf() == new String(req.body.brandid).toLowerCase().valueOf())
-//                                             {
-//                                                 identicalbrand = true;
-//                                             }
-//                                         }
-//                                         if(identicalstoreaddress)
-//                                         {
-//                                             if(identicalbrand)
-//                                             {
-//                                                 Product.findById(req.body.brandid)
-//                                                     .exec(function(errProduct,product)
-//                                                     {
-//                                                         if(errProduct)
-//                                                         {
-//                                                             return next(errProduct);
-//                                                         }
-//                                                         else
-//                                                         {
-//                                                             if(product == null)
-//                                                             {
-//                                                                 res.redirect('/')
-//                                                             }
-//                                                             else
-//                                                             {
-//                                                                 res.redirect('/detailstorePage_Brand?storeid'+req.body.identicalStoreId+"&searchstring="+product.Brand_Name);
-//                                                             }
-//                                                         }
-//                                                     })
-//                                             }
-//                                             else
-//                                             {
-//                                                 var productinstore = {
-//                                                     ProductId: req.body.brandid
-//                                                 }
-//                                                 Store.update({_id:req.body.identicalStoreId},{$push:{Product:productinstore}})
-//                                                     .exec(function(errStore)
-//                                                     {
-//                                                         if(errStore)
-//                                                         {
-//                                                             res.json({
-//                                                                 matched:"Could not insert new brand to the store, an error has occurred"
-//                                                             })
-//                                                         }
-//                                                         else
-//                                                         {
-//                                                             res.json({
-//                                                                 matched:"Successfully insert new brand to the store"
-//                                                             })
-//                                                         }
-//                                                     })
-//
-//                                             }
-//                                         }
-//                                         else
-//                                         {
-//                                             if(identicalbrand)
-//                                             {
-//                                                 var newaddress = {
-//                                                     StreetAddress: req.body.address,
-//                                                     State:req.body.state,
-//                                                     Postcode: req.body.postcode,
-//                                                     Lat: req.body.lat,
-//                                                     Long: req.body.long
-//                                                 }
-//                                                 Store.update({_id:req.body.identicalStoreId},{$push:{Address:newaddress}})
-//                                                     .exec(function(errStore)
-//                                                     {
-//                                                         if(errStore)
-//                                                         {
-//                                                             return next(errStore);
-//                                                         }
-//                                                         else
-//                                                         {
-//                                                             res.redirect('/detailstorePage_Address?storeid='+req.body.storeid);
-//                                                         }
-//                                                     })
-//                                             }
-//                                             else
-//                                             {
-//
-//                                             }
-//
-//                                         }
-//                                     }
-//                                 }
-//                             })
-//                     }
-//                     else
-//                     {
-//
-//                     }
-//                 }
-//             }
-//         })
-// }
+
+// Insert new Store/ Address/ brand in store to the database
+module.exports.ReportPage_Insert = async function(req,res,next)
+{
+    User.findById(req.session.userId)
+        .exec(function (errorUser, user) {
+            if (errorUser) {
+                return next(errorUser);
+            } else {
+                if (user === null) {
+                    res.redirect('/');
+                }
+                else {
+                    // Check if there are any identical store name
+                    if(req.body.identicalStoreName=="true")
+                    {
+                        Store.findById(req.body.identicalStoreId)
+                            .exec(function(errStore,store) {
+                                if (store == null) {
+                                    res.redirect('/');
+                                } else {
+                                var identicaladddress = false;
+                                var identicaladddressid;
+                                // Check whether they have the same address
+                                for (var i = 0; i < store.Address.length; i++) {
+                                    if (new String(req.body.address).toLowerCase().valueOf() == new String(store.Address[i].StreetAddress).toLowerCase().valueOf()) {
+                                        identicaladddress = true;
+                                        identicaladddressid = store.Address[i]._id;
+                                    }
+                                }
+                                if (identicaladddress) {
+                                    BrandinStore.find({storeid:req.body.identicalStoreId,addressid:identicaladddressid})
+                                        .exec(function(errBrandinStore,BrandinStores)
+                                        {
+                                            if(errBrandinStore)
+                                            {
+                                                return next(errBrandinStore);
+                                            }
+                                            else
+                                            {
+                                                if(BrandinStores == null)
+                                                {
+                                                    var newbrandinstore = {
+                                                        storeid: req.body.identicalStoreId,
+                                                        brandid: req.body.brandid,
+                                                        addressid: identicaladddressid
+                                                    }
+                                                    BrandinStore.create(newbrandinstore, async function (errBrandinStore, BrandinStore) {
+                                                        if (errBrandinStore) {
+                                                            return next(errBrandinStore);
+                                                        } else {
+                                                            if (BrandinStore == null) {
+                                                                res.redirect('/');
+                                                            } else {
+
+                                                                res.redirect('/detailstorePage_Brand?storeid=' + req.body.identicalStoreId + "&addressid=" + newbrandinstore.addressid);
+                                                            }
+                                                        }
+                                                    })
+                                                }
+                                                else
+                                                {
+                                                    var identicalbrand = false;
+                                                    for (var i = 0 ; i < BrandinStores.length ; i++)
+                                                    {
+                                                        if(new String(BrandinStores[i].brandid).valueOf() == new String(req.body.brandid).valueOf())
+                                                        {
+                                                            identicalbrand = true;
+                                                        }
+                                                    }
+                                                    if(identicalbrand)
+                                                    {
+                                                        res.redirect('/detailstorePage_Brand?storeid=' + req.body.identicalStoreId + "&addressid=" + identicaladddressid);
+                                                    }
+                                                    else
+                                                    {
+                                                        var newbrandinstore = {
+                                                            storeid: req.body.identicalStoreId,
+                                                            brandid: req.body.brandid,
+                                                            addressid: identicaladddressid
+                                                        }
+                                                        BrandinStore.create(newbrandinstore, async function (errBrandinStore, BrandinStore) {
+                                                            if (errBrandinStore) {
+                                                                return next(errBrandinStore);
+                                                            } else {
+                                                                if (BrandinStore == null) {
+                                                                    res.redirect('/');
+                                                                } else {
+
+                                                                    res.redirect('/detailstorePage_Brand?storeid=' + req.body.identicalStoreId + "&addressid=" + newbrandinstore.addressid);
+                                                                }
+                                                            }
+                                                        })
+                                                    }
+                                                }
+                                            }
+                                        })
+
+                                } else {
+                                    var newaddress = {
+                                        _id: new mongoose.mongo.ObjectId(),
+                                        StreetAddress: req.body.address,
+                                        State: req.body.state,
+                                        Postcode: req.body.postcode,
+                                        Lat: req.body.lat,
+                                        Long: req.body.long
+                                    }
+                                    Store.update({_id: req.body.identicalStoreId}, {$push: {Address: newaddress}})
+                                        .exec(function (errStore) {
+                                            if (errStore) {
+                                                return next(errStore);
+                                            } else {
+                                                var newbrandinstore = {
+                                                    storeid: req.body.identicalStoreId,
+                                                    brandid: req.body.brandid,
+                                                    addressid: newaddress._id
+                                                }
+                                                BrandinStore.create(newbrandinstore, async function (errBrandinStore, BrandinStore) {
+                                                    if (errBrandinStore) {
+                                                        return next(errBrandinStore);
+                                                    } else {
+                                                        if (BrandinStore == null) {
+                                                            res.redirect('/');
+                                                        } else {
+
+                                                            res.redirect('/detailstorePage_Brand?storeid=' + req.body.identicalStoreId + "&addressid=" + BrandinStore.addressid);
+                                                        }
+                                                    }
+                                                })
+                                            }
+                                        })
+                                }
+                            }
+                            })
+                    }
+                    else
+                    {
+                        var newstore = {
+                            storeName: req.body.name,
+                            Address: [],
+                        }
+                        var newaddress = {
+                            StreetAddress: req.body.address,
+                            Postcode: req.body.postcode,
+                            State: req.body.state,
+                            Lat: req.body.lat,
+                            Long: req.body.long
+                        }
+                        newstore.Address.push(newaddress);
+                        Store.create(newstore,async function(errStore,store)
+                        {
+                            if(errStore)
+                            {
+                                var err = new Error('Something wrong when insert new store!');
+                                err.status = 400;
+                                return res.send(err);
+                            }
+                            else
+                            {
+                                var newbrandinstore = {
+                                    storeid: store._id,
+                                    brandid: req.body.brandid,
+                                    addressid: store.Address[0]._id
+                                }
+                                BrandinStore.create(newbrandinstore, async function(errBrandinStore,BrandinStore)
+                                {
+                                    if(errBrandinStore)
+                                    {
+                                        return next(errBrandinStore);
+                                    }
+                                    else
+                                    {
+                                        if(BrandinStore == null)
+                                        {
+                                            res.redirect('/');
+                                        }
+                                        else
+                                        {
+
+                                            res.redirect('/detailstorePage_Brand?storeid='+newbrandinstore.storeid+"&addressid="+newbrandinstore.addressid);
+                                        }
+                                    }
+                                })
+                            }
+                        })
+                    }
+                }
+            }
+        })
+}
 
 module.exports.goToPublishPage = function(req, res, next)
 {
@@ -1573,7 +1629,6 @@ module.exports.StoreDetailPage_Brand = async function(req,res,next)
                                                 for (var i = ((perPage * page) - perPage); i < brandinstore.length && i < (perPage * (page + 1) - perPage); i++) {
                                                     if(searchstring !== undefined)
                                                     {
-                                                        // We are here
                                                         if(new String(brandinstore[i].Brand_Name.toLowerCase()).valueOf().includes(new String(searchstring).toLowerCase().valueOf()))
                                                         {
                                                             displaybrandlist.push(brandinstore[i]);
@@ -2109,7 +2164,7 @@ module.exports.loginAndroidAppUsers = function(req, res, next)
 };
 
 // to test around this:
-// http://<Server's IP>:3000/android-app-report-store?storeName=coles&streetAddress=broadway&state=NSW&postCode=2007&productId=5ccd6ad2334d7711a0ff5c12
+// http://<Server's IP>:3000/android-app-report-store?storeName=coles&streetAddress=broadway&state=NSW&postCode=2007&productId=5ccd6ad2334d7711a0ff5c20
 // the variable of query all you can modify to fit into yours
 module.exports.reportedStoreFromAndroidAppUsers = function(req, res, next)
 {
