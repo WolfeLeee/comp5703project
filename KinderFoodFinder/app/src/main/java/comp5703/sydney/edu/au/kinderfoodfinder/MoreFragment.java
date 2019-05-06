@@ -37,6 +37,7 @@ public class MoreFragment extends Fragment
     private Fragment fragmentfaqs;
     private Fragment fragmentreport;
     private Fragment fragmentglossary;
+    private Fragment fragmentreportaddress;
 
     private LoginButton fb_loginButton;
     private CallbackManager callbackManager;
@@ -53,6 +54,7 @@ public class MoreFragment extends Fragment
         fragmentfaqs = new FAQsFragment();
         fragmentreport = new ReportFragment();
         fragmentglossary = new GlossaryFragment();
+        fragmentreportaddress = new ReportAddressFragment();
 
         rating = view.findViewById(R.id.tv_rating);
         report = view.findViewById(R.id.tv_report);
@@ -81,7 +83,8 @@ public class MoreFragment extends Fragment
             {
                 Bundle bundle=new Bundle(  );
                 bundle.putInt( "key",2 );
-                fragmentreport.setArguments(  bundle);
+                fragmentreport.setArguments(bundle);
+                fragmentreportaddress.setArguments(bundle);
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.fragment_container, fragmentreport).commit();

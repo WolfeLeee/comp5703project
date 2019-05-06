@@ -37,9 +37,16 @@ public class ReportAddressFragment extends Fragment {
     private Button btn_submit;
     private Toolbar toolbar;
     private BottomNavigationView navigation;
-    private Fragment fragmentReport;
+    private Fragment fragmentReport, fragmentlocation, fragmentmore;
     private ProgressDialog reportProgressDialog;
     StoreDatabase storeDatabase;
+    int key;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate( savedInstanceState );
+        key = getArguments().getInt( "key" );
+    }
 
 
 
@@ -66,6 +73,8 @@ public class ReportAddressFragment extends Fragment {
         btn_submit = view.findViewById(R.id.btn_submit);
         
         storeDatabase = new StoreDatabase(getActivity());
+        fragmentlocation = new LocateFragment();
+        fragmentmore = new MoreFragment();
 
         // Receive data
         String brand = getArguments().getString("BRAND_KEY");
@@ -88,16 +97,23 @@ public class ReportAddressFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // go to login fragment
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                        .replace(R.id.fragment_container, fragmentReport).commit();
+                if(key==1){
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                            .replace(R.id.fragment_container,fragmentlocation ).commit();
+
+                }else if(key==2){
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                            .replace(R.id.fragment_container, fragmentmore).commit();
+
+                }
 
                 // remove toolbar again
                 toolbar.setVisibility(View.GONE);
 
                 // enable navigation bar again
                 navigation.setVisibility(View.VISIBLE);
-                toolbar.setVisibility( View.GONE );
             }
         });
 

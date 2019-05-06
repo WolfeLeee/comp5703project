@@ -75,8 +75,8 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
     private double latitude,longitude;
     private Location mLastLocation;
     private LocationRequest mLocationRequest;
-    private Marker mMarker;
-    private Fragment fragmentreport;
+    private Marker mMarker, NearbyMarker;
+    private Fragment fragmentreport, fragmentreportaddress;
 
     IGoogleAPIService mService;
 
@@ -128,6 +128,7 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
 
         fragmentreport = new ReportFragment();
         storedatabase = new StoreDatabase(getActivity());
+        fragmentreportaddress = new ReportAddressFragment();
 
         ArrayList<String> NearbyList = new ArrayList<>();
 
@@ -142,6 +143,7 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
                 Bundle bundle=new Bundle(  );
                 bundle.putInt( "key",1 );
                 fragmentreport.setArguments( bundle );
+                fragmentreportaddress.setArguments( bundle );
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.fragment_container, fragmentreport).commit();
@@ -157,6 +159,8 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
                 ArrayList<String> locationlist = storedatabase.getAddress(brandName);
                 List<Address> addressList = null;
                 ArrayList<String> NearbyList = new ArrayList<>();
+
+                mMap.clear();
 
                 for(int i = 1; i< locationlist.size(); i++){
 
@@ -178,7 +182,8 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
 
                             if(distance <= 2000){
 
-                                mMap.addMarker(new MarkerOptions().position(latLng).title(location));
+                                MarkerOptions markerOptions = new MarkerOptions().position(latLng).title(location);
+                                NearbyMarker =  mMap.addMarker(markerOptions);
                                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
                                 NearbyList.add(location);
 
@@ -189,6 +194,8 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
                                     @Override
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
+
+
                                     }
                                 });
 
@@ -196,6 +203,7 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
 
                         }
                     }
+
 
                 }
 
