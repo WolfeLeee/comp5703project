@@ -18,6 +18,16 @@ var AppFbUserSchema = new mongoose.Schema({
             type: String,
             required: true,
             unique: true
+        },
+    gender:
+        {
+            type: String,
+            required: true,
+        },
+    birthday:
+        {
+            type: String,
+            required: true,
         }
 });
 

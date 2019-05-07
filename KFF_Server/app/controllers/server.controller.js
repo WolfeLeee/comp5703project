@@ -2216,112 +2216,160 @@ module.exports.reportedStoreFromAndroidAppUsers = function(req, res, next)
 
 module.exports.loginRegisterAndroidAppFbUsers = function(req, res, next)
 {
-    // set up and receive the user info
-    var facebookId = req.query.facebookId;
-    console.log(facebookId);
+    // var queryStr = JSON.parse("[" + JSON.stringify(req.query) + "]");
+    // console.log(queryStr.length);
 
-    AppFbUser.findOne({facebookId: facebookId}, function (error, user)
+    if(req.query.name == null)
     {
-        if (error)
-        {
-            res.send("Error");
-        }
-        else if(!user)
-        {
-            // testing
-            var name = req.query.name;
-            console.log(name);
+        // set up and receive the user info
+        var facebookId = req.query.facebookId;
+        console.log(facebookId);
 
-            // set up and receive the user info
-            var appFbUserData = {
-                name: req.query.name,
-                facebookId: req.query.facebookId
-            };
-
-            // create the user account
-            AppFbUser.create(appFbUserData, function (error, appFbUser)
+        AppFbUser.findOne({facebookId: facebookId}, function (error, user)
+        {
+            if (error)
             {
-                if (error)
-                {
-                    var err = new Error('User info is invalid!');
-                    err.status = 400;
-                    return next(err);
-                }
-                else
-                {
-                    res.send("Create");
-                }
-            });
-        }
-        else
+                res.send("Error");
+            }
+            else if(!user)
+            {
+                res.send("No");
+            }
+            else
+            {
+                res.send("Yes");
+            }
+        });
+    }
+    else
+    {
+        // set up and receive the user info
+        var facebookId = req.query.facebookId;
+        console.log(facebookId);
+
+        AppFbUser.findOne({facebookId: facebookId}, function (error, user)
         {
-            res.send("Yes");
-        }
-    });
+            if (error)
+            {
+                res.send("Error");
+            }
+            else if(!user)
+            {
+                // testing
+                var name = req.query.name;
+                console.log(name);
+
+                // set up and receive the user info
+                var appFbUserData = {
+                    name: req.query.name,
+                    facebookId: req.query.facebookId,
+                    gender: req.query.gender,
+                    birthday: req.query.birthday
+                };
+
+                // create the user account
+                AppFbUser.create(appFbUserData, function (error, appFbUser)
+                {
+                    if (error)
+                    {
+                        var err = new Error('User info is invalid!');
+                        err.status = 400;
+                        return next(err);
+                    }
+                    else
+                    {
+                        res.send("Create");
+                    }
+                });
+            }
+            else
+            {
+                res.send("Yes");
+            }
+        });
+    }
 };
 
 module.exports.checkBrandVersion = function(req, res, next)
 {
-    Version.findOne({type: "brand"}, function(error, version)
+    Version.findOne({type: "brand"}, function(errorBrand, versionBrand)
     {
-        if(error)
+        if(errorBrand)
         {
-            res.send("Error");
+            res.send("Error while finding brand!");
         }
         else
         {
-            res.send(version.version);
+            Version.findOne({type: "store"}, function(errorStore, versionStore)
+            {
+                if(errorStore)
+                {
+                    res.send("Error while finding store!");
+                }
+                else
+                {
+                    res.send(versionBrand.version + "," + versionStore.version);
+                }
+            });
         }
     });
 };
 
-module.exports.checkStoreVersion = function(req, res, next)
-{
-    Version.findOne({type: "store"}, function(error, version)
-    {
-        if(error)
-        {
-            res.send("Error");
-        }
-        else
-        {
-            res.send(version.version);
-        }
-    });
-};
+// module.exports.checkStoreVersion = function(req, res, next)
+// {
+//     Version.findOne({type: "store"}, function(error, version)
+//     {
+//         if(error)
+//         {
+//             res.send("Error");
+//         }
+//         else
+//         {
+//             res.send(version.version);
+//         }
+//     });
+// };
 
 module.exports.createStatistic = function(req, res, next)
 {
+    // var queryStr = JSON.parse("[" + JSON.stringify(req.query) + "]");
+    // console.log(queryStr);
+    // if(req.query.name == null)
+    //     console.log("HI");
+    // else
+    //     console.log(("NONO"));
+
     // create a fake json string from android app
-    var test = [];
-    test.push({
-        brandId: "5ccd8e9b3e36263b52a8d091",
-        date: "06-05-2019",
-        gender: "Male",
-        age: "26",
-        count: "11"
-    });
-    test.push({
-        brandId: "5ccd8e9b3e36263b52a8d093",
-        date: "07-05-2019",
-        gender: "Male",
-        age: "20",
-        count: "5"
-    });
-    test.push({
-        brandId: "5ccd8e9b3e36263b52a8d093",
-        date: "01-05-2019",
-        gender: "Female",
-        age: "21",
-        count: "19"
-    });
-    var testJson = JSON.stringify(test);
-    // console.log(test);
+    // var test = [];
+    // test.push({
+    //     brandId: "5ccd8e9b3e36263b52a8d091",
+    //     date: "06-05-2019",
+    //     gender: "Male",
+    //     age: "26",
+    //     count: "11"
+    // });
+    // test.push({
+    //     brandId: "5ccd8e9b3e36263b52a8d093",
+    //     date: "07-05-2019",
+    //     gender: "Male",
+    //     age: "20",
+    //     count: "5"
+    // });
+    // test.push({
+    //     brandId: "5ccd8e9b3e36263b52a8d093",
+    //     date: "01-05-2019",
+    //     gender: "Female",
+    //     age: "21",
+    //     count: "19"
+    // });
+    // var testJson = JSON.stringify(test);
+    // var testJson = JSON.stringify(req.query.statistic);
+    // console.log(req.query.statistic);
     // console.log(testJson);
 
     // transfer json string back to json array
-    var statisticData = JSON.parse(testJson);
-    // console.log(statisticData);
+    var statisticData = JSON.parse(req.query.statistic);
+    console.log(statisticData);
     // console.log(statisticData[0].brandId);
     // statisticData[0].brandName = "CCC";
     // console.log(statisticData[0]);
@@ -2369,7 +2417,7 @@ module.exports.createStatistic = function(req, res, next)
                         }
                         else
                         {
-                            res.send("Server has got your statistic data!");
+                            res.send("Yes");
                         }
                     });
                 }
@@ -2405,7 +2453,7 @@ module.exports.createStatistic = function(req, res, next)
                             markStatisticData.push(0);
                         }
                     }
-                    console.log(markStatisticData);
+                    // console.log(markStatisticData);
 
                     // remove the elements as they exists in the database
                     var newStatisticData = [];
@@ -2416,7 +2464,7 @@ module.exports.createStatistic = function(req, res, next)
                             newStatisticData.push(statisticData[i]);
                         }
                     }
-                    console.log(newStatisticData);
+                    // console.log(newStatisticData);
 
                     // add the remain statistic data to the database since they are new
                     Statistic.create(newStatisticData, function(errorCreate, result)
@@ -2428,7 +2476,7 @@ module.exports.createStatistic = function(req, res, next)
                         else
                         {
                             // res.redirect('/feature');
-                            res.send("Server has got your statistic data!");
+                            res.send("Yes");
                         }
                     });
                 }
@@ -2446,6 +2494,7 @@ module.exports.createStatistic = function(req, res, next)
 
 module.exports.GetAllBrand = async function(req, res, next)
 {
+    console.log("App is getting brands!");
     Product.find()
         .exec(function(errProduct,Product)
         {
@@ -2482,16 +2531,17 @@ module.exports.GetImage = async function(req,res,next)
 
 module.exports.GetAllStore = async function(req, res, next)
 {
+    console.log("App is getting stores!");
     Store.find()
-        .exec(function(errProduct,Product)
+        .exec(function(errStore, Store)
         {
-            if(errProduct)
+            if(errStore)
             {
-                return next(errProduct);
+                return next(errStore);
             }
             else
             {
-                res.json(Product);
+                res.json(Store);
             }
         })
 }
