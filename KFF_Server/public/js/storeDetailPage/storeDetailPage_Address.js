@@ -1,4 +1,85 @@
 $(document).ready(function() {
+    // Function to enter brand data to an address
+    $('.Addbrandtoaddressbutton').unbind().on('click',function(){
+        var addressid = $(this).data("addressid");
+        var storeid = $(this).data("storeid");
+        var jqxhr = $.get("/detailstorePage_Address__FindBrandNotInthis?addressid=" + addressid+"&storeid="+storeid)
+            .done(function (data) {
+                BrandListcallback(data,storeid,addressid);
+            })
+            .fail(function (jqXHR) {
+                console.log(jqXHR.status);
+            });
+    })
+
+    function BrandListcallback(data,storeid,addressid)
+    {
+        var brandinsertmodal = $('#brandinsertModal-body');
+        brandinsertmodal.empty();
+        for( var i = 0 ; i< data.length ; i++)
+        {
+            var trow = document.createElement("tr");
+            trow.className = "modal-body__store__brandnotinstorelist";
+            var brandname = document.createElement("th");
+            var brandcategory = document.createElement("th");
+            var addbrand = document.createElement('th');
+            var addbutton = document.createElement('div');
+            brandname.className = "modal-body__store__sixty";
+            brandname.innerHTML = data[i].Brand_Name;
+            brandcategory.innerHTML = data[i].Category;
+            brandname.style.fontWeight = "400";
+            brandcategory.style.fontWeight = "400";
+            addbutton.style.fontWeight = "400";
+            brandcategory.className = "modal-body__store__twenty";
+            addbrand.className = "modal-body__store__twenty";
+            addbutton.className ="modal-body__store__insertbrandtostore hoverbutton";
+            addbutton.innerHTML = "Add";
+            addbutton.style.height = "100%";
+            addbutton.style.width = "50%";
+            addbutton.style.cursor = "pointer";
+            addbutton.style.color = "blue";
+            addbutton.setAttribute("data-brandid",data[i]._id);
+            addbutton.setAttribute("data-storeid",storeid);
+            addbutton.setAttribute("data-addressid",addressid);
+            addbutton.setAttribute("value","Add");
+
+            addbrand.append(addbutton);
+            trow.append(brandname);
+            trow.append(brandcategory);
+            trow.append(addbrand);
+            brandinsertmodal.append(trow);
+        }
+        $('#brandinsertModalScrollable').modal("show");
+        $('.modal-body__store__insertbrandtostore').unbind().on('click',function(){
+            var brandid = $(this).data('brandid');
+            var storeid = $(this).data('storeid');
+            var addressid = $(this).data('addressid');
+            var jqxhr = $.get("/detailstorePage_Brand__Insert?brandid="+brandid+"&storeid="+storeid+"&addressid="+addressid)
+                .done(function(data){
+                    alert(data.matched);
+                })
+                .fail(function(jqXHR) {
+                    console.log(jqXHR.status);
+                });
+        })
+
+        $('.modal-body__search').on('input',function(){
+            var brandnotinstore = $('.modal-body__store__brandnotinstorelist');
+            for (var i = 0; i < brandnotinstore.length ; i++)
+            {
+                if($(brandnotinstore[i]).children().eq(0).text().toLowerCase().includes($(this).val().toLowerCase()))
+                {
+                    $(brandnotinstore[i]).css('display',"block");
+                }
+                else
+                {
+                    $(brandnotinstore[i]).css('display',"none");
+                }
+            }
+        })
+
+    }
+
         $('.modal-body__search').on('input', function () {
             var brandnotinstore = $('.modal-body__store__brandnotinstorelist');
             for (var i = 0; i < brandnotinstore.length; i++) {
@@ -8,18 +89,6 @@ $(document).ready(function() {
                     $(brandnotinstore[i]).css('display', "none");
                 }
             }
-        })
-
-        $('.modal-body__store__insertbrandtostore').on("click", function () {
-            var brandid = $(this).data('brandid');
-            var storeid = $(this).data('storeid');
-            var jqxhr = $.get("/detailstorePage_Brand__Insert?brandid=" + brandid + "&storeid=" + storeid)
-                .done(function (data) {
-                    alert(data.matched);
-                })
-                .fail(function (jqXHR) {
-                    console.log(jqXHR.status);
-                })
         })
         /**
          * When a checkbox is checked the delete button will appear
@@ -190,10 +259,6 @@ $(document).ready(function() {
 
         /**
          * Function to insert new address to the store
-         */
-
-        /**
-         *
          */
 
         $('.pagebody_inputform__storesubmit').on("click", function (event) {
@@ -386,9 +451,6 @@ $(document).ready(function() {
                 return radioInput;
             }
 
-            /**
-             *
-             */
 
 
         })

@@ -5,6 +5,7 @@ var AppUser = require("../models/appUser");
 var AppFbUser = require("../models/appFbUser");
 var Store = require("../models/store");
 var ReportedStore = require("../models/reportedStore");
+var BrandinStore = require("../models/brandinstore");
 var Statistic = require("../models/statistic");
 var Version = require("../models/version");
 
@@ -262,6 +263,7 @@ module.exports.goToFeature = function(req, res, next)
                 }
                 else
                 {
+
                     res.render('main.pug');
                 }
             }
@@ -569,6 +571,7 @@ module.exports.getLocation = async function (req,res,next)
         }
         else
         {
+
             json = JSON.parse(data);
             var senddata = [];
             var sendgeo = []
@@ -775,6 +778,252 @@ module.exports.ReportPage_Delete = function(req,res,next)
             }
         })
 };
+
+
+// Insert new Store/ Address/ brand in store to the database
+module.exports.ReportPage_Insert = async function(req,res,next)
+{
+    User.findById(req.session.userId)
+        .exec(function (errorUser, user) {
+            if (errorUser) {
+                return next(errorUser);
+            } else {
+                if (user === null) {
+                    res.redirect('/');
+                }
+                else {
+                    // Check if there are any identical store name
+                    if(req.body.identicalStoreName=="true")
+                    {
+                        Store.findById(req.body.identicalStoreId)
+                            .exec(function(errStore,store) {
+                                if (store == null) {
+                                    res.redirect('/');
+                                } else {
+                                var identicaladddress = false;
+                                var identicaladddressid;
+                                // Check whether they have the same address
+                                for (var i = 0; i < store.Address.length; i++) {
+                                    if (new String(req.body.address).toLowerCase().valueOf() == new String(store.Address[i].StreetAddress).toLowerCase().valueOf()) {
+                                        identicaladddress = true;
+                                        identicaladddressid = store.Address[i]._id;
+                                    }
+                                }
+                                if (identicaladddress) {
+                                    BrandinStore.find({storeid:req.body.identicalStoreId,addressid:identicaladddressid})
+                                        .exec(function(errBrandinStore,BrandinStores)
+                                        {
+                                            if(errBrandinStore)
+                                            {
+                                                return next(errBrandinStore);
+                                            }
+                                            else
+                                            {
+                                                if(BrandinStores == null)
+                                                {
+                                                    var newbrandinstore = {
+                                                        storeid: req.body.identicalStoreId,
+                                                        brandid: req.body.brandid,
+                                                        addressid: identicaladddressid
+                                                    }
+                                                    BrandinStore.create(newbrandinstore, async function (errBrandinStore, BrandinStore) {
+                                                        if (errBrandinStore) {
+                                                            return next(errBrandinStore);
+                                                        } else {
+                                                            if (BrandinStore == null) {
+                                                                res.redirect('/');
+                                                            } else {
+                                                                ReportedStore.remove({_id:req.body.reportid})
+                                                                    .exec(function(errReportedStore)
+                                                                    {
+                                                                        if(errReportedStore)
+                                                                        {
+                                                                            return next(errReportedStore);
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            res.redirect('/detailstorePage_Brand?storeid=' + req.body.identicalStoreId + "&addressid=" + newbrandinstore.addressid);
+                                                                        }
+                                                                    })
+                                                            }
+                                                        }
+                                                    })
+                                                }
+                                                else
+                                                {
+                                                    var identicalbrand = false;
+                                                    for (var i = 0 ; i < BrandinStores.length ; i++)
+                                                    {
+                                                        if(new String(BrandinStores[i].brandid).valueOf() == new String(req.body.brandid).valueOf())
+                                                        {
+                                                            identicalbrand = true;
+                                                        }
+                                                    }
+                                                    if(identicalbrand)
+                                                    {
+                                                        ReportedStore.remove({_id:req.body.reportid})
+                                                            .exec(function(errReportedStore)
+                                                            {
+                                                                if(errReportedStore)
+                                                                {
+                                                                    return next(errReportedStore);
+                                                                }
+                                                                else
+                                                                {
+                                                                    res.redirect('/detailstorePage_Brand?storeid=' + req.body.identicalStoreId + "&addressid=" + identicaladddressid);
+                                                                }
+                                                            })
+                                                    }
+                                                    else
+                                                    {
+                                                        var newbrandinstore = {
+                                                            storeid: req.body.identicalStoreId,
+                                                            brandid: req.body.brandid,
+                                                            addressid: identicaladddressid
+                                                        }
+                                                        BrandinStore.create(newbrandinstore, async function (errBrandinStore, BrandinStore) {
+                                                            if (errBrandinStore) {
+                                                                return next(errBrandinStore);
+                                                            } else {
+                                                                if (BrandinStore == null) {
+                                                                    res.redirect('/');
+                                                                } else {
+                                                                    ReportedStore.remove({_id:req.body.reportid})
+                                                                        .exec(function(errReportedStore)
+                                                                        {
+                                                                            if(errReportedStore)
+                                                                            {
+                                                                                return next(errReportedStore);
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                res.redirect('/detailstorePage_Brand?storeid=' + req.body.identicalStoreId + "&addressid=" + newbrandinstore.addressid);
+                                                                            }
+                                                                        })
+                                                                }
+                                                            }
+                                                        })
+                                                    }
+                                                }
+                                            }
+                                        })
+
+                                } else {
+                                    var newaddress = {
+                                        _id: new mongoose.mongo.ObjectId(),
+                                        StreetAddress: req.body.address,
+                                        State: req.body.state,
+                                        Postcode: req.body.postcode,
+                                        Lat: req.body.lat,
+                                        Long: req.body.long
+                                    }
+                                    Store.update({_id: req.body.identicalStoreId}, {$push: {Address: newaddress}})
+                                        .exec(function (errStore) {
+                                            if (errStore) {
+                                                return next(errStore);
+                                            } else {
+                                                var newbrandinstore = {
+                                                    storeid: req.body.identicalStoreId,
+                                                    brandid: req.body.brandid,
+                                                    addressid: newaddress._id
+                                                }
+                                                BrandinStore.create(newbrandinstore, async function (errBrandinStore, BrandinStore) {
+                                                    if (errBrandinStore) {
+                                                        return next(errBrandinStore);
+                                                    } else {
+                                                        if (BrandinStore == null) {
+                                                            res.redirect('/');
+                                                        } else {
+                                                            ReportedStore.remove({_id:req.body.reportid})
+                                                                .exec(function(errReportedStore)
+                                                                {
+                                                                    if(errReportedStore)
+                                                                    {
+                                                                        return next(errReportedStore);
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        res.redirect('/detailstorePage_Brand?storeid=' + req.body.identicalStoreId + "&addressid=" + BrandinStore.addressid);
+                                                                    }
+                                                                })
+
+
+                                                        }
+                                                    }
+                                                })
+                                            }
+                                        })
+                                }
+                            }
+                            })
+                    }
+                    else
+                    {
+                        var newstore = {
+                            storeName: req.body.name,
+                            Address: [],
+                        }
+                        var newaddress = {
+                            StreetAddress: req.body.address,
+                            Postcode: req.body.postcode,
+                            State: req.body.state,
+                            Lat: req.body.lat,
+                            Long: req.body.long
+                        }
+                        newstore.Address.push(newaddress);
+                        Store.create(newstore,async function(errStore,store)
+                        {
+                            if(errStore)
+                            {
+                                var err = new Error('Something wrong when insert new store!');
+                                err.status = 400;
+                                return res.send(err);
+                            }
+                            else
+                            {
+                                var newbrandinstore = {
+                                    storeid: store._id,
+                                    brandid: req.body.brandid,
+                                    addressid: store.Address[0]._id
+                                }
+                                BrandinStore.create(newbrandinstore, async function(errBrandinStore,BrandinStore)
+                                {
+                                    if(errBrandinStore)
+                                    {
+                                        return next(errBrandinStore);
+                                    }
+                                    else
+                                    {
+                                        if(BrandinStore == null)
+                                        {
+                                            res.redirect('/');
+                                        }
+                                        else
+                                        {
+                                            ReportedStore.remove({_id:req.body.reportid})
+                                                .exec(function(errReportedStore)
+                                                {
+                                                    if(errReportedStore)
+                                                    {
+                                                        return next(errReportedStore);
+                                                    }
+                                                    else
+                                                    {
+                                                        res.redirect('/detailstorePage_Brand?storeid='+newbrandinstore.storeid+"&addressid="+newbrandinstore.addressid);
+                                                    }
+                                                })
+
+
+                                        }
+                                    }
+                                })
+                            }
+                        })
+                    }
+                }
+            }
+        })
+}
 
 module.exports.goToPublishPage = function(req, res, next)
 {
@@ -1092,6 +1341,7 @@ module.exports.ProductDetailPage_Accreditation__Insert = async function(req,res,
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Store Detail Page which enables the store to be udpated *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 module.exports.goToStoreDetailPage = async function(req,res,next)
 {
     Store.findById(req.query.storeid)
@@ -1109,12 +1359,41 @@ module.exports.goToStoreDetailPage = async function(req,res,next)
               }
               else
               {
-                  res.render('storeDetailPage/storeDetailPage.pug', {
-                      storeid: store._id,
-                      storename: store.storeName,
-                      addressnumb: store.Address.length,
-                      productnumb: store.Product.length
+                  BrandinStore.find({storeid:req.query.storeid})
+                      .exec(function(errBrandinStore,BrandinStore)
+                      {
+                          if(errBrandinStore)
+                          {
+                              return next(errBrandinStore);
+                          }
+                          else
+                          {
+                              var numberofbrand = [];
+                              var count = 0;
+                              for(var i = 0 ; i < BrandinStore.length ; i ++)
+                              {
+                                  var identical = false;
+                                  for(var j = 0 ; j < numberofbrand.length ; j ++)
+                                  {
+                                      if(BrandinStore[i].brandid == numberofbrand[j])
+                                      {
+                                          identical = true;
+                                      }
+                                  }
+                                  if(!identical)
+                                  {
+                                      numberofbrand.push(BrandinStore[j].brandid);
+                                  }
+                              }
+                              res.render('storeDetailPage/storeDetailPage.pug', {
+                                  storeid: store._id,
+                                  storename: store.storeName,
+                                  addressnumb: store.Address.length,
+                                  countnumberofbrand: numberofbrand.length
+                              })
+                          }
                       })
+
               }
           }
         })
@@ -1142,6 +1421,7 @@ module.exports.StoreDetailPage_updateStoreSummary = async function(req,res,next)
 /** Display all Addresses available for a store
  * This view also enables the admin to delete and/ or add addresses to the store
  */
+
 
 module.exports.StoreDetailPage_Address = async function(req,res,next)
 {
@@ -1179,15 +1459,46 @@ module.exports.StoreDetailPage_Address = async function(req,res,next)
                     for (var i = ((perPage * page) - perPage); i < addresslist.length && i < (perPage * (page + 1) - perPage); i++) {
                         displayaddresslist.push(addresslist[i]);
                     }
-                    res.render('storeDetailPage/storeDetailPage_Address.pug'
-                        , {
-                            storeid: store._id,
-                            storename: store.storeName,
-                            searchstring: searchstring,
-                            current: page,
-                            pages: Math.ceil(addresslist.length / perPage),
-                            address: displayaddresslist
-                        });
+                    var displayaddresslistids = []
+                    for (var i = 0 ; i < displayaddresslist.length ; i++)
+                    {
+                        displayaddresslistids.push(displayaddresslist[i]._id);
+                    }
+                    BrandinStore.find({addressid:{$in:displayaddresslistids}})
+                        .exec(function(errBrandinStore,BrandinStore)
+                        {
+                            if(errBrandinStore)
+                            {
+                                return next(errBrandinStore);
+                            }
+                            else
+                            {
+                                var countnumberofbrand = [];
+                                for( var i = 0 ; i < displayaddresslist.length ; i++)
+                                {
+                                    var count = 0;
+
+                                    for( var j = 0 ; j< BrandinStore.length ; j ++)
+                                    {
+                                        if(displayaddresslist[i]._id == BrandinStore[j].addressid)
+                                        {
+                                            count++;
+                                        }
+                                    }
+                                    countnumberofbrand.push(count);
+                                }
+                                res.render('storeDetailPage/storeDetailPage_Address.pug'
+                                    , {
+                                        storeid: store._id,
+                                        storename: store.storeName,
+                                        searchstring: searchstring,
+                                        current: page,
+                                        pages: Math.ceil(addresslist.length / perPage),
+                                        address: displayaddresslist,
+                                        countnumberofbrand:countnumberofbrand
+                                    });
+                            }
+                        })
                 }
             }
         })
@@ -1206,7 +1517,17 @@ module.exports.StoreDetailPage_Address__Delete = async function(req,res,next){
             }
             else
             {
-                res.redirect('/detailstorePage_Address?storeid='+req.query.storeid);
+                BrandinStore.remove({addressid:{$in:addids}})
+                    .exec(function(errBrandinStore){
+                        if(errBrandinStore)
+                        {
+                            return next(errBrandinStore)
+                        }
+                        else
+                        {
+                            res.redirect('/detailstorePage_Address?storeid='+req.query.storeid);
+                        }
+                    })
             }
         });
 }
@@ -1238,6 +1559,60 @@ module.exports.StoreDetailPage_Address__Insert = async function(req,res,next)
         })
 }
 
+module.exports.StoreDetailPage_Address__FindBrandNotInthis = function(req,res,next)
+{
+    User.findById(req.session.userId)
+        .exec(function (errorUser, user) {
+            if (errorUser) {
+                return next(errorUser);
+            } else {
+                if (user === null) {
+                    res.redirect('/');
+                } else {
+                    BrandinStore.find({'addressid':req.query.addressid})
+                        .exec(function(errBrandinStore,BrandinStore)
+                        {
+                            if(errBrandinStore)
+                            {
+                                return next(errBrandinStore)
+                            }
+                            else {
+                                if(BrandinStore == null)
+                                {
+                                    res.redireict('/');
+                                }
+                                else
+                                {
+                                    var productlist = [];
+                                    for(var i = 0 ; i< BrandinStore.length ; i ++){
+                                        productlist.push(BrandinStore[i].brandid)
+                                    }
+                                    Product.find({ "_id": { "$nin": productlist } })
+                                        .exec(function(errProduct,products)
+                                        {
+                                            if(errProduct)
+                                            {
+                                                return next(errProduct);
+                                            }
+                                            else
+                                            {
+                                                if(products == null)
+                                                {
+                                                    res.redirect('/')
+                                                }
+                                                else {
+                                                    res.json(products);
+                                                }
+                                            }
+                                        })
+                                }
+                            }
+                        })
+                }
+            }
+        })
+}
+
 
 /** Display all Brands available for a store,
  * This view also enables the admin to delete and/ or add brands to the store
@@ -1245,38 +1620,28 @@ module.exports.StoreDetailPage_Address__Insert = async function(req,res,next)
 
 module.exports.StoreDetailPage_Brand = async function(req,res,next)
 {
-    Store.findById(req.query.storeid)
-        .exec(function(errStore,store) {
-            if (errStore) {
-                return next(errStore);
+    User.findById(req.session.userId)
+        .exec(function (errorUser, user) {
+            if (errorUser) {
+                return next(errorUser);
             } else {
-                if (store === null) {
+                if (user === null) {
                     res.redirect('/');
                 } else {
-                    var brand = [];
-                    for (var i = 0; i < store.Product.length; i++) {
-                        brand.push(store.Product[i].ProductId);
-                    }
-                    Product.find({_id:{$in:brand}})
-                        .exec(async function (errProduct, products) {
-                            if (errProduct) {
-                                return next(errProduct);
-                            } else {
-                                var perPage = 25;
-                                var page = (parseInt(req.query.page)) || 1;
-                                var brandlist = [];
-                                var displaybrandlist = []
-                                var brandnotinstore = [];
-                                for (var i = 0; i < products.length; i++) {
-                                    if (req.query.searchstring == null) {
-                                        brandlist.push(products[i]);
-                                    } else {
-                                        if (products[i].Brand_Name.toLowerCase().includes(req.query.searchstring.toLowerCase())) {
-                                            brandlist.push(products[i]);
-                                        }
-                                    }
+                    BrandinStore.find({addressid: req.query.addressid,storeid:req.query.storeid})
+                        .exec(function(errBrandinStore,brandinstoreinfo)
+                        {
+                            if(errBrandinStore)
+                            {
+                                return next(errBrandinStore);
+                            }
+                            else
+                            {
+                                var brand = [];
+                                for (var i = 0; i < brandinstoreinfo.length; i++) {
+                                    brand.push(brandinstoreinfo[i].brandid);
                                 }
-                                Product.find({})
+                                Product.find()
                                     .exec(async function(errProduct,products)
                                     {
                                         if(errProduct)
@@ -1291,118 +1656,188 @@ module.exports.StoreDetailPage_Brand = async function(req,res,next)
                                             }
                                             else
                                             {
+                                                var perPage = 25;
+                                                var page = req.query.page || 1;
+                                                var displaybrandlist = [];
+                                                var brandnotinstore = [];
+                                                var brandinstore = [];
                                                 for(var i = 0 ; i < products.length ; i++)
                                                 {
                                                     var identical = false;
-                                                    for( var j = 0 ; j < brandlist.length ; j++)
+                                                    for( var j = 0 ; j < brand.length ; j++)
                                                     {
-                                                        if(new String(products[i]._id).valueOf() == new String(brandlist[j]._id).valueOf())
+                                                        if(new String(products[i]._id).valueOf() == new String(brand[j]).valueOf())
                                                         {
                                                             identical = true;
                                                         }
                                                     }
-                                                    if(!identical)
+                                                    if(identical)
+                                                    {
+                                                        brandinstore.push(products[i]);
+                                                    }
+                                                    else
                                                     {
                                                         brandnotinstore.push(products[i]);
                                                     }
                                                 }
-                                                for (var i = ((perPage * page) - perPage); i < brandlist.length && i < (perPage * (page + 1) - perPage); i++) {
-                                                    displaybrandlist.push(brandlist[i]);
-                                                }
                                                 var searchstring = req.query.searchstring;
-                                                res.render('storeDetailPage/storeDetailPage_Brand.pug'
-                                                    , {
-                                                        storeid: store._id,
-                                                        searchstring: searchstring,
-                                                        current: page,
-                                                        pages: Math.ceil(brandlist.length / perPage),
-                                                        storename: store.storeName,
-                                                        brand: displaybrandlist,
-                                                        brandnotinstore:brandnotinstore
+                                                for (var i = ((perPage * page) - perPage); i < brandinstore.length && i < (perPage * (page + 1) - perPage); i++) {
+                                                    if(searchstring !== undefined)
+                                                    {
+                                                        if(new String(brandinstore[i].Brand_Name.toLowerCase()).valueOf().includes(new String(searchstring).toLowerCase().valueOf()))
+                                                        {
+                                                            displaybrandlist.push(brandinstore[i]);
+                                                        }
                                                     }
-                                                );
+                                                    else
+                                                    {
+                                                        displaybrandlist.push(brandinstore[i]);
+                                                    }
+
+                                                }
+                                                var displaybrandinstoreinfoid = [];
+                                                for( var i = 0 ; i < displaybrandlist.length; i ++)
+                                                {
+                                                    for( var j = 0 ; j < brandinstoreinfo.length ; j ++)
+                                                    {
+                                                        if(new String(brandinstoreinfo[j].brandid).valueOf() == new String(displaybrandlist[i]._id).valueOf())
+                                                        {
+                                                            displaybrandinstoreinfoid.push(brandinstoreinfo[j]._id);
+                                                        }
+                                                    }
+                                                }
+                                                Store.findById(req.query.storeid)
+                                                    .exec(function(errStore,store)
+                                                    {
+                                                        if(errStore)
+                                                        {
+                                                            return next(errStore);
+                                                        }
+                                                        else
+                                                        {
+                                                            if(store == null)
+                                                            {
+                                                                res.redirect('/');
+                                                            }
+                                                            else
+                                                            {
+                                                                var displayaddress;
+                                                                for(var i = 0; i < store.Address.length ; i++)
+                                                                {
+                                                                    if(store.Address[i]._id == req.query.addressid)
+                                                                    {
+                                                                        displayaddress = store.Address[i];
+                                                                    }
+                                                                }
+                                                                res.render('storeDetailPage/storeDetailPage_Brand.pug'
+                                                                    , {
+                                                                        storeid: req.query.storeid,
+                                                                        addressid: req.query.addressid,
+                                                                        searchstring: searchstring,
+                                                                        current: page,
+                                                                        displaybrandinstoreid:displaybrandinstoreinfoid,
+                                                                        pages: Math.ceil(brandinstore.length / perPage),
+                                                                        storename: store.storeName,
+                                                                        displayaddress: displayaddress,
+                                                                        brand: displaybrandlist,
+                                                                        brandnotinstore:brandnotinstore
+                                                                    });
+                                                            }
+                                                        }
+                                                    })
                                             }
                                         }
                                     })
-
                             }
                         })
+
                 }
             }
-        })
+    })
 }
 
 /** Delete brands in a particular store
  */
 module.exports.StoreDetailPage_Brand__Delete = async function(req,res,next){
-    var brids = req.query.brids.split(',');
-    Store.update({_id:req.query.storeid},{$pull:{Product:{ProductId:{$in:brids}}}})
-        .exec(function(errStore)
+    var brinstids = req.query.brinstids.split(',');
+    BrandinStore.remove({_id:{$in:brinstids}})
+        .exec(function(errBrandinStore)
         {
-            if(errStore)
+            if(errBrandinStore)
             {
-                return next(errStore);
+                return next(errBrandinStore);
             }
             else
             {
-                res.redirect('/detailstorePage_Brand?storeid='+req.query.storeid);
+                res.redirect('/detailstorePage_Brand?storeid='+req.query.storeid+"&addressid="+req.query.addressid);
             }
-        });
+        })
 }
 
 module.exports.StoreDetailPage_Brand__Insert = async function(req,res,next)
 {
     var productinstore = {
-        ProductId: req.query.brandid
+        storeid: req.query.storeid,
+        brandid: req.query.brandid,
+        addressid: req.query.addressid
     }
-    Store.findById(req.query.storeid)
-        .exec(function(errStore,store)
-        {
-            if(errStore)
-            {
-                res.json({
-                        matched:"This store does not exist"
-                })
-            }
-            else
-            {
-                var identicalbrand = false;
-                for(var i = 0 ; i < store.Product.length; i ++)
-                {
-                    if(new String(req.query.brandid).valueOf() == store.Product[i].ProductId)
+    BrandinStore.find({"brandid":req.query.brandid})
+        .exec(function (errorBrandinStore, brandinstore) {
+            if (errorBrandinStore) {
+                return next(errorBrandinStore);
+            } else {
+                if (brandinstore === null) {
+                    BrandinStore.create(productinstore,async function(errStore,BrandinStore)
                     {
-                        identicalbrand = true;
-                    }
-                }
-                if(identicalbrand)
-                {
-                    res.json({
-                        matched:"The store already has this brand"
+                        if(errStore)
+                        {
+                            res.json({
+                                matched:"Some errors have occurred when insert new brand to the store"
+                            });
+                        }
+                        else
+                        {
+                            res.json({
+                                matched:"Successfully insert new brand to the store"
+                            });
+                        }
                     })
-                }
-                else
-                {
-                    Store.update({_id:req.query.storeid},{$push:{Product:productinstore}})
-                        .exec(function(errStore)
+
+                } else {
+                    var alreadyinstore = false;
+                    for(var i = 0 ; i < brandinstore.length ; i++)
+                    {
+                        if(brandinstore[i].brandid == req.query.brandid && brandinstore[i].storeid == req.query.storeid && brandinstore[i].addressid == req.query.addressid)
+                        {
+                            alreadyinstore = true;
+                        }
+                    }
+                    if(alreadyinstore){
+                        res.json({
+                            matched:"This store already has the brand"
+                        });
+                    }
+                    else
+                    {
+                        BrandinStore.create(productinstore,async function(errStore,store)
                         {
                             if(errStore)
                             {
-                                res.json({
-                                    matched:"Could not insert new brand to the store, an error has occurred"
-                                })
+                                var err = new Error('Something wrong when insert new information!');
+                                err.status = 400;
+                                return res.send(err);
                             }
                             else
                             {
                                 res.json({
                                     matched:"Successfully insert new brand to the store"
-                                })
+                                });
                             }
                         })
+                    }
                 }
-
             }
         })
-
 }
 
 /** Store databasemanagement function
@@ -1450,8 +1885,6 @@ module.exports.StoredatabaseManagement = function(req,res,next)
                         "$project": {
                             "storeName": 1,
                             "Address": 1,
-                            "Product": 1,
-                            "BrandCount": {"$size": "$Product"}
                         }
                     }];
                     if (sortString !== "") {
@@ -1481,19 +1914,64 @@ module.exports.StoredatabaseManagement = function(req,res,next)
                                     for (var i = ((perPage * page) - perPage); i < storesList.length && i < (perPage * (page + 1) - perPage); i++) {
                                         displaystores.push(storesList[i]);
                                     }
+                                    var displaystoresid = [];
+                                    for( var i = 0 ; i < displaystores.length ; i++)
+                                    {
+                                        displaystoresid.push(displaystores[i]._id);
+                                    }
                                     var searchstring = req.query.searchstring;
-                                    res.render('store_dbmanagement.pug'
-                                        , {
-                                            displaydata: displaystores,
-                                            numPerPage: perPage,
-                                            count: storesList.length,
-                                            current: page,
-                                            pages: Math.ceil(storesList.length / perPage),
-                                            countentries: displaystores.length,
-                                            searchstring: req.query.searchstring || "",
-                                            sortquery: req.query.sortquery
-                                        }
-                                    );
+                                    BrandinStore.find({storeid:{$in:displaystoresid}})
+                                        .exec(function(errBrandinStore,BrandinStore)
+                                        {
+                                            if(errBrandinStore)
+                                            {
+                                                return next(errBrandinStore);
+                                            }
+                                            else
+                                            {
+                                                var numberofbrand = [];
+                                                var countnumberofbrand = [];
+                                                for( var i = 0 ; i < displaystores.length ; i++)
+                                                {
+                                                    var count = 0;
+                                                    for(var j = 0 ; j < BrandinStore.length ; j ++)
+                                                    {
+                                                        if(displaystores[i]._id == BrandinStore[j].storeid)
+                                                        {
+                                                            var identical = false;
+                                                            for(var k = 0 ; k < numberofbrand.length ; k ++)
+                                                            {
+                                                                if(BrandinStore[j].brandid == numberofbrand[k].brandid && BrandinStore[j].storeid == numberofbrand[k].storeid)
+                                                                {
+                                                                    identical = true;
+                                                                }
+                                                            }
+                                                            if(!identical)
+                                                            {
+                                                                numberofbrand.push(BrandinStore[j]);
+                                                                count++;
+                                                            }
+                                                        }
+
+                                                    }
+                                                    countnumberofbrand.push(count);
+                                                }
+                                                res.render('store_dbmanagement.pug'
+                                                    , {
+                                                        displaydata: displaystores,
+                                                        numPerPage: perPage,
+                                                        count: storesList.length,
+                                                        current: page,
+                                                        countnumberofbrand: countnumberofbrand,
+                                                        pages: Math.ceil(storesList.length / perPage),
+                                                        countentries: displaystores.length,
+                                                        searchstring: req.query.searchstring || "",
+                                                        sortquery: req.query.sortquery
+                                                    }
+                                                );
+                                            }
+                                        })
+
                                 }
                             }
                         })
@@ -1501,7 +1979,6 @@ module.exports.StoredatabaseManagement = function(req,res,next)
             }
         })
 };
-
 module.exports.StoredatabaseManagement_Delete = function(req,res,next)
 {
     var stids = req.query.stids.split(',');
@@ -1522,7 +1999,17 @@ module.exports.StoredatabaseManagement_Delete = function(req,res,next)
                             }
                             else
                             {
-                                res.redirect('/store_dbmanagement');
+                                BrandinStore.remove({storeid:{$in:stids}})
+                                    .exec(function(errBrandinStore){
+                                        if(errBrandinStore)
+                                        {
+                                            return next(errBrandinStore)
+                                        }
+                                        else
+                                        {
+                                            res.redirect('/store_dbmanagement');
+                                        }
+                                    })
                             }
                         });
                 }
@@ -1639,7 +2126,17 @@ module.exports.databaseManagement_Delete = function(req,res,next)
             }
             else
             {
-                res.redirect('/dbmanagement');
+                BrandinStore.remove({brandid:{$in:brids}})
+                    .exec(function(errBrandinStore){
+                        if(errBrandinStore)
+                        {
+                            return next(errBrandinStore)
+                        }
+                        else
+                        {
+                            res.redirect('/dbmanagement');
+                        }
+                    })
             }
         });
 };
@@ -1722,7 +2219,7 @@ module.exports.loginAndroidAppUsers = function(req, res, next)
 };
 
 // to test around this:
-// http://<Server's IP>:3000/android-app-report-store?storeName=coles&streetAddress=broadway&state=NSW&postCode=2007&productId=5ccd6ad2334d7711a0ff5c12
+// http://<Server's IP>:3000/android-app-report-store?storeName=coles&streetAddress=broadway&state=NSW&postCode=2007&productId=5ccd6ad2334d7711a0ff5c20
 // the variable of query all you can modify to fit into yours
 module.exports.reportedStoreFromAndroidAppUsers = function(req, res, next)
 {
@@ -1773,83 +2270,275 @@ module.exports.reportedStoreFromAndroidAppUsers = function(req, res, next)
 
 module.exports.loginRegisterAndroidAppFbUsers = function(req, res, next)
 {
-    // set up and receive the user info
-    var facebookId = req.query.facebookId;
-    console.log(facebookId);
+    // var queryStr = JSON.parse("[" + JSON.stringify(req.query) + "]");
+    // console.log(queryStr.length);
 
-    AppFbUser.findOne({facebookId: facebookId}, function (error, user)
+    if(req.query.name == null)
     {
-        if (error)
-        {
-            res.send("Error");
-        }
-        else if(!user)
-        {
-            // testing
-            var name = req.query.name;
-            console.log(name);
+        // set up and receive the user info
+        var facebookId = req.query.facebookId;
+        console.log(facebookId);
 
-            // set up and receive the user info
-            var appFbUserData = {
-                name: req.query.name,
-                facebookId: req.query.facebookId
-            };
-
-            // create the user account
-            AppFbUser.create(appFbUserData, function (error, appFbUser)
+        AppFbUser.findOne({facebookId: facebookId}, function (error, user)
+        {
+            if (error)
             {
-                if (error)
-                {
-                    var err = new Error('User info is invalid!');
-                    err.status = 400;
-                    return next(err);
-                }
-                else
-                {
-                    res.send("Create");
-                }
-            });
-        }
-        else
+                res.send("Error");
+            }
+            else if(!user)
+            {
+                res.send("No");
+            }
+            else
+            {
+                res.send("Yes");
+            }
+        });
+    }
+    else
+    {
+        // set up and receive the user info
+        var facebookId = req.query.facebookId;
+        console.log(facebookId);
+
+        AppFbUser.findOne({facebookId: facebookId}, function (error, user)
         {
-            res.send("Yes");
-        }
-    });
+            if (error)
+            {
+                res.send("Error");
+            }
+            else if(!user)
+            {
+                // testing
+                var name = req.query.name;
+                console.log(name);
+
+                // set up and receive the user info
+                var appFbUserData = {
+                    name: req.query.name,
+                    facebookId: req.query.facebookId,
+                    gender: req.query.gender,
+                    birthday: req.query.birthday
+                };
+
+                // create the user account
+                AppFbUser.create(appFbUserData, function (error, appFbUser)
+                {
+                    if (error)
+                    {
+                        var err = new Error('User info is invalid!');
+                        err.status = 400;
+                        return next(err);
+                    }
+                    else
+                    {
+                        res.send("Create");
+                    }
+                });
+            }
+            else
+            {
+                res.send("Yes");
+            }
+        });
+    }
 };
 
 module.exports.checkBrandVersion = function(req, res, next)
 {
-    Version.findOne({type: "brand"}, function(error, version)
+    Version.findOne({type: "brand"}, function(errorBrand, versionBrand)
     {
-        if(error)
+        if(errorBrand)
         {
-            res.send("Error");
+            res.send("Error while finding brand!");
         }
         else
         {
-            res.send(version.version);
+            Version.findOne({type: "store"}, function(errorStore, versionStore)
+            {
+                if(errorStore)
+                {
+                    res.send("Error while finding store!");
+                }
+                else
+                {
+                    res.send(versionBrand.version + "," + versionStore.version);
+                }
+            });
         }
     });
 };
 
-module.exports.checkStoreVersion = function(req, res, next)
-{
-    Version.findOne({type: "store"}, function(error, version)
-    {
-        if(error)
-        {
-            res.send("Error");
-        }
-        else
-        {
-            res.send(version.version);
-        }
-    });
-};
+// module.exports.checkStoreVersion = function(req, res, next)
+// {
+//     Version.findOne({type: "store"}, function(error, version)
+//     {
+//         if(error)
+//         {
+//             res.send("Error");
+//         }
+//         else
+//         {
+//             res.send(version.version);
+//         }
+//     });
+// };
 
 module.exports.createStatistic = function(req, res, next)
 {
-    
+    // var queryStr = JSON.parse("[" + JSON.stringify(req.query) + "]");
+    // console.log(queryStr);
+    // if(req.query.name == null)
+    //     console.log("HI");
+    // else
+    //     console.log(("NONO"));
+
+    // create a fake json string from android app
+    // var test = [];
+    // test.push({
+    //     brandId: "5ccd8e9b3e36263b52a8d091",
+    //     date: "06-05-2019",
+    //     gender: "Male",
+    //     age: "26",
+    //     count: "11"
+    // });
+    // test.push({
+    //     brandId: "5ccd8e9b3e36263b52a8d093",
+    //     date: "07-05-2019",
+    //     gender: "Male",
+    //     age: "20",
+    //     count: "5"
+    // });
+    // test.push({
+    //     brandId: "5ccd8e9b3e36263b52a8d093",
+    //     date: "01-05-2019",
+    //     gender: "Female",
+    //     age: "21",
+    //     count: "19"
+    // });
+    // var testJson = JSON.stringify(test);
+    // var testJson = JSON.stringify(req.query.statistic);
+    // console.log(req.query.statistic);
+    // console.log(testJson);
+
+    // transfer json string back to json array
+    var statisticData = JSON.parse(req.query.statistic);
+    console.log(statisticData);
+    // console.log(statisticData[0].brandId);
+    // statisticData[0].brandName = "CCC";
+    // console.log(statisticData[0]);
+
+    // add the brand name depending on the brand id
+    Product.find({}, function(errorFindAll, brands)
+    {
+        if(errorFindAll)
+        {
+            res.send("Something went wrong while searching the products!");
+        }
+        else if(!brands)
+        {
+            res.send("Do not have any product!");
+        }
+        else
+        {
+            for(var i = 0; i < statisticData.length; i++)
+            {
+                for(var j = 0; j < brands.length; j++)
+                {
+                    if(statisticData[i].brandId == brands[j]._id.toString())
+                    {
+                        statisticData[i].brandName = brands[j].Brand_Name;
+                    }
+                }
+            }
+            // console.log(statisticData);
+
+            // check if the statistic data is existing in the database
+            Statistic.find({}, function(errorFindAllSta, statistics)
+            {
+                if(errorFindAllSta)
+                {
+                    res.send("Something went wrong while searching all statistic documents!");
+                }
+                else if(!statistics)
+                {
+                    // create statistic documents into mongo db
+                    Statistic.create(statisticData, function(errorCreate, result)
+                    {
+                        if(errorCreate)
+                        {
+                            res.send("Something went wrong while creating statistic documents!");
+                        }
+                        else
+                        {
+                            res.send("Yes");
+                        }
+                    });
+                }
+                else
+                {
+                    // check
+                    var markStatisticData = [];
+                    for(var i = 0; i < statisticData.length; i++)
+                    {
+                        var check = false;
+                        for(var j = 0; j < statistics.length; j++)
+                        {
+                            if(statisticData[i].brandId == statistics[j].brandId && statisticData[i].date == statistics[j].date
+                            && statisticData[i].gender == statistics[j].gender && statisticData[i].age == statistics[j].age)
+                            {
+                                var sumCount = (parseInt(statisticData[i].count) + parseInt(statistics[j].count)).toString();
+                                check = true;
+                                Statistic.findByIdAndUpdate(statistics[j]._id, {count: sumCount}, function(errorUpdate, updateRes)
+                                {
+                                    if(errorUpdate)
+                                    {
+                                        res.send("Something went wrong while updating statistic document!");
+                                    }
+                                });
+                            }
+                        }
+                        if(check)
+                        {
+                            markStatisticData.push(1);
+                        }
+                        else
+                        {
+                            markStatisticData.push(0);
+                        }
+                    }
+                    // console.log(markStatisticData);
+
+                    // remove the elements as they exists in the database
+                    var newStatisticData = [];
+                    for(var i = 0; i < statisticData.length; i++)
+                    {
+                        if(markStatisticData[i] == 0)
+                        {
+                            newStatisticData.push(statisticData[i]);
+                        }
+                    }
+                    // console.log(newStatisticData);
+
+                    // add the remain statistic data to the database since they are new
+                    Statistic.create(newStatisticData, function(errorCreate, result)
+                    {
+                        if(errorCreate)
+                        {
+                            res.send("Something went wrong while creating statistic documents!");
+                        }
+                        else
+                        {
+                            // res.redirect('/feature');
+                            res.send("Yes");
+                        }
+                    });
+                }
+            });
+        }
+    });
+
+
 };
 
 
@@ -1859,6 +2548,7 @@ module.exports.createStatistic = function(req, res, next)
 
 module.exports.GetAllBrand = async function(req, res, next)
 {
+    console.log("App is getting brands!");
     Product.find()
         .exec(function(errProduct,Product)
         {
@@ -1895,16 +2585,17 @@ module.exports.GetImage = async function(req,res,next)
 
 module.exports.GetAllStore = async function(req, res, next)
 {
+    console.log("App is getting stores!");
     Store.find()
-        .exec(function(errProduct,Product)
+        .exec(function(errStore, Store)
         {
-            if(errProduct)
+            if(errStore)
             {
-                return next(errProduct);
+                return next(errStore);
             }
             else
             {
-                res.json(Product);
+                res.json(Store);
             }
         })
 }
@@ -1926,7 +2617,6 @@ module.exports.CompareStoreAddress = async function(req,res,next)
                 }
                 else
                 {
-                    console.log(store);
                     var identicaladdress = false;
                     for(var i = 0 ; i < store.Address.length ; i++)
                     {

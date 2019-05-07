@@ -7,15 +7,11 @@ var mongoose = require('mongoose');
 var StoreSchema = new mongoose.Schema(
     {
         storeName: String,
-        Address: [{StreetAddress: String, Postcode: String, State: String, Lat: String, Long: String}],
-        Product: [{ProductId: String}]
+        Address: [{StreetAddress: String, Postcode: String, State: String, Lat: String, Long: String}]
     },
     {
         versionKey: false
     });
-
-
-
 
 
 var Store = mongoose.model('Store', StoreSchema, 'stores');

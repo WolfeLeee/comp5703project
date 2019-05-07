@@ -15,11 +15,12 @@ $(document).ready(function()
             }
         })
 
-        $('.modal-body__store__insertbrandtostore').on("click",function()
+        $('.modal-body__store__insertbrandtostore').unbind().on("click",function()
         {
             var brandid = $(this).data('brandid');
             var storeid = $(this).data('storeid');
-            var jqxhr = $.get("/detailstorePage_Brand__Insert?brandid="+brandid+"&storeid="+storeid)
+            var addressid = $(this).data('addressid');
+            var jqxhr = $.get("/detailstorePage_Brand__Insert?brandid="+brandid+"&storeid="+storeid+"&addressid="+addressid)
                 .done(function(data){
                     alert(data.matched);
                 })
@@ -27,6 +28,7 @@ $(document).ready(function()
                     console.log(jqXHR.status);
                 })
         })
+
         /**
          * When a checkbox is checked the delete button will appear
          */
@@ -75,14 +77,15 @@ $(document).ready(function()
             var checkedboxes = $('.accreditationlist_table__Delete:checked');
             var confirmation = confirm('Do you want to delete this(these) '+checkedboxes.length+' brand(s) from the store?');
             if(confirmation == true){
-                var brids = [];
+                var brinstids = [];
                 for(var i = 0 ; i < checkedboxes.length; i++)
                 {
-                    brids.push(checkedboxes.get(i).getAttribute('value'));
+                    brinstids.push(checkedboxes.get(i).getAttribute('value'));
                 }
                 var params = {
-                    brids: brids,
-                    storeid : $(this).attr('value')
+                    brinstids: brinstids,
+                    storeid : $(this).attr('value'),
+                    addressid: $(this).data('addressid')
                 };
                 post('/detailstorePage_Brand__Delete',params,"get");
             }
@@ -102,6 +105,7 @@ $(document).ready(function()
             if(event.which == 13){
                 var params = {
                     storeid: $(this).attr('title'),
+                    addressid: $(this).data('addressid'),
                     searchstring: $(this).val()
                 }
                 post('/detailstorePage_Brand',params,"get");
@@ -111,6 +115,7 @@ $(document).ready(function()
         $('.pagebody_mainbody_infodisplay__searchsubmitbutton').on('click',function(event){
             var params = {
                 storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr('title'),
+                addressid: $('.pagebody_mainbody__infodisplay__searchinput').first().data('addressid'),
                 searchstring: $('.pagebody_mainbody__infodisplay__searchinput').first().val()
             }
             post('/detailstorePage_Brand',params,"get");
@@ -129,7 +134,8 @@ $(document).ready(function()
                 {
                     var params = {
                         page : page,
-                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title")
+                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title"),
+                        addressid : $('.pagebody_mainbody__infodisplay__searchinput').first().data('addressid')
                     }
                     post('/detailstorePage_Brand',params,"get");
                 }
@@ -138,7 +144,8 @@ $(document).ready(function()
                     var params = {
                         page : page,
                         searchstring: searchstring,
-                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title")
+                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title"),
+                        addressid : $('.pagebody_mainbody__infodisplay__searchinput').first().data('addressid')
                     }
                     post('/detailstorePage_Brand',params,"get");
                 }
@@ -150,7 +157,8 @@ $(document).ready(function()
                 {
                     var params = {
                         page : page,
-                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title")
+                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title"),
+                        addressid : $('.pagebody_mainbody__infodisplay__searchinput').first().data('addressid')
                     }
                     post('/detailstorePage_Brand',params,"get");
                 }
@@ -159,7 +167,8 @@ $(document).ready(function()
                     var params = {
                         page : page,
                         searchstring: searchstring,
-                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title")
+                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title"),
+                        addressid : $('.pagebody_mainbody__infodisplay__searchinput').first().data('addressid')
                     }
                     post('/detailstorePage_Brand',params,"get");
                 }
@@ -170,7 +179,8 @@ $(document).ready(function()
                 {
                     var params = {
                         page : $(this).children().eq(0).text(),
-                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title")
+                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title"),
+                        addressid : $('.pagebody_mainbody__infodisplay__searchinput').first().data('addressid')
                     }
                     post('/detailstorePage_Brand',params,"get");
                 }
@@ -179,15 +189,14 @@ $(document).ready(function()
                     var params = {
                         page : $(this).children().eq(0).text(),
                         searchstring: searchstring,
-                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title")
+                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title"),
+                        addressid : $('.pagebody_mainbody__infodisplay__searchinput').first().data('addressid')
                     }
                     post('/detailstorePage_Brand',params,"get");
                 }
 
             }
         })
-
-
 
         /** Post function
          *

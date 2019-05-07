@@ -2,6 +2,9 @@ package comp5703.sydney.edu.au.kinderfoodfinder;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -12,6 +15,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -23,6 +31,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -38,11 +47,14 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import comp5703.sydney.edu.au.kinderfoodfinder.Adapter.SearchAdapter;
-import comp5703.sydney.edu.au.kinderfoodfinder.LocalDatabase.Database;
+import comp5703.sydney.edu.au.kinderfoodfinder.Database.StoreDatabase;
 import comp5703.sydney.edu.au.kinderfoodfinder.Model.MyPlaces;
 import comp5703.sydney.edu.au.kinderfoodfinder.Model.Results;
 import comp5703.sydney.edu.au.kinderfoodfinder.Remote.IGoogleAPIService;
@@ -61,23 +73,23 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
     private GoogleApiClient mGoogleApiClient;
 
     private double latitude,longitude;
-    private String org_address, des_address;
     private Location mLastLocation;
     private LocationRequest mLocationRequest;
-    private Marker mMarker;
-    private Fragment fragmentreport;
+    private Marker mMarker, NearbyMarker;
+    private Fragment fragmentreport, fragmentreportaddress;
 
     IGoogleAPIService mService;
-    MyPlaces currentPlace;
-
 
     ImageView add_report;
     MaterialSearchBar materialSearchBar;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
-    List<String> suggestList = new ArrayList<>();
     SearchAdapter adapter;
-    private Database database;
+    private StoreDatabase storedatabase;
+    SearchView searchView;
+    ListView listView;
+    ListAdapter listAdapter;
+
 
     // Keys for storing activity state.
     private static final int MY_PERMISSION_CODE =1000;
@@ -99,6 +111,15 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
 
         //Init Service
         mService = Common.getGoogleAPIService();
+        add_report = mView.findViewById(R.id.add_report);
+        searchView = mView.findViewById(R.id.search_bar);
+        listView = mView.findViewById(R.id.listview_search);
+        searchView.setFocusable(false);
+
+//        recyclerView = mView.findViewById(R.id.recycler_search);
+//        layoutManager = new LinearLayoutManager(getActivity());
+//        recyclerView.setLayoutManager(layoutManager);
+//        recyclerView.setHasFixedSize(true);
 
         //Request Runtime permission
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
@@ -106,18 +127,11 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
         }
 
         fragmentreport = new ReportFragment();
+        storedatabase = new StoreDatabase(getActivity());
+        fragmentreportaddress = new ReportAddressFragment();
 
-        // Init View
-        add_report = mView.findViewById(R.id.add_report);
-        recyclerView = mView.findViewById(R.id.recycler_search);
-        layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(true);
+        ArrayList<String> NearbyList = new ArrayList<>();
 
-        materialSearchBar = mView.findViewById(R.id.search_bar);
-
-        // Init DB
-        database = new Database(getActivity());
 
         // Jump to Report Page
 
@@ -129,6 +143,7 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
                 Bundle bundle=new Bundle(  );
                 bundle.putInt( "key",1 );
                 fragmentreport.setArguments( bundle );
+                fragmentreportaddress.setArguments( bundle );
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.fragment_container, fragmentreport).commit();
@@ -136,110 +151,81 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
             }
         });
 
-        // Setup search bar
-
-        materialSearchBar.setHint("Search Brand Name...");
-        materialSearchBar.setCardViewElevation(10);
-        loadSuggestList();
-        materialSearchBar.addTextChangeListener(new TextWatcher() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public boolean onQueryTextSubmit(String query) {
 
-            }
+                String brandName = searchView.getQuery().toString();
+                ArrayList<String> locationlist = storedatabase.getAddress(brandName);
+                List<Address> addressList = null;
+                ArrayList<String> NearbyList = new ArrayList<>();
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mMap.clear();
 
-                List<String> suggest = new ArrayList<>();
-                for(String search:suggestList) {
-                    if (search != null) {
-                        if (search.toLowerCase().contains(materialSearchBar.getText().toLowerCase()))
-                        {
-                            suggest.add(search);
-                        } materialSearchBar.setLastSuggestions(suggest);
+                for(int i = 1; i< locationlist.size(); i++){
+
+                    String location = locationlist.get(i);
+                    Geocoder geocoder = new Geocoder(getActivity());
+                    try {
+                        addressList = geocoder.getFromLocationName(location, 10);
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
+
+                    if (addressList != null) {
+                        for (int j = 0; j < addressList.size(); j++){
+                            final Address address = addressList.get(j);
+                            double lat = address.getLatitude();
+                            double lng = address.getLongitude();
+                            final LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                            float distance = getDistance(lat, lng);
+
+                            if(distance <= 2000){
+
+                                MarkerOptions markerOptions = new MarkerOptions().position(latLng).title(location);
+                                NearbyMarker =  mMap.addMarker(markerOptions);
+                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
+                                NearbyList.add(location);
+
+                                listAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, NearbyList);
+                                listView.setAdapter(listAdapter);
+
+                                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
+
+
+                                    }
+                                });
+
+                            }
+
+                        }
+                    }
+
+
                 }
 
+
+//                adapter = new SearchAdapter(getActivity(),NearbyList);
+//                recyclerView.setAdapter(adapter);
+                return false;
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-
+            public boolean onQueryTextChange(String s) {
+                return false;
             }
         });
-        materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
-            @Override
-            public void onSearchStateChanged(boolean enabled) {
-                if(!enabled)
-                    recyclerView.setAdapter(adapter);
-            }
-
-            @Override
-            public void onSearchConfirmed(CharSequence text) {
-                startSearch(text.toString());
-
-            }
-
-            @Override
-            public void onButtonClicked(int buttonCode) {
-
-            }
-        });
-
-
-        // Init Adapter default set all result
-        adapter = new SearchAdapter(getActivity(),database.getProducts());
-        recyclerView.setAdapter(adapter);
 
         return mView;
     }
 
-    //get nearby place location from API
-    private void nearByPlace(final String placeType) {
-        String url = getPlaceUrl(latitude, longitude, placeType);
 
-        mService.getNearByPlaces(url)
-                .enqueue(new Callback<MyPlaces>() {
-                    @Override
-                    public void onResponse(Call<MyPlaces> call, Response<MyPlaces> response) {
-
-                        if(response.isSuccessful())
-                        {
-                            assert response.body() != null;
-                            for(int i = 0; i < response.body().getResults().length; i++)
-                            {
-                                MarkerOptions markerOptions = new MarkerOptions();
-                                Results googlePlace = response.body().getResults()[i];
-                                double lat = Double.parseDouble(googlePlace.getGeometry().getLocation().getLat());
-                                double lng = Double.parseDouble(googlePlace.getGeometry().getLocation().getLng());
-                                String placeName = googlePlace.getName();
-                                String vicinity = googlePlace.getVicinity();
-                                LatLng latLng = new LatLng(lat, lng);
-                                if(placeType.equals("supermarket"))
-                                    markerOptions.position(latLng).title(placeName).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                                markerOptions.snippet("Distance : " + getDistance(lat, lng)+ " m "); // show the distance
-
-                                //Add to map
-                                mMap.addMarker(markerOptions);
-
-                                //Move Camera
-                                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                                mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<MyPlaces> call, Throwable t) {
-
-                    }
-                });
-
-
-    }
 
     // calculate the distance between two locations
-    public float getDistance(double lat,double lang) {
+    public float getDistance(double lat,double lng) {
 
         Location current = new Location("");
         current.setLatitude(mLastLocation.getLatitude());// current latitude
@@ -247,24 +233,13 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
 
         Location selected = new Location("");
         selected.setLatitude(lat);
-        selected.setLongitude(lang);
+        selected.setLongitude(lng);
 
         return current.distanceTo(selected);
         //  return approximate distance between current location and selected location;
     }
 
-    private String getPlaceUrl(double latitude, double longitude, String placeType) {
 
-        StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
-        googlePlacesUrl.append("location="+latitude+","+longitude);
-        googlePlacesUrl.append("&radius="+2000);
-        googlePlacesUrl.append("&type="+ placeType);
-        googlePlacesUrl.append("&sensor=true");
-        googlePlacesUrl.append("&key="+"AIzaSyBKza1Ni031Lx3HdDZ2d5VJe6HfuwhNNBs");
-        Log.d("getUrl", googlePlacesUrl.toString());
-
-        return googlePlacesUrl.toString();
-    }
 
     private boolean checkLocationPermission() {
         if(ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
@@ -308,17 +283,6 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    private void startSearch(String text) {
-        adapter = new SearchAdapter(getActivity(),database.getProductByBrandName(text));
-        recyclerView.setAdapter(adapter);
-
-        nearByPlace("supermarket");
-    }
-
-    private void loadSuggestList() {
-        suggestList = database.getBrandName();
-        materialSearchBar.setLastSuggestions(suggestList);
-    }
 
 
     @Override
@@ -333,14 +297,14 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
                 mMap.setMyLocationEnabled(true);
             }
         }
-            else{
-                buildGoogleApiClienr();
-                mMap.setMyLocationEnabled(true);
-            }
-
-
-
+        else{
+            buildGoogleApiClienr();
+            mMap.setMyLocationEnabled(true);
         }
+
+
+
+    }
 
     private synchronized void buildGoogleApiClienr() {
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())

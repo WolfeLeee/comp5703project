@@ -1,16 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
-    android:gravity="center"
+    android:background="@color/lightOrange"
     android:orientation="vertical">
-
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="GOOD" />
-</LinearLayout>
+        android:padding="5dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title_hens_good"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/layinghens"
+            android:textSize="18sp"
+            android:layout_gravity="center_vertical"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/hens_good"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/hens_good"
+            android:textSize="15sp"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"/>
+
+        <TextView
+            android:id="@+id/title_chickens_good"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/chickens"
+            android:textSize="18sp"
+            android:layout_gravity="center_vertical"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/chickens_good"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/chickens_good"
+            android:textSize="15sp"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"/>
+
+        <TextView
+            android:id="@+id/title_pigs_good"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/pigs"
+            android:textSize="18sp"
+            android:layout_gravity="center_vertical"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/pigs_good"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/pigs_good"
+            android:textSize="15sp"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"/>
+    </LinearLayout>
+</ScrollView>

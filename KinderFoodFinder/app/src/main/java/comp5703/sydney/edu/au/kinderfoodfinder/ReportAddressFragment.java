@@ -25,6 +25,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import comp5703.sydney.edu.au.kinderfoodfinder.Database.StoreDatabase;
 
 
 public class ReportAddressFragment extends Fragment {
@@ -36,8 +37,16 @@ public class ReportAddressFragment extends Fragment {
     private Button btn_submit;
     private Toolbar toolbar;
     private BottomNavigationView navigation;
-    private Fragment fragmentReport;
+    private Fragment fragmentReport, fragmentlocation, fragmentmore;
     private ProgressDialog reportProgressDialog;
+    StoreDatabase storeDatabase;
+    int key;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate( savedInstanceState );
+        key = getArguments().getInt( "key" );
+    }
 
 
 
@@ -62,6 +71,10 @@ public class ReportAddressFragment extends Fragment {
         input_statae=view.findViewById( R.id.input_state );
 
         btn_submit = view.findViewById(R.id.btn_submit);
+        
+        storeDatabase = new StoreDatabase(getActivity());
+        fragmentlocation = new LocateFragment();
+        fragmentmore = new MoreFragment();
 
         // Receive data
         String brand = getArguments().getString("BRAND_KEY");
@@ -84,16 +97,23 @@ public class ReportAddressFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // go to login fragment
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                        .replace(R.id.fragment_container, fragmentReport).commit();
+                if(key==1){
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                            .replace(R.id.fragment_container,fragmentlocation ).commit();
+
+                }else if(key==2){
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                            .replace(R.id.fragment_container, fragmentmore).commit();
+
+                }
 
                 // remove toolbar again
                 toolbar.setVisibility(View.GONE);
 
                 // enable navigation bar again
                 navigation.setVisibility(View.VISIBLE);
-                toolbar.setVisibility( View.GONE );
             }
         });
 
@@ -108,6 +128,7 @@ public class ReportAddressFragment extends Fragment {
                 String id ="5ccd8e9b3e36263b52a8d08f";
                 String brand =content_brand.getText().toString();
                 reportInfomation( storeName,streetAddress,state,postCode,id);
+                AddStore(brand, storeName, streetAddress, postCode, state);
 
             }
         } );
@@ -115,6 +136,18 @@ public class ReportAddressFragment extends Fragment {
 
 
         return view;
+    }
+    
+     private void AddStore(String brandName, String storeName, String streetAddress, String postCode, String state) {
+        boolean insertData = storeDatabase.addStore(brandName, storeName, streetAddress, postCode, state);
+        storeDatabase.close();
+
+        if(insertData){
+
+            Toast.makeText(getActivity(), "Successful Entered !", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(getActivity(), "Something went wrong :( ", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void reportInfomation(String storeName, String streetAddress, String state, String postCode, String productID)

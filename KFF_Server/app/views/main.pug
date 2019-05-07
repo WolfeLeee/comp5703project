@@ -2,13 +2,16 @@ doctype html
 
 html
 head
-    title Main Page
+    title Statistic Page
     link(rel='stylesheet',type='text/css',href='css/fontawesome-free/all.min.css')
     link(rel='stylesheet',type='text/css',href='css/dataTables/dataTables.bootstrap4.css')
     link(rel='stylesheet',type='text/css', href='css/shared.css')
+    link(rel='stylesheet',type='text/css', href='css/importInsertPage.css')
     link(rel='stylesheet',type='text/css',href='css/sb-admin.min.css')
+    link(rel='stylesheet',type='text/css',href='https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css')
     script(src="http://code.jquery.com/jquery-1.9.1.min.js")
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
+    script(src="js/statisticPage.js" type="text/javascript")
     script.
         window.jQuery || document.write('script(src="js/jquery.js")')
 body
@@ -42,24 +45,12 @@ body
                 a(href="/publish") Publish
         div(class="pagebody_mainbody")
             div(class="brand")
-                div(class="pagebody_mainbody__sectionheader__brand") Statistics
-                div(class="pagebody_inputform__brand")
-                    div(class="pagebody_inputform__brand__dialog") Guideline: ???
-                    div(class="inputform_brand__BrandNameHeader inputheader") ...
-                    div(class="inputform_brand__BrandCategoryHeader inputheader") ...
-                    //input(type="text" name="Brandname" Placeholder = "Please enter the brand name..." id="inputform_brand__BrandName")
-                    //select(name="Category" id="inputform_brand__BrandCategory")
-                    //    option(value="Eggs") Eggs
-                    //    option(value="Eggs") Porks
-                    //    option(value="Eggs") Chicken/ Broilers
-                    //input(type="file" accept="image/*" name="Image" id="inputform_brand__BrandImage")
-                    div(class="inputform_brand__BrandAccreditationHeader inputheader") ...
-                    div(class="inputform_brand__BrandRatingHeader inputheader") ...
-                    //input(type="text" name="Accreditation" Placeholder = "Please enter the accreditation..." class="inputform_brand__BrandAccreditation")
-                    //input(type="text" name="Rating" Placeholder = "Please enter the rating..." class="inputform_brand__BrandRating")
-                    //br
-                    //input(type="button" class="inputform_brand__BrandSubmit" value="Submit")
-                    //input(type="button" class="inputform_brand__BrandReset" value="Reset")
+                div(class="pagebody_mainbody__sectionheader__brand")
+                    p Statistic
+                div(class="pagebody_inputform__choosedata")
+                    p Here to show the statistic collected from app
+                    input(type="button" id="btnTest" value="Test")
+
     div(class="feature_page_footer" style="text-align:center")
         div(class="bottom_copyright" style="display:inline-block")
             p &copy; 2019 IT Capstone Project - KinderFoodFinder. All rights reserved | Design by Team 2 - COMP5703

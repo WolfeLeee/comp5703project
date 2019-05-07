@@ -7,13 +7,22 @@
     android:background="@color/lighterOrange"
     android:padding="10dp">
 
-    <com.mancj.materialsearchbar.MaterialSearchBar
+    <!--<com.mancj.materialsearchbar.MaterialSearchBar-->
+        <!--android:id="@+id/search_bar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:mt_speechMode="false"-->
+        <!--app:mt_hint="Search Brand Name..."-->
+        <!--app:mt_maxSuggestionsCount="10"-->
+        <!--android:background="@drawable/style_shadow"/>-->
+    <SearchView
         android:id="@+id/search_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:mt_speechMode="false"
-        app:mt_hint="Search Brand Name..."
-        app:mt_maxSuggestionsCount="10"/>
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/style_shadow"
+        android:iconifiedByDefault="false"
+        android:queryHint="Search Product ..." />
 
     <fragment
         android:id="@+id/map"
@@ -34,11 +43,18 @@
         android:src="@drawable/ic_add_circle_black_24dp"
         android:layout_alignParentEnd="true" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_search"
+    <ListView
+        android:id="@+id/listview_search"
         android:layout_below="@+id/add_report"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_marginTop="5dp"/>
+
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/recycler_search"-->
+        <!--android:layout_below="@+id/add_report"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="300dp"-->
+        <!--android:layout_marginTop="5dp"/>-->
 
 </RelativeLayout>

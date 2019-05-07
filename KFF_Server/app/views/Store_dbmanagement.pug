@@ -3,7 +3,7 @@ doctype html
 html
     head
         meta(charset='utf-8')
-        title Kinder Food Finder
+        title Update Delete Store Page
         script(src="http://code.jquery.com/jquery-1.9.1.min.js")
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
         script(src="js/store_dbmanagement.js" type="text/javascript")
@@ -216,7 +216,7 @@ html
                                                         td
                                                             - for(var j = 0; j < displaydata[i].Address.length; j++ )
                                                                 div #{displaydata[i].Address[j].StreetAddress}, #{displaydata[i].Address[j].Postcode}, #{displaydata[i].Address[j].State}
-                                                        td #{displaydata[i].BrandCount}
+                                                        td #{countnumberofbrand[i]}
                                                         td.deletecheckbox
                                                             label.button
                                                                 - var id = displaydata[i]._id
