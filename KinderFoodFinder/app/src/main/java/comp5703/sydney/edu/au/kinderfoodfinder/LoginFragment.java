@@ -56,6 +56,7 @@ public class LoginFragment extends Fragment {
     private boolean fblogin=true;
     String brand_version, store_version,brand_update,store_update;
 
+    String IP_ADDRESS = "172.20.10.4";
 
 //    @Override
 //    public void onCreate(Bundle savedInstanceState) {
@@ -181,7 +182,7 @@ public class LoginFragment extends Fragment {
 
         // set up
         String ipAddress = "10.16.206.194";  //100.101.72.250 Here should be changed to your server IP
-        String url = "http://" + ipAddress + ":3000/android-app-login?email=" + email + "&password=" + password;
+        String url = "http://" + IP_ADDRESS + ":3000/android-app-login?email=" + email + "&password=" + password;
 
         // send the request to the server for checking user login info
         RequestQueue ExampleRequestQueue = Volley.newRequestQueue(getActivity());
@@ -287,7 +288,7 @@ public class LoginFragment extends Fragment {
 
         // set up
         String ipAddress = "10.16.206.194";  //100.101.72.250 Here should be changed to your server IP
-        String url = "http://" + ipAddress + ":3000/android-app-login-register-fb?facebookId=" + password;
+        String url = "http://" + IP_ADDRESS + ":3000/android-app-login-register-fb?facebookId=" + password;
 
         // send the request to the server for checking user login info
         RequestQueue ExampleRequestQueue = (RequestQueue) Volley.newRequestQueue(getActivity());

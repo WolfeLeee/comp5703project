@@ -146,7 +146,8 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
                 fragmentreportaddress.setArguments( bundle );
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragment_container, fragmentreport).commit();
+                        .replace(R.id.fragment_container, fragmentreport)
+                        .addToBackStack(null).commit();
 
             }
         });

@@ -71,6 +71,7 @@ public class StartUpActivity extends AppCompatActivity
     Context context;
     File file;
     String version;
+    String IP_ADDRESS = "172.20.10.4";
 
     ProgressDialog pd;
 
@@ -222,9 +223,9 @@ public class StartUpActivity extends AppCompatActivity
 {
     // modify the user data to the server
     String url;
-    String ipAddress = "10.16.206.194";  //100.101.72.250 Here should be changed to your server IP
+    String ipAddress = "172.20.10.4";  //100.101.72.250 Here should be changed to your server IP
 
-    url = "http://" + ipAddress + ":3000/android-app-check-version-brand-store";
+    url = "http://" + IP_ADDRESS + ":3000/android-app-check-version-brand-store";
 
     // send the data to the server
     RequestQueue ExampleRequestQueue = Volley.newRequestQueue(this);
@@ -276,7 +277,7 @@ public class StartUpActivity extends AppCompatActivity
                 DaoUnit.getInstance().clearProductsTable();
                 DaoUnit.getInstance().clearAccreditationTable();
 
-                new JsonTask().execute("http://" + "10.16.206.194" + ":3000/GetAllBrand");
+                new JsonTask().execute("http://" + IP_ADDRESS + ":3000/GetAllBrand");
 
             }
         }

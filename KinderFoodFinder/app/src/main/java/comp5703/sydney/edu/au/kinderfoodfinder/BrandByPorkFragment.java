@@ -24,6 +24,13 @@ public class BrandByPorkFragment extends Fragment {
     private Toolbar toolbar;
     private BottomNavigationView navigation;
     Fragment fragmentReport, fragmentReport_address;
+    int key;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate( savedInstanceState );
+        key = getArguments().getInt( "key" );
+    }
 
     @Nullable
     @Override
@@ -42,7 +49,7 @@ public class BrandByPorkFragment extends Fragment {
         // Init DB
         database = new Database(getActivity());
 
-        adapter = new BrandAdapter(getActivity(),database.getBrandByPork());
+        adapter = new BrandAdapter(getActivity(),database.getBrandByPork(), key);
         recyclerView.setAdapter(adapter);
 
 
@@ -59,9 +66,14 @@ public class BrandByPorkFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // go to login fragment
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                        .replace(R.id.fragment_container, fragmentReport).commit();
+                Bundle bundle=new Bundle(  );
+                bundle.putInt( "key", key );
+                fragmentReport.setArguments( bundle );
+//                getActivity().getSupportFragmentManager().beginTransaction()
+//                        .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+//                        .replace(R.id.fragment_container, fragmentReport).commit();
+                getActivity().getSupportFragmentManager().popBackStack();
+                getActivity().getSupportFragmentManager().popBackStack();
 
                 // remove toolbar again
                 toolbar.setVisibility(View.GONE);

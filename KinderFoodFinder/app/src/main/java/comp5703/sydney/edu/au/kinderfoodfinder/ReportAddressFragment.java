@@ -42,13 +42,13 @@ public class ReportAddressFragment extends Fragment {
     StoreDatabase storeDatabase;
     int key;
 
+    String IP_ADDRESS = "172.20.10.4";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         key = getArguments().getInt( "key" );
     }
-
-
 
     @Nullable
     @Override
@@ -97,17 +97,21 @@ public class ReportAddressFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // go to login fragment
-                if(key==1){
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                            .replace(R.id.fragment_container,fragmentlocation ).commit();
+//                if(key==1){
+//                    getActivity().getSupportFragmentManager().beginTransaction()
+//                            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+//                            .replace(R.id.fragment_container,fragmentlocation ).commit();
+//
+//                }else if(key==2){
+//                    getActivity().getSupportFragmentManager().beginTransaction()
+//                            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+//                            .replace(R.id.fragment_container, fragmentmore).commit();
+//
+//                }
+                getActivity().getSupportFragmentManager().popBackStack();
+                getActivity().getSupportFragmentManager().popBackStack();
+                getActivity().getSupportFragmentManager().popBackStack();
 
-                }else if(key==2){
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                            .replace(R.id.fragment_container, fragmentmore).commit();
-
-                }
 
                 // remove toolbar again
                 toolbar.setVisibility(View.GONE);
@@ -178,7 +182,7 @@ public class ReportAddressFragment extends Fragment {
         String url;
         String ipAddress = "10.16.206.194";  //100.101.72.250 Here should be changed to your server IP
 
-            url = "http://" + ipAddress + ":3000/android-app-report-store?storeName=" + storeName + "&streetAddress=" + streetAddress + "&state=" +
+            url = "http://" + IP_ADDRESS + ":3000/android-app-report-store?storeName=" + storeName + "&streetAddress=" + streetAddress + "&state=" +
                     state + "&postCode=" + postCode + "&productId=" + productID;
 
         // send the data to the server

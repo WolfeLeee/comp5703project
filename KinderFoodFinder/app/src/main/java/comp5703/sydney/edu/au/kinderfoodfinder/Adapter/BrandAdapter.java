@@ -51,11 +51,13 @@ public class BrandAdapter extends RecyclerView.Adapter<BrandViewHolder>{
 
     private FragmentActivity context;
     private List<Product_Info> products;
+    private int key;
 
 
-    public BrandAdapter(FragmentActivity context, List<Product_Info> products){
+    public BrandAdapter(FragmentActivity context, List<Product_Info> products, int key){
         this.context = context;
         this.products = products;
+        this.key = key;
     }
 
 
@@ -83,7 +85,7 @@ public class BrandAdapter extends RecyclerView.Adapter<BrandViewHolder>{
         holder.setOnItemClickListener(new BrandViewHolder.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                openAddressFragment(brand,category);
+                openAddressFragment(brand,category, key);
 
             }
         });
@@ -97,7 +99,7 @@ public class BrandAdapter extends RecyclerView.Adapter<BrandViewHolder>{
         return products.size();
     }
 
-    private void openAddressFragment(String brand, String category){
+    private void openAddressFragment(String brand, String category, int key){
 
         /*Intent intent = new Intent(context, ReportAddressFragment.class);
 
@@ -109,6 +111,7 @@ public class BrandAdapter extends RecyclerView.Adapter<BrandViewHolder>{
         Bundle bundle = new Bundle();
         bundle.putString("BRAND_KEY", brand);
         bundle.putString("CATEGORY_KEY", category);
+        bundle.putInt("key", key);
         ReportAddressFragment fragmentaddress = new ReportAddressFragment();
         fragmentaddress.setArguments(bundle);
 

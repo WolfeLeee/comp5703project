@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -57,9 +58,16 @@ public class ReportFragment extends Fragment
             @Override
             public void onClick(View v)
             {
+                Bundle bundle=new Bundle(  );
+                bundle.putInt( "key", key );
+                fragmentBrand_eggs.setArguments( bundle );
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragment_container, fragmentBrand_eggs).commit();
+                        .add(R.id.fragment_container, fragmentBrand_eggs)
+                        .addToBackStack(null).commit();
+
+                // remove toolbar again
+                toolbar.setVisibility(View.GONE);
 
             }
         });
@@ -69,9 +77,13 @@ public class ReportFragment extends Fragment
             @Override
             public void onClick(View v)
             {
+                Bundle bundle=new Bundle(  );
+                bundle.putInt( "key", key );
+                fragmentBrand_Chicken.setArguments( bundle );
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragment_container, fragmentBrand_Chicken).commit();
+                        .add(R.id.fragment_container, fragmentBrand_Chicken)
+                        .addToBackStack(null).commit();
 
             }
         });
@@ -81,9 +93,13 @@ public class ReportFragment extends Fragment
             @Override
             public void onClick(View v)
             {
+                Bundle bundle=new Bundle(  );
+                bundle.putInt( "key", key );
+                fragmentBrand_Pork.setArguments( bundle );
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragment_container, fragmentBrand_Pork).commit();
+                        .add(R.id.fragment_container, fragmentBrand_Pork)
+                        .addToBackStack(null).commit();
 
             }
         });
@@ -100,17 +116,18 @@ public class ReportFragment extends Fragment
             @Override
             public void onClick(View v) {
                 // go to login fragment
-                if(key==1){
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                            .replace(R.id.fragment_container,fragmentLocation ).commit();
-
-                }else if(key==2){
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                            .replace(R.id.fragment_container, fragmentMore).commit();
-
-                }
+//                if(key==1){
+//                    getActivity().getSupportFragmentManager().beginTransaction()
+//                            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+//                            .replace(R.id.fragment_container,fragmentLocation ).commit();
+//
+//                }else if(key==2){
+//                    getActivity().getSupportFragmentManager().beginTransaction()
+//                            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+//                            .replace(R.id.fragment_container, fragmentMore).commit();
+//
+//                }
+                getActivity().getSupportFragmentManager().popBackStack();
 
                 // remove toolbar again
                 toolbar.setVisibility(View.GONE);
