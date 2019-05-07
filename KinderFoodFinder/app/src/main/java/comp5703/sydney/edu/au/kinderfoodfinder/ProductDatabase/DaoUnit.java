@@ -110,21 +110,34 @@ public class DaoUnit {
         return covert2products(productBuilder.list());
     }
 
+    public ArrayList<Product> getcategoryList(String type){
+
+        QueryBuilder productBuilder=productManager.queryBuilder();
+        productBuilder.where( ProductDao.Properties.Category.like( "%"+type+"%" ) );
+        Join join= productBuilder.join(ProductDao.Properties.Id,Accreditation.class,AccreditationDao.Properties.ParentId);
+        return covert2products( productBuilder.list() );
+    }
+
+    public ArrayList<Product> getRatingList(String type){
+
+        QueryBuilder accBuilder=accreditationManager.queryBuilder();
+        accBuilder.where( AccreditationDao.Properties.Rating.eq( type ) );
+        Join join=accBuilder.join( AccreditationDao.Properties.ParentId,Product.class,ProductDao.Properties.Id );
+        return covert2products( accBuilder.list() );
+    }
+
+
 
     public Product getProduct(long id, String sid){
 
         QueryBuilder accBuilder = accreditationManager.queryBuilder();
         Join productJoin = accBuilder.join(AccreditationDao.Properties.ParentId,Product.class,ProductDao.Properties.Id);
-
-
-
         ProductDao productDao=MyApplication.getInstance().getDaoSession().getProductDao();
-
-
-
         Product product=new Product(  );
         return product;
     }
+
+
 
 
     public void clearProductsTable()

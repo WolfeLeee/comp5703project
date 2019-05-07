@@ -91,14 +91,14 @@ public class DetailActivity extends AppCompatActivity {
 
         }
 
-//        if(type.equalsIgnoreCase( "eggs" )){
-//            imageView.setImageResource( R.drawable.farm3 );
-//        }else if(type.equalsIgnoreCase( "pork" )){
-//            imageView.setImageResource( R.drawable.farm1 );
-//
-//        }else if(type.equalsIgnoreCase( "chickens" )){
-//            imageView.setImageResource( R.drawable.farm2 );
-//        }
+        if(type.equalsIgnoreCase( "eggs" )){
+            imageView.setImageResource( R.drawable.farm3 );
+        }else if(type.equalsIgnoreCase( "pork" )){
+            imageView.setImageResource( R.drawable.farm1 );
+
+        }else if(type.equalsIgnoreCase( "chickens" )){
+            imageView.setImageResource( R.drawable.farm2 );
+        }
 
         // test collect click data
 

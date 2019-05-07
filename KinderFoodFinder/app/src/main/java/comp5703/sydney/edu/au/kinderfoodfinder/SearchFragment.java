@@ -412,6 +412,12 @@ public class SearchFragment extends Fragment
 //                Product p= (Product) productAdapter.getItem( position );
                 Product p=result.get( position );
 
+                List<Accreditation> accreditations=p.getAccreditation();
+
+                String acc="ACC";
+                String rating= "GOOD";
+                acc=accreditations.get( 0 ).getAccreditation();
+                rating=accreditations.get( 0 ).getRating();
 
                 ProductDao productDao= MyApplication.getInstance().getDaoSession().getProductDao();
                 Product test=new Product(  );
@@ -419,8 +425,7 @@ public class SearchFragment extends Fragment
                     Intent intent = new Intent(getActivity(), DetailActivity.class);
                     if (intent != null) {
 //                        Accreditation accreditation= (Accreditation) p.getAccreditation();
-                        String acc="ACC";
-                        String rating= "GOOD";
+
                         intent.putExtra("brand", p.getBrand_Name());
                         intent.putExtra("type", p.getCategory());
                         intent.putExtra("accreditation", acc);
