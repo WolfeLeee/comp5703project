@@ -833,8 +833,18 @@ module.exports.ReportPage_Insert = async function(req,res,next)
                                                             if (BrandinStore == null) {
                                                                 res.redirect('/');
                                                             } else {
-
-                                                                res.redirect('/detailstorePage_Brand?storeid=' + req.body.identicalStoreId + "&addressid=" + newbrandinstore.addressid);
+                                                                ReportedStore.remove({_id:req.body.reportid})
+                                                                    .exec(function(errReportedStore)
+                                                                    {
+                                                                        if(errReportedStore)
+                                                                        {
+                                                                            return next(errReportedStore);
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            res.redirect('/detailstorePage_Brand?storeid=' + req.body.identicalStoreId + "&addressid=" + newbrandinstore.addressid);
+                                                                        }
+                                                                    })
                                                             }
                                                         }
                                                     })
@@ -851,7 +861,18 @@ module.exports.ReportPage_Insert = async function(req,res,next)
                                                     }
                                                     if(identicalbrand)
                                                     {
-                                                        res.redirect('/detailstorePage_Brand?storeid=' + req.body.identicalStoreId + "&addressid=" + identicaladddressid);
+                                                        ReportedStore.remove({_id:req.body.reportid})
+                                                            .exec(function(errReportedStore)
+                                                            {
+                                                                if(errReportedStore)
+                                                                {
+                                                                    return next(errReportedStore);
+                                                                }
+                                                                else
+                                                                {
+                                                                    res.redirect('/detailstorePage_Brand?storeid=' + req.body.identicalStoreId + "&addressid=" + identicaladddressid);
+                                                                }
+                                                            })
                                                     }
                                                     else
                                                     {
@@ -867,8 +888,18 @@ module.exports.ReportPage_Insert = async function(req,res,next)
                                                                 if (BrandinStore == null) {
                                                                     res.redirect('/');
                                                                 } else {
-
-                                                                    res.redirect('/detailstorePage_Brand?storeid=' + req.body.identicalStoreId + "&addressid=" + newbrandinstore.addressid);
+                                                                    ReportedStore.remove({_id:req.body.reportid})
+                                                                        .exec(function(errReportedStore)
+                                                                        {
+                                                                            if(errReportedStore)
+                                                                            {
+                                                                                return next(errReportedStore);
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                res.redirect('/detailstorePage_Brand?storeid=' + req.body.identicalStoreId + "&addressid=" + newbrandinstore.addressid);
+                                                                            }
+                                                                        })
                                                                 }
                                                             }
                                                         })
@@ -903,8 +934,20 @@ module.exports.ReportPage_Insert = async function(req,res,next)
                                                         if (BrandinStore == null) {
                                                             res.redirect('/');
                                                         } else {
+                                                            ReportedStore.remove({_id:req.body.reportid})
+                                                                .exec(function(errReportedStore)
+                                                                {
+                                                                    if(errReportedStore)
+                                                                    {
+                                                                        return next(errReportedStore);
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        res.redirect('/detailstorePage_Brand?storeid=' + req.body.identicalStoreId + "&addressid=" + BrandinStore.addressid);
+                                                                    }
+                                                                })
 
-                                                            res.redirect('/detailstorePage_Brand?storeid=' + req.body.identicalStoreId + "&addressid=" + BrandinStore.addressid);
+
                                                         }
                                                     }
                                                 })
@@ -957,8 +1000,20 @@ module.exports.ReportPage_Insert = async function(req,res,next)
                                         }
                                         else
                                         {
+                                            ReportedStore.remove({_id:req.body.reportid})
+                                                .exec(function(errReportedStore)
+                                                {
+                                                    if(errReportedStore)
+                                                    {
+                                                        return next(errReportedStore);
+                                                    }
+                                                    else
+                                                    {
+                                                        res.redirect('/detailstorePage_Brand?storeid='+newbrandinstore.storeid+"&addressid="+newbrandinstore.addressid);
+                                                    }
+                                                })
 
-                                            res.redirect('/detailstorePage_Brand?storeid='+newbrandinstore.storeid+"&addressid="+newbrandinstore.addressid);
+
                                         }
                                     }
                                 })
@@ -1320,22 +1375,21 @@ module.exports.goToStoreDetailPage = async function(req,res,next)
                                   var identical = false;
                                   for(var j = 0 ; j < numberofbrand.length ; j ++)
                                   {
-                                      if(BrandinStore[i].brandid == numberofbrand[j].brandid && BrandinStore[i].storeid == numberofbrand[j].storeid)
+                                      if(BrandinStore[i].brandid == numberofbrand[j])
                                       {
                                           identical = true;
                                       }
                                   }
                                   if(!identical)
                                   {
-                                      numberofbrand.push(BrandinStore[j]);
-                                      count++;
+                                      numberofbrand.push(BrandinStore[j].brandid);
                                   }
                               }
                               res.render('storeDetailPage/storeDetailPage.pug', {
                                   storeid: store._id,
                                   storename: store.storeName,
                                   addressnumb: store.Address.length,
-                                  countnumberofbrand: count
+                                  countnumberofbrand: numberofbrand.length
                               })
                           }
                       })

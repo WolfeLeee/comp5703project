@@ -227,7 +227,7 @@ html
                                                                 input.accreditationlist_table__Delete(value = id, type='checkbox')
                                                                 span.checkmark
                                                         td
-                                                            div.addreport-button Add report
+                                                            div(data-reportid=displaydata[i]._id).addreport-button Add report
                                 div.row
                                     div.col-sm-12.col-md-5
                                         div.dataTables_info(id="datable_info" role="status", aria-live="polite") Showing #{countentries} of #{count}

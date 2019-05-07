@@ -184,6 +184,7 @@ $(document).ready(function()
         var storeAddress = $(trow).children().eq(2).data('streetaddress');
         var storePostCode = $(trow).children().eq(2).data('postcode');
         var storeState = $(trow).children().eq(2).data('state');
+        var reportid = $(this).data('reportid');
         $('.pagebody_inputform__storenameinput').text(storeName);
         $('.pagebody_inputform__storeaddressinput').text(storeAddress);
         $('.pagebody_inputform__storestateinput').text(storeState);
@@ -192,14 +193,14 @@ $(document).ready(function()
         function CompareStoreName(storeName,storePostCode,storeAddress,storeState,brandId){
             var jqxhr = $.get("/GetAllStore")
                 .done(function(data){
-                    IdenticalStoreName(data,storeName,storePostCode,storeAddress,storeState,brandId);
+                    IdenticalStoreName(data,storeName,storePostCode,storeAddress,storeState,brandId,reportid);
                 })
                 .fail(function(jqXHR) {
                     console.log(jqXHR.status);
                 })
         }
 
-        function IdenticalStoreName(data,store_name,store_postcode,store_address,store_state,brandId) {
+        function IdenticalStoreName(data,store_name,store_postcode,store_address,store_state,brandId,reportid) {
             var identicalstorename = false;
             var identicalstoreid = null;
             for (var i = 0; i < data.length; i++) {
@@ -217,7 +218,7 @@ $(document).ready(function()
             var jqxhr = $.get("/getLocation?address=" + address)
                 .done(function (data) {
                     if (data.matched) {
-                        StoreCallback(data, store_name, brandId,identicalstorename,identicalstoreid);
+                        StoreCallback(data, store_name, brandId,identicalstorename,identicalstoreid,reportid);
                     } else {
                         alert("Please enter a valid address;");
                     }
@@ -227,7 +228,7 @@ $(document).ready(function()
                 })
         }
         ///////////
-        function StoreCallback(data,storeName,brandId,identicalStoreName,identicalStoreId) {
+        function StoreCallback(data,storeName,brandId,identicalStoreName,identicalStoreId,reportid) {
 
             $('.modal-body__store__addresslist').empty();
             $('.modal-header').attr('title', storeName);
@@ -377,7 +378,8 @@ $(document).ready(function()
                         long: $(selectedbody).children().eq(4).attr('title'),
                         lat: $(selectedbody).children().eq(5).attr('title'),
                         identicalStoreName: identicalStoreName,
-                        identicalStoreId: identicalStoreId
+                        identicalStoreId: identicalStoreId,
+                        reportid:reportid
                     }
                     if(identicalStoreName)
                     {

@@ -134,7 +134,8 @@ $(document).ready(function()
                 {
                     var params = {
                         page : page,
-                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title")
+                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title"),
+                        addressid : $('.pagebody_mainbody__infodisplay__searchinput').first().data('addressid')
                     }
                     post('/detailstorePage_Brand',params,"get");
                 }
@@ -143,7 +144,8 @@ $(document).ready(function()
                     var params = {
                         page : page,
                         searchstring: searchstring,
-                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title")
+                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title"),
+                        addressid : $('.pagebody_mainbody__infodisplay__searchinput').first().data('addressid')
                     }
                     post('/detailstorePage_Brand',params,"get");
                 }
@@ -155,7 +157,8 @@ $(document).ready(function()
                 {
                     var params = {
                         page : page,
-                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title")
+                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title"),
+                        addressid : $('.pagebody_mainbody__infodisplay__searchinput').first().data('addressid')
                     }
                     post('/detailstorePage_Brand',params,"get");
                 }
@@ -164,7 +167,8 @@ $(document).ready(function()
                     var params = {
                         page : page,
                         searchstring: searchstring,
-                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title")
+                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title"),
+                        addressid : $('.pagebody_mainbody__infodisplay__searchinput').first().data('addressid')
                     }
                     post('/detailstorePage_Brand',params,"get");
                 }
@@ -175,7 +179,8 @@ $(document).ready(function()
                 {
                     var params = {
                         page : $(this).children().eq(0).text(),
-                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title")
+                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title"),
+                        addressid : $('.pagebody_mainbody__infodisplay__searchinput').first().data('addressid')
                     }
                     post('/detailstorePage_Brand',params,"get");
                 }
@@ -184,15 +189,14 @@ $(document).ready(function()
                     var params = {
                         page : $(this).children().eq(0).text(),
                         searchstring: searchstring,
-                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title")
+                        storeid: $('.pagebody_mainbody__infodisplay__searchinput').first().attr("title"),
+                        addressid : $('.pagebody_mainbody__infodisplay__searchinput').first().data('addressid')
                     }
                     post('/detailstorePage_Brand',params,"get");
                 }
 
             }
         })
-
-
 
         /** Post function
          *
