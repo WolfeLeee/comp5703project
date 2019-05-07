@@ -185,7 +185,7 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
                                 MarkerOptions markerOptions = new MarkerOptions().position(latLng).title(location);
                                 NearbyMarker =  mMap.addMarker(markerOptions);
                                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
-                                NearbyList.add(location);
+                                NearbyList.add(location  + " Distance : " + distance + " m");
 
                                 listAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, NearbyList);
                                 listView.setAdapter(listAdapter);

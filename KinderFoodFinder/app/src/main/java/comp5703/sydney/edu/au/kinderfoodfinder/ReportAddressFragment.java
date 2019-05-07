@@ -173,27 +173,10 @@ public class ReportAddressFragment extends Fragment {
             Toast.makeText(getActivity(), "Please enter your post code!", Toast.LENGTH_SHORT).show();
             return;
         }
-        // check pwd equals to confirm pwd
-
-
-//        if(TextUtils.isEmpty(productID))
-//        {
-////            Toast.makeText(getActivity(), "Please select date for your birthday!", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-
-        // if all validations above are passed, show the progress dialog
-//        reportProgressDialog.setMessage("Report...");
-//        reportProgressDialog.show();
-
-//        String timeStamp = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
-
-        // deal with the gender and birthday format
-
 
         // modify the user data to the server
         String url;
-        String ipAddress = "10.16.81.139";  //100.101.72.250 Here should be changed to your server IP
+        String ipAddress = "10.16.206.194";  //100.101.72.250 Here should be changed to your server IP
 
             url = "http://" + ipAddress + ":3000/android-app-report-store?storeName=" + storeName + "&streetAddress=" + streetAddress + "&state=" +
                     state + "&postCode=" + postCode + "&productId=" + productID;

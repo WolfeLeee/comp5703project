@@ -169,7 +169,7 @@ public class RegisterFragment extends Fragment
     /* * * * * * * * * * * *
      * Register Functions  *
      * * * * * * * * * * * */
-    private void registerUser(String name, String gender, String email, String pwd, String confirmPwd, String birthday, boolean showBirthday)
+    private void registerUser(final String name, final String gender, final String email, String pwd, String confirmPwd, final String birthday, boolean showBirthday)
     {
         // check if the texts are empty
         if(TextUtils.isEmpty(name))
@@ -221,7 +221,7 @@ public class RegisterFragment extends Fragment
 
         // modify the user data to the server
         String url;
-        String ipAddress = "10.16.81.139";  //100.101.72.250 Here should be changed to your server IP
+        String ipAddress = "10.16.206.194";  //100.101.72.250 Here should be changed to your server IP
         if(!showBirthday)
             url = "http://" + ipAddress + ":3000/android-app-register?name=" + name + "&gender=" + genderModified + "&email=" +
                     email + "&password=" + pwd + "&birthday=" + birthdayModified;
@@ -241,6 +241,10 @@ public class RegisterFragment extends Fragment
                 //You can test it by printing response.substring(0,500) to the screen.
                 registerProgressDialog.dismiss();
                 Intent intent = new Intent(getActivity(), MainActivity.class);
+                intent.putExtra( "status","yes" );
+                intent.putExtra( "gender",gender );
+                intent.putExtra( "birthday",birthday );
+                intent.putExtra( "userID",email );
                 startActivity(intent);
                 getActivity().finish();
                 Toast.makeText(getActivity(), "Registered Successfully!", Toast.LENGTH_SHORT).show();

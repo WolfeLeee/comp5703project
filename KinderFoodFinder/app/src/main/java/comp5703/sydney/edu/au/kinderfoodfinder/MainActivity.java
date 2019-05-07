@@ -1,6 +1,7 @@
 package comp5703.sydney.edu.au.kinderfoodfinder;
 
 import android.Manifest;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -8,9 +9,12 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -26,6 +30,11 @@ public class MainActivity extends AppCompatActivity
 
     private Toolbar toolbar;
     private BottomNavigationView navigation;
+
+
+
+
+//    String brandVersion,brandUpdate,storeVersion,storeUpdate,status;
 
     /* * * * * * * * * * *
      * On Created Method *
@@ -82,11 +91,6 @@ public class MainActivity extends AppCompatActivity
                     .replace(R.id.fragment_container,new ReportFragment())
                     .addToBackStack(null)
                     .commit();
-//            selectedFragment=locateFragment;
-//
-//            getSupportFragmentManager().beginTransaction()
-//                    .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-//                    .replace(R.id.fragment_container, selectedFragment).commit();
 
         }
 
@@ -97,8 +101,17 @@ public class MainActivity extends AppCompatActivity
         }
 
 
+        Intent intent =getIntent();
+        final String brandVersion=intent.getStringExtra( "brand_version" );
+        final String brandUpdate=intent.getStringExtra( "brand_update" );
+        final String status=intent.getStringExtra( "status" );
 
+        final String userID=intent.getStringExtra( "userID" );
+        final String gender=intent.getStringExtra( "gender" );
+        final String birthday=intent.getStringExtra( "birthday" );
+        Log.d("statistic",brandVersion+", "+brandVersion+", "+status+", "+userID+", "+gender+", "+birthday);
 
+        Intent intent1=new Intent( MainActivity.this,DetailActivity.class );
     }
 
     /* * * * * *
@@ -136,6 +149,35 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
     };
+
+
+    public ArrayList<String> getBasicData(String a,String b,String c){
+        ArrayList<String> data=new ArrayList<>(  );
+        data.add( a );
+        data.add( b );
+        data.add( c );
+        return data;
+    }
+
+    public void persionalData(){
+
+        Intent intent =getIntent();
+
+        final String userID=intent.getStringExtra( "userID" );
+        final String gender=intent.getStringExtra( "gender" );
+        final String birthday=intent.getStringExtra( "birthday" );
+
+        Intent intent1=new Intent( MainActivity.this,DetailActivity.class );
+
+        intent.putExtra( "gender",gender );
+        intent.putExtra( "birthday",birthday );
+        intent.putExtra( "userID",userID );
+
+
+    }
+
+
+
 
 
 

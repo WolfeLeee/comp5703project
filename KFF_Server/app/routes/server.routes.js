@@ -61,8 +61,8 @@ router.get('/android-app-register', controller.registerAndroidAppUsers);
 router.get('/android-app-login', controller.loginAndroidAppUsers);
 router.get('/android-app-report-store', controller.reportedStoreFromAndroidAppUsers);
 router.get('/android-app-login-register-fb', controller.loginRegisterAndroidAppFbUsers);
-router.get('/android-app-check-version-brand', controller.checkBrandVersion);
-router.get('/android-app-check-version-store', controller.checkStoreVersion);
+router.get('/android-app-check-version-brand-store', controller.checkBrandVersion);
+// router.get('/android-app-check-version-store', controller.checkStoreVersion);
 router.get('/android-app-statistic', controller.createStatistic);
 
 // Get data from the database

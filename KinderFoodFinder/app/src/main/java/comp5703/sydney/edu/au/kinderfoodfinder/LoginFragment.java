@@ -54,8 +54,18 @@ public class LoginFragment extends Fragment {
     public final int Login_REQUEST_CODE = 647;
     private Fragment fragmentFBRegister;
     private boolean fblogin=true;
+    String brand_version, store_version,brand_update,store_update;
 
 
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//
+//        brand_version=getArguments().getString( "brand_version" );
+//        brand_update=getArguments().getString( "brand_update" );
+//        store_version=getArguments().getString( "store_version" );
+//        store_update=getArguments().getString( "store_update" );
+//    }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -104,6 +114,17 @@ public class LoginFragment extends Fragment {
         UserDBHelper userDBHelper=new UserDBHelper( getActivity() );
         SQLiteDatabase database=userDBHelper.getReadableDatabase();
 
+        Intent intent =getActivity().getIntent();
+         brand_version=intent.getStringExtra( "brand_version" );
+         brand_update=intent.getStringExtra( "brand_update" );
+        final String status=intent.getStringExtra( "status" );
+        store_update="no";
+        store_version="1";
+
+        Log.d("version data",brand_version+"; "+brand_update+", "+store_version+" "+store_update);
+
+
+        fragmentFBRegister=new FBRegisterFragment();
 
 
         //Login with Facebook
@@ -140,7 +161,7 @@ public class LoginFragment extends Fragment {
     /* * * * * * * * * *
      * Login Functions *
      * * * * * * * * * */
-    private void loginUser(String email, String password) {
+    private void loginUser(final String email, String password) {
         // show the progress dialog until the login validation is complete
         loginProgressDialog.setMessage("Login...");
         loginProgressDialog.show();
@@ -149,13 +170,17 @@ public class LoginFragment extends Fragment {
         if (email.equals("test") && password.equals("test")) {
             loginProgressDialog.dismiss();
             Intent intent = new Intent(getActivity(), MainActivity.class);
+            intent.putExtra( "status","yes" );
+            intent.putExtra( "gender","Male" );
+            intent.putExtra( "birthday","Not Disclose " );
+            intent.putExtra( "userID","test" );
             startActivity(intent);
             getActivity().finish();
             return;
         }
 
         // set up
-        String ipAddress = "10.16.81.139";  //100.101.72.250 Here should be changed to your server IP
+        String ipAddress = "10.16.206.194";  //100.101.72.250 Here should be changed to your server IP
         String url = "http://" + ipAddress + ":3000/android-app-login?email=" + email + "&password=" + password;
 
         // send the request to the server for checking user login info
@@ -173,6 +198,10 @@ public class LoginFragment extends Fragment {
                     Toast.makeText(getActivity(), "Login Successfully!", Toast.LENGTH_SHORT).show();
                     Log.d("Send query response:", response);
                     Intent intent = new Intent(getActivity(), MainActivity.class);
+                    intent.putExtra( "status","yes" );
+                    intent.putExtra( "gender",rep[1] );
+                    intent.putExtra( "birthday",rep[2] );
+                    intent.putExtra( "userID",email );
                     startActivity(intent);
                     getActivity().finish();
                 } else {
@@ -257,8 +286,8 @@ public class LoginFragment extends Fragment {
     private void loginwithFBUser(final String name,final String password) {
 
         // set up
-        String ipAddress = "10.16.81.139";  //100.101.72.250 Here should be changed to your server IP
-        String url = "http://" + ipAddress + ":3000/android-app-login-register-fb?name="+name+"&facebookId=" + password;
+        String ipAddress = "10.16.206.194";  //100.101.72.250 Here should be changed to your server IP
+        String url = "http://" + ipAddress + ":3000/android-app-login-register-fb?facebookId=" + password;
 
         // send the request to the server for checking user login info
         RequestQueue ExampleRequestQueue = (RequestQueue) Volley.newRequestQueue(getActivity());
@@ -266,17 +295,29 @@ public class LoginFragment extends Fragment {
             @Override
             public void onResponse(String response) {
 
-                if (response.equals("Yes")||response.equals( "Create" )) {
+                if (response.equals("Yes")) {
                     Toast.makeText(getActivity(), "Login Successfully!", Toast.LENGTH_SHORT).show();
                     Log.d("Send query response:", response);
 
 
                     Intent intent = new Intent(getActivity(), MainActivity.class);
+                    intent.putExtra( "status","yes" );
+                    intent.putExtra( "gender","Male" );
+                    intent.putExtra( "birthday","Not Disclose " );
+                    intent.putExtra( "userID",password );
                     startActivity(intent);
                     getActivity().finish();
                 } else {
                     Toast.makeText(getActivity(), "Login Failed!", Toast.LENGTH_SHORT).show();
                     Log.d("Send query response:", response);
+
+                    Bundle bundle=new Bundle(  );
+                    bundle.putString( "fb_name",name );
+                    bundle.putString( "fb_id",password );
+                    fragmentFBRegister.setArguments( bundle );
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, fragmentFBRegister).commit();
+
 
                 }
             }
