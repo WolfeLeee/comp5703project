@@ -1012,8 +1012,6 @@ module.exports.ReportPage_Insert = async function(req,res,next)
                                                         res.redirect('/detailstorePage_Brand?storeid='+newbrandinstore.storeid+"&addressid="+newbrandinstore.addressid);
                                                     }
                                                 })
-
-
                                         }
                                     }
                                 })
@@ -2548,6 +2546,78 @@ module.exports.GetAllStore = async function(req, res, next)
                 res.json(Product);
             }
         })
+}
+
+module.exports.GetAllStore = async function(req,res,next)
+{
+    Store.find({})
+        .exec(function(errStore,store)
+        {
+            if(errStore)
+            {
+                return next(errStore);
+            }
+            else
+            {
+                res.json(store);
+            }
+        })
+}
+
+
+module.exports.GetAllBrandinStore = async function(req, res, next)
+{
+    BrandinStore.find()
+        .exec(function(errBrandinStore,BrandinStore)
+        {
+            if(errBrandinStore)
+            {
+                return next(errBrandinStore);
+            }
+            else
+            {
+                Store.find()
+                    .exec(function(errStore,Store)
+                    {
+                        if(errStore)
+                        {
+                            return next(errStore);
+                        }
+                        else
+                        {
+                            var result = [];
+                            for (var i = 0 ; i < BrandinStore.length ; i ++)
+                            {
+                                for(var j = 0 ; j < Store.length ; j++)
+                                {
+                                    if(new String(Store[j]._id).valueOf() == new String(BrandinStore[i].storeid).valueOf())
+                                    {
+                                        for(var k = 0 ; k < Store[j].Address.length ; k++)
+                                        {
+                                           if(new String(Store[j].Address[k]._id).valueOf() == BrandinStore[i].addressid)
+                                           {
+                                               var newbrandinstore = {
+                                                   storeName: Store[j].storeName,
+                                                   StreetAddress: Store[j].Address[k].StreetAddress,
+                                                   State: Store[j].Address[k].State,
+                                                   Postcode: Store[j].Address[k].Postcode,
+                                                   Lat: Store[j].Address[k].Lat,
+                                                   Long: Store[j].Address[k].Long,
+                                                   Brandid: BrandinStore[i].brandid
+                                               }
+                                               result.push(newbrandinstore);
+                                           }
+                                        }
+                                    }
+                                }
+                            }
+                            res.json(result);
+                        }
+                    })
+            }
+        })
+
+
 }
 
 module.exports.CompareStoreAddress = async function(req,res,next)

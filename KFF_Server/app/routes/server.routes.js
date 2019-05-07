@@ -69,6 +69,7 @@ router.get('/android-app-statistic', controller.createStatistic);
 router.get('/GetAllBrand',controller.GetAllBrand);
 router.get('/GetImage',controller.GetImage);
 router.get('/GetAllStore',controller.GetAllStore);
+router.get('/GetAllBrandinStore',controller.GetAllBrandinStore);
 router.get('/CompareStoreAddress',controller.CompareStoreAddress);
 
 module.exports = router;
