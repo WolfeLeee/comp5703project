@@ -228,7 +228,7 @@ public class FBRegisterFragment extends Fragment {
         request.executeAsync();
     }
 
-    private void registerUser(String name, String gender, String id,  String birthday, boolean showBirthday)
+    private void registerUser(String name, final String gender, final String id, final String birthday, boolean showBirthday)
     {
 
         if(TextUtils.isEmpty(birthday))
@@ -254,12 +254,12 @@ public class FBRegisterFragment extends Fragment {
 
         // modify the user data to the server
         String url;
-        String ipAddress = "10.16.81.139";  //100.101.72.250 Here should be changed to your server IP
+        String ipAddress = "10.16.206.194";  //100.101.72.250 Here should be changed to your server IP
         if(!showBirthday)
-            url = "http://" + ipAddress + ":3000/android-app-register-fb?name=" + name + "&facebookId=" + id + "&gender=" +
+            url = "http://" + ipAddress + ":3000/android-app-login-register-fb?name=" + name + "&facebookId=" + id + "&gender=" +
                     genderModified +  "&birthday=" + birthdayModified;
         else
-            url = "http://" + ipAddress + ":3000/android-app-register-fb??name=" + name + "&facebookId=" + id + "&gender=" +
+            url = "http://" + ipAddress + ":3000/android-app-login-register-fb??name=" + name + "&facebookId=" + id + "&gender=" +
                     genderModified + "&birthday=Not+Disclose";
 
         // send the data to the server
@@ -276,6 +276,10 @@ public class FBRegisterFragment extends Fragment {
                 registerProgressDialog.dismiss();
 
                 Intent intent = new Intent(getActivity(), MainActivity.class);
+                intent.putExtra( "status","yes" );
+                intent.putExtra( "gender",gender );
+                intent.putExtra( "birthday",birthday );
+                intent.putExtra( "userID",id );
                 startActivity(intent);
                 getActivity().finish();
                 Toast.makeText(getActivity(), "Registered Successfully!", Toast.LENGTH_SHORT).show();

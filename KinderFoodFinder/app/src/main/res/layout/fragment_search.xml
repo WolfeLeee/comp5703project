@@ -7,18 +7,59 @@
     android:orientation="vertical"
     android:padding="10dp">
 
-    <TextView
-        android:id="@+id/text_search"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:orientation="vertical">
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/radioCatogory">
+            <RadioButton
+                android:id="@+id/radioBrandName"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:checked="false"
+                android:text="BRAND NAME"/>
+            <RadioButton
+                android:id="@+id/radioAccreditation"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:checked="false"
+                android:text="ACCREDITATION"/>
+        </RadioGroup>
 
-    <ImageView
-        android:id="@+id/image_search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/farm1" />
-
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/radioType">
+            <RadioButton
+                android:id="@+id/radioEgg"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:checked="false"
+                android:text="EGG"/>
+            <RadioButton
+                android:id="@+id/radioChicken"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:checked="false"
+                android:text="CHICKEN"/>
+            <RadioButton
+                android:id="@+id/radioPig"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:checked="false"
+                android:text="PIG"/>
+        </RadioGroup>
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

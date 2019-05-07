@@ -1,5 +1,9 @@
 package comp5703.sydney.edu.au.kinderfoodfinder;
 
+
+
+
+
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -11,38 +15,40 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Accreditation;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Product;
 
-public class ItemsAdapter extends BaseAdapter implements Filterable {
+public class ProductAdpater extends BaseAdapter implements Filterable {
 
     private Context context;
     private ArrayList<Items> itemsList;
     private ArrayList<Items> filterList;
     private ArrayList<Product> productsList;
-
     CustomFilter filter;
 
-    public ItemsAdapter (Context context, ArrayList<Items> itemsList){
+    public ProductAdpater (Context context, ArrayList<Product> productsList){
         this.context = context;
-        this.itemsList = itemsList;
+        this.productsList = productsList;
         this.filterList = itemsList;
     }
 
     @Override
     public int getCount() {
-        return itemsList.size();
+        return productsList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return itemsList.get(position);
+        return productsList.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return itemsList.indexOf(getItem(position));
+        return productsList.indexOf(getItem(position));
     }
 
     @Override
@@ -60,11 +66,16 @@ public class ItemsAdapter extends BaseAdapter implements Filterable {
         TextView type=convertView.findViewById( R.id.type );
 
 
-        brand.setText(itemsList.get(position).getBrand());
-        accreditation.setText( itemsList.get( position ).getAccreditation() );
-        String rate=itemsList.get( position ).getRating();
-        rating.setText( itemsList.get( position ).getRating() );
-        type.setText( itemsList.get( position ).getType() );
+
+        List<Accreditation> accreditationList=productsList.get( position ).getAccreditation();
+        String a=accreditationList.get( 0 ).getAccreditation();
+        String b=accreditationList.get( 0 ).getRating();
+
+        brand.setText(productsList.get(position).getBrand_Name());
+        accreditation.setText( a );
+        String rate=a;
+        rating.setText( b );
+        type.setText( productsList.get( position ).getCategory() );
 
         if(rate.equalsIgnoreCase( "BEST" )){
             rating.setTextColor( Color.parseColor("#208E5C"));
@@ -126,3 +137,4 @@ public class ItemsAdapter extends BaseAdapter implements Filterable {
     }
 
 }
+

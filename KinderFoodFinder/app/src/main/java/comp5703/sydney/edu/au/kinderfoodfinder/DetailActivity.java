@@ -1,23 +1,41 @@
 package comp5703.sydney.edu.au.kinderfoodfinder;
 
+import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.AsyncTask;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Accreditation;
+import comp5703.sydney.edu.au.kinderfoodfinder.StatisticDatabase.StatisticsDatabase;
+
 public class DetailActivity extends AppCompatActivity {
+
 
     private TextView brandtv, ratetv, accreditationtv, locationtv;
     private ImageView imageView;
 
     private Toolbar toolbar;
     private BottomNavigationView navigation;
+    String sid,date,age;
+    int times;
+
 
 
 
@@ -34,6 +52,21 @@ public class DetailActivity extends AppCompatActivity {
         String accreditation = intent.getStringExtra("accreditation");
         String rate = intent.getStringExtra("rating");
         String location = intent.getStringExtra("location");
+        sid=intent.getStringExtra( "stringId" );
+        final String userID=intent.getStringExtra( "userID" );
+        final String gender=intent.getStringExtra( "gender" );
+        final String birthday=intent.getStringExtra( "birthday" );
+        GregorianCalendar cal = new GregorianCalendar();    //当前时间
+
+        cal.setMinimalDaysInFirstWeek(7);   //第一周最少包含七天
+        cal.setFirstDayOfWeek( Calendar.MONDAY);//周一为一周第一天
+        cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());//取开始时间
+        int weeks=cal.get(Calendar.WEEK_OF_YEAR);
+        Calendar calendar = Calendar.getInstance();
+        int year =calendar.get(Calendar.YEAR);
+
+
+
 
 //        String img = intent.getStringExtra("img");
 
@@ -66,6 +99,31 @@ public class DetailActivity extends AppCompatActivity {
 //        }else if(type.equalsIgnoreCase( "chickens" )){
 //            imageView.setImageResource( R.drawable.farm2 );
 //        }
+
+        // test collect click data
+
+        date=getDate();
+        age=getAge( birthday );
+        times=1;
+        String count ="1";
+
+
+
+
+        String info=sid+"; "+date+"; "+times+"; "+userID+"; "+gender+"; "+age+"; ";
+        Log.d("statistics add record",info);
+
+
+
+        StatisticsDatabase statisticsDatabase=new StatisticsDatabase(this);
+//
+        SQLiteDatabase database= statisticsDatabase.getWritableDatabase();
+        statisticsDatabase.addProduct( sid,date,gender,age,count,database );
+        statisticsDatabase.close();
+
+        Log.d("statistic","one row insert");
+
+//        new AddClickData( ).execute( sid,period,times,userid,gender,age );
 
         toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setVisibility(View.VISIBLE);
@@ -132,11 +190,115 @@ public class DetailActivity extends AppCompatActivity {
 
 
 
+    }
 
 
+    private class AddClickData extends AsyncTask<String, String, String> {
+        Context context;
+//
+//        public AddClickData(Context context) {
+//            this.context=context;
+//        }
+
+
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            StatisticsDatabase statisticsDatabase=new StatisticsDatabase( context);
+
+            SQLiteDatabase database= statisticsDatabase.getWritableDatabase();
+            int t=0;
+            String sid=strings[0];
+            String date=strings[1];
+            String gender=strings[2];
+            String age=strings[3];
+            String count=strings[5];
+
+
+            statisticsDatabase.addProduct( sid,date,gender,age,count,database );
+
+
+
+
+            return "One Row Insert";
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate( values );
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Log.d("statistic",s);
+        }
     }
 
     public void backClick(View view) {
         finish();
+    }
+
+    public String getDate(){
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        Date d=new Date();
+
+        String year=String.valueOf( calendar.get( Calendar.YEAR ) );
+        String month=String.valueOf( calendar.get( Calendar.MONTH ) +1);
+        String day=String.valueOf( calendar.get( Calendar.DAY_OF_MONTH ) );
+        String date= sdf.format( d );
+        return date;
+    }
+
+    public String getAge(String birthday)  {
+        String result="";
+        String string = birthday;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        int age=0;
+
+        Date birth=new Date(  );
+        try {
+
+            birth=sdf.parse( string );
+            Date d=new Date();
+
+            if(birth.getDay()>d.getDay()&& birth.getMonth()>d.getMonth()){
+                age=d.getYear()-birth.getYear()-1;
+            }else {
+                age=d.getYear()-birth.getYear();
+            }
+        } catch (ParseException e) {
+            result=e.toString();
+            e.printStackTrace();
+            return "Not Disclose";
+        }
+
+
+        if(age<18){
+            result="Under 18 years";
+        }else if(age>=18&&age<30){
+            result="18-29 years";
+        }else if(age>=30&&age<40){
+            result="30-39 years";
+        }else if(age>=40&&age<50){
+            result="40-49 years";
+        }else if(age>=50&&age<60){
+            result="50-59 years";
+        }else {
+            result="60+ years";
+        }
+
+
+        Log.d("date",birth.toString()+"；  " +String.valueOf( age ));
+
+
+        return result;
     }
 }

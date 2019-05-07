@@ -71,11 +71,9 @@ public class BrowseResultFragment extends Fragment {
         mPage = getArguments().getInt("page");
         position=getArguments().getInt( "position" );
         title=getArguments().getString( "title" );
-
-
-
-
     }
+
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate( R.layout.result_fragment, container, false );
@@ -96,11 +94,6 @@ public class BrowseResultFragment extends Fragment {
 
 //        navigation = (BottomNavigationView) getActivity().findViewById(R.id.navigation);
 //        navigation.setVisibility(View.GONE);
-
-
-
-
-
 
         int n=position+1;
         page=mPage;
@@ -137,13 +130,6 @@ public class BrowseResultFragment extends Fragment {
 
         Log.d( "pppp",String.valueOf( resultList.size() ) );
 
-
-
-
-
-
-
-
         // tool bar listener
         toolbar.setNavigationOnClickListener(new View.OnClickListener()
         {
@@ -156,8 +142,10 @@ public class BrowseResultFragment extends Fragment {
                         .replace(R.id.fragment_container, browseFragment).commit();
 
 
+
                 // remove toolbar again
                 toolbar.setVisibility(View.GONE);
+                textView.setText( "Back" );
 
                 // enable navigation bar again
 //                navigation.setVisibility(View.VISIBLE);
@@ -189,15 +177,17 @@ public class BrowseResultFragment extends Fragment {
             }
         });
 
+        Intent intent =getActivity().getIntent();
+        final String userID=intent.getStringExtra( "userID" );
+        final String gender=intent.getStringExtra( "gender" );
+        final String birthday=intent.getStringExtra( "birthday" );
+
+
         resultlv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Items c= (Items) itemsAdapter.getItem(position);
-
-
-
-
-                Intent intent = new Intent(getActivity(), DetailActivity.class);
+            Intent intent = new Intent(getActivity(), DetailActivity.class);
                 if (intent != null) {
 
                     intent.putExtra("brand", c.getBrand());
@@ -205,14 +195,14 @@ public class BrowseResultFragment extends Fragment {
                     intent.putExtra("accreditation", c.getAccreditation());
                     intent.putExtra("rating", c.getRating());
                     intent.putExtra("location", c.getAvailable());
+                    intent.putExtra( "gender",gender );
+                    intent.putExtra( "birthday",birthday );
+                    intent.putExtra( "userID",userID );
 
 //                    intent.putExtra("img", String.valueOf(c.getImg()));
                     startActivityForResult(intent, VIEW_ITEM_REQUEST_CODE);
 
                 }
-//
-
-
             }
         });
 

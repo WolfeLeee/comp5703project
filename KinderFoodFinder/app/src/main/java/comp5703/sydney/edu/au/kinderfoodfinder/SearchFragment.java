@@ -11,11 +11,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -26,12 +26,15 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.List;
 
-import comp5703.sydney.edu.au.kinderfoodfinder.Database.BackgroundTask;
+import comp5703.sydney.edu.au.greendao.gen.ProductDao;
 import comp5703.sydney.edu.au.kinderfoodfinder.Database.ProductContract;
 import comp5703.sydney.edu.au.kinderfoodfinder.Database.ProductDatabase;
-import comp5703.sydney.edu.au.kinderfoodfinder.Database.SearchBackground;
-import comp5703.sydney.edu.au.kinderfoodfinder.LocalDatabase.ProductsRecyclerViewAdapter;
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Accreditation;
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.DaoUnit;
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.MyApplication;
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Product;
 
 /* * * * * * * * * * *
  * May be used later *
@@ -64,6 +67,11 @@ public class SearchFragment extends Fragment
     ArrayList<Items> resultList =new ArrayList<>(  );
     public final int VIEW_ITEM_REQUEST_CODE = 647;
     ArrayList<Items> eggsdata=new ArrayList<>(  );
+    private ArrayList<Product> result=new ArrayList<>(  );
+    ProductAdpater productAdapter;
+
+
+    private int category,type;
 
 
     private LinearLayout categoryEgg, categoryChicken, categoryPig;
@@ -123,7 +131,6 @@ public class SearchFragment extends Fragment
 //        egglv=view.findViewById( R.id.egglv );
 //        pigslv=view.findViewById( R.id.piglv );
 //        chickenlv=view.findViewById( R.id.chickenlv );
-        imageView=view.findViewById( R.id.image_search );
 
         /* * * * * * *
          * Listeners *
@@ -148,7 +155,6 @@ public class SearchFragment extends Fragment
                 categoryEgg.setBackgroundColor(getResources().getColor(R.color.darkOrange));
                 categoryChicken.setBackgroundColor(getResources().getColor(R.color.white));
                 categoryPig.setBackgroundColor(getResources().getColor(R.color.white));
-                imageView.setImageResource( R.drawable.farm3 );
                 product.setAdapter( null );
             }
         });
@@ -161,7 +167,6 @@ public class SearchFragment extends Fragment
                 categoryEgg.setBackgroundColor(getResources().getColor(R.color.white));
                 categoryChicken.setBackgroundColor(getResources().getColor(R.color.darkOrange));
                 categoryPig.setBackgroundColor(getResources().getColor(R.color.white));
-                imageView.setImageResource( R.drawable.farm2 );
                 product.setAdapter( null );
 
             }
@@ -175,7 +180,6 @@ public class SearchFragment extends Fragment
                 categoryEgg.setBackgroundColor(getResources().getColor(R.color.white));
                 categoryChicken.setBackgroundColor(getResources().getColor(R.color.white));
                 categoryPig.setBackgroundColor(getResources().getColor(R.color.darkOrange));
-                imageView.setImageResource( R.drawable.farm1 );
                 product.setAdapter( null );
 
             }
@@ -184,177 +188,260 @@ public class SearchFragment extends Fragment
 
 
 
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+// initial function
+//         search view listener for searching result
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+//        {
 //            @Override
-//            public boolean onQueryTextSubmit(String query) {
+//            public boolean onQueryTextSubmit(String query)
+//            {
+//                // search by the input from user
+//                if(categoryID == 1) // egg
+//                {
+//                    Toast.makeText(getActivity(), "Searching egg product...", Toast.LENGTH_SHORT).show();
+////                    eggAdapter.getFilter().filter(query);
+////                    egglv.setAdapter( eggAdapter );
+//                    eggDataAp.getFilter().filter(query);
+//                    product.setAdapter( eggDataAp );
+//                    Utility.setListViewHeightBasedOnChildren(product);
+//
+//                    return false;
+//                }
+//                else if(categoryID == 2) // chicken
+//                {
+//
+//                    Toast.makeText(getActivity(), "Searching chicken product...", Toast.LENGTH_SHORT).show();
+//
+//                    product.setAdapter( chickenAdapter );
+//                    Utility.setListViewHeightBasedOnChildren(product);
+//                }
+//                else if(categoryID == 3) // pigs
+//                {
+//                    Toast.makeText(getActivity(), "Searching pig product...", Toast.LENGTH_SHORT).show();
+//
+//                    product.setAdapter( pigAdapter );
+//                    Utility.setListViewHeightBasedOnChildren(product);
+//                }
+//                else // nothing selected
+//                {
+//                    Toast.makeText(getActivity(), "Please select the category before searching!", Toast.LENGTH_SHORT).show();
+//
+//
+//                }
+////                Log.d(TAG, "onQueryTextSubmit: "+query);
+////                GetProductsData getProductsData = new GetProductsData(SearchFragment.this,SearchFragment.this.getContext());
+////                getProductsData.execute(query);
 //                return false;
 //            }
 //
 //            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                eggAdapter.getFilter().filter(newText);
+//            public boolean onQueryTextChange(String newText)
+//            {
+//
+//                if(categoryID == 1) // egg
+//                {
+//                    Toast.makeText(getActivity(), "Searching egg product...", Toast.LENGTH_SHORT).show();
+////                    eggAdapter.getFilter().filter(query);
+////                    egglv.setAdapter( eggAdapter );
+//                    eggDataAp.getFilter().filter(newText);
+//                    product.setAdapter( eggDataAp );
+//                    Utility.setListViewHeightBasedOnChildren(product);
+//
+//                    return false;
+//                }
+//                else if(categoryID == 2) // chicken
+//                {
+//
+//                    Toast.makeText(getActivity(), "Searching chicken product...", Toast.LENGTH_SHORT).show();
+//
+//                    chickenAdapter.getFilter().filter(newText);
+//
+//                    product.setAdapter( chickenAdapter );
+//                    Utility.setListViewHeightBasedOnChildren(product);
+//                }
+//                else if(categoryID == 3) // pigs
+//                {
+//                    Toast.makeText(getActivity(), "Searching pig product...", Toast.LENGTH_SHORT).show();
+//
+//                    pigAdapter.getFilter().filter(newText);
+//
+//                    product.setAdapter( pigAdapter );
+//                    Utility.setListViewHeightBasedOnChildren(product);
+//                }
+//                else // nothing selected
+//                {
+//                    Toast.makeText(getActivity(), "Please select the category before searching!", Toast.LENGTH_SHORT).show();
+//
+//                }
 //                return false;
 //            }
 //        });
 
-//         search view listener for searching result
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
-        {
+
+//        product.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//                if(categoryID == 1) // egg
+//                {
+//                    Toast.makeText(getActivity(), "Searching egg product...", Toast.LENGTH_SHORT).show();
+//                    Items c= (Items) eggDataAp.getItem(position);
+//                    Intent intent = new Intent(getActivity(), DetailActivity.class);
+//                    if (intent != null) {
+//
+//                        intent.putExtra("brand", c.getBrand());
+//                        intent.putExtra("type", c.getType());
+//                        intent.putExtra("accreditation", c.getAccreditation());
+//                        intent.putExtra("rating", c.getRating());
+//                        intent.putExtra("location", c.getAvailable());
+//
+////                    intent.putExtra("img", String.valueOf(c.getImg()));
+//                        startActivity( intent );
+//
+//
+//                    }
+//                }
+//                else if(categoryID == 2) // chicken
+//                {
+//
+//                    Items c= (Items) chickenAdapter.getItem(position);
+//                    Intent intent = new Intent(getActivity(), DetailActivity.class);
+//                    if (intent != null) {
+//
+//                        intent.putExtra("brand", c.getBrand());
+//                        intent.putExtra("type", c.getType());
+//                        intent.putExtra("accreditation", c.getAccreditation());
+//                        intent.putExtra("rating", c.getRating());
+//                        intent.putExtra("location", c.getAvailable());
+//
+////                    intent.putExtra("img", String.valueOf(c.getImg()));
+//                        startActivity( intent );
+//
+//
+//                    }
+//                    Toast.makeText(getActivity(), "Searching chicken product...", Toast.LENGTH_SHORT).show();
+//                }
+//                else if(categoryID == 3) // pigs
+//                {
+//                    Items c= (Items) pigAdapter.getItem(position);
+//                    Intent intent = new Intent(getActivity(), DetailActivity.class);
+//                    if (intent != null) {
+//
+//                        intent.putExtra("brand", c.getBrand());
+//                        intent.putExtra("type", c.getType());
+//                        intent.putExtra("accreditation", c.getAccreditation());
+//                        intent.putExtra("rating", c.getRating());
+//                        intent.putExtra("location", c.getAvailable());
+//
+////                    intent.putExtra("img", String.valueOf(c.getImg()));
+//                        startActivity( intent );
+//
+//                    }
+//                    Toast.makeText(getActivity(), "Searching pig product...", Toast.LENGTH_SHORT).show();
+//                }
+//                else // nothing selected
+//                {
+//                    Toast.makeText(getActivity(), "Please select the category before searching!", Toast.LENGTH_SHORT).show();
+//                }
+//
+//            }
+//        } );
+
+
+///***********************************************************
+
+
+
+        Intent intent =getActivity().getIntent();
+        final String userID=intent.getStringExtra( "userID" );
+        final String gender=intent.getStringExtra( "gender" );
+        final String birthday=intent.getStringExtra( "birthday" );
+
+        RadioGroup catogryRadioes = view.findViewById(R.id.radioCatogory);
+        RadioGroup typeRadioes = view.findViewById(R.id.radioType);
+        //大类选择
+        catogryRadioes.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public boolean onQueryTextSubmit(String query)
-            {
-                // search by the input from user
-                if(categoryID == 1) // egg
-                {
-                    Toast.makeText(getActivity(), "Searching egg product...", Toast.LENGTH_SHORT).show();
-//                    eggAdapter.getFilter().filter(query);
-//                    egglv.setAdapter( eggAdapter );
-                    eggDataAp.getFilter().filter(query);
-                    product.setAdapter( eggDataAp );
-                    Utility.setListViewHeightBasedOnChildren(product);
-
-                    return false;
-                }
-                else if(categoryID == 2) // chicken
-                {
-
-                    Toast.makeText(getActivity(), "Searching chicken product...", Toast.LENGTH_SHORT).show();
-
-                    product.setAdapter( chickenAdapter );
-                    Utility.setListViewHeightBasedOnChildren(product);
-                }
-                else if(categoryID == 3) // pigs
-                {
-                    Toast.makeText(getActivity(), "Searching pig product...", Toast.LENGTH_SHORT).show();
-
-                    product.setAdapter( pigAdapter );
-                    Utility.setListViewHeightBasedOnChildren(product);
-                }
-                else // nothing selected
-                {
-                    Toast.makeText(getActivity(), "Please select the category before searching!", Toast.LENGTH_SHORT).show();
-
-
-                }
-//                Log.d(TAG, "onQueryTextSubmit: "+query);
-//                GetProductsData getProductsData = new GetProductsData(SearchFragment.this,SearchFragment.this.getContext());
-//                getProductsData.execute(query);
-                return false;
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                category = checkedId;
             }
-
+        });
+        //鸡、鸡蛋、猪选择
+        typeRadioes.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public boolean onQueryTextChange(String newText)
-            {
-
-
-
-
-                if(categoryID == 1) // egg
-                {
-                    Toast.makeText(getActivity(), "Searching egg product...", Toast.LENGTH_SHORT).show();
-//                    eggAdapter.getFilter().filter(query);
-//                    egglv.setAdapter( eggAdapter );
-                    eggDataAp.getFilter().filter(newText);
-                    product.setAdapter( eggDataAp );
-                    Utility.setListViewHeightBasedOnChildren(product);
-
-                    return false;
-                }
-                else if(categoryID == 2) // chicken
-                {
-
-                    Toast.makeText(getActivity(), "Searching chicken product...", Toast.LENGTH_SHORT).show();
-
-                    chickenAdapter.getFilter().filter(newText);
-
-                    product.setAdapter( chickenAdapter );
-                    Utility.setListViewHeightBasedOnChildren(product);
-                }
-                else if(categoryID == 3) // pigs
-                {
-                    Toast.makeText(getActivity(), "Searching pig product...", Toast.LENGTH_SHORT).show();
-
-                    pigAdapter.getFilter().filter(newText);
-
-                    product.setAdapter( pigAdapter );
-                    Utility.setListViewHeightBasedOnChildren(product);
-                }
-                else // nothing selected
-                {
-                    Toast.makeText(getActivity(), "Please select the category before searching!", Toast.LENGTH_SHORT).show();
-
-                }
-                return false;
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                type = checkedId;
             }
         });
 
 
+        searchView.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                result=DaoUnit.getInstance().searchByOption(category,type,query);
+
+                ProductAdpater productAdapter=new ProductAdpater( getActivity(),result );
+
+                product.setAdapter( productAdapter );
+                productAdapter.notifyDataSetChanged();
+                Utility.setListViewHeightBasedOnChildren(product);
+
+                Log.d("search result",String.valueOf( result.size() ));
+
+
+                Toast.makeText( getActivity(),"Total Find "+String.valueOf(result.size())+" Records",Toast.LENGTH_LONG ).show();
+//                BToast.success(MainActivity.this).text("Total Searching Result"+String.valueOf(ps.size())+" Records").show();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
         product.setOnItemClickListener( new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Product p= (Product) productAdapter.getItem( position );
+                Product p=result.get( position );
 
-                if(categoryID == 1) // egg
-                {
-                    Toast.makeText(getActivity(), "Searching egg product...", Toast.LENGTH_SHORT).show();
-                    Items c= (Items) eggDataAp.getItem(position);
+
+                ProductDao productDao= MyApplication.getInstance().getDaoSession().getProductDao();
+                Product test=new Product(  );
+
                     Intent intent = new Intent(getActivity(), DetailActivity.class);
                     if (intent != null) {
+//                        Accreditation accreditation= (Accreditation) p.getAccreditation();
+                        String acc="ACC";
+                        String rating= "GOOD";
+                        intent.putExtra("brand", p.getBrand_Name());
+                        intent.putExtra("type", p.getCategory());
+                        intent.putExtra("accreditation", acc);
+                        intent.putExtra("rating", rating);
+                        intent.putExtra("location", p.getAvailable());
+                        intent.putExtra( "stringId",p.getSid() );
+                        intent.putExtra( "gender",gender );
+                        intent.putExtra( "birthday",birthday );
+                        intent.putExtra( "userID",userID );
+                        List<Accreditation> accreditation= (List<Accreditation>) p.getAccreditation();
+                        String a=accreditation.get( 0 ).getSid();
+                        String b=accreditation.get( 0 ).getAccreditation();
+                        String c=accreditation.get( 0 ).getRating();
 
-                        intent.putExtra("brand", c.getBrand());
-                        intent.putExtra("type", c.getType());
-                        intent.putExtra("accreditation", c.getAccreditation());
-                        intent.putExtra("rating", c.getRating());
-                        intent.putExtra("location", c.getAvailable());
 
+                        String info=p.getSid()+"; "+p.getBrand_Name()+"; "+p.getCategory()+"; "+p.getImage()+"; "
+                                +a+"; "+b+"; "+c;
+                        Log.d("statistics put record",info);
 //                    intent.putExtra("img", String.valueOf(c.getImg()));
                         startActivity( intent );
-
-
                     }
-                }
-                else if(categoryID == 2) // chicken
-                {
-
-                    Items c= (Items) chickenAdapter.getItem(position);
-                    Intent intent = new Intent(getActivity(), DetailActivity.class);
-                    if (intent != null) {
-
-                        intent.putExtra("brand", c.getBrand());
-                        intent.putExtra("type", c.getType());
-                        intent.putExtra("accreditation", c.getAccreditation());
-                        intent.putExtra("rating", c.getRating());
-                        intent.putExtra("location", c.getAvailable());
-
-//                    intent.putExtra("img", String.valueOf(c.getImg()));
-                        startActivity( intent );
-
-
-                    }
-                    Toast.makeText(getActivity(), "Searching chicken product...", Toast.LENGTH_SHORT).show();
-                }
-                else if(categoryID == 3) // pigs
-                {
-                    Items c= (Items) pigAdapter.getItem(position);
-                    Intent intent = new Intent(getActivity(), DetailActivity.class);
-                    if (intent != null) {
-
-                        intent.putExtra("brand", c.getBrand());
-                        intent.putExtra("type", c.getType());
-                        intent.putExtra("accreditation", c.getAccreditation());
-                        intent.putExtra("rating", c.getRating());
-                        intent.putExtra("location", c.getAvailable());
-
-//                    intent.putExtra("img", String.valueOf(c.getImg()));
-                        startActivity( intent );
-
-                    }
-                    Toast.makeText(getActivity(), "Searching pig product...", Toast.LENGTH_SHORT).show();
-                }
-                else // nothing selected
-                {
-                    Toast.makeText(getActivity(), "Please select the category before searching!", Toast.LENGTH_SHORT).show();
-                }
-
             }
         } );
 
@@ -422,6 +509,8 @@ public class SearchFragment extends Fragment
         }
         
     }
+
+
 
 
     // test the function
@@ -604,15 +693,5 @@ public class SearchFragment extends Fragment
 
     }
 
-    public String itemtoString(int i){
-        Items items=itemsArrayList.get( i );
-//
-        String brand =items.getBrand();
-        String acc=items.getAccreditation();
-        String rating=items.getRating();
-        String available =items.getAvailable();
-        String category=items.getType();
 
-        return String.valueOf( i )+"; "+brand+"; "+acc+"; "+rating+"; "+available+"; "+category;
-    }
 }
