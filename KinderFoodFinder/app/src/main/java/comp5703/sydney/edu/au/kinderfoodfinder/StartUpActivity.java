@@ -301,13 +301,9 @@ public class StartUpActivity extends AppCompatActivity
 
         protected void onPreExecute() {
             super.onPreExecute();
-
-
         }
 
         protected String doInBackground(String... params) {
-
-
             HttpURLConnection connection = null;
             BufferedReader reader = null;
 
@@ -315,8 +311,6 @@ public class StartUpActivity extends AppCompatActivity
                 URL url = new URL(params[0]);
                 connection = (HttpURLConnection) url.openConnection();
                 connection.connect();
-
-
                 InputStream stream = connection.getInputStream();
 
                 reader = new BufferedReader(new InputStreamReader(stream));
@@ -327,12 +321,8 @@ public class StartUpActivity extends AppCompatActivity
                 while ((line = reader.readLine()) != null) {
                     buffer.append(line+"\n");
                     Log.d("Response: ", "> " + line);   //here u ll get whole response...... :-)
-
                 }
-
                 return buffer.toString();
-
-
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -502,7 +492,7 @@ public class StartUpActivity extends AppCompatActivity
 
 
 
-        url = "http://" + ipAddress + ":3000/android-app-statistic?statistic="+result;
+        url = "http://" + IP_ADDRESS + ":3000/android-app-statistic?statistic="+result;
 
         // send the data to the server
         RequestQueue ExampleRequestQueue = Volley.newRequestQueue(this);

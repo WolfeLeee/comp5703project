@@ -21,6 +21,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import comp5703.sydney.edu.au.greendao.gen.AccreditationDao;
+import comp5703.sydney.edu.au.greendao.gen.DaoMaster;
+import comp5703.sydney.edu.au.greendao.gen.DaoSession;
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.DaoUnit;
+
 public class TestFragment extends Fragment {
 
 
@@ -140,17 +145,20 @@ public class TestFragment extends Fragment {
         ratinglist.add( "GOOD" );
         ratinglist.add( "Avoid" );
 
-        accreditationlist.add( "Cage, Caged" );
-        accreditationlist.add( "RSPCA Approved Indoor" );
-        accreditationlist.add( "FREPA" );
-        accreditationlist.add( "Humane Choice" );
-        accreditationlist.add( "Free Range Farmers Association" );
-        accreditationlist.add( "Australian Certified Organic" );
-        accreditationlist.add( "NASAA, NASAA Organic" );
-        accreditationlist.add( "Organic Food Chain, OFC" );
-        accreditationlist.add( "Coles Egg Production Standard for Free Range" );
-        accreditationlist.add( "DEMETER, DEMETER Bio-dynamic" );
-        accreditationlist.add( "PROOF" );
+        ;
+
+
+//        accreditationlist.add( "Cage, Caged" );
+//        accreditationlist.add( "RSPCA Approved Indoor" );
+//        accreditationlist.add( "FREPA" );
+//        accreditationlist.add( "Humane Choice" );
+//        accreditationlist.add( "Free Range Farmers Association" );
+//        accreditationlist.add( "Australian Certified Organic" );
+//        accreditationlist.add( "NASAA, NASAA Organic" );
+//        accreditationlist.add( "Organic Food Chain, OFC" );
+//        accreditationlist.add( "Coles Egg Production Standard for Free Range" );
+//        accreditationlist.add( "DEMETER, DEMETER Bio-dynamic" );
+//        accreditationlist.add( "PROOF" );
 
     }
 

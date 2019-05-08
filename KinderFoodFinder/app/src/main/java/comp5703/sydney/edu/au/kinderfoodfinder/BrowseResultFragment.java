@@ -26,6 +26,10 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Accreditation;
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.DaoUnit;
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Product;
+
 public class BrowseResultFragment extends Fragment {
 
     private Fragment browseFragment;
@@ -55,7 +59,9 @@ public class BrowseResultFragment extends Fragment {
     ArrayList<Items> goodList=new ArrayList<>(  );
     ArrayList<Items> avoidList=new ArrayList<>(  );
     ArrayList<Items> resultList =new ArrayList<>(  );
+    ArrayList<Product> myresult;
 
+    int checkid;
     public static BrowseResultFragment newInstance(int page, int position) {
         Bundle args = new Bundle();
 
@@ -63,12 +69,13 @@ public class BrowseResultFragment extends Fragment {
         args.putInt( "position",position );
         BrowseResultFragment fragment = new BrowseResultFragment();
         fragment.setArguments(args);
+
         return fragment;
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPage = getArguments().getInt("page");
+        checkid = getArguments().getInt("checkid");
         position=getArguments().getInt( "position" );
         title=getArguments().getString( "title" );
     }
@@ -78,6 +85,11 @@ public class BrowseResultFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate( R.layout.result_fragment, container, false );
 
+
+        Intent intent =getActivity().getIntent();
+        final String userID=intent.getStringExtra( "userID" );
+        final String gender=intent.getStringExtra( "gender" );
+        final String birthday=intent.getStringExtra( "birthday" );
 
 
 
@@ -105,10 +117,7 @@ public class BrowseResultFragment extends Fragment {
                 resultList=eggsList;
             }else if(page==3){
                 resultList=bestList;
-
             }
-
-
         }else if(n==2){
             if(page==1){
                 resultList=pigList;
@@ -156,9 +165,28 @@ public class BrowseResultFragment extends Fragment {
         eggsv=view.findViewById( R.id.eggsv );
 
 
-        final ItemsAdapter itemsAdapter= new ItemsAdapter( getActivity(),resultList );
-        resultlv.setAdapter( itemsAdapter );
+//        final ItemsAdapter itemsAdapter= new ItemsAdapter( getActivity(),resultList );
+
+
+        if(checkid==1){
+            myresult= DaoUnit.getInstance().getcategoryList( title );
+            Log.d("result",String.valueOf( checkid ));
+
+        }else if(checkid==2){
+            myresult=DaoUnit.getInstance().getAccList( title );
+
+        }else if(checkid==3){
+            myresult=DaoUnit.getInstance().getRatingList( title );
+        }else{
+        }
+
+        final ProductAdpater productAdpater=new ProductAdpater( getActivity(),myresult );
+        resultlv.setAdapter( productAdpater );
         Utility.setListViewHeightBasedOnChildren(resultlv);
+
+        Log.d("myresult sizw",String.valueOf( myresult.size() ));
+        Log.d("myresult sizw",String.valueOf( checkid )+";"+title);
+
 
 
 //        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,list);
@@ -172,29 +200,30 @@ public class BrowseResultFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                itemsAdapter.getFilter().filter(newText);
-                return false;
+                productAdpater.getFilter().filter(newText);
+                productAdpater.notifyDataSetChanged();
+                return true;
             }
         });
-
-        Intent intent =getActivity().getIntent();
-        final String userID=intent.getStringExtra( "userID" );
-        final String gender=intent.getStringExtra( "gender" );
-        final String birthday=intent.getStringExtra( "birthday" );
-
 
         resultlv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Items c= (Items) itemsAdapter.getItem(position);
+                Product product = (Product) productAdpater.getItem(position);
             Intent intent = new Intent(getActivity(), DetailActivity.class);
                 if (intent != null) {
-
-                    intent.putExtra("brand", c.getBrand());
-                    intent.putExtra("type", c.getType());
-                    intent.putExtra("accreditation", c.getAccreditation());
-                    intent.putExtra("rating", c.getRating());
-                    intent.putExtra("location", c.getAvailable());
+                    ArrayList<Accreditation> accreditations=new ArrayList<>(  );
+//                    String acc=accreditations.get( 0 ).getAccreditation();
+//                    String rating=accreditations.get( 0 ).getRating();
+                    String acc="acc";
+                    String rating="Best";
+                    acc=accreditations.get( 0 ).getAccreditation();
+                    rating=accreditations.get( 0 ).getRating();
+                    intent.putExtra("brand", product.getBrand_Name());
+                    intent.putExtra("type", product.getCategory());
+                    intent.putExtra("accreditation", acc);
+                    intent.putExtra("rating", rating);
+                    intent.putExtra("location", product.getAvailable());
                     intent.putExtra( "gender",gender );
                     intent.putExtra( "birthday",birthday );
                     intent.putExtra( "userID",userID );
@@ -210,7 +239,18 @@ public class BrowseResultFragment extends Fragment {
         return view;
     }
 
+    public void browseList(int id,String value){
 
+        if(id==R.id.radioCategory){
+            myresult= DaoUnit.getInstance().getcategoryList( value );
+        }else if(id==R.id.radioAcc){
+            myresult=DaoUnit.getInstance().getAccList( value );
+
+        }else if(id==R.id.radioRate){
+            myresult=DaoUnit.getInstance().getRatingList( value );
+        }
+
+    }
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null) {
@@ -229,11 +269,6 @@ public class BrowseResultFragment extends Fragment {
                 + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
     }
-
-
-
-
-
 
 
 

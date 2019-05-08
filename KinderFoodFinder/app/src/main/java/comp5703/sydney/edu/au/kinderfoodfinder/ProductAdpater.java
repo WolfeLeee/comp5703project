@@ -12,10 +12,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,15 +23,15 @@ import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Product;
 public class ProductAdpater extends BaseAdapter implements Filterable {
 
     private Context context;
-    private ArrayList<Items> itemsList;
-    private ArrayList<Items> filterList;
+    private ArrayList<Product> itemsList;
+    private ArrayList<Product> filterList;
     private ArrayList<Product> productsList;
     CustomFilter filter;
 
     public ProductAdpater (Context context, ArrayList<Product> productsList){
         this.context = context;
         this.productsList = productsList;
-        this.filterList = itemsList;
+        this.filterList = productsList;
     }
 
     @Override
@@ -109,11 +107,11 @@ public class ProductAdpater extends BaseAdapter implements Filterable {
             if(constraint != null && constraint.length()>0){
                 constraint = constraint.toString().toUpperCase();
 
-                ArrayList<Items> filters = new ArrayList<>();
+                ArrayList<Product> filters = new ArrayList<>();
 
                 for(int i=0; i<filterList.size();i++){
-                    if(filterList.get(i).getBrand().toUpperCase().contains(constraint)){
-                        Items p = filterList.get(i);
+                    if(filterList.get(i).getBrand_Name().toUpperCase().contains(constraint)){
+                        Product p = filterList.get(i);
                         filters.add(p);
                     }
                 }
@@ -131,7 +129,7 @@ public class ProductAdpater extends BaseAdapter implements Filterable {
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
 
-            itemsList = (ArrayList<Items>) results.values;
+            productsList = (ArrayList<Product>) results.values;
             notifyDataSetChanged();
         }
     }

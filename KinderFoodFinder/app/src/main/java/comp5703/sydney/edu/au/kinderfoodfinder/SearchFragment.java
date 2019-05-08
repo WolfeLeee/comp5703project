@@ -394,7 +394,6 @@ public class SearchFragment extends Fragment
 
                 Log.d("search result",String.valueOf( result.size() ));
 
-
                 Toast.makeText( getActivity(),"Total Find "+String.valueOf(result.size())+" Records",Toast.LENGTH_LONG ).show();
 //                BToast.success(MainActivity.this).text("Total Searching Result"+String.valueOf(ps.size())+" Records").show();
                 return true;

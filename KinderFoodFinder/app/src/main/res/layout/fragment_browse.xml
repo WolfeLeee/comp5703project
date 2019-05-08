@@ -1,28 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:visibility="visible">
 
-
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/logo"
-        android:layout_marginTop="0dp"/>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="55dp"
+
+        android:visibility="gone"
         app:tabGravity="center"
         app:tabIndicatorColor="@color/colorAccent"
         app:tabMode="scrollable"
         app:tabSelectedTextColor="@color/colorPrimaryDark"
-        app:tabTextColor="@color/colorPrimary"
-        android:layout_below="@+id/image"/>
+        app:tabTextColor="@color/colorPrimary" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
@@ -31,8 +27,51 @@
         android:layout_below="@id/tabLayout"
         android:layout_marginTop="0dp"
         android:layout_marginBottom="0dp"
-        android:visibility="visible">
+        android:visibility="gone">
 
     </android.support.v4.view.ViewPager>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <RadioGroup
+            android:id="@+id/radioBrowse"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radioCategory"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="Category" />
+
+            <RadioButton
+                android:id="@+id/radioAcc"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:checked="false"
+                android:text="Accreditation" />
+
+            <RadioButton
+                android:id="@+id/radioRate"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:checked="false"
+                android:text="Rating" />
+        </RadioGroup>
+
+        <ListView
+            android:id="@+id/browselv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/radioBrowse"/>
+    </RelativeLayout>
 
 </RelativeLayout>
