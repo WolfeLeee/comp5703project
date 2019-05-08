@@ -2635,33 +2635,45 @@ module.exports.GetAllBrandinStore = async function(req, res, next)
                         }
                         else
                         {
-                            var result = [];
-                            for (var i = 0 ; i < BrandinStore.length ; i ++)
-                            {
-                                for(var j = 0 ; j < Store.length ; j++)
+                            Product.find({})
+                                .exec(function(errProduct,Product)
                                 {
-                                    if(new String(Store[j]._id).valueOf() == new String(BrandinStore[i].storeid).valueOf())
+                                    var result = [];
+                                    for (var i = 0 ; i < BrandinStore.length ; i ++)
                                     {
-                                        for(var k = 0 ; k < Store[j].Address.length ; k++)
+                                        for(var j = 0 ; j < Store.length ; j++)
                                         {
-                                           if(new String(Store[j].Address[k]._id).valueOf() == BrandinStore[i].addressid)
-                                           {
-                                               var newbrandinstore = {
-                                                   storeName: Store[j].storeName,
-                                                   StreetAddress: Store[j].Address[k].StreetAddress,
-                                                   State: Store[j].Address[k].State,
-                                                   Postcode: Store[j].Address[k].Postcode,
-                                                   Lat: Store[j].Address[k].Lat,
-                                                   Long: Store[j].Address[k].Long,
-                                                   Brandid: BrandinStore[i].brandid
-                                               }
-                                               result.push(newbrandinstore);
-                                           }
+                                            if(new String(Store[j]._id).valueOf() == new String(BrandinStore[i].storeid).valueOf())
+                                            {
+                                                for(var k = 0 ; k < Store[j].Address.length ; k++)
+                                                {
+                                                    if(new String(Store[j].Address[k]._id).valueOf() == BrandinStore[i].addressid)
+                                                    {
+                                                        for(var l = 0 ; l < Product.length ; l ++)
+                                                        {
+                                                            if(new String(BrandinStore[i].brandid).valueOf() == new String(Product[l]._id).valueOf())
+                                                            {
+                                                                var newbrandinstore = {
+                                                                    storeName: Store[j].storeName,
+                                                                    StreetAddress: Store[j].Address[k].StreetAddress,
+                                                                    State: Store[j].Address[k].State,
+                                                                    Postcode: Store[j].Address[k].Postcode,
+                                                                    Lat: Store[j].Address[k].Lat,
+                                                                    Long: Store[j].Address[k].Long,
+                                                                    Brandid: BrandinStore[i].brandid,
+                                                                    Brandname: Product[l].Brand_Name
+                                                                }
+                                                                result.push(newbrandinstore);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
-                                }
-                            }
-                            res.json(result);
+                                    res.json(result);
+                                })
+
                         }
                     })
             }
