@@ -183,7 +183,8 @@ html,body{
 
 .brand{
 	width:95%;
-	height:100%;
+	min-height:100%;
+	height:fit-content;
 	margin:0;
 	padding:0;
 }

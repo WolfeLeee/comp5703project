@@ -42,7 +42,8 @@ STYLE THE RIGHT DIV ELEMENT WHERE INFORMATION REGARDING A BRAND IS DISPLAYED
  */
 
 .pagebody_mainbody__infodisplay{
-    width: calc(100% - 25.5%);
+    min-width: calc(100% - 25.5%);
+    max-width:fit-content;
     margin-top:.5%;
     margin-left:.5%;
     height: calc(100% - 12.5%);

@@ -9,7 +9,7 @@ var BrandinStore = require("../models/brandinstore");
 var Statistic = require("../models/statistic");
 var Version = require("../models/version");
 
-// External libraries
+// External librariesreportedStoreFromAndroidAppUsers
 var mongoose = require('mongoose');
 var csv = require('fast-csv');
 var fs = require('fs');
