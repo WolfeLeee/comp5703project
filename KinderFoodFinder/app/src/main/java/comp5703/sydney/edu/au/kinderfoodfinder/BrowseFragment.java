@@ -60,12 +60,6 @@ public class BrowseFragment extends Fragment
     private ArrayList<Accreditation> test=new ArrayList<>(  );
     private Fragment broseresultFragment;
     int type=1;
-
-
-
-
-
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -73,8 +67,6 @@ public class BrowseFragment extends Fragment
         View view = inflater.inflate(R.layout.fragment_browse, container, false);
 
         view = inflater.inflate(R.layout.fragment_browse, container, false);
-
-
         tabLayout= (TabLayout) view.findViewById(R.id.tabLayout);
 
         tabLayout.addTab(tabLayout.newTab().setText("Category"));

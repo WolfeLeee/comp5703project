@@ -149,9 +149,6 @@ public class BrowseResultFragment extends Fragment {
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
                         .replace(R.id.fragment_container, browseFragment).commit();
-
-
-
                 // remove toolbar again
                 toolbar.setVisibility(View.GONE);
                 textView.setText( "Back" );
@@ -184,14 +181,6 @@ public class BrowseResultFragment extends Fragment {
         resultlv.setAdapter( productAdpater );
         Utility.setListViewHeightBasedOnChildren(resultlv);
 
-        Log.d("myresult sizw",String.valueOf( myresult.size() ));
-        Log.d("myresult sizw",String.valueOf( checkid )+";"+title);
-
-
-
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,list);
-//        resultlv.setAdapter( adapter );
-
         eggsv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -212,13 +201,16 @@ public class BrowseResultFragment extends Fragment {
                 Product product = (Product) productAdpater.getItem(position);
             Intent intent = new Intent(getActivity(), DetailActivity.class);
                 if (intent != null) {
-                    ArrayList<Accreditation> accreditations=new ArrayList<>(  );
+                    ArrayList<Accreditation> accreditations= (ArrayList<Accreditation>) product.getAccreditation();
 //                    String acc=accreditations.get( 0 ).getAccreditation();
 //                    String rating=accreditations.get( 0 ).getRating();
-                    String acc="acc";
-                    String rating="Best";
-                    acc=accreditations.get( 0 ).getAccreditation();
-                    rating=accreditations.get( 0 ).getRating();
+                    String acc="null";
+                    String rating="Avoid";
+                    if(accreditations.size()>0){
+                        acc=accreditations.get( 0 ).getAccreditation();
+                        rating=accreditations.get( 0 ).getRating();
+                    }
+
                     intent.putExtra("brand", product.getBrand_Name());
                     intent.putExtra("type", product.getCategory());
                     intent.putExtra("accreditation", acc);
