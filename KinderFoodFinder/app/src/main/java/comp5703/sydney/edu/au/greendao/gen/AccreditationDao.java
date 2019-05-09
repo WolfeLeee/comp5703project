@@ -56,8 +56,6 @@ public class AccreditationDao extends AbstractDao<Accreditation, Long> {
         // Add Indexes
         db.execSQL("CREATE UNIQUE INDEX " + constraint + "IDX_ACCREDITATION_SID ON \"ACCREDITATION\"" +
                 " (\"SID\" ASC);");
-        db.execSQL("CREATE UNIQUE INDEX " + constraint + "IDX_ACCREDITATION_PARENT_ID ON \"ACCREDITATION\"" +
-                " (\"PARENT_ID\" ASC);");
     }
 
     /** Drops the underlying database table. */

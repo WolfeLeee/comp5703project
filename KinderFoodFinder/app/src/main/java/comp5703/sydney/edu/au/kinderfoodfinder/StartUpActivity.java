@@ -52,9 +52,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import comp5703.sydney.edu.au.greendao.gen.AccreditationDao;
 import comp5703.sydney.edu.au.kinderfoodfinder.Database.ProductContract;
 import comp5703.sydney.edu.au.kinderfoodfinder.Database.ProductDatabase;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Accreditation;
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.AccreditationHelper;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.DaoUnit;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.MyApplication;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Product;
@@ -71,7 +73,7 @@ public class StartUpActivity extends AppCompatActivity
     Context context;
     File file;
     String version;
-    String IP_ADDRESS = "172.20.10.4";
+    String IP_ADDRESS = "10.16.82.52";
 
     ProgressDialog pd;
 
@@ -89,10 +91,7 @@ public class StartUpActivity extends AppCompatActivity
 
     public Intent intent;
     Intent startIntent;
-
-
-
-    /* * * * * * * * * * *
+   /* * * * * * * * * * *
      * On Created Method *
      * * * * * * * * * * */
     @Override
@@ -109,7 +108,7 @@ public class StartUpActivity extends AppCompatActivity
 
         // check if the file of version.txt has been created
         File fileVersion = new File(getApplicationContext().getFilesDir(), "version.txt");
-        if(!fileVersion.exists()) {
+        if(!(fileVersion.exists())) {
             writeToFile( "1,1,0" );
             Log.d( "VersionDatabase", "Creating!" );
         }
@@ -128,6 +127,7 @@ public class StartUpActivity extends AppCompatActivity
 
 
 
+        testString();
         readStatistics();
 //        deleteClickStatistic();
         checkBrandDatabase(status);
@@ -140,12 +140,6 @@ public class StartUpActivity extends AppCompatActivity
 
 
         sendStatistics( test );
-
-        if(status.equals( "1" )){
-            startActivity(intent);
-            finish();
-        }
-
         // set up fragment
         fragmentLogin = new LoginFragment();
         Fragment startFragment=new StartFragment();
@@ -219,13 +213,13 @@ public class StartUpActivity extends AppCompatActivity
         }
     }
 
-    private void checkBrandDatabase(final String status)
+    private void checkBrandDatabase( String status)
 {
     // modify the user data to the server
     String url;
     String ipAddress = "172.20.10.4";  //100.101.72.250 Here should be changed to your server IP
 
-    url = "http://" + IP_ADDRESS + ":3000/android-app-check-version-brand-store";
+    url = "http://" + StatisticContract.StatisticEntry.IP_Address + ":3000/android-app-check-version-brand-store";
 
     // send the data to the server
     RequestQueue ExampleRequestQueue = Volley.newRequestQueue(this);
@@ -277,7 +271,13 @@ public class StartUpActivity extends AppCompatActivity
                 DaoUnit.getInstance().clearProductsTable();
                 DaoUnit.getInstance().clearAccreditationTable();
 
-                new JsonTask().execute("http://" + IP_ADDRESS + ":3000/GetAllBrand");
+                AccreditationHelper accreditationHelper=new AccreditationHelper(getApplicationContext());
+//
+                SQLiteDatabase database= accreditationHelper.getWritableDatabase();
+                accreditationHelper.deleteAll( database );
+                accreditationHelper.onCreate( database );
+                new JsonTask().execute("http://" + StatisticContract.StatisticEntry.IP_Address + ":3000/GetAllBrand");
+
 
             }
         }
@@ -298,6 +298,8 @@ public class StartUpActivity extends AppCompatActivity
 
 }
  private class JsonTask extends AsyncTask<String, String, String> {
+
+        Context context;
 
         protected void onPreExecute() {
             super.onPreExecute();
@@ -356,6 +358,10 @@ public class StartUpActivity extends AppCompatActivity
             JsonParser jsonParser = new JsonParser();
             JsonArray jsonElements = jsonParser.parse(jsonString).getAsJsonArray();
 
+            AccreditationHelper accreditationHelper=new AccreditationHelper(getApplicationContext());
+//
+            SQLiteDatabase database= accreditationHelper.getWritableDatabase();
+
             Gson gson = new Gson();
             ArrayList<Product>productArrayList = new ArrayList<>();
             for (JsonElement product:jsonElements) {
@@ -364,13 +370,17 @@ public class StartUpActivity extends AppCompatActivity
                 for (Accreditation acc:pro.getAccreditation()) {
                     acc.setParentId(pro.getId());
                     MyApplication.getInstance().getDaoSession().getAccreditationDao().insertWithoutSettingPk(acc);
+                    accreditationHelper.addAcc( acc.getSid(),pro.getSid(),acc.getAccreditation(),acc.getRating(),database );
+
                 }
                 productArrayList.add(pro);
             }
+
+            accreditationHelper.close();
+
             Log.d("JSON size",String.valueOf( jsonElements.size() ));
             Toast.makeText( StartUpActivity.this,"update database",Toast.LENGTH_LONG ).show();
             String a=jsonElements.get( 0 ).toString();
-
             Log.d("JSON element",jsonString );
 
         }
@@ -411,7 +421,6 @@ public class StartUpActivity extends AppCompatActivity
         statisticsDatabase.deleteAll( database );
         statisticsDatabase.onCreate( database );
     }
-
 
     public void gourpBY(){
         StatisticsDatabase statisticsDatabase=new StatisticsDatabase( this );
@@ -489,10 +498,7 @@ public class StartUpActivity extends AppCompatActivity
 
         String url;
         String ipAddress = "10.16.206.194";  //100.101.72.250 Here should be changed to your server IP
-
-
-
-        url = "http://" + IP_ADDRESS + ":3000/android-app-statistic?statistic="+result;
+        url = "http://" + StatisticContract.StatisticEntry.IP_Address + ":3000/android-app-statistic?statistic="+result;
 
         // send the data to the server
         RequestQueue ExampleRequestQueue = Volley.newRequestQueue(this);
@@ -558,6 +564,11 @@ public class StartUpActivity extends AppCompatActivity
         JsonParser jsonParser = new JsonParser();
         JsonArray jsonElements = jsonParser.parse(jsonString).getAsJsonArray();
 
+        deleteAcc();
+
+        AccreditationHelper accreditationHelper=new AccreditationHelper(this);
+//
+        SQLiteDatabase database= accreditationHelper.getWritableDatabase();
         Gson gson = new Gson();
         ArrayList<Product>productArrayList = new ArrayList<>();
         for (JsonElement product:jsonElements) {
@@ -566,13 +577,25 @@ public class StartUpActivity extends AppCompatActivity
             for (Accreditation acc:pro.getAccreditation()) {
                 acc.setParentId(pro.getId());
                 MyApplication.getInstance().getDaoSession().getAccreditationDao().insertWithoutSettingPk(acc);
+                accreditationHelper.addAcc( acc.getSid(),pro.getSid(),acc.getAccreditation(),acc.getRating(),database );
             }
             productArrayList.add(pro);
         }
+        accreditationHelper.close();
         Log.d("JSON size",String.valueOf( jsonElements.size() ));
         Toast.makeText( StartUpActivity.this,"update database",Toast.LENGTH_LONG ).show();
         String a=jsonElements.get( 0 ).toString();
 
         Log.d("JSON element",jsonString );
     }
+
+
+    public void deleteAcc(){
+        AccreditationHelper accrediationDatabase=new AccreditationHelper( this );
+        SQLiteDatabase database=accrediationDatabase.getWritableDatabase();
+
+        accrediationDatabase.deleteAll( database );
+        accrediationDatabase.onCreate( database );
+    }
+
 }

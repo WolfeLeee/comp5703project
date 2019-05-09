@@ -61,6 +61,7 @@ public class BrowseResultFragment extends Fragment {
     ArrayList<Items> resultList =new ArrayList<>(  );
     ArrayList<Product> myresult;
 
+
     int checkid;
     public static BrowseResultFragment newInstance(int page, int position) {
         Bundle args = new Bundle();
@@ -93,6 +94,7 @@ public class BrowseResultFragment extends Fragment {
 
 
 
+
         browseFragment=new BrowseFragment();
 
         readEggData();
@@ -104,8 +106,8 @@ public class BrowseResultFragment extends Fragment {
         toolbar.setVisibility(View.VISIBLE);
         textView=getActivity().findViewById( R.id.title );
 
-//        navigation = (BottomNavigationView) getActivity().findViewById(R.id.navigation);
-//        navigation.setVisibility(View.GONE);
+        navigation = (BottomNavigationView) getActivity().findViewById(R.id.navigation);
+        navigation.setVisibility(View.GONE);
 
         int n=position+1;
         page=mPage;
@@ -154,7 +156,7 @@ public class BrowseResultFragment extends Fragment {
                 textView.setText( "Back" );
 
                 // enable navigation bar again
-//                navigation.setVisibility(View.VISIBLE);
+                navigation.setVisibility(View.VISIBLE);
             }
         });
 

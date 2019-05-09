@@ -41,6 +41,8 @@ import org.json.JSONObject;
 
 import java.util.Calendar;
 
+import comp5703.sydney.edu.au.kinderfoodfinder.StatisticDatabase.StatisticContract;
+
 public class FBRegisterFragment extends Fragment {
     private Toolbar toolbar;
     private Fragment fragmentLogin;
@@ -56,7 +58,7 @@ public class FBRegisterFragment extends Fragment {
 
     private ProgressDialog registerProgressDialog;
 
-    String IP_ADDRESS = "172.20.10.4";
+    String IP_ADDRESS = "10.16.82.52";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -256,10 +258,10 @@ public class FBRegisterFragment extends Fragment {
         String url;
         String ipAddress = "10.16.206.194";  //100.101.72.250 Here should be changed to your server IP
         if(!showBirthday)
-            url = "http://" + IP_ADDRESS + ":3000/android-app-login-register-fb?name=" + name + "&facebookId=" + id + "&gender=" +
+            url = "http://" + StatisticContract.StatisticEntry.IP_Address + ":3000/android-app-login-register-fb?name=" + name + "&facebookId=" + id + "&gender=" +
                     genderModified +  "&birthday=" + birthdayModified;
         else
-            url = "http://" + IP_ADDRESS + ":3000/android-app-login-register-fb??name=" + name + "&facebookId=" + id + "&gender=" +
+            url = "http://" + StatisticContract.StatisticEntry.IP_Address + ":3000/android-app-login-register-fb??name=" + name + "&facebookId=" + id + "&gender=" +
                     genderModified + "&birthday=Not+Disclose";
 
         // send the data to the server

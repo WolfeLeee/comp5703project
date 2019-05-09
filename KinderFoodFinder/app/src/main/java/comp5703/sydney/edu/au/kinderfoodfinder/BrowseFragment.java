@@ -33,9 +33,6 @@ public class BrowseFragment extends Fragment
     TabLayout tabLayout;
     ViewPager viewPager;
     View view;
-
-
-
     String[] mTitle = new String[3];
     String[] mData = new String[3];
     private List<String> mTitles;
@@ -78,6 +75,10 @@ public class BrowseFragment extends Fragment
 
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewPager);
 
+        categroylist=new ArrayList<>(  );
+        ratinglist=new ArrayList<>(  );
+        accreditationlist=new ArrayList<>(  );
+
         BrowsePageAdapter adapter = new BrowsePageAdapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager( viewPager );
@@ -87,9 +88,9 @@ public class BrowseFragment extends Fragment
         additem();
         final Bundle args= new Bundle(  );
 
-        result=categroylist;
-        ArrayAdapter<String> intialAdapter=new ArrayAdapter<String>( getActivity(), android.R.layout.simple_list_item_1,result);
-        listView.setAdapter( intialAdapter );
+//        result=categroylist;
+//        ArrayAdapter<String> intialAdapter=new ArrayAdapter<String>( getActivity(), android.R.layout.simple_list_item_1,result);
+//        listView.setAdapter( intialAdapter );
         Utility.setListViewHeightBasedOnChildren( listView );
         browsegorup.setOnCheckedChangeListener( new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -121,10 +122,6 @@ public class BrowseFragment extends Fragment
 
         return view;
     }
-
-
-
-
 
     public void additem() {
         categroylist.add( "Egg" );

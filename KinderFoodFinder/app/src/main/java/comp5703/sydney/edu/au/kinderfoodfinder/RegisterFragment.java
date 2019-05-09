@@ -34,6 +34,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import comp5703.sydney.edu.au.kinderfoodfinder.StatisticDatabase.StatisticContract;
+
 public class RegisterFragment extends Fragment
 {
     // defined variables
@@ -50,9 +52,7 @@ public class RegisterFragment extends Fragment
     private ProgressDialog registerProgressDialog;
 
     private Toolbar toolbar;
-
-    String IP_ADDRESS = "172.20.10.4";
-
+    String IP_ADDRESS = "10.16.82.52";
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -140,22 +140,6 @@ public class RegisterFragment extends Fragment
             }
         });
 
-//        // tool bar listener
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener()
-//        {
-//            @Override
-//            public void onClick(View v)
-//            {
-//                // go to login fragment
-//                getActivity().getSupportFragmentManager().beginTransaction()
-//                        .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-//                        .replace(R.id.fragment_container, fragmentLogin).commit();
-//
-//                // remove toolbar again
-//                toolbar.setVisibility(View.GONE);
-//            }
-//        });
-
         logintv.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -225,10 +209,10 @@ public class RegisterFragment extends Fragment
         String url;
         String ipAddress = "10.16.206.194";  //100.101.72.250 Here should be changed to your server IP
         if(!showBirthday)
-            url = "http://" + IP_ADDRESS + ":3000/android-app-register?name=" + name + "&gender=" + genderModified + "&email=" +
+            url = "http://" + StatisticContract.StatisticEntry.IP_Address + ":3000/android-app-register?name=" + name + "&gender=" + genderModified + "&email=" +
                     email + "&password=" + pwd + "&birthday=" + birthdayModified;
         else
-            url = "http://" + IP_ADDRESS + ":3000/android-app-register?name=" + name + "&gender=" + genderModified + "&email=" +
+            url = "http://" + StatisticContract.StatisticEntry.IP_Address + ":3000/android-app-register?name=" + name + "&gender=" + genderModified + "&email=" +
                     email + "&password=" + pwd + "&birthday=Not+Disclose";
 
         // send the data to the server

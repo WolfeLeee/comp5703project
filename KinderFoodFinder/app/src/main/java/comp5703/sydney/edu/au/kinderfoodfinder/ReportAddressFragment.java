@@ -26,6 +26,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import comp5703.sydney.edu.au.kinderfoodfinder.Database.StoreDatabase;
+import comp5703.sydney.edu.au.kinderfoodfinder.StatisticDatabase.StatisticContract;
 
 
 public class ReportAddressFragment extends Fragment {
@@ -182,7 +183,7 @@ public class ReportAddressFragment extends Fragment {
         String url;
         String ipAddress = "10.16.206.194";  //100.101.72.250 Here should be changed to your server IP
 
-            url = "http://" + IP_ADDRESS + ":3000/android-app-report-store?storeName=" + storeName + "&streetAddress=" + streetAddress + "&state=" +
+            url = "http://" + StatisticContract.StatisticEntry.IP_Address + ":3000/android-app-report-store?storeName=" + storeName + "&streetAddress=" + streetAddress + "&state=" +
                     state + "&postCode=" + postCode + "&productId=" + productID;
 
         // send the data to the server

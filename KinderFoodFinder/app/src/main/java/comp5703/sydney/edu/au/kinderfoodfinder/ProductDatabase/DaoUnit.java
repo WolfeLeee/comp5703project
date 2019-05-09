@@ -117,10 +117,10 @@ public class DaoUnit {
                 productBuilder.where(ProductDao.Properties.Category.eq("chicken"));
                 break;
         }
-        if (Catogry == R.id.radioBrandName)productBuilder.where(ProductDao.Properties.Brand_Name.like("%"+searchKey+"%"));
+        if (Catogry == R.id.radioBrandName)productBuilder.where(ProductDao.Properties.Brand_Name.like(searchKey+"%"));
         //
         Join join= productBuilder.join(ProductDao.Properties.Id,Accreditation.class,AccreditationDao.Properties.ParentId);
-        if (Catogry == R.id.radioAccreditation)join.where(AccreditationDao.Properties.Accreditation.like("%"+searchKey+"%"));
+        if (Catogry == R.id.radioAccreditation)join.where(AccreditationDao.Properties.Accreditation.like(searchKey+"%"));
         return covertproducts(productBuilder.list());
     }
 
@@ -180,6 +180,15 @@ public class DaoUnit {
         return product;
     }
 
+    public ArrayList<Accreditation> getAccByParentId(long sid)
+    {
+        QueryBuilder productBuilder= productManager.queryBuilder().where( ProductDao.Properties.Id.eq(sid));
+        QueryBuilder accBuilder=accreditationManager.queryBuilder().where( AccreditationDao.Properties.ParentId.eq( sid ) );
+
+
+        return (ArrayList<Accreditation>) accBuilder.list();
+    }
+
     public ArrayList<Accreditation> getAcc(){
         ArrayList<Product>productsArrayList = new ArrayList<>();
 
@@ -188,7 +197,6 @@ public class DaoUnit {
        accBuilder.where( AccreditationDao.Properties.Accreditation.isNotNull() );
 
        return (ArrayList<Accreditation>) accBuilder.list();
-
 
    }
 

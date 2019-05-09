@@ -144,7 +144,6 @@ public class SearchFragment extends Fragment
                 searchView.clearFocus();
             }
         });
-
         // categories click listener
         categoryEgg.setOnClickListener(new View.OnClickListener()
         {
@@ -387,10 +386,16 @@ public class SearchFragment extends Fragment
                 result=DaoUnit.getInstance().searchByOption(category,type,query);
 
                 ProductAdpater productAdapter=new ProductAdpater( getActivity(),result );
-
-                product.setAdapter( productAdapter );
-                productAdapter.notifyDataSetChanged();
-                Utility.setListViewHeightBasedOnChildren(product);
+                BrandAdapter brandAdapter=new BrandAdapter( getActivity(),result );
+                if(category==R.id.radioBrandName){
+                    product.setAdapter( brandAdapter );
+                    brandAdapter.notifyDataSetChanged();
+                    Utility.setListViewHeightBasedOnChildren( product );
+                }else if(category==R.id.radioAccreditation){
+                    product.setAdapter( productAdapter );
+                    productAdapter.notifyDataSetChanged();
+                    Utility.setListViewHeightBasedOnChildren(product);
+                }
 
                 Log.d("search result",String.valueOf( result.size() ));
 
@@ -417,7 +422,6 @@ public class SearchFragment extends Fragment
                 String rating= "GOOD";
                 acc=accreditations.get( 0 ).getAccreditation();
                 rating=accreditations.get( 0 ).getRating();
-
                 ProductDao productDao= MyApplication.getInstance().getDaoSession().getProductDao();
                 Product test=new Product(  );
 
@@ -513,9 +517,6 @@ public class SearchFragment extends Fragment
         }
         
     }
-
-
-
 
     // test the function
     public void readEggData(){

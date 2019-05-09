@@ -6,33 +6,27 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
 
 @Entity
-public class Accreditation {
+public class AccEntity {
 
-    @Id(autoincrement = true)
-    private  Long id;
+    @Id
+    private long id;
     @Index(unique = true)
-    private  String sid;
-    private Long parentId;
-    private  String Accreditation;
-    private  String Rating;
-    @Generated(hash = 1501738056)
-    public Accreditation(Long id, String sid, Long parentId, String Accreditation,
-            String Rating) {
+    private String sid;
+    private String parentId;
+    private String accreditation;
+    private String rating;
+
+    @Generated(hash = 1637818586)
+    public AccEntity(long id, String sid, String parentId, String accreditation, String rating) {
         this.id = id;
         this.sid = sid;
         this.parentId = parentId;
-        this.Accreditation = Accreditation;
-        this.Rating = Rating;
-    }
-    @Generated(hash = 1290250304)
-    public Accreditation() {
-    }
-    public Long getId() {
-        return id;
+        this.accreditation = accreditation;
+        this.rating = rating;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    @Generated(hash = 1852916788)
+    public AccEntity() {
     }
 
     public String getSid() {
@@ -43,29 +37,35 @@ public class Accreditation {
         this.sid = sid;
     }
 
-    public Long getParentId() {
+    public String getParentId() {
         return parentId;
     }
 
-    public void setParentId(Long parentId) {
+    public void setParentId(String parentId) {
         this.parentId = parentId;
     }
 
     public String getAccreditation() {
-        return Accreditation;
+        return accreditation;
     }
 
     public void setAccreditation(String accreditation) {
-        Accreditation = accreditation;
+        this.accreditation = accreditation;
     }
 
     public String getRating() {
-        return Rating;
+        return rating;
     }
 
     public void setRating(String rating) {
-        Rating = rating;
+        this.rating = rating;
     }
 
+    public long getId() {
+        return this.id;
+    }
 
+    public void setId(long id) {
+        this.id = id;
+    }
 }

@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity
         ActivityCompat.requestPermissions(MainActivity.this,
                 new String[]{Manifest.permission.INTERNET},
                 1);
-
         // set up tool bar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
@@ -93,8 +92,6 @@ public class MainActivity extends AppCompatActivity
                     .commit();
 
         }
-
-
         if (id == 3) {
 
             navigation.setSelectedItemId(R.id.navigation_more);

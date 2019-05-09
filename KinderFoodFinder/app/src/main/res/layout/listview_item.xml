@@ -56,4 +56,10 @@
 
 
         tools:text="TextView" />
+
+    <ListView
+        android:id="@+id/accLIstview"
+        android:layout_below="@id/accreditation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </RelativeLayout>

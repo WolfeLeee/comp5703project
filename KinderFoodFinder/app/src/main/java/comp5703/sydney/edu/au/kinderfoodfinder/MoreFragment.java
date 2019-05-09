@@ -2,6 +2,7 @@ package comp5703.sydney.edu.au.kinderfoodfinder;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.se.omapi.Session;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
@@ -39,8 +41,8 @@ public class MoreFragment extends Fragment
     private Fragment fragmentglossary;
     private Fragment fragmentreportaddress;
 
-    private LoginButton fb_loginButton;
-    private CallbackManager callbackManager;
+//    private LoginButton fb_loginButton;
+//    private CallbackManager callbackManager;
 
     @Nullable
     @Override
@@ -64,7 +66,6 @@ public class MoreFragment extends Fragment
         share = view.findViewById(R.id.tv_share);
         account = view.findViewById(R.id.tv_Account);
         glossary = view.findViewById(R.id.tv_glossary);
-        fb_loginButton=view.findViewById( R.id.btn_fblogin );
 
         rating.setOnClickListener(new View.OnClickListener()
         {
@@ -133,60 +134,14 @@ public class MoreFragment extends Fragment
                 Intent intent = new Intent(getActivity(), StartUpActivity.class);
                 startActivity(intent);
                 getActivity().finish();
+                LoginManager.getInstance().logOut();
+
             }
         });
-
-
-        callbackManager= CallbackManager.Factory.create();
-        fb_loginButton.setReadPermissions( Arrays.asList("email","public_profile") );
-        fb_loginButton.setFragment( this );
-        fb_loginButton.registerCallback( callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                if(loginResult.getAccessToken()==null){
-
-                    Intent intent = new Intent(getActivity(), StartUpActivity.class);
-                    startActivity(intent);
-                    getActivity().finish();
-                }
-            }
-
-            @Override
-            public void onCancel() {
-
-
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-
-            }
-        } );
-
-
         return view;
     }
 
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        callbackManager.onActivityResult( requestCode,resultCode,data );
-        super.onActivityResult( requestCode, resultCode, data );
-    }
 
-    AccessTokenTracker tokenTracker=new AccessTokenTracker() {
-        @Override
-        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-
-            if(currentAccessToken==null){
-
-
-            }
-            else {
-
-            }
-
-        }
-    };
 
 }
