@@ -119,15 +119,15 @@ public class StartUpActivity extends AppCompatActivity
             status=v[2];
             Log.d("VersionDatabase", "Existing!");
 
-        Log.d("VersionDatabase", version);
-        Log.d("VersionDatabase1", test);
+//        Log.d("VersionDatabase", version);
+//        Log.d("VersionDatabase1", test);
 
         intent=new Intent(StartUpActivity.this,MainActivity.class  );
         startIntent=new Intent( StartUpActivity.this,StartUpActivity.class );
 
 
 
-        testString();
+//        testString();
         readStatistics();
 //        deleteClickStatistic();
         checkBrandDatabase(status);
@@ -136,7 +136,7 @@ public class StartUpActivity extends AppCompatActivity
         String test=getResults();
         JsonParser jsonParser = new JsonParser();
         JsonArray jsonElements = jsonParser.parse(test).getAsJsonArray();
-        Log.d("Statistics Size",String.valueOf( jsonElements.size() ));
+//        Log.d("Statistics Size",String.valueOf( jsonElements.size() ));
 
 
         sendStatistics( test );
@@ -234,6 +234,8 @@ public class StartUpActivity extends AppCompatActivity
             String[] result=response.split( "," );
             int i=0;
             int v=1;
+            Log.d("Send Update response:", response);
+
             try{
                 i=Integer.parseInt( result[0] );
 
@@ -278,7 +280,6 @@ public class StartUpActivity extends AppCompatActivity
                 accreditationHelper.onCreate( database );
                 new JsonTask().execute("http://" + StatisticContract.StatisticEntry.IP_Address + ":3000/GetAllBrand");
 
-
             }
         }
     },
@@ -290,7 +291,7 @@ public class StartUpActivity extends AppCompatActivity
                     //This code is executed if there is an error.
 
                     Toast.makeText(StartUpActivity.this, "Update database!", Toast.LENGTH_SHORT).show();
-                    Log.d("Send query error:", error.toString());
+                    Log.d("Send update error:", error.toString());
                 }
             });
     ExampleRequestQueue.add(ExampleStringRequest);
@@ -298,7 +299,6 @@ public class StartUpActivity extends AppCompatActivity
 
 }
  private class JsonTask extends AsyncTask<String, String, String> {
-
         Context context;
 
         protected void onPreExecute() {
@@ -350,7 +350,7 @@ public class StartUpActivity extends AppCompatActivity
 
 
             jsonString=result;
-            Log.d("json",result);
+//            Log.d("json",result);
             jsonString = jsonString.replace("_id","sid");
 
 
@@ -375,13 +375,11 @@ public class StartUpActivity extends AppCompatActivity
                 }
                 productArrayList.add(pro);
             }
-
             accreditationHelper.close();
-
-            Log.d("JSON size",String.valueOf( jsonElements.size() ));
+//            Log.d("JSON size",String.valueOf( jsonElements.size() ));
             Toast.makeText( StartUpActivity.this,"update database",Toast.LENGTH_LONG ).show();
             String a=jsonElements.get( 0 ).toString();
-            Log.d("JSON element",jsonString );
+//            Log.d("JSON element",jsonString );
 
         }
     }
@@ -406,7 +404,7 @@ public class StartUpActivity extends AppCompatActivity
 //            info=info+"\n\n"+"ID :"+id+"\nName :"+name+"\nEmail :"+email;
 
                 info=id+"; "+date+"; "+gender+"; "+age+"; "+count;
-                Log.d("statistics record",info);
+//                Log.d("statistics record",info);
 
             }
 
@@ -442,7 +440,7 @@ public class StartUpActivity extends AppCompatActivity
 //            info=info+"\n\n"+"ID :"+id+"\nName :"+name+"\nEmail :"+email;
 
                 info=id+"; "+date+"; "+gender+"; "+age+"; "+count;
-                Log.d("statistics record",info);
+//                Log.d("statistics record",info);
 
             }
         }
@@ -582,11 +580,11 @@ public class StartUpActivity extends AppCompatActivity
             productArrayList.add(pro);
         }
         accreditationHelper.close();
-        Log.d("JSON size",String.valueOf( jsonElements.size() ));
+//        Log.d("JSON size",String.valueOf( jsonElements.size() ));
         Toast.makeText( StartUpActivity.this,"update database",Toast.LENGTH_LONG ).show();
         String a=jsonElements.get( 0 ).toString();
 
-        Log.d("JSON element",jsonString );
+//        Log.d("JSON element",jsonString );
     }
 
 

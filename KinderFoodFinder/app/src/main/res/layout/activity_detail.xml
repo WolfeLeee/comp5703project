@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relativelayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".DetailActivity">
 
 
@@ -17,123 +18,12 @@
     <ImageView
         android:id="@+id/imgdetail"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
+        android:layout_height="200dp"
         app:srcCompat="@drawable/logo"
-
+        android:layout_gravity="center"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"/>
-
-    <TextView
-        android:id="@+id/dtllearnname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/dtllocation"
-        android:layout_marginTop="20dp"
-        android:layout_toRightOf="@+id/dtllocation"
-        android:text="About what this rating means for the animals."
-        android:layout_marginLeft="30dp"
-        android:textSize="20sp"
-        android:layout_marginRight="20dp"/>
-
-    <TextView
-        android:id="@+id/dtllearn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Learn More "
-        android:layout_below="@id/dtllocation"
-        android:layout_marginTop="20dp"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="50dp"
-        android:textStyle="italic"
-        android:textSize="20sp"/>
-
-    <TextView
-        android:id="@+id/dtllocationname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/dtlreport"
-        android:layout_marginTop="20dp"
-        android:layout_toRightOf="@+id/dtllocation"
-        android:text="What you found this product"
-        android:layout_marginLeft="30dp"
-        android:textSize="20sp"
-        android:layout_marginRight="20dp"/>
-
-    <TextView
-        android:id="@+id/dtllocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Available At: "
-        android:layout_below="@id/dtlreport"
-        android:layout_marginTop="20dp"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="50dp"
-        android:textStyle="italic"
-        android:textSize="20sp"/>
-
-    <TextView
-        android:id="@+id/dtlreportname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/dtlacc"
-        android:layout_marginLeft="90dp"
-        android:layout_marginTop="20dp"
-        android:layout_toRightOf="@+id/dtlreport"
-        android:text="Where product you found"
-        android:textSize="20sp"
-        android:layout_marginRight="20dp"/>
-
-    <TextView
-        android:id="@+id/dtlreport"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Report"
-        android:layout_below="@id/dtlacc"
-        android:layout_marginTop="20dp"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="50dp"
-        android:textStyle="italic"
-        android:textSize="20sp"/>
-
-    <TextView
-        android:id="@+id/dtlaccname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/dtlrating"
-        android:layout_marginTop="30dp"
-        android:layout_toRightOf="@+id/dtlacc"
-        android:text="testview"
-        android:layout_marginLeft="30dp"
-
-        android:textSize="20sp"
-        android:layout_marginRight="20dp"
-        />
-
-    <TextView
-        android:id="@+id/dtlacc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Accreditation"
-        android:layout_below="@id/dtlrating"
-        android:layout_marginTop="30dp"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="50dp"
-        android:textStyle="italic"
-
-        android:textSize="20sp"/>
-    <TextView
-        android:id="@+id/dtlrating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:layout_below="@id/dtlbrand"
-        android:textSize="30sp"
-        android:layout_marginTop="10dp"
-        android:layout_centerHorizontal="true"
-        android:textStyle="bold"
-        />
 
 
     <TextView
@@ -148,6 +38,105 @@
         android:textSize="25sp"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
-        android:gravity="center"/>
 
-</RelativeLayout>
+        android:layout_gravity="center"
+        />
+
+    <LinearLayout
+        android:id="@+id/textLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dtlbrand"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="20dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="Location"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/location_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textSize="18sp"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/report"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="Report:"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/report_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Where a product you found"
+                android:textSize="18sp"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:id="@+id/learnmore"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="Learn More:"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:id="@+id/learnmore_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="About what this rating means for the animals"
+                android:textSize="18sp"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/detail_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/textLinearLayout"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp" />
+
+</LinearLayout>

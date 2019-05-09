@@ -2,18 +2,23 @@ package comp5703.sydney.edu.au.kinderfoodfinder;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,84 +26,88 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.AccEntity;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Accreditation;
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.AccreditationHelper;
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Contract;
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.DaoUnit;
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Product;
 import comp5703.sydney.edu.au.kinderfoodfinder.StatisticDatabase.StatisticsDatabase;
 
 public class DetailActivity extends AppCompatActivity {
 
 
-    private TextView brandtv, ratetv, accreditationtv, locationtv;
+
     private ImageView imageView;
 
     private Toolbar toolbar;
     private BottomNavigationView navigation;
-    String sid,date,age;
-    int times;
-
-
-
-
+    private  String sid,date,age;
+    private int times;
+    private TextView brand_info, rate_info, accreditationtv, location_info;
     private TextView reporttv,availabletv, learntv;
-
+    private ListView listView;
+    ArrayList<AccEntity> accreditationList;
+    Context ctx;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_detail );
 
         Intent intent = getIntent();
-        String brand = intent.getStringExtra("brand");
-        String type = intent.getStringExtra("type");
-        String accreditation = intent.getStringExtra("accreditation");
-        String rate = intent.getStringExtra("rating");
-        String location = intent.getStringExtra("location");
+        //
         sid=intent.getStringExtra( "stringId" );
         final String userID=intent.getStringExtra( "userID" );
         final String gender=intent.getStringExtra( "gender" );
         final String birthday=intent.getStringExtra( "birthday" );
-        GregorianCalendar cal = new GregorianCalendar();    //当前时间
 
-        cal.setMinimalDaysInFirstWeek(7);   //第一周最少包含七天
-        cal.setFirstDayOfWeek( Calendar.MONDAY);//周一为一周第一天
-        cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());//取开始时间
-        int weeks=cal.get(Calendar.WEEK_OF_YEAR);
-        Calendar calendar = Calendar.getInstance();
-        int year =calendar.get(Calendar.YEAR);
+        brand_info=findViewById( R.id.dtlbrand );
+//
+        location_info=findViewById( R.id.location_info );
+        imageView=findViewById( R.id.imgdetail );
+        reporttv=findViewById( R.id.report );
+        availabletv=findViewById( R.id.location );
+        learntv=findViewById( R.id.learnmore );
+        listView=findViewById( R.id.detail_listview );
+        Product product= DaoUnit.getInstance().searchBySid( sid );
+
+        String brandname=product.getBrand_Name();
+        String category=product.getCategory();
+        String available=product.getAvailable();
+        String image=product.getImage();
+
+        accreditationList = readAccreditation( sid );
+        AccreditationAdapter accreditationAdapter=new AccreditationAdapter( this,accreditationList );
+        listView.setAdapter( accreditationAdapter );
+        Log.d("detail",String.valueOf( accreditationList.size() ));
 
 
+        image="https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQ8A0C9JxBqP_M27oZ8oF2PXG9y1hqZy_hjsIcOKHeGdKaj6N_rDrJfWZ9UmdNaTRSpFzKcqHeAeJz8cojEEU0HeqNvYzf6&usqp=CAc";
 
+        //for test load image
 
+        if(image!=null){
+            Picasso.with( this ).load( image ).into( imageView );
+
+        }
 //        String img = intent.getStringExtra("img");
 
-        brandtv=findViewById( R.id.dtlbrand );
-        ratetv=findViewById( R.id.dtlrating );
-        accreditationtv=findViewById( R.id.dtlaccname );
-        locationtv=findViewById( R.id.dtllocationname );
-        imageView=findViewById( R.id.imgdetail );
 
-        brandtv.setText( brand );
-        ratetv.setText( rate );
-        accreditationtv.setText( accreditation );
-        locationtv.setText( location );
+        brand_info.setText( brandname );
+        location_info.setText( available );
 
-        if(rate.equalsIgnoreCase( "BEST" )){
-            ratetv.setTextColor( Color.parseColor("#208E5C"));
-        }if(rate.equalsIgnoreCase( "GOOD" )){
-            ratetv.setTextColor( Color.parseColor("#f7912f"));
+//        if(rate.equalsIgnoreCase( "BEST" )){
+//            ratetv.setTextColor( Color.parseColor("#208E5C"));
+//        }if(rate.equalsIgnoreCase( "GOOD" )){
+//            ratetv.setTextColor( Color.parseColor("#f7912f"));
+//
+//        }if(rate.equalsIgnoreCase( "AVOID" )){
+//            ratetv.setTextColor( Color.parseColor("#FF4081"));
+//
+//        }
 
-        }if(rate.equalsIgnoreCase( "AVOID" )){
-            ratetv.setTextColor( Color.parseColor("#FF4081"));
-
-        }
-
-        if(type.equalsIgnoreCase( "eggs" )){
-            imageView.setImageResource( R.drawable.farm3 );
-        }else if(type.equalsIgnoreCase( "pork" )){
-            imageView.setImageResource( R.drawable.farm1 );
-
-        }else if(type.equalsIgnoreCase( "chickens" )){
-            imageView.setImageResource( R.drawable.farm2 );
-        }
 
         // test collect click data
 
@@ -106,10 +115,6 @@ public class DetailActivity extends AppCompatActivity {
         age=getAge( birthday );
         times=1;
         String count ="1";
-
-
-
-
         String info=sid+"; "+date+"; "+times+"; "+userID+"; "+gender+"; "+age+"; ";
         Log.d("statistics add record",info);
 
@@ -130,7 +135,7 @@ public class DetailActivity extends AppCompatActivity {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle( type );
+        getSupportActionBar().setTitle( category );
 
 
         // tool bar listener
@@ -139,14 +144,13 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
+                toolbar.setVisibility( View.INVISIBLE );
                 finish();
             }
         });
 
 
-        reporttv=findViewById( R.id.dtlreport );
-        availabletv=findViewById( R.id.dtllocation );
-        learntv=findViewById( R.id.dtllearn );
+
         reporttv.getPaint().setFlags( Paint.FAKE_BOLD_TEXT_FLAG);
         availabletv.getPaint().setFlags(Paint.FAKE_BOLD_TEXT_FLAG);
         learntv.getPaint().setFlags(Paint.FAKE_BOLD_TEXT_FLAG);
@@ -162,6 +166,7 @@ public class DetailActivity extends AppCompatActivity {
                 intent.putExtra("id",1);
                 startActivity(intent);
 
+                finish();
             }
         } );
 
@@ -173,6 +178,14 @@ public class DetailActivity extends AppCompatActivity {
                 Intent intent = new Intent(DetailActivity.this, MainActivity.class);
                 intent.putExtra("id",2);
                 startActivity(intent);
+                toolbar.setVisibility( View.INVISIBLE );
+
+//                getSupportFragmentManager()
+//                        .beginTransaction()
+//                        .replace(DetailActivity.this,new ReportFragment())
+//                        .addToBackStack(null)
+//                        .commit();
+                finish();
 
             }
         } );
@@ -180,10 +193,13 @@ public class DetailActivity extends AppCompatActivity {
         learntv.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                toolbar.setVisibility( View.INVISIBLE );
+
 
                 Intent intent = new Intent(DetailActivity.this, MainActivity.class);
                 intent.putExtra("id",3);
                 startActivity(intent);
+                finish();
 
             }
         } );
@@ -301,4 +317,38 @@ public class DetailActivity extends AppCompatActivity {
 
         return result;
     }
+
+    private ArrayList<AccEntity> readAccreditation(String pid){
+        AccreditationHelper accreditationHelper=new AccreditationHelper( this );
+        SQLiteDatabase database=accreditationHelper.getReadableDatabase();
+
+        Cursor cursor=accreditationHelper.searchbyPID(pid, database );
+
+        ArrayList<AccEntity> accList=new ArrayList<>(  );
+        if(cursor!=null){
+            Log.d("Database "," already has information");
+            String info ="";
+            while (cursor.moveToNext()){
+
+                String sid =cursor.getString(  cursor.getColumnIndex( Contract.sid));
+                String parentid=cursor.getString( cursor.getColumnIndex( Contract.ParentId ));
+                String acc=cursor.getString( cursor.getColumnIndex( Contract.Accreditation) );
+                String rating=cursor.getString( cursor.getColumnIndex( Contract.Rating ) );
+
+                AccEntity accreditationEntity=new AccEntity( );
+                accreditationEntity.setSid( sid );
+                accreditationEntity.setParentId( parentid );
+                accreditationEntity.setAccreditation( acc );
+                accreditationEntity.setRating( rating );
+                accList.add( accreditationEntity );
+
+            }
+
+        }
+        accreditationHelper.close();
+        return accList;
+    }
+
+
+
 }

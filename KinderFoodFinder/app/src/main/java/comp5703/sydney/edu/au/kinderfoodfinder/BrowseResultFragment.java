@@ -218,6 +218,8 @@ public class BrowseResultFragment extends Fragment {
                     intent.putExtra("accreditation", acc);
                     intent.putExtra("rating", rating);
                     intent.putExtra("location", product.getAvailable());
+                    intent.putExtra( "stringId",product.getSid() );
+
                     intent.putExtra( "gender",gender );
                     intent.putExtra( "birthday",birthday );
                     intent.putExtra( "userID",userID );

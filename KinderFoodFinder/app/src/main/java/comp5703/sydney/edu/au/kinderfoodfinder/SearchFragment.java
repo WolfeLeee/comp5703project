@@ -12,12 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -41,7 +43,7 @@ import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Product;
  * * * * * * * * * * */
 //implements GetProductsData.OnDataAvailable, RecyclerItemClickListener.OnRecyclerClickListener
 
-public class SearchFragment extends Fragment
+public class SearchFragment extends Fragment implements AdapterView.OnItemSelectedListener
 {
     /* * * * * * * * * * *
      * Defined Variables *
@@ -73,9 +75,9 @@ public class SearchFragment extends Fragment
 
     private int category,type;
 
+    ArrayList<String> items;
+    int temp=0;
 
-    private LinearLayout categoryEgg, categoryChicken, categoryPig;
-    private int categoryID;
 
 //    private ProductsRecyclerViewAdapter mProductsRecyclerViewAdapter;
 
@@ -88,15 +90,6 @@ public class SearchFragment extends Fragment
     {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-//        readEggData();
-        readChickenData();
-        readporkData();
-
-        readProduct();
-
-        Log.d("ddddddddd",String.valueOf( eggsList.size() ));
-        Log.d("ddddddddd",String.valueOf( chickenList.size() ));
-        Log.d("ddddddddd",String.valueOf( pigList.size() ));
 
 //        BackgroundTask backgroundTask1=new BackgroundTask( getActivity() );
 //        backgroundTask1.execute( "read_info");
@@ -105,86 +98,8 @@ public class SearchFragment extends Fragment
 
 
 
-
-        // set up
-        touchInterceptor = (ScrollView) getActivity().findViewById(R.id.touchInterceptor);
-        searchView = (SearchView) view.findViewById(R.id.searchProduct);
-        searchView.setFocusable(false);  // prevent from opening keyboard first
-
-        categoryEgg = (LinearLayout) view.findViewById(R.id.categoryEgg);
-        categoryChicken = (LinearLayout) view.findViewById(R.id.categoryChicken);
-        categoryPig = (LinearLayout) view.findViewById(R.id.categoryPig);
-        categoryID = 0; // 0 = no select, 1 = egg selected, 2 = chicken selected, 3 = pig selected
-
+        searchView=view.findViewById( R.id.searchProduct );
         product=view.findViewById( R.id.productListView );
-
-
-        final ItemsAdapter adapter=new ItemsAdapter( getActivity(),itemsArrayList );
-//        final ItemsAdapter eggAdapter=new ItemsAdapter( getActivity(),eggsList );
-        final ItemsAdapter chickenAdapter=new ItemsAdapter( getActivity(),chickenList );
-        final ItemsAdapter pigAdapter=new ItemsAdapter( getActivity(),pigList );
-        final ItemsAdapter eggDataAp=new ItemsAdapter( getActivity(),eggsdata );
-
-//        product.setAdapter( adapter );
-//        Utility.setListViewHeightBasedOnChildren(product);
-
-//        egglv=view.findViewById( R.id.egglv );
-//        pigslv=view.findViewById( R.id.piglv );
-//        chickenlv=view.findViewById( R.id.chickenlv );
-
-        /* * * * * * *
-         * Listeners *
-         * * * * * * */
-        // remove focus on search view if touch other area
-        touchInterceptor.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                searchView.clearFocus();
-            }
-        });
-        // categories click listener
-        categoryEgg.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                categoryID = 1;
-                categoryEgg.setBackgroundColor(getResources().getColor(R.color.darkOrange));
-                categoryChicken.setBackgroundColor(getResources().getColor(R.color.white));
-                categoryPig.setBackgroundColor(getResources().getColor(R.color.white));
-                product.setAdapter( null );
-            }
-        });
-        categoryChicken.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                categoryID = 2;
-                categoryEgg.setBackgroundColor(getResources().getColor(R.color.white));
-                categoryChicken.setBackgroundColor(getResources().getColor(R.color.darkOrange));
-                categoryPig.setBackgroundColor(getResources().getColor(R.color.white));
-                product.setAdapter( null );
-
-            }
-        });
-        categoryPig.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                categoryID = 3;
-                categoryEgg.setBackgroundColor(getResources().getColor(R.color.white));
-                categoryChicken.setBackgroundColor(getResources().getColor(R.color.white));
-                categoryPig.setBackgroundColor(getResources().getColor(R.color.darkOrange));
-                product.setAdapter( null );
-
-            }
-        });
-
-
 
 
 // initial function
@@ -349,6 +264,19 @@ public class SearchFragment extends Fragment
 
 ///***********************************************************
 
+        items=new ArrayList<>(  );
+        String info="";
+        ArrayList<Product> test=new ArrayList<>(  );
+
+        test=DaoUnit.getInstance().getProduct();
+
+        for (Product product:test){
+            String brand=product.getCategory();
+            if(! info.contains( brand)){
+                info=info+brand+";";
+                items.add( brand );
+            }
+        }
 
 
         Intent intent =getActivity().getIntent();
@@ -357,23 +285,22 @@ public class SearchFragment extends Fragment
         final String birthday=intent.getStringExtra( "birthday" );
 
         RadioGroup catogryRadioes = view.findViewById(R.id.radioCatogory);
-        RadioGroup typeRadioes = view.findViewById(R.id.radioType);
-        //大类选择
         catogryRadioes.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 category = checkedId;
             }
         });
-        //鸡、鸡蛋、猪选择
-        typeRadioes.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                type = checkedId;
-            }
-        });
 
+        Spinner spinner = view.findViewById(R.id.spinner);
+        //create a list of items for the spinner.
 
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, items);
+        //set the spinners adapter to the previously created one.
+        spinner.setAdapter(adapter1);
+        spinner.setClickable( false );
+
+        spinner.setOnItemSelectedListener( this );
         searchView.setOnSearchClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -383,20 +310,20 @@ public class SearchFragment extends Fragment
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                result=DaoUnit.getInstance().searchByOption(category,type,query);
-
-                ProductAdpater productAdapter=new ProductAdpater( getActivity(),result );
-                BrandAdapter brandAdapter=new BrandAdapter( getActivity(),result );
+                Log.d("spiner", String.valueOf( temp ));
                 if(category==R.id.radioBrandName){
+                    result=DaoUnit.getInstance().searchByBrand( category,items.get( temp ),query );
+                    BrandAdapter brandAdapter=new BrandAdapter( getActivity(),result );
                     product.setAdapter( brandAdapter );
                     brandAdapter.notifyDataSetChanged();
                     Utility.setListViewHeightBasedOnChildren( product );
                 }else if(category==R.id.radioAccreditation){
+                    result=DaoUnit.getInstance().searchByAcc( category,items.get( temp ),query );
+                    ProductAdpater productAdapter=new ProductAdpater( getActivity(),result );
                     product.setAdapter( productAdapter );
                     productAdapter.notifyDataSetChanged();
                     Utility.setListViewHeightBasedOnChildren(product);
                 }
-
                 Log.d("search result",String.valueOf( result.size() ));
 
                 Toast.makeText( getActivity(),"Total Find "+String.valueOf(result.size())+" Records",Toast.LENGTH_LONG ).show();
@@ -416,6 +343,7 @@ public class SearchFragment extends Fragment
 //                Product p= (Product) productAdapter.getItem( position );
                 Product p=result.get( position );
 
+
                 List<Accreditation> accreditations=p.getAccreditation();
 
                 String acc="ACC";
@@ -429,6 +357,7 @@ public class SearchFragment extends Fragment
                     if (intent != null) {
 //                        Accreditation accreditation= (Accreditation) p.getAccreditation();
 
+                        intent.putExtra( "sid",p.getSid() );
                         intent.putExtra("brand", p.getBrand_Name());
                         intent.putExtra("type", p.getCategory());
                         intent.putExtra("accreditation", acc);
@@ -453,36 +382,10 @@ public class SearchFragment extends Fragment
             }
         } );
 
-
-
-
         return view;
     }
 
-    /* * * * * *
-     * Methods *
-     * * * * * */
-//    @Override
-//    public void onDataAvailable(List<Products> data)
-//    {
-//        Log.d(TAG, "onDataAvailable: starts");
-//        mProductsRecyclerViewAdapter.loadNewData(data);
-//        Log.d(TAG, "onDataAvailable: ends");
-//    }
-//
-//    @Override
-//    public void onItemClick(View view, int position)
-//    {
-//        Intent intent = new Intent(getContext(), ProductDetailActivity.class);
-//        Products pseudoproduct = mProductsRecyclerViewAdapter.getProducts(position);
-//        Products passingproducts = new Products(pseudoproduct.getCategory(),pseudoproduct.getBrand());
-//        intent.putExtra(PRODUCT_DETAIL,passingproducts);
-//        ByteArrayOutputStream bStream = new ByteArrayOutputStream();
-//        pseudoproduct.getImage().compress(Bitmap.CompressFormat.PNG,0,bStream);
-//        byte[] byteArray = bStream.toByteArray();
-//        intent.putExtra(IMAGE_DETAIL,byteArray);
-//        startActivity(intent);
-//    }
+
 
 
     private void readProduct() {
@@ -612,11 +515,6 @@ public class SearchFragment extends Fragment
                     }else if(token[2].equalsIgnoreCase( "AVOID" )){
                         avoidList.add( items );
                     }
-
-
-
-
-
                     chickenList.add( items );
                     itemsArrayList.add(items);
                 }
@@ -672,10 +570,6 @@ public class SearchFragment extends Fragment
                         avoidList.add( items );
                     }
 
-//
-//
-
-
                     pigList.add( items );
 
 
@@ -699,4 +593,15 @@ public class SearchFragment extends Fragment
     }
 
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Log.d("spinner",String.valueOf( position ));
+        Log.d("spinner",items.get( position ));
+        temp=position;
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }

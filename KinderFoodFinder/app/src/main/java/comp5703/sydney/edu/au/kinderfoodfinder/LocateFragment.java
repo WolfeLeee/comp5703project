@@ -196,7 +196,6 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
 
-
                                     }
                                 });
 

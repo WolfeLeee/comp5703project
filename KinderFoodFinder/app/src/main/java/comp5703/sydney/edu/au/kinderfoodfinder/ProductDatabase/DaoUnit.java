@@ -45,18 +45,6 @@ public class DaoUnit {
         String cotegory = "";
         switch (type)
         {
-            case R.id.radioPig:
-                cotegory="pig";
-                //productJoin.where(productsDao.Properties.Category.eq("pig"));
-                break;
-            case R.id.radioEgg:
-                cotegory = "egg";
-                //productJoin.where(productsDao.Properties.Category.eq("egg"));
-                break;
-            case R.id.radioChicken:
-                cotegory = "chicken";
-                //productJoin.where(productsDao.Properties.Category.eq("chicken"));
-                break;
         }
         if (Catogry == R.id.radioBrandName)productJoin.whereOr(ProductDao.Properties.Category.eq(cotegory),ProductDao.Properties.Brand_Name.like(searchKey));
         return accBuilder.list();
@@ -107,21 +95,34 @@ public class DaoUnit {
         QueryBuilder productBuilder = productManager.queryBuilder();
         switch (type)
         {
-            case R.id.radioPig:
-                productBuilder.where(ProductDao.Properties.Category.eq("pig"));
-                break;
-            case R.id.radioEgg:
-                productBuilder.where(ProductDao.Properties.Category.eq("egg"));
-                break;
-            case R.id.radioChicken:
-                productBuilder.where(ProductDao.Properties.Category.eq("chicken"));
-                break;
         }
         if (Catogry == R.id.radioBrandName)productBuilder.where(ProductDao.Properties.Brand_Name.like(searchKey+"%"));
         //
         Join join= productBuilder.join(ProductDao.Properties.Id,Accreditation.class,AccreditationDao.Properties.ParentId);
         if (Catogry == R.id.radioAccreditation)join.where(AccreditationDao.Properties.Accreditation.like(searchKey+"%"));
         return covertproducts(productBuilder.list());
+    }
+
+    public ArrayList<Product> searchByAcc(int type, String category, String searchKey)
+    {
+        QueryBuilder productBuilder = productManager.queryBuilder();
+        productBuilder.where(ProductDao.Properties.Category.eq(category));
+
+
+        if ( type == R.id.radioBrandName)productBuilder.where(ProductDao.Properties.Brand_Name.like(searchKey+"%"));
+        //
+        Join join= productBuilder.join(ProductDao.Properties.Id,Accreditation.class,AccreditationDao.Properties.ParentId);
+        if (type == R.id.radioAccreditation)join.where(AccreditationDao.Properties.Accreditation.like(searchKey+"%"));
+        return covertproducts(productBuilder.list());
+    }
+
+    public ArrayList<Product> searchByBrand(int type,String category,String searchKey){
+        QueryBuilder productBuilder = productManager.queryBuilder();
+        productBuilder.where(ProductDao.Properties.Category.eq(category));
+        if ( type == R.id.radioBrandName)productBuilder.where(ProductDao.Properties.Brand_Name.like(searchKey+"%"));
+        ArrayList<Product> productArrayList= (ArrayList<Product>) productBuilder.list();
+        return productArrayList;
+
     }
 
     public ArrayList<Product> getcategoryList(String type){
@@ -169,6 +170,7 @@ public class DaoUnit {
     }
 
 
+
     public Product searchById(long sid)
     {
         QueryBuilder productBuilder= productManager.queryBuilder().where( ProductDao.Properties.Id.eq(sid));
@@ -179,6 +181,18 @@ public class DaoUnit {
 
         return product;
     }
+
+    public Product searchBySid(String sid)
+    {
+        QueryBuilder productBuilder= productManager.queryBuilder().where( ProductDao.Properties.Sid.eq(sid));
+        productBuilder.join(ProductDao.Properties.Id,Accreditation.class,AccreditationDao.Properties.ParentId);
+        Product product=new Product(  );
+        ArrayList<Product>productsArrayList = (ArrayList<Product>) productBuilder.list();
+        product=productsArrayList.get( 0 );
+
+        return product;
+    }
+
 
     public ArrayList<Accreditation> getAccByParentId(long sid)
     {
@@ -198,6 +212,12 @@ public class DaoUnit {
 
        return (ArrayList<Accreditation>) accBuilder.list();
 
+   }
+
+   public ArrayList<Product> getProduct(){
+        ArrayList<Product> productArrayList=new ArrayList<>(  );
+        productArrayList= (ArrayList<Product>) productManager.loadAll();
+        return productArrayList;
    }
 
     public void clearProductsTable()

@@ -39,9 +39,7 @@ public class BrowseFragment extends Fragment
     private List<Fragment> mFragment;
     private HomeFragment homeFragment;
 
-    private int tabCount = 6;
     private List<String> tabs;
-    String [] titles={"s1","s2","s3","s4","s5","s6"};
     private RadioGroup browsegorup;
     private SearchView searchView;
     private ListView listView;
@@ -134,6 +132,7 @@ public class BrowseFragment extends Fragment
         chickenlist=DaoUnit.getInstance().getcategoryList( "chicken" );
         piglist=DaoUnit.getInstance().getcategoryList( "pig" );
         test=DaoUnit.getInstance().getAcc();
+
 
         String info="";
         for (Accreditation accreditation:test){

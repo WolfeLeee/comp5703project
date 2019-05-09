@@ -1,58 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="3dp">
+    >
 
     <TextView
         android:id="@+id/tv_cate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="80dp"
-        android:layout_marginLeft="93dp"
-        android:layout_marginTop="155dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
         android:gravity="center_vertical"
-        android:paddingLeft="10dp"
         android:text="Choose your Category :"
         android:textSize="20sp" />
-
-    <Button
-        android:id="@+id/button_egg"
-        android:layout_below="@+id/tv_cate"
-        android:layout_width="160dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="35dp"
-        android:gravity="center"
-        android:layout_marginLeft="110dp"
-        android:text="Eggs"
-        android:background="@drawable/button_style"/>
-
-    <Button
-        android:id="@+id/button_chicken"
-        android:layout_below="@+id/button_egg"
-        android:layout_width="160dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="35dp"
-        android:gravity="center"
-        android:layout_marginLeft="110dp"
-        android:text="Chicken"
-        android:background="@drawable/button_style"/>
-
-    <Button
-        android:id="@+id/button_pork"
-        android:layout_below="@+id/button_chicken"
-        android:layout_width="160dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="35dp"
-        android:gravity="center"
-        android:layout_marginLeft="110dp"
-        android:text="Pork"
-        android:background="@drawable/button_style"/>
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"/>
 
 
-</RelativeLayout>
+
+    <ListView
+        android:id="@+id/categoryListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"/>
+
+
+</LinearLayout>

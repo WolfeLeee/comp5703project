@@ -25,7 +25,6 @@ public class SearchAdapter extends BaseAdapter implements Filterable {
         this.context = context;
         this.itemsList = itemsList;
         this.filterList = itemsList;
-
     }
 
     @Override

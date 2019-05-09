@@ -42,13 +42,18 @@ public class ReportAddressFragment extends Fragment {
     private ProgressDialog reportProgressDialog;
     StoreDatabase storeDatabase;
     int key;
+    String sid, brandName,category;
 
     String IP_ADDRESS = "172.20.10.4";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-        key = getArguments().getInt( "key" );
+//        key = getArguments().getInt( "key" );
+
+        sid=getArguments().getString( "sid" );
+        brandName=getArguments().getString( "brand_name" );
+        category=getArguments().getString( "type" );
     }
 
     @Nullable
@@ -78,10 +83,10 @@ public class ReportAddressFragment extends Fragment {
         fragmentmore = new MoreFragment();
 
         // Receive data
-        String brand = getArguments().getString("BRAND_KEY");
-        String category = getArguments().getString("CATEGORY_KEY");
+//        String brand = getArguments().getString("BRAND_KEY");
+//        String category = getArguments().getString("CATEGORY_KEY");
         content_product.setText(category);
-        content_brand.setText(brand);
+        content_brand.setText(brandName);
 
         // disable navigation bar at the bottom
         navigation = (BottomNavigationView) getActivity().findViewById(R.id.navigation);
@@ -130,7 +135,7 @@ public class ReportAddressFragment extends Fragment {
                 String streetAddress=input_location.getText().toString();
                 String state=input_statae.getText().toString();
                 String postCode =input_postcode.getText().toString();
-                String id ="5ccd8e9b3e36263b52a8d08f";
+                String id =sid;
                 String brand =content_brand.getText().toString();
                 reportInfomation( storeName,streetAddress,state,postCode,id);
                 AddStore(brand, storeName, streetAddress, postCode, state);
@@ -200,6 +205,9 @@ public class ReportAddressFragment extends Fragment {
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
                         .replace(R.id.fragment_container, fragmentReport).commit();
+
+                toolbar.setVisibility( View.GONE );
+//                getActivity().getSupportFragmentManager().popBackStack();
 
                 Toast.makeText(getActivity(), "Report Successfully!", Toast.LENGTH_SHORT).show();
                 Log.d("Send query response:", response);

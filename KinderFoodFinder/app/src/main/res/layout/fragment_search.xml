@@ -23,125 +23,26 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:checked="false"
-                android:text="BRAND NAME"/>
+                android:text="BRAND NAME"
+                android:gravity="center"/>
             <RadioButton
                 android:id="@+id/radioAccreditation"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:checked="false"
-                android:text="ACCREDITATION"/>
+                android:text="ACCREDITATION"
+                android:gravity="center"/>
         </RadioGroup>
 
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:id="@+id/radioType">
-            <RadioButton
-                android:id="@+id/radioEgg"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:checked="false"
-                android:text="EGG"/>
-            <RadioButton
-                android:id="@+id/radioChicken"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:checked="false"
-                android:text="CHICKEN"/>
-            <RadioButton
-                android:id="@+id/radioPig"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:checked="false"
-                android:text="PIG"/>
-        </RadioGroup>
     </LinearLayout>
 
-    <LinearLayout
+    <Spinner
+        android:id="@+id/spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/style_shadow"
-        android:orientation="horizontal"
-        android:padding="8dp"
-        tools:visibility="gone">
-
-        <LinearLayout
-            android:id="@+id/categoryEgg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.35"
-            android:orientation="vertical"
-            android:padding="2dp">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:background="@drawable/egg_icon" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:text="EGG"
-                android:textAlignment="center"
-                android:textSize="16dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/categoryChicken"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.2"
-            android:orientation="vertical"
-            android:padding="2dp">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:background="@drawable/chicken_icon" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:text="CHICKEN"
-                android:textAlignment="center"
-                android:textSize="16dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/categoryPig"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.35"
-            android:orientation="vertical"
-            android:padding="2dp">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:background="@drawable/pig_icon" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:text="PIG"
-                android:textAlignment="center"
-                android:textSize="16dp" />
-
-        </LinearLayout>
-    </LinearLayout>
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown"/>
 
     <SearchView
         android:id="@+id/searchProduct"

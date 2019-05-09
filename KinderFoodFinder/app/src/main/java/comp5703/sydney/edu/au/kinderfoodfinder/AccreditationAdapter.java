@@ -29,33 +29,33 @@ import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Contract;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.DaoUnit;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Product;
 
-public class BrandAdapter extends BaseAdapter implements Filterable {
+public class AccreditationAdapter extends BaseAdapter implements Filterable {
 
     private Context context;
     private ArrayList<Product> itemsList;
-    private ArrayList<Product> filterList;
-    private ArrayList<Product> productsList;
+    private ArrayList<AccEntity> filterList;
+    private ArrayList<AccEntity> accList;
     CustomFilter filter;
 
-    public BrandAdapter (Context context, ArrayList<Product> productsList){
+    public AccreditationAdapter (Context context, ArrayList<AccEntity> productsList){
         this.context = context;
-        this.productsList = productsList;
+        this.accList = productsList;
         this.filterList = productsList;
     }
 
     @Override
     public int getCount() {
-        return productsList.size();
+        return accList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return productsList.get(position);
+        return accList.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return productsList.indexOf(getItem(position));
+        return accList.indexOf(getItem(position));
     }
 
     @Override
@@ -63,36 +63,22 @@ public class BrandAdapter extends BaseAdapter implements Filterable {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
 
         if(convertView == null) {
-            convertView = inflater.inflate(R.layout.listview_brand, null);
+            convertView = inflater.inflate(R.layout.listview_accreditation, null);
         }
-        TextView brand = convertView.findViewById(R.id.brandneme);
-        TextView best =convertView.findViewById( R.id.best );
-        TextView good=convertView.findViewById( R.id.good );
-        TextView avoid=convertView.findViewById( R.id.avoid );
-        ImageView brangImage = convertView.findViewById( R.id.brand_image );
+        TextView ratetv=convertView.findViewById( R.id.rating );
+        TextView acctv=convertView.findViewById( R.id.accreditation );
+        String rate=accList.get( position ).getRating();
+        ratetv.setText( rate );
+        acctv.setText( accList.get( position ).getAccreditation() );
+        if(rate.equalsIgnoreCase( "BEST" )){
+            ratetv.setTextColor( Color.parseColor("#208E5C"));
+        }if(rate.equalsIgnoreCase( "GOOD" )){
+            ratetv.setTextColor( Color.parseColor("#f7912f"));
 
-        int best_count=0;
-        int good_count=0;
-        int avoid_count=0;
+        }if(rate.equalsIgnoreCase( "AVOID" )){
+            ratetv.setTextColor( Color.parseColor("#FF4081"));
 
-//        List<Accreditation> accreditationList=productsList.get( position ).getAccreditation();
-
-        String sid=productsList.get( position ).getSid();
-        List<AccEntity> accreditationList= readAccreditation( sid );
-        brand.setText(productsList.get(position).getBrand_Name());
-        for(AccEntity acc:accreditationList){
-            if(acc.getRating().equalsIgnoreCase( "best" )){
-                best_count++;
-            }else if(acc.getRating().equalsIgnoreCase( "good" )){
-                good_count++;
-            }else if(acc.getRating().equalsIgnoreCase( "avoid" )) {
-                avoid_count++;
-            }
         }
-        best.setText( "Best: "+String.valueOf( best_count ) );
-        good.setText( "Good: "+String.valueOf( good_count ) );
-        avoid.setText( "Avoid: "+String.valueOf( avoid_count ) );
-
         return convertView;
     }
 
@@ -112,19 +98,7 @@ public class BrandAdapter extends BaseAdapter implements Filterable {
             FilterResults results = new FilterResults();
 
             if(constraint != null && constraint.length()>0){
-                constraint = constraint.toString().toUpperCase();
 
-                ArrayList<Product> filters = new ArrayList<>();
-
-                for(int i=0; i<filterList.size();i++){
-                    if(filterList.get(i).getBrand_Name().toUpperCase().startsWith( (String) constraint )){
-                        Product p = filterList.get(i);
-                        filters.add(p);
-                    }
-                }
-
-                results.count = filters.size();
-                results.values = filters;
             }else{
                 results.count = filterList.size();
                 results.values = filterList;
@@ -136,7 +110,7 @@ public class BrandAdapter extends BaseAdapter implements Filterable {
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
 
-            productsList = (ArrayList<Product>) results.values;
+
             notifyDataSetChanged();
         }
     }

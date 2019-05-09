@@ -85,9 +85,14 @@ public class MainActivity extends AppCompatActivity
 
         if (id == 2) {
             navigation.setSelectedItemId(R.id.navigation_more);
+
+            Bundle bundle=new Bundle(  );
+            bundle.putInt( "key",3 );
+            Fragment reportFragment= new ReportFragment();
+            reportFragment.setArguments( bundle );
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container,new ReportFragment())
+                    .replace(R.id.fragment_container,reportFragment)
                     .addToBackStack(null)
                     .commit();
 
@@ -102,7 +107,6 @@ public class MainActivity extends AppCompatActivity
         final String brandVersion=intent.getStringExtra( "brand_version" );
         final String brandUpdate=intent.getStringExtra( "brand_update" );
         final String status=intent.getStringExtra( "status" );
-
         final String userID=intent.getStringExtra( "userID" );
         final String gender=intent.getStringExtra( "gender" );
         final String birthday=intent.getStringExtra( "birthday" );
