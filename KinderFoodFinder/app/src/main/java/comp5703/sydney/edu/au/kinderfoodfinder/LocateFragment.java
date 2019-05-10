@@ -271,9 +271,9 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
                 {
                     if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
                     {
-                        if(mGoogleApiClient == null)
+                        if(mGoogleApiClient == null){
                             buildGoogleApiClienr();
-                        mMap.setMyLocationEnabled(true);
+                            mMap.setMyLocationEnabled(true);}
                     }
                 }
                 else
@@ -359,8 +359,9 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
         mMarker = mMap.addMarker(markerOptions);
 
         //Move Camera
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
+//         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+//         mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
 
         UiSettings uiSettings = mMap.getUiSettings();
         uiSettings.setZoomControlsEnabled(true);
