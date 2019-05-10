@@ -89,6 +89,12 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
          spinner=view.findViewById( R.id.spinner );
          listView=view.findViewById( R.id.categoryListView );
 
+        ArrayList<Product> productArrayList=DaoUnit.getInstance().getcategoryList( items.get( 0));
+        getStringlist( 0 );
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(  getActivity(), android.R.layout.simple_list_item_1, brandList);
+        listView.setAdapter( arrayAdapter );
+        Utility.setListViewHeightBasedOnChildren( listView );
+
         ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, items);
         //set the spinners adapter to the previously created one.
         spinner.setAdapter(adapter1);
@@ -99,7 +105,6 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toolbar.setVisibility(View.GONE);
                 // go to login fragment
 //                if(key==1){
 //                    getActivity().getSupportFragmentManager().popBackStack();
@@ -134,15 +139,14 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
 //                }
 
 
-
 //                getActivity().getSupportFragmentManager().popBackStack();
 
                 getActivity().getSupportFragmentManager().beginTransaction()
                             .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
                             .replace(R.id.fragment_container,fragmentMore ).commit();
-                    navigation.setVisibility(View.VISIBLE);
-
                 // remove toolbar again
+
+                toolbar.setVisibility(View.GONE);
 
                 // enable navigation bar again
                 navigation.setVisibility(View.VISIBLE);

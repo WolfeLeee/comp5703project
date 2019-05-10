@@ -112,33 +112,35 @@ public class StartUpActivity extends AppCompatActivity
             writeToFile( "1,1,0" );
             Log.d( "VersionDatabase", "Creating!" );
         }
-            version = readFromFile();
-            String[] v=version.split( "," );
-            brand_version=v[0];
-            store_version=v[1];
-            status=v[2];
-            Log.d("VersionDatabase", "Existing!");
+        version = readFromFile();
+        String[] v=version.split( "," );
+        brand_version=v[0];
+        store_version=v[1];
+        Log.d("VersionDatabase", "Existing!");
+
+        int bversion=1;
+        int sversion=1;
+        try{
+            bversion=Integer.parseInt( brand_version );
+            sversion=Integer.parseInt( store_version );
+        }catch (Exception e){
+
+        }
+        checkBrandDatabase(bversion,sversion);
 
 //        Log.d("VersionDatabase", version);
 //        Log.d("VersionDatabase1", test);
 
         intent=new Intent(StartUpActivity.this,MainActivity.class  );
         startIntent=new Intent( StartUpActivity.this,StartUpActivity.class );
-
-
-
 //        testString();
-        readStatistics();
 //        deleteClickStatistic();
-        checkBrandDatabase(status);
-        gourpBY();
 
+        gourpBY();
         String test=getResults();
         JsonParser jsonParser = new JsonParser();
         JsonArray jsonElements = jsonParser.parse(test).getAsJsonArray();
 //        Log.d("Statistics Size",String.valueOf( jsonElements.size() ));
-
-
         sendStatistics( test );
         // set up fragment
         fragmentLogin = new LoginFragment();
@@ -213,7 +215,7 @@ public class StartUpActivity extends AppCompatActivity
         }
     }
 
-    private void checkBrandDatabase( String status)
+    private void checkBrandDatabase(final int brandVersion, final int storeversion)
 {
     // modify the user data to the server
     String url;
@@ -232,17 +234,21 @@ public class StartUpActivity extends AppCompatActivity
             //The String 'response' contains the server's response.
             //You can test it by printing response.substring(0,500) to the screen.
             String[] result=response.split( "," );
-            int i=0;
-            int v=1;
+            int serverbrand=1;
+            int serverstore=1;
             Log.d("Send Update response:", response);
 
             try{
-                i=Integer.parseInt( result[0] );
-
+                serverbrand=Integer.parseInt( result[0] );
+                serverstore=Integer.parseInt( result[0] );
             }catch (Exception e){
 
             }
-            if(v==i){
+
+            Log.d("Send Update :", String.valueOf( serverbrand )+String.valueOf( serverstore )
+                    +String.valueOf( brandVersion)+String.valueOf(storeversion  ));
+
+            if(serverbrand>brandVersion){
 
 //                if(status.equals( "0" )){
 //                    startIntent.putExtra( "brand_version",response );
@@ -254,22 +260,8 @@ public class StartUpActivity extends AppCompatActivity
 //                    intent.putExtra( "brand_update","no" );
 //                }
 
-                Toast.makeText(StartUpActivity.this, "Same Version!", Toast.LENGTH_SHORT).show();
-                Log.d("Send Update response:", response);
-//
-
-            }else if(i>v){
                 Toast.makeText(StartUpActivity.this, "Update database!", Toast.LENGTH_SHORT).show();
-                Log.d("Send Update response:", response);
-//                if(status.equals( "0" )){
-//                    startIntent.putExtra( "brand_version",response );
-//                    startIntent.putExtra( "brand_update","yes" );
-//                }else {
-////                    Intent intent=new Intent(StartUpActivity.this,MainActivity.class  );
-//                    intent.putExtra( "brand_version",response );
-//                    intent.putExtra( "brand_update","yes" );
-//                }
-//                Log.d("update versionDatabase","brand"+brand_version+"   "+"store"+store_version);
+                Log.d("Send brand Update :", "yes");
                 DaoUnit.getInstance().clearProductsTable();
                 DaoUnit.getInstance().clearAccreditationTable();
 
@@ -280,7 +272,44 @@ public class StartUpActivity extends AppCompatActivity
                 accreditationHelper.onCreate( database );
                 new JsonTask().execute("http://" + StatisticContract.StatisticEntry.IP_Address + ":3000/GetAllBrand");
 
+
+
+//
+
+            }else {
+                Toast.makeText(StartUpActivity.this, "Same Version!", Toast.LENGTH_SHORT).show();
+                Log.d("Send Brand Update:", "no");
+//                if(status.equals( "0" )){
+//                    startIntent.putExtra( "brand_version",response );
+//                    startIntent.putExtra( "brand_update","yes" );
+//                }else {
+////                    Intent intent=new Intent(StartUpActivity.this,MainActivity.class  );
+//                    intent.putExtra( "brand_version",response );
+//                    intent.putExtra( "brand_update","yes" );
+//                }
+//                Log.d("update versionDatabase","brand"+brand_version+"   "+"store"+store_version)
             }
+
+
+            if(serverstore>storeversion){
+                Toast.makeText(StartUpActivity.this, "Update Store database!", Toast.LENGTH_SHORT).show();
+                Log.d("Send Store Update :", "yes");
+                new StoreJsonTask().execute("http://" + StatisticContract.StatisticEntry.IP_Address + ":3000/GetAllStore");
+
+            }else {
+                Toast.makeText(StartUpActivity.this, "Same Version!", Toast.LENGTH_SHORT).show();
+                Log.d("Send Store Update:", "no");
+//
+            }
+            if(serverbrand>brandVersion|| serverstore>storeversion){
+                deletefile();
+                String version=response+","+"0";
+                writeToFile( version );
+                Log.d("Send write file:", "yes");
+
+            }
+
+
         }
     },
             new Response.ErrorListener()  //Create an error listener to handle errors appropriately.
@@ -380,6 +409,79 @@ public class StartUpActivity extends AppCompatActivity
             Toast.makeText( StartUpActivity.this,"update database",Toast.LENGTH_LONG ).show();
             String a=jsonElements.get( 0 ).toString();
 //            Log.d("JSON element",jsonString );
+
+        }
+    }
+    private class StoreJsonTask extends AsyncTask<String, String, String> {
+        Context context;
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        protected String doInBackground(String... params) {
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+
+            try {
+                URL url = new URL(params[0]);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+                InputStream stream = connection.getInputStream();
+
+                reader = new BufferedReader(new InputStreamReader(stream));
+
+                StringBuffer buffer = new StringBuffer();
+                String line = "";
+
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line+"\n");
+                    Log.d("Response: ", "> " + line);   //here u ll get whole response...... :-)
+                }
+                return buffer.toString();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+
+            jsonString=result;
+            Log.d("json",result);
+            jsonString = jsonString.replace("_id","sid");
+
+
+//            Log.d("JSON",result );
+            JsonParser jsonParser = new JsonParser();
+            JsonArray jsonElements = jsonParser.parse(jsonString).getAsJsonArray();
+
+
+            Gson gson = new Gson();
+//            for (JsonElement product:jsonElements) {
+//
+//            }
+            Log.d("JSON size",String.valueOf( jsonElements.size() ));
+            Toast.makeText( StartUpActivity.this,"update database",Toast.LENGTH_LONG ).show();
+            String a=jsonElements.get( 0 ).toString();
+            Log.d("JSON element",jsonString );
+
 
         }
     }
@@ -591,9 +693,13 @@ public class StartUpActivity extends AppCompatActivity
     public void deleteAcc(){
         AccreditationHelper accrediationDatabase=new AccreditationHelper( this );
         SQLiteDatabase database=accrediationDatabase.getWritableDatabase();
-
         accrediationDatabase.deleteAll( database );
         accrediationDatabase.onCreate( database );
+    }
+
+
+    public void checkVersionFile(){
+
     }
 
 }

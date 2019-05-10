@@ -114,10 +114,13 @@ public class ReportAddressFragment extends Fragment {
 //                            .replace(R.id.fragment_container, fragmentmore).commit();
 //
 //                }
-                getActivity().getSupportFragmentManager().popBackStack();
-                getActivity().getSupportFragmentManager().popBackStack();
-                getActivity().getSupportFragmentManager().popBackStack();
+//                getActivity().getSupportFragmentManager().popBackStack();
+//                getActivity().getSupportFragmentManager().popBackStack();
+//                getActivity().getSupportFragmentManager().popBackStack();
 
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                        .replace(R.id.fragment_container,fragmentReport ).commit();
 
                 // remove toolbar again
                 toolbar.setVisibility(View.GONE);
