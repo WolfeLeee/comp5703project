@@ -277,6 +277,11 @@ public class FBRegisterFragment extends Fragment {
 
                 registerProgressDialog.dismiss();
 
+                Intent intentDetail=new Intent( getActivity(),DetailActivity.class );
+                intentDetail.putExtra( "status","yes" );
+                intentDetail.putExtra( "gender","Male" );
+                intentDetail.putExtra( "birthday","Not Disclose " );
+                intentDetail.putExtra( "userID",id );
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 intent.putExtra( "status","yes" );
                 intent.putExtra( "gender",gender );

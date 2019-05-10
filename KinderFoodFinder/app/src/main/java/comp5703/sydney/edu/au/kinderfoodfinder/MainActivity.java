@@ -101,7 +101,12 @@ public class MainActivity extends AppCompatActivity
 
             navigation.setSelectedItemId(R.id.navigation_more);
         }
-
+        if(id==4){
+            navigation.setSelectedItemId( R.id.navigation_search );
+        }
+        if(id==5){
+            navigation.setSelectedItemId( R.id.navigation_browse );
+        }
 
         Intent intent =getIntent();
         final String brandVersion=intent.getStringExtra( "brand_version" );
@@ -114,6 +119,8 @@ public class MainActivity extends AppCompatActivity
 
         Intent intent1=new Intent( MainActivity.this,DetailActivity.class );
     }
+
+
 
     /* * * * * *
      * Methods *

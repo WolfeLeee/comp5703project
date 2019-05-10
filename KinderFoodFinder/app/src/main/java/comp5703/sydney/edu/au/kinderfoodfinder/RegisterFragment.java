@@ -226,6 +226,11 @@ public class RegisterFragment extends Fragment
                 //The String 'response' contains the server's response.
                 //You can test it by printing response.substring(0,500) to the screen.
                 registerProgressDialog.dismiss();
+                Intent intentDetail=new Intent( getActivity(),DetailActivity.class );
+                intentDetail.putExtra( "status","yes" );
+                intentDetail.putExtra( "gender","Male" );
+                intentDetail.putExtra( "birthday","Not Disclose " );
+                intentDetail.putExtra( "userID",email );
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 intent.putExtra( "status","yes" );
                 intent.putExtra( "gender",gender );

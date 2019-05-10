@@ -364,6 +364,7 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
                         intent.putExtra("rating", rating);
                         intent.putExtra("location", p.getAvailable());
                         intent.putExtra( "stringId",p.getSid() );
+                        intent.putExtra( "page","search" );
                         intent.putExtra( "gender",gender );
                         intent.putExtra( "birthday",birthday );
                         intent.putExtra( "userID",userID );
@@ -373,11 +374,13 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
                         String c=accreditation.get( 0 ).getRating();
 
 
+
                         String info=p.getSid()+"; "+p.getBrand_Name()+"; "+p.getCategory()+"; "+p.getImage()+"; "
                                 +a+"; "+b+"; "+c;
                         Log.d("statistics put record",info);
 //                    intent.putExtra("img", String.valueOf(c.getImg()));
                         startActivity( intent );
+                        getActivity().finish();
                     }
             }
         } );

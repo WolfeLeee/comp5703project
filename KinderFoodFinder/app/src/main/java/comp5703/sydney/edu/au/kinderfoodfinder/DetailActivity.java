@@ -44,7 +44,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private BottomNavigationView navigation;
-    private  String sid,date,age;
+    private  String sid,date,age,page;
     private int times;
     private TextView brand_info, rate_info, accreditationtv, location_info;
     private TextView reporttv,availabletv, learntv;
@@ -59,6 +59,8 @@ public class DetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         //
         sid=intent.getStringExtra( "stringId" );
+        page=intent.getStringExtra( "page");
+
         final String userID=intent.getStringExtra( "userID" );
         final String gender=intent.getStringExtra( "gender" );
         final String birthday=intent.getStringExtra( "birthday" );
@@ -90,6 +92,7 @@ public class DetailActivity extends AppCompatActivity {
 
         if(image!=null){
             Picasso.with( this ).load( image ).into( imageView );
+
 
         }
 //        String img = intent.getStringExtra("img");
@@ -144,12 +147,25 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                toolbar.setVisibility( View.INVISIBLE );
+
+                if(page.equalsIgnoreCase( "search" )){
+                    Intent intent = new Intent(DetailActivity.this, MainActivity.class);
+                    intent.putExtra("id",4);
+                    startActivity(intent);
+                }else {
+                    Intent intent = new Intent(DetailActivity.this, MainActivity.class);
+                    intent.putExtra("id",5);
+                    startActivity(intent);
+                }
+                toolbar.setVisibility( View.GONE );
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setTitle( "Back" );
+//                toolbar.setVisibility( View.INVISIBLE );
+//                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//                getSupportActionBar().setTitle( "Back" );
                 finish();
             }
         });
-
-
 
         reporttv.getPaint().setFlags( Paint.FAKE_BOLD_TEXT_FLAG);
         availabletv.getPaint().setFlags(Paint.FAKE_BOLD_TEXT_FLAG);
@@ -165,8 +181,12 @@ public class DetailActivity extends AppCompatActivity {
                 Intent intent = new Intent(DetailActivity.this, MainActivity.class);
                 intent.putExtra("id",1);
                 startActivity(intent);
-
+                toolbar.setVisibility( View.GONE );
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setTitle( "Back" );
                 finish();
+
+
             }
         } );
 
@@ -179,7 +199,8 @@ public class DetailActivity extends AppCompatActivity {
                 intent.putExtra("id",2);
                 startActivity(intent);
                 toolbar.setVisibility( View.INVISIBLE );
-
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setTitle( "Back" );
 //                getSupportFragmentManager()
 //                        .beginTransaction()
 //                        .replace(DetailActivity.this,new ReportFragment())
@@ -194,8 +215,7 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 toolbar.setVisibility( View.INVISIBLE );
-
-
+                toolbar.setVisibility( View.GONE );
                 Intent intent = new Intent(DetailActivity.this, MainActivity.class);
                 intent.putExtra("id",3);
                 startActivity(intent);
@@ -233,10 +253,6 @@ public class DetailActivity extends AppCompatActivity {
 
 
             statisticsDatabase.addProduct( sid,date,gender,age,count,database );
-
-
-
-
             return "One Row Insert";
         }
 
@@ -278,23 +294,28 @@ public class DetailActivity extends AppCompatActivity {
         String string = birthday;
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         int age=0;
+//        Log.d("brithday" ,birthday);
 
-        Date birth=new Date(  );
-        try {
+        if(string!=null){
+            Date birth=new Date(  );
+            try {
+                    birth=sdf.parse( string );
+                    Date d=new Date();
 
-            birth=sdf.parse( string );
-            Date d=new Date();
+                    if(birth.getDay()>d.getDay()&& birth.getMonth()>d.getMonth()){
+                        age=d.getYear()-birth.getYear()-1;
+                    }else {
+                        age=d.getYear()-birth.getYear();
+                    }
 
-            if(birth.getDay()>d.getDay()&& birth.getMonth()>d.getMonth()){
-                age=d.getYear()-birth.getYear()-1;
-            }else {
-                age=d.getYear()-birth.getYear();
+
+            } catch (ParseException e) {
+                result=e.toString();
+                e.printStackTrace();
+                return "Not Disclose";
             }
-        } catch (ParseException e) {
-            result=e.toString();
-            e.printStackTrace();
-            return "Not Disclose";
         }
+
 
 
         if(age<18){
@@ -312,7 +333,7 @@ public class DetailActivity extends AppCompatActivity {
         }
 
 
-        Log.d("date",birth.toString()+"；  " +String.valueOf( age ));
+//        Log.d("date",birth.toString()+"；  " +String.valueOf( age ));
 
 
         return result;

@@ -171,6 +171,11 @@ public class LoginFragment extends Fragment {
         // only for developer to test the app
         if (email.equals("test") && password.equals("test")) {
             loginProgressDialog.dismiss();
+            Intent intentDetail=new Intent( getActivity(),DetailActivity.class );
+            intentDetail.putExtra( "status","yes" );
+            intentDetail.putExtra( "gender","Male" );
+            intentDetail.putExtra( "birthday","Not Disclose " );
+            intentDetail.putExtra( "userID",password );
             Intent intent = new Intent(getActivity(), MainActivity.class);
             intent.putExtra( "status","yes" );
             intent.putExtra( "gender","Male" );
@@ -199,6 +204,11 @@ public class LoginFragment extends Fragment {
                 if (rep[0].equals("Yes")) {
                     Toast.makeText(getActivity(), "Login Successfully!", Toast.LENGTH_SHORT).show();
                     Log.d("Send query response:", response);
+                    Intent intentDetail=new Intent( getActivity(),DetailActivity.class );
+                    intentDetail.putExtra( "status","yes" );
+                    intentDetail.putExtra( "gender","Male" );
+                    intentDetail.putExtra( "birthday","Not Disclose " );
+                    intentDetail.putExtra( "userID",email );
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     intent.putExtra( "status","yes" );
                     intent.putExtra( "gender",rep[1] );
@@ -300,8 +310,11 @@ public class LoginFragment extends Fragment {
                 if (response.equals("Yes")) {
                     Toast.makeText(getActivity(), "Login Successfully!", Toast.LENGTH_SHORT).show();
                     Log.d("Send query response:", response);
-
-
+                    Intent intentDetail=new Intent( getActivity(),DetailActivity.class );
+                    intentDetail.putExtra( "status","yes" );
+                    intentDetail.putExtra( "gender","Male" );
+                    intentDetail.putExtra( "birthday","Not Disclose " );
+                    intentDetail.putExtra( "userID",password );
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     intent.putExtra( "status","yes" );
                     intent.putExtra( "gender","Male" );
@@ -309,6 +322,8 @@ public class LoginFragment extends Fragment {
                     intent.putExtra( "userID",password );
                     startActivity(intent);
                     getActivity().finish();
+
+
                 } else {
                     Toast.makeText(getActivity(), "Login Failed!", Toast.LENGTH_SHORT).show();
                     Log.d("Send query response:", response);
@@ -335,4 +350,12 @@ public class LoginFragment extends Fragment {
         ExampleRequestQueue.add(ExampleStringRequest);
     }
 
+
+    public void putValue(String id){
+        Intent intent = new Intent(getActivity(), DetailActivity.class);
+        intent.putExtra( "status","yes" );
+        intent.putExtra( "gender","Male" );
+        intent.putExtra( "birthday","Not Disclose " );
+        intent.putExtra( "userID",id );
+    }
 }

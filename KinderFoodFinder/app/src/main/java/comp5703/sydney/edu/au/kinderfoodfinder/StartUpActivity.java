@@ -376,13 +376,9 @@ public class StartUpActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-
-
-            jsonString=result;
+           jsonString=result;
 //            Log.d("json",result);
             jsonString = jsonString.replace("_id","sid");
-
-
 //            Log.d("JSON",result );
             JsonParser jsonParser = new JsonParser();
             JsonArray jsonElements = jsonParser.parse(jsonString).getAsJsonArray();
@@ -400,7 +396,6 @@ public class StartUpActivity extends AppCompatActivity
                     acc.setParentId(pro.getId());
                     MyApplication.getInstance().getDaoSession().getAccreditationDao().insertWithoutSettingPk(acc);
                     accreditationHelper.addAcc( acc.getSid(),pro.getSid(),acc.getAccreditation(),acc.getRating(),database );
-
                 }
                 productArrayList.add(pro);
             }
