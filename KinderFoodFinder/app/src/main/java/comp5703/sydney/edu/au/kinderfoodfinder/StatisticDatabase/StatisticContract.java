@@ -15,7 +15,7 @@ public class StatisticContract {
         public static final String GENDER="gender";
         public static final String AGE="age";
         public static final String COUNT="count";
-        public static final String IP_Address="192.168.20.30";
+        public static final String IP_Address="192.168.0.3";
 
     }
 }
