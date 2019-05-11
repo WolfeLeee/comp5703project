@@ -242,8 +242,9 @@ module.exports.registerLogin = function(req, res, next)
         return next(err);
     }
 };
-
-// Feature page
+/* * * * * * * * * * * * * * * * * *
+ * Statistics Page                 *
+ * * * * * * * * * * * * * * * * * */
 module.exports.goToFeature = function(req, res, next)
 {
     User.findById(req.session.userId)
@@ -263,13 +264,45 @@ module.exports.goToFeature = function(req, res, next)
                 }
                 else
                 {
+                    Statistic.find({})
+                    Product.find({})
+                        .exec(function(errProduct,products)
+                        {
+                            if(errProduct)
+                            {
+                                return next(errProduct);
+                            }
+                            else
+                            {
+                                res.render('Statistics.pug',
+                                    {
+                                        products:products
+                                    });
+                            }
+                        })
 
-                    res.render('main.pug');
                 }
             }
         });
 
 };
+
+
+module.exports.GenerateStatistics = async function(req,res,next)
+{
+    var ws = fs.createWriteStream("Statisticalreport.csv");
+    csv.write([
+        ["No.","Brand","Gender","Age","Timeline","Count"],
+        ["1","Gourmet Breakfast Cage Free Eggs","Female","24","12/05/2019","52"],
+        ["2","Captain Creek Vineyard & Winery","Female","20","04/04/2019","73"],
+        ["2","Campbell's Real Stock","Undefined","42","06/02/2019","91"],
+        ["3","Kelty Farm","Male","57","05/04/2019","17"],
+        ["3","Gourmet Breakfast Cage Free Eggs","Undefined","49","09/03/2019","3"],
+        ["4","Tonemade","Female","16","21/03/2019","4"]
+    ],{headers:true})
+        .pipe(ws);
+
+}
 
 /* * * * * * * * * * * * * * * * * *
  * Insert/ Import data             *

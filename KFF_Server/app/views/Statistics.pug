@@ -1,0 +1,109 @@
+doctype html
+
+html
+head
+    title Import Insert Page
+    link(rel='stylesheet',type='text/css',href='css/fontawesome-free/all.min.css')
+    link(rel='stylesheet',type='text/css',href='css/dataTables/dataTables.bootstrap4.css')
+    link(rel='stylesheet',type='text/css', href='css/shared.css')
+    link(rel='stylesheet',type='text/css', href='css/Statistics.css')
+    link(rel='stylesheet',type='text/css',href='css/sb-admin.min.css')
+    link(rel='stylesheet',type='text/css',href='https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css')
+    script(src="http://code.jquery.com/jquery-1.9.1.min.js")
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
+    script(src="js/statisticsPage.js" type="text/javascript")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
+    script.
+        window.jQuery || document.write('script(src="js/jquery.js")')
+body
+    div(class="pageheader")
+        div(class="pageheader_title")
+            a(href="/feature" class="pageheader_title__anchor") KINDER FOOD FINDER
+            div(class="ertical-align")
+        div(class="pageheader_navigationbar")
+            ul(class="pageheader_navigationbar__items")
+                li(class="pageheader_navigationbar__item")
+                    input(id="pageheader_navigationbar__searchbox" type="text" name="SearchBrandName" Placeholder="Search a brand name...")
+                    div(class="vertical-align")
+                li(class="pageheader_navigationbar__item")
+                    a(href="/feature") ABOUT THE SERVER
+                li(class="pageheader_navigationbar__item")
+                    a(href="/feature") GUIDELINE
+                li(class="pageheader_navigationbar__item")
+                    a(href="/logout") LOGOUT
+    div(class="pagebody")
+        div(class="pagebody_navigationbar")
+            p CONTROL PANEL
+            div(class="pagebody_navigationbar__header")
+                a(href="/report") Report
+            div(class="pagebody_navigationbar__header")
+                a(href="/importinsertPage") Import/ Insert Data
+            div(class="pagebody_navigationbar__header")
+                a(href="/dbmanagement") Update/ Delete Brand
+            div(class="pagebody_navigationbar__header")
+                a(href="/store_dbmanagement") Update/ Delete Store
+            div(class="pagebody_navigationbar__header")
+                a(href="/publish") Publish
+        div(class="pagebody_mainbody")
+            div(class="brand")
+                div(class="pagebody_mainbody__sectionheader__brand")
+                    p Statistics
+                div.pagebody_inputform__brand.pagebody_inputform__chosenresult
+                    div.pagebody_inputform__section.pagebody_inputform__brand__section__first
+                        p.pagebody_inputform__header Brand statistics
+                        div.pagebody_inputform__dialog
+                            p Guideline: This function enables the admin to export a csv file contains statistical data collected from the end-users
+                        div.pagebody_inputform__input.pagebody_inputform__inputnewbrand
+                            form(action="/insertnewBrand" method="post" enctype="multipart/form-data")
+                                div.pagebody_inputform__hundred.pagebody_inputform__inputheader Timeline (*)
+                                    label.pagebody_inputform__hundred
+                                        input.pagebody_inputform__radiobutton(type="radio" name="timeline" value = "All")
+                                        label.pagebody_inputform__radiobuttontext All
+                                    label.pagebody_inputform__hundred
+                                        input.pagebody_inputform__radiobutton(type="radio" name="timeline" value = "All")
+                                        label.pagebody_inputform__radiobuttontext Period
+                                        input(type="date")
+                                        input(type="date")
+                                div.pagebody_inputform__hundred.pagebody_inputform__inputheader Choose brand
+                                input.pagebody_inputform__hundred.pagebody_inputform__brandratinginput(name = "brandrating",list = "pagebody_inputform__BrandRating",placeholder ="Choose or type a brand", autocomplete ="off")
+                                datalist(autocomplete ="off")#pagebody_inputform__BrandRating
+                                    option(value="All" selected)
+                                    - for ( var i = 0 ; i < products.length ; i++)
+                                        option(value=products[i].Brand_Name)
+                                    #{products[0]}
+                                div.pagebody_inputform__fifty.pagebody_inputform__inputheader Gender
+                                select(autocomplete ="off")#pagebody_inputform__BrandRating
+                                    option(value="All" selected) All
+                                    option(value="Female") Female
+                                    option(value="Male") Male
+                                    option(value="Undefined") Undefined
+                                input.pagebody_inputform__submit.pagebody_inputform__generatebrandcsvstatistics(type="button" value="Generate csv file")
+                                input.pagebody_inputform__reset(type="reset" value="Reset")
+                                div.pagebody_inputform__hundred.pagebody_inputform__errordialog
+                    div.pagebody_inputform__section
+<!--                        p.pagebody_inputform__header Insert new brand-->
+<!--                        div.pagebody_inputform__dialog-->
+<!--                            p Guideline: This function enables the admin to insert a new brand to the database. Likewise, only one accreditation should be recorded at this stage. If the admin wants to input more accreditation to a brand, please access the "Accreditation" tab in the "Detail Brand Page" (Update/ Delete Brand > Detail Brand > Accreditation).-->
+<!--                        div.pagebody_inputform__input.pagebody_inputform__inputnewbrand-->
+<!--                            form(action="/insertnewBrand" method="post" enctype="multipart/form-data")-->
+<!--                                div.pagebody_inputform__fifty.pagebody_inputform__inputheader Enter a Brand Name (*)-->
+<!--                                div.pagebody_inputform__fourty.pagebody_inputform__inputheader Category (*)-->
+<!--                                input.pagebody_inputform__fifty.pagebody_inputform__brandnameinput(type="text" name="brandname" Placeholder = "Please enter the brand name...", autocomplete ="off")-->
+<!--                                input.pagebody_inputform__fourty.pagebody_inputform__brandcategoryinput(name = "brandcategory",list = "pagebody_inputform__BrandCategory",placeholder ="Choose or type a category", autocomplete ="off")-->
+<!--                                datalist#pagebody_inputform__BrandCategory-->
+<!--                                    option(value="Egg")-->
+<!--                                    option(value="Pork")-->
+<!--                                    option(value="Chicken")-->
+<!--                                div.pagebody_inputform__hundred.pagebody_inputform__inputheader Choose an image for this brand-->
+<!--                                input(type="file" accept="image/*" name="brandimage")-->
+<!--                                div.pagebody_inputform__fifty.pagebody_inputform__inputheader Accreditation (*)-->
+<!--                                div.pagebody_inputform__fourty.pagebody_inputform__inputheader Rating (*)-->
+<!--                                input.pagebody_inputform__fifty.pagebody_inputform__brandaccreditationinput(type="text" name="brandaccreditation" Placeholder = "Please enter the Accreditation...", autocomplete ="off")-->
+<!--                                input.pagebody_inputform__fourty.pagebody_inputform__brandratinginput(name = "brandrating",list = "pagebody_inputform__BrandRating",placeholder ="Choose or type a rating", autocomplete ="off")-->
+<!--                                datalist#pagebody_inputform__BrandRating-->
+<!--                                    option(value="Good")-->
+<!--                                    option(value="Best")-->
+<!--                                    option(value="Avoid")-->
+<!--                                input.pagebody_inputform__submit.pagebody_inputform__brandsubmit(type="button" value="Submit")-->
+<!--                                input.pagebody_inputform__reset(type="reset" value="Reset")-->
+<!--                                div.pagebody_inputform__hundred.pagebody_inputform__errordialog-->

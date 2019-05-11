@@ -6,8 +6,13 @@ var router = express.Router();
 router.get('/', controller.goToLogin);
 router.get('/landing', controller.showLandingPage);
 router.post('/', controller.registerLogin);
-router.get('/feature', controller.goToFeature);
 router.get('/logout', controller.logout);
+
+//Statistics
+router.get('/feature', controller.goToFeature);
+router.get('/GenerateStatistics', controller.GenerateStatistics);
+
+
 
 // Main page and some features
 router.post('/insertnewStore',controller.insertnewStore);
