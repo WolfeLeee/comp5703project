@@ -93,6 +93,8 @@ public class AccreditationHelper extends SQLiteOpenHelper {
         database.execSQL(DROP_TABLE);
         Log.d("Database Operation","Table Dropped...");
 
+        onCreate( database );
+
 
     }
     public Cursor groupby(SQLiteDatabase database){

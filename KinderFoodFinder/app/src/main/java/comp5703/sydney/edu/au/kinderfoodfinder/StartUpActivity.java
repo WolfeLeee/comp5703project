@@ -57,9 +57,12 @@ import comp5703.sydney.edu.au.kinderfoodfinder.Database.ProductContract;
 import comp5703.sydney.edu.au.kinderfoodfinder.Database.ProductDatabase;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Accreditation;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.AccreditationHelper;
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Contract;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.DaoUnit;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.MyApplication;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Product;
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.StoreHelper;
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.StoreInfo;
 import comp5703.sydney.edu.au.kinderfoodfinder.StatisticDatabase.StatisticContract;
 import comp5703.sydney.edu.au.kinderfoodfinder.StatisticDatabase.StatisticsDatabase;
 
@@ -126,7 +129,7 @@ public class StartUpActivity extends AppCompatActivity
         }catch (Exception e){
 
         }
-        checkBrandDatabase(bversion,sversion);
+        checkBrandDatabase();
 
 //        Log.d("VersionDatabase", version);
 //        Log.d("VersionDatabase1", test);
@@ -136,12 +139,15 @@ public class StartUpActivity extends AppCompatActivity
 //        testString();
 //        deleteClickStatistic();
 
+//        readStore();
         gourpBY();
         String test=getResults();
         JsonParser jsonParser = new JsonParser();
         JsonArray jsonElements = jsonParser.parse(test).getAsJsonArray();
 //        Log.d("Statistics Size",String.valueOf( jsonElements.size() ));
         sendStatistics( test );
+        readStore();
+
         // set up fragment
         fragmentLogin = new LoginFragment();
         Fragment startFragment=new StartFragment();
@@ -207,7 +213,6 @@ public class StartUpActivity extends AppCompatActivity
     public void deletefile() {
         try {
             //
-
             File file = new File(getApplicationContext().getFilesDir(), "version.txt");
             file.delete();
         } catch (Exception e) {
@@ -215,7 +220,7 @@ public class StartUpActivity extends AppCompatActivity
         }
     }
 
-    private void checkBrandDatabase(final int brandVersion, final int storeversion)
+    private void checkBrandDatabase( )
 {
     // modify the user data to the server
     String url;
@@ -233,32 +238,34 @@ public class StartUpActivity extends AppCompatActivity
             //This code is executed if the server responds, whether or not the response contains data.
             //The String 'response' contains the server's response.
             //You can test it by printing response.substring(0,500) to the screen.
+            checkVersionFile();
             String[] result=response.split( "," );
+            String[] version=readFromFile().split( "," );
+            int appbrand=1;
+            int appstore=1;
             int serverbrand=1;
             int serverstore=1;
             Log.d("Send Update response:", response);
+            Log.d("Send Update version:", readFromFile());
+
+
 
             try{
                 serverbrand=Integer.parseInt( result[0] );
                 serverstore=Integer.parseInt( result[0] );
+
+                appbrand=Integer.parseInt( version[0] );
+                appstore=Integer.parseInt( version[1] );
+
             }catch (Exception e){
 
             }
 
-            Log.d("Send Update :", String.valueOf( serverbrand )+String.valueOf( serverstore )
-                    +String.valueOf( brandVersion)+String.valueOf(storeversion  ));
+            Log.d("Send Update :", String.valueOf( result[0] )+String.valueOf( result[1] )
+                    +String.valueOf( appbrand)+String.valueOf(appstore ));
 
-            if(serverbrand>brandVersion){
 
-//                if(status.equals( "0" )){
-//                    startIntent.putExtra( "brand_version",response );
-//                    startIntent.putExtra( "brand_update","no" );
-//
-//                }else {
-////                    Intent intent=new Intent(StartUpActivity.this,MainActivity.class  );
-//                    intent.putExtra( "brand_version",response );
-//                    intent.putExtra( "brand_update","no" );
-//                }
+            if(serverbrand>appbrand){
 
                 Toast.makeText(StartUpActivity.this, "Update database!", Toast.LENGTH_SHORT).show();
                 Log.d("Send brand Update :", "yes");
@@ -269,12 +276,10 @@ public class StartUpActivity extends AppCompatActivity
 //
                 SQLiteDatabase database= accreditationHelper.getWritableDatabase();
                 accreditationHelper.deleteAll( database );
-                accreditationHelper.onCreate( database );
+//                accreditationHelper.onCreate( database );
                 new JsonTask().execute("http://" + StatisticContract.StatisticEntry.IP_Address + ":3000/GetAllBrand");
 
 
-
-//
 
             }else {
                 Toast.makeText(StartUpActivity.this, "Same Version!", Toast.LENGTH_SHORT).show();
@@ -289,25 +294,28 @@ public class StartUpActivity extends AppCompatActivity
 //                }
 //                Log.d("update versionDatabase","brand"+brand_version+"   "+"store"+store_version)
             }
-
-
-            if(serverstore>storeversion){
+            
+            if(serverstore>appstore){
                 Toast.makeText(StartUpActivity.this, "Update Store database!", Toast.LENGTH_SHORT).show();
                 Log.d("Send Store Update :", "yes");
-                new StoreJsonTask().execute("http://" + StatisticContract.StatisticEntry.IP_Address + ":3000/GetAllStore");
+                StoreHelper storeHelper=new StoreHelper( getApplicationContext());
+                SQLiteDatabase database= storeHelper.getWritableDatabase();
+                storeHelper.deleteAll( database );
+                new StoreJsonTask().execute("http://" + StatisticContract.StatisticEntry.IP_Address + ":3000/GetAllBrandinStore");
 
             }else {
                 Toast.makeText(StartUpActivity.this, "Same Version!", Toast.LENGTH_SHORT).show();
                 Log.d("Send Store Update:", "no");
 //
             }
-            if(serverbrand>brandVersion|| serverstore>storeversion){
+            if(serverbrand>appbrand|| serverstore>appstore){
                 deletefile();
-                String version=response+","+"0";
-                writeToFile( version );
+                String ver=response+","+"0";
+                writeToFile( ver );
                 Log.d("Send write file:", "yes");
 
             }
+
 
 
         }
@@ -353,6 +361,33 @@ public class StartUpActivity extends AppCompatActivity
                     buffer.append(line+"\n");
                     Log.d("Response: ", "> " + line);   //here u ll get whole response...... :-)
                 }
+
+                jsonString=buffer.toString();
+//            Log.d("json",result);
+                jsonString = jsonString.replace("_id","sid");
+//            Log.d("JSON",result );
+                JsonParser jsonParser = new JsonParser();
+                JsonArray jsonElements = jsonParser.parse(jsonString).getAsJsonArray();
+
+                AccreditationHelper accreditationHelper=new AccreditationHelper(getApplicationContext());
+//
+                SQLiteDatabase database= accreditationHelper.getWritableDatabase();
+
+                Gson gson = new Gson();
+                ArrayList<Product>productArrayList = new ArrayList<>();
+                for (JsonElement product:jsonElements) {
+                                Log.d("JSON element brand", product.toString() );
+
+                    Product pro = gson.fromJson(product,Product.class);
+                    pro.setId( MyApplication.getInstance().getDaoSession().getProductDao().insertWithoutSettingPk(pro));
+                    for (Accreditation acc:pro.getAccreditation()) {
+                        acc.setParentId(pro.getId());
+                        MyApplication.getInstance().getDaoSession().getAccreditationDao().insertWithoutSettingPk(acc);
+                        accreditationHelper.addAcc( acc.getSid(),pro.getSid(),acc.getAccreditation(),acc.getRating(),database );
+                    }
+                    productArrayList.add(pro);
+                }
+                accreditationHelper.close();
                 return buffer.toString();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -376,34 +411,34 @@ public class StartUpActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-           jsonString=result;
-//            Log.d("json",result);
-            jsonString = jsonString.replace("_id","sid");
-//            Log.d("JSON",result );
-            JsonParser jsonParser = new JsonParser();
-            JsonArray jsonElements = jsonParser.parse(jsonString).getAsJsonArray();
-
-            AccreditationHelper accreditationHelper=new AccreditationHelper(getApplicationContext());
+//           jsonString=result;
+////            Log.d("json",result);
+//            jsonString = jsonString.replace("_id","sid");
+////            Log.d("JSON",result );
+//            JsonParser jsonParser = new JsonParser();
+//            JsonArray jsonElements = jsonParser.parse(jsonString).getAsJsonArray();
 //
-            SQLiteDatabase database= accreditationHelper.getWritableDatabase();
-
-            Gson gson = new Gson();
-            ArrayList<Product>productArrayList = new ArrayList<>();
-            for (JsonElement product:jsonElements) {
-                Product pro = gson.fromJson(product,Product.class);
-                pro.setId( MyApplication.getInstance().getDaoSession().getProductDao().insertWithoutSettingPk(pro));
-                for (Accreditation acc:pro.getAccreditation()) {
-                    acc.setParentId(pro.getId());
-                    MyApplication.getInstance().getDaoSession().getAccreditationDao().insertWithoutSettingPk(acc);
-                    accreditationHelper.addAcc( acc.getSid(),pro.getSid(),acc.getAccreditation(),acc.getRating(),database );
-                }
-                productArrayList.add(pro);
-            }
-            accreditationHelper.close();
-//            Log.d("JSON size",String.valueOf( jsonElements.size() ));
-            Toast.makeText( StartUpActivity.this,"update database",Toast.LENGTH_LONG ).show();
-            String a=jsonElements.get( 0 ).toString();
-//            Log.d("JSON element",jsonString );
+//            AccreditationHelper accreditationHelper=new AccreditationHelper(getApplicationContext());
+////
+//            SQLiteDatabase database= accreditationHelper.getWritableDatabase();
+//
+//            Gson gson = new Gson();
+//            ArrayList<Product>productArrayList = new ArrayList<>();
+//            for (JsonElement product:jsonElements) {
+//                Product pro = gson.fromJson(product,Product.class);
+//                pro.setId( MyApplication.getInstance().getDaoSession().getProductDao().insertWithoutSettingPk(pro));
+//                for (Accreditation acc:pro.getAccreditation()) {
+//                    acc.setParentId(pro.getId());
+//                    MyApplication.getInstance().getDaoSession().getAccreditationDao().insertWithoutSettingPk(acc);
+//                    accreditationHelper.addAcc( acc.getSid(),pro.getSid(),acc.getAccreditation(),acc.getRating(),database );
+//                }
+//                productArrayList.add(pro);
+//            }
+//            accreditationHelper.close();
+////            Log.d("JSON size",String.valueOf( jsonElements.size() ));
+//            Toast.makeText( StartUpActivity.this,"update database",Toast.LENGTH_LONG ).show();
+//            String a=jsonElements.get( 0 ).toString();
+////            Log.d("JSON element",jsonString );
 
         }
     }
@@ -433,6 +468,41 @@ public class StartUpActivity extends AppCompatActivity
                     buffer.append(line+"\n");
                     Log.d("Response: ", "> " + line);   //here u ll get whole response...... :-)
                 }
+
+                jsonString=buffer.toString();
+                jsonString = jsonString.replace("_id","sid");
+                JsonParser jsonParser = new JsonParser();
+                JsonArray jsonElements = jsonParser.parse(jsonString).getAsJsonArray();
+
+
+
+                StoreHelper storeHelper=new StoreHelper(getApplicationContext());
+//
+                SQLiteDatabase database= storeHelper.getWritableDatabase();
+                Gson gson = new Gson();
+                ArrayList<StoreInfo> storeInfos=new ArrayList<>(  );
+
+                for (JsonElement store:jsonElements) {
+                    Log.d("JSON element store", store.toString() );
+                    StoreInfo s = gson.fromJson(store,StoreInfo.class);
+//                    s.setId( MyApplication.getInstance().getDaoSession().getStoreInfoDao().insertWithoutSettingPk(s));
+                    storeInfos.add( s );
+                    Log.d("tttttt", store.toString() );
+
+                    String storename=s.getStoreName();
+                    String address=s.getStreetAddress();
+                    String state=s.getState();
+                    String postcod=s.getPostcode();
+                    String lon=s.getLong();
+                    String lat=s.getLat();
+
+                    storeHelper.addStore( s,database );
+                }
+
+                storeHelper.close();
+                Log.d("JSON element store", String.valueOf( storeInfos.size() ) );
+
+
                 return buffer.toString();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -458,24 +528,23 @@ public class StartUpActivity extends AppCompatActivity
             super.onPostExecute(result);
 
 
-            jsonString=result;
-            Log.d("json",result);
-            jsonString = jsonString.replace("_id","sid");
-
-
-//            Log.d("JSON",result );
-            JsonParser jsonParser = new JsonParser();
-            JsonArray jsonElements = jsonParser.parse(jsonString).getAsJsonArray();
-
-
-            Gson gson = new Gson();
-//            for (JsonElement product:jsonElements) {
+//            jsonString=result;
+//            Log.d("json",result);
+//            jsonString = jsonString.replace("_id","sid");
+//           Log.d("JSON",result );
+//            JsonParser jsonParser = new JsonParser();
+//            JsonArray jsonElements = jsonParser.parse(jsonString).getAsJsonArray();
 //
-//            }
-            Log.d("JSON size",String.valueOf( jsonElements.size() ));
-            Toast.makeText( StartUpActivity.this,"update database",Toast.LENGTH_LONG ).show();
-            String a=jsonElements.get( 0 ).toString();
-            Log.d("JSON element",jsonString );
+//
+//            Gson gson = new Gson();
+////            for (JsonElement product:jsonElements) {
+////
+////            }
+//
+//            Log.d("JSON size",String.valueOf( jsonElements.size() ));
+//            Toast.makeText( StartUpActivity.this,"update database",Toast.LENGTH_LONG ).show();
+//            String a=jsonElements.get( 0 ).toString();
+//            Log.d("JSON element",jsonString );
 
 
         }
@@ -507,6 +576,33 @@ public class StartUpActivity extends AppCompatActivity
 
         }
         statisticsDatabase.close();
+    }
+    private void readStore(){
+        StoreHelper storeHelper=new StoreHelper( this );
+        SQLiteDatabase database=storeHelper.getReadableDatabase();
+
+        Cursor cursor=storeHelper.readStore( database );
+
+        if(cursor!=null){
+            Log.d("Database "," already has information");
+            String info ="";
+            while (cursor.moveToNext()){
+
+                String storeName =cursor.getString(  cursor.getColumnIndex( Contract.StoreContract.storeName ));
+                String street=cursor.getString( cursor.getColumnIndex( Contract.StoreContract.StreetAddress ) );
+                String state=cursor.getString( cursor.getColumnIndex( Contract.StoreContract.State ) );
+                String brand=cursor.getString( cursor.getColumnIndex( Contract.StoreContract.Brandname ) );
+                String id=cursor.getString( cursor.getColumnIndex( Contract.StoreContract.Brandid ) );
+
+//            info=info+"\n\n"+"ID :"+id+"\nName :"+name+"\nEmail :"+email;
+
+                info=storeName+"; "+street+"; "+state+"; "+brand+"; "+id;
+                Log.d("Address record",info);
+
+            }
+
+        }
+        storeHelper.close();
     }
 
     public void deleteClickStatistic(){
@@ -695,6 +791,12 @@ public class StartUpActivity extends AppCompatActivity
 
     public void checkVersionFile(){
 
+        File fileVersion = new File(getApplicationContext().getFilesDir(), "version.txt");
+        if(!(fileVersion.exists())) {
+            writeToFile( "1,1" );
+            Log.d( "VersionDatabase", "Creating!" );
+        }else
+            Log.d("VersionDatabase", "Existing!");
     }
 
 }
