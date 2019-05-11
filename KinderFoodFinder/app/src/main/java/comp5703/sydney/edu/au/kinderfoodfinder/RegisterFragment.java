@@ -2,6 +2,7 @@ package comp5703.sydney.edu.au.kinderfoodfinder;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -25,6 +26,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Calendar;
 
 import com.android.volley.Request;
@@ -35,6 +39,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import comp5703.sydney.edu.au.kinderfoodfinder.StatisticDatabase.StatisticContract;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class RegisterFragment extends Fragment
 {
@@ -226,16 +232,9 @@ public class RegisterFragment extends Fragment
                 //The String 'response' contains the server's response.
                 //You can test it by printing response.substring(0,500) to the screen.
                 registerProgressDialog.dismiss();
-                Intent intentDetail=new Intent( getActivity(),DetailActivity.class );
-                intentDetail.putExtra( "status","yes" );
-                intentDetail.putExtra( "gender","Male" );
-                intentDetail.putExtra( "birthday","Not Disclose " );
-                intentDetail.putExtra( "userID",email );
                 Intent intent = new Intent(getActivity(), MainActivity.class);
-                intent.putExtra( "status","yes" );
-                intent.putExtra( "gender",gender );
-                intent.putExtra( "birthday",birthday );
-                intent.putExtra( "userID",email );
+                deletefile();
+                writeToFile( "1;"+gender+birthday);
                 startActivity(intent);
                 getActivity().finish();
                 Toast.makeText(getActivity(), "Registered Successfully!", Toast.LENGTH_SHORT).show();
@@ -254,5 +253,30 @@ public class RegisterFragment extends Fragment
                     }
                 });
         ExampleRequestQueue.add(ExampleStringRequest);
+    }
+
+    private void writeToFile(String version)
+    {
+        try
+        {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getActivity().openFileOutput("profile.txt", Context.MODE_PRIVATE));
+            outputStreamWriter.write(version);
+            outputStreamWriter.close();
+        }
+        catch (IOException e)
+        {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+
+    }
+
+    public void deletefile() {
+        try {
+            //
+            File file = new File(getApplicationContext().getFilesDir(), "profile.txt");
+            file.delete();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -221,15 +221,8 @@ public class BrowseResultFragment extends Fragment {
                     intent.putExtra( "stringId",product.getSid() );
                     intent.putExtra( "page","browse" );
 
-                    intent.putExtra( "gender",gender );
-                    intent.putExtra( "birthday",birthday );
-                    intent.putExtra( "userID",userID );
-
 //                    intent.putExtra("img", String.valueOf(c.getImg()));
                     startActivityForResult(intent, VIEW_ITEM_REQUEST_CODE);
-                    getActivity().finish();
-                    textView.setText( "Back" );
-
 
                 }
             }

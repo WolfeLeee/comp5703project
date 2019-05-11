@@ -18,8 +18,20 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.squareup.picasso.Picasso;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,6 +45,7 @@ import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Accreditation;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.AccreditationHelper;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Contract;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.DaoUnit;
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.MyApplication;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Product;
 import comp5703.sydney.edu.au.kinderfoodfinder.StatisticDatabase.StatisticsDatabase;
 
@@ -60,10 +73,10 @@ public class DetailActivity extends AppCompatActivity {
         //
         sid=intent.getStringExtra( "stringId" );
         page=intent.getStringExtra( "page");
-
-        final String userID=intent.getStringExtra( "userID" );
-        final String gender=intent.getStringExtra( "gender" );
-        final String birthday=intent.getStringExtra( "birthday" );
+//
+//        final String userID=intent.getStringExtra( "userID" );
+//        final String gender=intent.getStringExtra( "gender" );
+//        final String birthday=intent.getStringExtra( "birthday" );
 
         brand_info=findViewById( R.id.dtlbrand );
 //
@@ -101,35 +114,26 @@ public class DetailActivity extends AppCompatActivity {
         brand_info.setText( brandname );
         location_info.setText( available );
 
-//        if(rate.equalsIgnoreCase( "BEST" )){
-//            ratetv.setTextColor( Color.parseColor("#208E5C"));
-//        }if(rate.equalsIgnoreCase( "GOOD" )){
-//            ratetv.setTextColor( Color.parseColor("#f7912f"));
+
+//        // test collect click data
+//        String[] result=readFromFile().split( ";" );
+//        String[] profile= result[1].split( "," );
+//        String userID="1";
+//        String gender=profile[0];
+//        String birthday=profile[1];
+//        date=getDate();
+//        age=getAge( birthday );
+//        times=1;
+//        String count ="1";
+//        String info=sid+"; "+date+"; "+times+"; "+userID+"; "+gender+"; "+age+"; ";
+//        Log.d("statistics add record",info);
+//       StatisticsDatabase statisticsDatabase=new StatisticsDatabase(this);
+//        SQLiteDatabase database= statisticsDatabase.getWritableDatabase();
+//        statisticsDatabase.addProduct( sid,date,gender,age,count,database );
+//        statisticsDatabase.close();
 //
-//        }if(rate.equalsIgnoreCase( "AVOID" )){
-//            ratetv.setTextColor( Color.parseColor("#FF4081"));
-//
-//        }
+//        Log.d("statistic","one row insert");
 
-
-        // test collect click data
-
-        date=getDate();
-        age=getAge( birthday );
-        times=1;
-        String count ="1";
-        String info=sid+"; "+date+"; "+times+"; "+userID+"; "+gender+"; "+age+"; ";
-        Log.d("statistics add record",info);
-
-
-
-        StatisticsDatabase statisticsDatabase=new StatisticsDatabase(this);
-//
-        SQLiteDatabase database= statisticsDatabase.getWritableDatabase();
-        statisticsDatabase.addProduct( sid,date,gender,age,count,database );
-        statisticsDatabase.close();
-
-        Log.d("statistic","one row insert");
 
 //        new AddClickData( ).execute( sid,period,times,userid,gender,age );
 
@@ -140,6 +144,7 @@ public class DetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle( category );
 
+        new AddClickData().execute( sid,readFromFile() );
 
         // tool bar listener
         toolbar.setNavigationOnClickListener(new View.OnClickListener()
@@ -148,18 +153,18 @@ public class DetailActivity extends AppCompatActivity {
             public void onClick(View v)
             {
 
-                if(page.equalsIgnoreCase( "search" )){
-                    Intent intent = new Intent(DetailActivity.this, MainActivity.class);
-                    intent.putExtra("id",4);
-                    startActivity(intent);
-                }else {
-                    Intent intent = new Intent(DetailActivity.this, MainActivity.class);
-                    intent.putExtra("id",5);
-                    startActivity(intent);
-                }
-                toolbar.setVisibility( View.GONE );
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                getSupportActionBar().setTitle( "Back" );
+//                if(page.equalsIgnoreCase( "search" )){
+//                    Intent intent = new Intent(DetailActivity.this, MainActivity.class);
+//                    intent.putExtra("id",4);
+//                    startActivity(intent);
+//                }else {
+//                    Intent intent = new Intent(DetailActivity.this, MainActivity.class);
+//                    intent.putExtra("id",5);
+//                    startActivity(intent);
+//                }
+//                toolbar.setVisibility( View.GONE );
+//                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//                getSupportActionBar().setTitle( "Back" );
 //                toolbar.setVisibility( View.INVISIBLE );
 //                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //                getSupportActionBar().setTitle( "Back" );
@@ -236,23 +241,30 @@ public class DetailActivity extends AppCompatActivity {
 //            this.context=context;
 //        }
 
-
-
         @Override
         protected String doInBackground(String... strings) {
 
-            StatisticsDatabase statisticsDatabase=new StatisticsDatabase( context);
-
-            SQLiteDatabase database= statisticsDatabase.getWritableDatabase();
-            int t=0;
             String sid=strings[0];
-            String date=strings[1];
-            String gender=strings[2];
-            String age=strings[3];
-            String count=strings[5];
+            String[] result=strings[1].split( ";" );
+            String[] profile= result[1].split( "," );
+            String userID="1";
+            String gender=profile[0];
+            String birthday=profile[1];
+            String date=getDate();
+            String age=getAge( birthday );
+            int times=1;
+            String count ="1";
+            String info=sid+"; "+date+"; "+times+"; "+userID+"; "+gender+"; "+age+"; ";
+            Log.d("statistics add record",info);
 
 
+
+            StatisticsDatabase statisticsDatabase=new StatisticsDatabase(getApplicationContext());
+//
+            SQLiteDatabase database= statisticsDatabase.getWritableDatabase();
             statisticsDatabase.addProduct( sid,date,gender,age,count,database );
+            statisticsDatabase.close();
+
             return "One Row Insert";
         }
 
@@ -271,11 +283,65 @@ public class DetailActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             Log.d("statistic",s);
         }
+        public String getDate(){
+            Calendar calendar = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            Date d=new Date();
+
+            String year=String.valueOf( calendar.get( Calendar.YEAR ) );
+            String month=String.valueOf( calendar.get( Calendar.MONTH ) +1);
+            String day=String.valueOf( calendar.get( Calendar.DAY_OF_MONTH ) );
+            String date= sdf.format( d );
+            return date;
+        }
+
+        public String getAge(String birthday)  {
+            String result="";
+            String string = birthday;
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            int age=0;
+//        Log.d("brithday" ,birthday);
+
+            if(string!=null){
+                Date birth=new Date(  );
+                try {
+                    birth=sdf.parse( string );
+                    Date d=new Date();
+
+                    if(birth.getDay()>d.getDay()&& birth.getMonth()>d.getMonth()){
+                        age=d.getYear()-birth.getYear()-1;
+                    }else {
+                        age=d.getYear()-birth.getYear();
+                    }
+
+
+                } catch (ParseException e) {
+                    result=e.toString();
+                    e.printStackTrace();
+                    return "Not Disclose";
+                }
+            }
+            if(age<18){
+                result="Under 18 years";
+            }else if(age>=18&&age<30){
+                result="18-29 years";
+            }else if(age>=30&&age<40){
+                result="30-39 years";
+            }else if(age>=40&&age<50){
+                result="40-49 years";
+            }else if(age>=50&&age<60){
+                result="50-59 years";
+            }else {
+                result="60+ years";
+            }
+
+
+//        Log.d("date",birth.toString()+"；  " +String.valueOf( age ));
+            return result;
+        }
+
     }
 
-    public void backClick(View view) {
-        finish();
-    }
 
     public String getDate(){
         Calendar calendar = Calendar.getInstance();
@@ -315,9 +381,6 @@ public class DetailActivity extends AppCompatActivity {
                 return "Not Disclose";
             }
         }
-
-
-
         if(age<18){
             result="Under 18 years";
         }else if(age>=18&&age<30){
@@ -334,8 +397,6 @@ public class DetailActivity extends AppCompatActivity {
 
 
 //        Log.d("date",birth.toString()+"；  " +String.valueOf( age ));
-
-
         return result;
     }
 
@@ -371,5 +432,110 @@ public class DetailActivity extends AppCompatActivity {
     }
 
 
+    private String readFromFile()
+    {
+        String ret = "";
+        try
+        {
+            InputStream inputStream = this.openFileInput("profile.txt");
 
+            if (inputStream != null )
+            {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null )
+                {
+                    stringBuilder.append(receiveString);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+
+            }
+        }
+        catch (FileNotFoundException e)
+        {
+            Log.e("login activity", "File not found: " + e.toString());
+        }
+        catch (IOException e)
+        {
+            Log.e("login activity", "Can not read file: " + e.toString());
+        }
+        return ret;
+    }
+
+
+    private class JsonTask extends AsyncTask<String, String, String> {
+        Context context;
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        protected String doInBackground(String... params) {
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+
+            try {
+                URL url = new URL(params[0]);
+
+
+
+                return null;
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+//           jsonString=result;
+////            Log.d("json",result);
+//            jsonString = jsonString.replace("_id","sid");
+////            Log.d("JSON",result );
+//            JsonParser jsonParser = new JsonParser();
+//            JsonArray jsonElements = jsonParser.parse(jsonString).getAsJsonArray();
+//
+//            AccreditationHelper accreditationHelper=new AccreditationHelper(getApplicationContext());
+////
+//            SQLiteDatabase database= accreditationHelper.getWritableDatabase();
+//
+//            Gson gson = new Gson();
+//            ArrayList<Product>productArrayList = new ArrayList<>();
+//            for (JsonElement product:jsonElements) {
+//                Product pro = gson.fromJson(product,Product.class);
+//                pro.setId( MyApplication.getInstance().getDaoSession().getProductDao().insertWithoutSettingPk(pro));
+//                for (Accreditation acc:pro.getAccreditation()) {
+//                    acc.setParentId(pro.getId());
+//                    MyApplication.getInstance().getDaoSession().getAccreditationDao().insertWithoutSettingPk(acc);
+//                    accreditationHelper.addAcc( acc.getSid(),pro.getSid(),acc.getAccreditation(),acc.getRating(),database );
+//                }
+//                productArrayList.add(pro);
+//            }
+//            accreditationHelper.close();
+////            Log.d("JSON size",String.valueOf( jsonElements.size() ));
+//            Toast.makeText( StartUpActivity.this,"update database",Toast.LENGTH_LONG ).show();
+//            String a=jsonElements.get( 0 ).toString();
+////            Log.d("JSON element",jsonString );
+
+        }
+    }
 }

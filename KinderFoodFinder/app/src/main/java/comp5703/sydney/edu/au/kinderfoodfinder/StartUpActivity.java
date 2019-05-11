@@ -66,6 +66,8 @@ import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.StoreInfo;
 import comp5703.sydney.edu.au.kinderfoodfinder.StatisticDatabase.StatisticContract;
 import comp5703.sydney.edu.au.kinderfoodfinder.StatisticDatabase.StatisticsDatabase;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 public class StartUpActivity extends AppCompatActivity
 {
     /* * * * * * * * * * *
@@ -110,6 +112,7 @@ public class StartUpActivity extends AppCompatActivity
         toolbar.setVisibility(View.GONE);
 
         // check if the file of version.txt has been created
+        checkProfileFile();
         File fileVersion = new File(getApplicationContext().getFilesDir(), "version.txt");
         if(!(fileVersion.exists())) {
             writeToFile( "1,1,0" );
@@ -294,7 +297,7 @@ public class StartUpActivity extends AppCompatActivity
 //                }
 //                Log.d("update versionDatabase","brand"+brand_version+"   "+"store"+store_version)
             }
-            
+
             if(serverstore>appstore){
                 Toast.makeText(StartUpActivity.this, "Update Store database!", Toast.LENGTH_SHORT).show();
                 Log.d("Send Store Update :", "yes");
@@ -799,4 +802,37 @@ public class StartUpActivity extends AppCompatActivity
             Log.d("VersionDatabase", "Existing!");
     }
 
+    public void checkProfileFile(){
+
+        File fileVersion = new File(getApplicationContext().getFilesDir(), "profile.txt");
+        if(!(fileVersion.exists())) {
+            writeProfileFile( "0;1" );
+            Log.d( "profile", "Creating!" );
+        }else
+            Log.d("profile", "Existing!");
+    }
+    private void writeProfileFile(String profile)
+    {
+        try
+        {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(this.openFileOutput("profile.txt", Context.MODE_PRIVATE));
+            outputStreamWriter.write(profile);
+            outputStreamWriter.close();
+        }
+        catch (IOException e)
+        {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }

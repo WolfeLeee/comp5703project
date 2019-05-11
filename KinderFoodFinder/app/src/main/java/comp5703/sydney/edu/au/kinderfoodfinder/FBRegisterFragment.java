@@ -2,6 +2,7 @@ package comp5703.sydney.edu.au.kinderfoodfinder;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -35,13 +36,19 @@ import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Calendar;
 
 import comp5703.sydney.edu.au.kinderfoodfinder.StatisticDatabase.StatisticContract;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class FBRegisterFragment extends Fragment {
     private Toolbar toolbar;
@@ -276,19 +283,12 @@ public class FBRegisterFragment extends Fragment {
                 //You can test it by printing response.substring(0,500) to the screen.
 
                 registerProgressDialog.dismiss();
-
-                Intent intentDetail=new Intent( getActivity(),DetailActivity.class );
-                intentDetail.putExtra( "status","yes" );
-                intentDetail.putExtra( "gender","Male" );
-                intentDetail.putExtra( "birthday","Not Disclose " );
-                intentDetail.putExtra( "userID",id );
                 Intent intent = new Intent(getActivity(), MainActivity.class);
-                intent.putExtra( "status","yes" );
-                intent.putExtra( "gender",gender );
-                intent.putExtra( "birthday",birthday );
-                intent.putExtra( "userID",id );
+
                 startActivity(intent);
                 getActivity().finish();
+                deletefile();
+                writeToFile( "1;"+gender+birthday );
                 Toast.makeText(getActivity(), "Registered Successfully!", Toast.LENGTH_SHORT).show();
                 Log.d("Send query response:", response);
             }
@@ -302,9 +302,35 @@ public class FBRegisterFragment extends Fragment {
                         registerProgressDialog.dismiss();
                         Toast.makeText(getActivity(), "Registered Failed!", Toast.LENGTH_SHORT).show();
                         Log.d("Send query error:", error.toString());
+                        LoginManager.getInstance().logOut();
+
                     }
                 });
         ExampleRequestQueue.add(ExampleStringRequest);
     }
 
+    private void writeToFile(String version)
+    {
+        try
+        {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getActivity().openFileOutput("profile.txt", Context.MODE_PRIVATE));
+            outputStreamWriter.write(version);
+            outputStreamWriter.close();
+        }
+        catch (IOException e)
+        {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+
+    }
+
+    public void deletefile() {
+        try {
+            //
+            File file = new File(getApplicationContext().getFilesDir(), "profile.txt");
+            file.delete();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

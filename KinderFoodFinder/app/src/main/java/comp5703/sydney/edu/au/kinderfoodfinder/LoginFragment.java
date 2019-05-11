@@ -1,6 +1,7 @@
 package comp5703.sydney.edu.au.kinderfoodfinder;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -30,16 +31,26 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.Arrays;
 
 import comp5703.sydney.edu.au.kinderfoodfinder.StatisticDatabase.StatisticContract;
 import comp5703.sydney.edu.au.kinderfoodfinder.UserInfomation.UserDBHelper;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class LoginFragment extends Fragment {
     // defined variables
@@ -74,6 +85,8 @@ public class LoginFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
         // set up
+        LoginManager.getInstance().logOut();
+
         fragmentRegister = new RegisterFragment();
         loginProgressDialog = new ProgressDialog(getActivity());
 
@@ -181,6 +194,9 @@ public class LoginFragment extends Fragment {
             intent.putExtra( "gender","Male" );
             intent.putExtra( "birthday","Not Disclose " );
             intent.putExtra( "userID","test" );
+            deletefile();
+            writeToFile( "1;"+"Male,"+"7-5-2008");
+
             startActivity(intent);
             getActivity().finish();
             return;
@@ -199,21 +215,24 @@ public class LoginFragment extends Fragment {
                 //The String 'response' contains the server's response.
                 //You can test it by printing response.substring(0,500) to the screen.
 
-                String[] rep=response.split( "," );
+
+                String[] rep=response.split( "," ,2);
+                if(rep.length==2){
+                    Log.d("Send query response:", rep[1]);
+
+                    deletefile();
+                    writeToFile( "1;"+rep[1] );
+                }
+
                 loginProgressDialog.dismiss();
                 if (rep[0].equals("Yes")) {
                     Toast.makeText(getActivity(), "Login Successfully!", Toast.LENGTH_SHORT).show();
                     Log.d("Send query response:", response);
-                    Intent intentDetail=new Intent( getActivity(),DetailActivity.class );
-                    intentDetail.putExtra( "status","yes" );
-                    intentDetail.putExtra( "gender","Male" );
-                    intentDetail.putExtra( "birthday","Not Disclose " );
-                    intentDetail.putExtra( "userID",email );
                     Intent intent = new Intent(getActivity(), MainActivity.class);
-                    intent.putExtra( "status","yes" );
-                    intent.putExtra( "gender",rep[1] );
-                    intent.putExtra( "birthday",rep[2] );
-                    intent.putExtra( "userID",email );
+//                    intent.putExtra( "status","yes" );
+//                    intent.putExtra( "gender",rep[1] );
+//                    intent.putExtra( "birthday",rep[2] );
+//                    intent.putExtra( "userID",email );
                     startActivity(intent);
                     getActivity().finish();
                 } else {
@@ -307,22 +326,26 @@ public class LoginFragment extends Fragment {
             @Override
             public void onResponse(String response) {
 
+                String[] rep=response.split( "," ,2);
+                if(rep.length==2){
+                    Log.d("Send query response:", rep[1]);
+
+                    deletefile();
+                    writeToFile( "1;"+rep[1] );
+                }
+                deletefile();
+                writeToFile( "1;"+"Male,"+"7-5-2009");
                 if (response.equals("Yes")) {
                     Toast.makeText(getActivity(), "Login Successfully!", Toast.LENGTH_SHORT).show();
                     Log.d("Send query response:", response);
-                    Intent intentDetail=new Intent( getActivity(),DetailActivity.class );
-                    intentDetail.putExtra( "status","yes" );
-                    intentDetail.putExtra( "gender","Male" );
-                    intentDetail.putExtra( "birthday","Not Disclose " );
-                    intentDetail.putExtra( "userID",password );
+//                    Intent intentDetail=new Intent( getActivity(),DetailActivity.class );
+//                    intentDetail.putExtra( "status","yes" );
+//                    intentDetail.putExtra( "gender","Male" );
+//                    intentDetail.putExtra( "birthday","Not Disclose " );
+//                    intentDetail.putExtra( "userID",password );
                     Intent intent = new Intent(getActivity(), MainActivity.class);
-                    intent.putExtra( "status","yes" );
-                    intent.putExtra( "gender","Male" );
-                    intent.putExtra( "birthday","Not Disclose " );
-                    intent.putExtra( "userID",password );
                     startActivity(intent);
                     getActivity().finish();
-
 
                 } else {
                     Toast.makeText(getActivity(), "Login Failed!", Toast.LENGTH_SHORT).show();
@@ -334,6 +357,8 @@ public class LoginFragment extends Fragment {
                     fragmentFBRegister.setArguments( bundle );
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_container, fragmentFBRegister).commit();
+                    LoginManager.getInstance().logOut();
+
                 }
             }
         },
@@ -345,17 +370,99 @@ public class LoginFragment extends Fragment {
                         loginProgressDialog.dismiss();
                         Toast.makeText(getActivity(), "Login Failed!", Toast.LENGTH_SHORT).show();
                         Log.d("Send query error:", error.toString());
+                        LoginManager.getInstance().logOut();
+
                     }
                 });
         ExampleRequestQueue.add(ExampleStringRequest);
     }
 
 
-    public void putValue(String id){
-        Intent intent = new Intent(getActivity(), DetailActivity.class);
-        intent.putExtra( "status","yes" );
-        intent.putExtra( "gender","Male" );
-        intent.putExtra( "birthday","Not Disclose " );
-        intent.putExtra( "userID",id );
+
+    public void checkProfileFile(){
+
+        File fileVersion = new File(getApplicationContext().getFilesDir(), "profile.txt");
+        if(!(fileVersion.exists())) {
+            writeToFile( "0;1" );
+            Log.d( "profile", "Creating!" );
+        }else
+            Log.d("profile", "Existing!");
     }
+
+    private String readFromFile()
+    {
+        String ret = "";
+        try
+        {
+            InputStream inputStream = getActivity().openFileInput("profile.txt");
+
+            if (inputStream != null )
+            {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null )
+                {
+                    stringBuilder.append(receiveString);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+
+            }
+        }
+        catch (FileNotFoundException e)
+        {
+            Log.e("login activity", "File not found: " + e.toString());
+        }
+        catch (IOException e)
+        {
+            Log.e("login activity", "Can not read file: " + e.toString());
+        }
+        return ret;
+    }
+
+    private void writeToFile(String version)
+    {
+        try
+        {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getActivity().openFileOutput("profile.txt", Context.MODE_PRIVATE));
+            outputStreamWriter.write(version);
+            outputStreamWriter.close();
+        }
+        catch (IOException e)
+        {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+
+    }
+
+    public void deletefile() {
+        try {
+            //
+            File file = new File(getApplicationContext().getFilesDir(), "profile.txt");
+            file.delete();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+
 }
