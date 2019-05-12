@@ -241,7 +241,7 @@ public class StartUpActivity extends AppCompatActivity
             //This code is executed if the server responds, whether or not the response contains data.
             //The String 'response' contains the server's response.
             //You can test it by printing response.substring(0,500) to the screen.
-            checkVersionFile();
+            Boolean loaddata=checkVersionFile();
             String[] result=response.split( "," );
             String[] version=readFromFile().split( "," );
             int appbrand=1;
@@ -250,8 +250,6 @@ public class StartUpActivity extends AppCompatActivity
             int serverstore=1;
             Log.d("Send Update response:", response);
             Log.d("Send Update version:", readFromFile());
-
-
 
             try{
                 serverbrand=Integer.parseInt( result[0] );
@@ -267,8 +265,7 @@ public class StartUpActivity extends AppCompatActivity
             Log.d("Send Update :", String.valueOf( result[0] )+String.valueOf( result[1] )
                     +String.valueOf( appbrand)+String.valueOf(appstore ));
 
-
-            if(serverbrand>appbrand){
+            if(serverbrand>appbrand||loaddata){
 
                 Toast.makeText(StartUpActivity.this, "Update database!", Toast.LENGTH_SHORT).show();
                 Log.d("Send brand Update :", "yes");
@@ -298,7 +295,7 @@ public class StartUpActivity extends AppCompatActivity
 //                Log.d("update versionDatabase","brand"+brand_version+"   "+"store"+store_version)
             }
 
-            if(serverstore>appstore){
+            if(serverstore>appstore||loaddata){
                 Toast.makeText(StartUpActivity.this, "Update Store database!", Toast.LENGTH_SHORT).show();
                 Log.d("Send Store Update :", "yes");
                 StoreHelper storeHelper=new StoreHelper( getApplicationContext());
@@ -316,11 +313,7 @@ public class StartUpActivity extends AppCompatActivity
                 String ver=response+","+"0";
                 writeToFile( ver );
                 Log.d("Send write file:", "yes");
-
             }
-
-
-
         }
     },
             new Response.ErrorListener()  //Create an error listener to handle errors appropriately.
@@ -504,8 +497,6 @@ public class StartUpActivity extends AppCompatActivity
 
                 storeHelper.close();
                 Log.d("JSON element store", String.valueOf( storeInfos.size() ) );
-
-
                 return buffer.toString();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -792,14 +783,16 @@ public class StartUpActivity extends AppCompatActivity
     }
 
 
-    public void checkVersionFile(){
+    public Boolean checkVersionFile(){
 
         File fileVersion = new File(getApplicationContext().getFilesDir(), "version.txt");
         if(!(fileVersion.exists())) {
             writeToFile( "1,1" );
             Log.d( "VersionDatabase", "Creating!" );
+            return true;
         }else
             Log.d("VersionDatabase", "Existing!");
+        return false;
     }
 
     public void checkProfileFile(){
@@ -808,8 +801,13 @@ public class StartUpActivity extends AppCompatActivity
         if(!(fileVersion.exists())) {
             writeProfileFile( "0;1" );
             Log.d( "profile", "Creating!" );
-        }else
+
+        }else{
             Log.d("profile", "Existing!");
+
+        }
+
+
     }
     private void writeProfileFile(String profile)
     {
