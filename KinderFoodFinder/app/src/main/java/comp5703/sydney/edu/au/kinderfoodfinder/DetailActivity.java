@@ -88,7 +88,7 @@ public class DetailActivity extends AppCompatActivity {
         listView=findViewById( R.id.detail_listview );
         Product product= DaoUnit.getInstance().searchBySid( sid );
 
-        String brandname=product.getBrand_Name();
+        final String brandname=product.getBrand_Name();
         String category=product.getCategory();
         String available=product.getAvailable();
         String image=product.getImage();
@@ -185,6 +185,7 @@ public class DetailActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(DetailActivity.this, MainActivity.class);
                 intent.putExtra("id",1);
+                intent.putExtra("LOCATE", brandname);
                 startActivity(intent);
                 toolbar.setVisibility( View.GONE );
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);

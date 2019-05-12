@@ -80,7 +80,19 @@ public class MainActivity extends AppCompatActivity
 //            getSupportFragmentManager().beginTransaction()
 //                    .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
 //                    .replace(R.id.fragment_container, selectedFragment).commit();
-            navigation.setSelectedItemId(R.id.navigation_locate);
+//            navigation.setSelectedItemId(R.id.navigation_locate);
+
+            Bundle bundle=new Bundle(  );
+            String brand_name = getIntent().getStringExtra("LOCATE");
+            bundle.putInt( "LOCATE_KEY", 1 );
+            bundle.putString("Brand", brand_name);
+            Fragment locatefragment = new LocateFragment();
+            locatefragment.setArguments( bundle );
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container,locatefragment)
+                    .addToBackStack(null)
+                    .commit();
         }
 
         if (id == 2) {
