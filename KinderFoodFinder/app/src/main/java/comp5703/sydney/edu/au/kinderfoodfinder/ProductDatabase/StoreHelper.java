@@ -7,11 +7,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 import comp5703.sydney.edu.au.kinderfoodfinder.Database.ProductContract;
 
 public class StoreHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "kff_database";
+    public static final String TABLE_NAME="store_table";
+    public static final String Brandname= "Brandname";
     public static final int DATABASE_VERSION=1;
 
     public static final String CREATE_TABLE="create table "+ Contract.StoreContract.TABLE_NAME+"("
@@ -43,7 +47,7 @@ public class StoreHelper extends SQLiteOpenHelper {
 
         ContentValues contentValues= new ContentValues(  );
 //        contentValues.put( ProductContract.ContactEntry.CONTACT_ID,id );
-        contentValues.put( Contract.StoreContract.storeName,store.getBrandname());
+        contentValues.put( Contract.StoreContract.storeName,store.getStoreName());
         contentValues.put( Contract.StoreContract.StreetAddress,store.getStreetAddress());
         contentValues.put( Contract.StoreContract.State,store.getState());
         contentValues.put( Contract.StoreContract.Postcode,store.getPostcode());
@@ -52,6 +56,70 @@ public class StoreHelper extends SQLiteOpenHelper {
         contentValues.put( Contract.StoreContract.Brandid,store.getBrandid());
         contentValues.put( Contract.StoreContract.Brandname,store.getBrandname());
         database.insert( Contract.StoreContract.TABLE_NAME,null,contentValues );
+    }
+    public ArrayList<String> getAddress(String brand) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor data = db.rawQuery(
+                "SELECT * FROM store_table WHERE Brandname LIKE ? ", new String[]{"%"+brand+"%"});
+
+        ArrayList<String> LocationList = new ArrayList<>();
+
+        String location;
+        if (data.moveToFirst()) {
+            do {
+                String brandname = data.getString(data.getColumnIndex("Brandname"));
+                String store = data.getString(data.getColumnIndex("storeName"));
+                String street = data.getString(data.getColumnIndex("StreetAddress"));
+                String postcode = data.getString(data.getColumnIndex("Postcode"));
+                String state = data.getString(data.getColumnIndex("State"));
+
+                location = store + ", " + street + ", " + postcode + ", " + state;
+                LocationList.add(location);
+
+            } while (data.moveToNext());
+        }
+        data.close();
+
+
+//        String address = data.getString(data.getColumnIndex(StoreContract.StoreEntry.STORE_NAME + ","+ StoreContract.StoreEntry.STREET + "," +
+//                StoreContract.StoreEntry.POSTCODE + "," + StoreContract.StoreEntry.STATE));
+//
+//        Log.d("QueryAddress",address);
+
+
+        return LocationList;
+    }
+
+    public String getBrand(String brand) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor data = db.rawQuery(
+                "SELECT * FROM store_table WHERE Brandname LIKE ? ", new String[]{"%"+brand+"%"});
+
+        ArrayList<String> LocationList = new ArrayList<>();
+
+        String brandName = null;
+        if (data.moveToFirst()) {
+            do {
+                String brandname = data.getString(data.getColumnIndex("Brandname"));
+                String store = data.getString(data.getColumnIndex("storeName"));
+                String street = data.getString(data.getColumnIndex("StreetAddress"));
+                String postcode = data.getString(data.getColumnIndex("Postcode"));
+                String state = data.getString(data.getColumnIndex("State"));
+
+                brandName = brandname;
+
+            } while (data.moveToNext());
+        }
+        data.close();
+
+
+//        String address = data.getString(data.getColumnIndex(StoreContract.StoreEntry.STORE_NAME + ","+ StoreContract.StoreEntry.STREET + "," +
+//                StoreContract.StoreEntry.POSTCODE + "," + StoreContract.StoreEntry.STATE));
+//
+//        Log.d("QueryAddress",address);
+
+
+        return brandName;
     }
 
     public Cursor searchbyStoreName(String brandName, SQLiteDatabase database){

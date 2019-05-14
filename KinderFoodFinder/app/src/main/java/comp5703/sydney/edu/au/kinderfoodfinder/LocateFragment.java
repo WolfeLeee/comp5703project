@@ -17,6 +17,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -57,6 +58,7 @@ import comp5703.sydney.edu.au.kinderfoodfinder.Adapter.SearchAdapter;
 import comp5703.sydney.edu.au.kinderfoodfinder.Database.StoreDatabase;
 import comp5703.sydney.edu.au.kinderfoodfinder.Model.MyPlaces;
 import comp5703.sydney.edu.au.kinderfoodfinder.Model.Results;
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.StoreHelper;
 import comp5703.sydney.edu.au.kinderfoodfinder.Remote.IGoogleAPIService;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -81,14 +83,16 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
     IGoogleAPIService mService;
 
     ImageView add_report;
-    MaterialSearchBar materialSearchBar;
-    RecyclerView recyclerView;
-    RecyclerView.LayoutManager layoutManager;
     SearchAdapter adapter;
     private StoreDatabase storedatabase;
+    StoreHelper storeHelper;
     SearchView searchView;
     ListView listView;
-    ListAdapter listAdapter;
+    NearbyAdapter listAdapter;
+    ArrayAdapter ListAdapter;
+    int Locate_key, Distance_key;
+    String Brand;
+    Button twenty, five, ten, fifty;
 
 
     // Keys for storing activity state.
@@ -116,6 +120,40 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
         listView = mView.findViewById(R.id.listview_search);
         searchView.setFocusable(false);
 
+        twenty = mView.findViewById(R.id.twenty_km);
+        five = mView.findViewById(R.id.five_km);
+        ten = mView.findViewById(R.id.ten_km);
+        fifty = mView.findViewById(R.id.ft_km);
+        Distance_key = 1000;
+
+        twenty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Distance_key = 20000;
+            }
+        });
+
+        five.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Distance_key = 5000;
+            }
+        });
+
+        ten.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Distance_key = 10000;
+            }
+        });
+
+        fifty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Distance_key = 50000;
+            }
+        });
+
 //        recyclerView = mView.findViewById(R.id.recycler_search);
 //        layoutManager = new LinearLayoutManager(getActivity());
 //        recyclerView.setLayoutManager(layoutManager);
@@ -126,11 +164,22 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
             checkLocationPermission();
         }
 
+        if(getArguments()!=null){
+            Locate_key = getArguments().getInt( "LOCATE_KEY" );
+            Brand = getArguments().getString("Brand");
+        }else {
+            Log.d("key", "getArgument is null");
+        }
+
         fragmentreport = new ReportFragment();
-        storedatabase = new StoreDatabase(getActivity());
+        storeHelper = new StoreHelper(getActivity());
         fragmentreportaddress = new ReportAddressFragment();
 
         ArrayList<String> NearbyList = new ArrayList<>();
+
+        // click on available of the detailed activity
+
+
 
 
         // Jump to Report Page
@@ -156,11 +205,13 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
             @Override
             public boolean onQueryTextSubmit(String query) {
 
-                String brandName = searchView.getQuery().toString();
-                ArrayList<String> locationlist = storedatabase.getAddress(brandName);
-                List<Address> addressList = null;
-                ArrayList<String> NearbyList = new ArrayList<>();
+                 String brandName = searchView.getQuery().toString();
+                 String BrandName = storeHelper.getBrand(brandName);
 
+                ArrayList<String> locationlist = storeHelper.getAddress(brandName);
+                List<Address> addressList = null;
+                ArrayList<Nearbydistance> DistanceList = new ArrayList<>();
+                ArrayList<String> NearbyList = new ArrayList<>();
                 mMap.clear();
 
                 for(int i = 1; i< locationlist.size(); i++){
@@ -174,30 +225,52 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
                     }
 
                     if (addressList != null) {
+
                         for (int j = 0; j < addressList.size(); j++){
                             final Address address = addressList.get(j);
                             double lat = address.getLatitude();
                             double lng = address.getLongitude();
                             final LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-                            float distance = getDistance(lat, lng);
+                            int distance = getDistance(lat, lng);
 
-                            if(distance <= 2000){
+
+                            if(distance <= Distance_key){
 
                                 MarkerOptions markerOptions = new MarkerOptions().position(latLng).title(location);
                                 NearbyMarker =  mMap.addMarker(markerOptions);
                                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
-                                NearbyList.add(location  + " Distance : " + distance + " m");
+//                                NearbyList.add(location  + " Distance : " + distance + " m");
+//                                String Distance = String.valueOf(distance);
 
-                                listAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, NearbyList);
+                                Nearbydistance near = new Nearbydistance(BrandName, location, distance);
+                                DistanceList.add(near);
+
+                                listAdapter = new NearbyAdapter(getContext(), DistanceList);
                                 listView.setAdapter(listAdapter);
-
-                                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                Collections.sort(DistanceList, new Comparator<Nearbydistance>() {
                                     @Override
-                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
-
+                                    public int compare(Nearbydistance d1, Nearbydistance d2) {
+                                        if(d1.getDistance() < d2.getDistance()){
+                                            return 1;
+                                        }else {
+                                            return 0;
+                                        }
+//                                        return d1.getDistance().compareTo(d2.getDistance());
                                     }
                                 });
+//                                Collections.sort(DistanceList, new Sorting());
+                                listAdapter.notifyDataSetChanged();
+
+//                                listAdapter.refresh();
+
+
+
+
+
+//                                listView.setAdapter(listAdapter);
+
+//                                ((ArrayAdapter) listView.getAdapter()).notifyDataSetChanged();
+
 
                             }
 
@@ -222,10 +295,12 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
         return mView;
     }
 
+    public void List(){
 
+    }
 
     // calculate the distance between two locations
-    public float getDistance(double lat,double lng) {
+    public int getDistance(double lat,double lng) {
 
         Location current = new Location("");
         current.setLatitude(mLastLocation.getLatitude());// current latitude
@@ -235,9 +310,10 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
         selected.setLatitude(lat);
         selected.setLongitude(lng);
 
-        return current.distanceTo(selected);
+        return Math.round(current.distanceTo(selected));
         //  return approximate distance between current location and selected location;
     }
+
 
 
 
@@ -303,6 +379,70 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
         }
 
 
+//        if(Locate_key ==1){
+//
+//            ArrayList<String> locationlist = storeHelper.getAddress(Brand);
+//            List<Address> addressList = null;
+//            ArrayList<Nearbydistance> distanceList = new ArrayList<>();
+//            ArrayList<String> Nearbylist = new ArrayList<>();
+
+//            for(int i = 1; i< locationlist.size(); i++){
+//
+//                String location = locationlist.get(i);
+//                Geocoder geocoder = new Geocoder(getActivity());
+//                try {
+//                    addressList = geocoder.getFromLocationName(location, 10);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                if (addressList != null) {
+//
+//                    for (int j = 0; j < addressList.size(); j++){
+//                        final Address address = addressList.get(j);
+//                        double lat = address.getLatitude();
+//                        double lng = address.getLongitude();
+//                        final LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+//                        int distance = getDistance(lat, lng);
+//
+//
+//                        if(distance <= 2000){
+//                        MarkerOptions markerOptions = new MarkerOptions().position(latLng).title(location);
+//                        NearbyMarker =  mMap.addMarker(markerOptions);
+//                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
+////                                NearbyList.add(location  + " Distance : " + distance + " m");
+////                                String Distance = String.valueOf(distance);
+//
+//                        Nearbydistance near = new Nearbydistance(Brand, location, distance);
+//                        distanceList.add(near);
+//
+//                        listAdapter = new NearbyAdapter(getContext(), distanceList);
+//                        listView.setAdapter(listAdapter);
+//                        Collections.sort(distanceList, new Comparator<Nearbydistance>() {
+//                            @Override
+//                            public int compare(Nearbydistance d1, Nearbydistance d2) {
+//                                if(d1.getDistance() < d2.getDistance()){
+//                                    return 1;
+//                                }else {
+//                                    return 0;
+//                                }
+//                            }
+//                        });
+//
+//                        listAdapter.refresh();
+//
+//
+//
+//                    }
+//
+//                }
+//                }
+//
+//
+//            }
+
+
+//        }
 
     }
 
@@ -371,6 +511,88 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
         if(mGoogleApiClient != null)
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
 
+        if(Locate_key ==1){
+
+            ArrayList<String> locationlist = storeHelper.getAddress(Brand);
+            List<Address> addressList = null;
+            ArrayList<Nearbydistance> distanceList = new ArrayList<>();
+            ArrayList<String> Nearbylist = new ArrayList<>();
+
+            for(int i = 1; i< locationlist.size(); i++){
+
+                String loc = locationlist.get(i);
+                Geocoder geocoder = new Geocoder(getActivity());
+                try {
+                    addressList = geocoder.getFromLocationName(loc, 10);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                if (addressList != null) {
+
+                    for (int j = 0; j < addressList.size(); j++){
+                        final Address address = addressList.get(j);
+                        double lat = address.getLatitude();
+                        double lng = address.getLongitude();
+                        final LatLng latLn = new LatLng(address.getLatitude(), address.getLongitude());
+                        int distance = getDistance(lat, lng);
+
+
+                        if(distance <= 5000){
+                            MarkerOptions marker = new MarkerOptions().position(latLn).title(loc);
+                            NearbyMarker =  mMap.addMarker(marker);
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLn, 14));
+//                                NearbyList.add(location  + " Distance : " + distance + " m");
+//                                String Distance = String.valueOf(distance);
+
+                            Nearbydistance near = new Nearbydistance(Brand, loc, distance);
+                            distanceList.add(near);
+
+                            listAdapter = new NearbyAdapter(getContext(), distanceList);
+                            listView.setAdapter(listAdapter);
+                            Collections.sort(distanceList, new Comparator<Nearbydistance>() {
+                                @Override
+                                public int compare(Nearbydistance d1, Nearbydistance d2) {
+                                    if(d1.getDistance() < d2.getDistance()){
+                                        return 1;
+                                    }else {
+                                        return 0;
+                                    }
+//                                        return d1.getDistance().compareTo(d2.getDistance());
+                                }
+                            });
+//                                Collections.sort(DistanceList, new Sorting());
+
+
+//                            Nearbydistance near = new Nearbydistance(location, distance);
+//                            distancelist.add(near);
+
+//                            Comparator<Nearbydistance> comparator = new Comparator<Nearbydistance>() {
+//                                public int compare(Nearbydistance d1, Nearbydistance d2) {
+//                                    return d1.getDistance().compareTo(d2.getDistance());
+//                                }
+//                            };
+//                            Collections.sort(distancelist, comparator);
+
+//                        ListAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, Nearbylist);
+//                        listView.setAdapter(ListAdapter);
+//                            ((ArrayAdapter) listAdapter).notifyDataSetChanged();
+
+
+                        }
+
+                    }
+                }
+
+
+            }
+
+
+        }
+
 
     }
+
+
 }
+

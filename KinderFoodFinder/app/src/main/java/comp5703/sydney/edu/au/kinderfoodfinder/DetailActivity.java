@@ -91,7 +91,11 @@ public class DetailActivity extends AppCompatActivity {
         Product product= DaoUnit.getInstance().searchBySid( sid );
 
         final String brandname=product.getBrand_Name();
+<<<<<<< HEAD
         final String category=product.getCategory();
+=======
+        String category=product.getCategory();
+>>>>>>> 946f0fdc7f9f0a9fb14d1ec2e5989e4a7c45fca5
         String available=product.getAvailable();
         String image=product.getImage();
 
@@ -187,6 +191,7 @@ public class DetailActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(DetailActivity.this, MainActivity.class);
                 intent.putExtra("id",1);
+                intent.putExtra("LOCATE", brandname);
                 startActivity(intent);
                 toolbar.setVisibility( View.GONE );
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
