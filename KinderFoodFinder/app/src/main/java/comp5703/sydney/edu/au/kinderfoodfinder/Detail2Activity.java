@@ -1,5 +1,6 @@
 package comp5703.sydney.edu.au.kinderfoodfinder;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,6 +13,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -49,7 +53,9 @@ import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.MyApplication;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Product;
 import comp5703.sydney.edu.au.kinderfoodfinder.StatisticDatabase.StatisticsDatabase;
 
-public class DetailActivity extends AppCompatActivity {
+import static android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE;
+
+public class Detail2Activity extends AppCompatActivity {
 
 
 
@@ -61,34 +67,80 @@ public class DetailActivity extends AppCompatActivity {
     private int times;
     private TextView brand_info, rate_info, accreditationtv, location_info;
     private TextView reporttv,availabletv, learntv;
-    private ListView listView;
     ArrayList<AccEntity> accreditationList;
     Context ctx;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_detail );
+        setContentView( R.layout.activity_detail2 );
 
         Intent intent = getIntent();
         //
         sid=intent.getStringExtra( "stringId" );
         page=intent.getStringExtra( "page");
         accId=intent.getStringExtra( "accid" );
-
-//
-//        final String userID=intent.getStringExtra( "userID" );
-//        final String gender=intent.getStringExtra( "gender" );
-//        final String birthday=intent.getStringExtra( "birthday" );
-
         brand_info=findViewById( R.id.dtlbrand );
-//
         location_info=findViewById( R.id.location_info );
         imageView=findViewById( R.id.imgdetail );
         reporttv=findViewById( R.id.report );
         availabletv=findViewById( R.id.location );
         learntv=findViewById( R.id.learnmore );
-        listView=findViewById( R.id.detail_listview );
+        accreditationtv=findViewById( R.id.dtlAcc );
         Product product= DaoUnit.getInstance().searchBySid( sid );
+
+        Accreditation accreditation=DaoUnit.getInstance().searchAccBySid( accId );
+        String a ="This is a ";
+        String rate="";
+        String c=" choice, ";
+        String best="congratulation!";
+        String good="well done but try to buy in moderation.";
+        String avoid_a="We suggest you ";
+        String avoid_b=" this choice, if you can.";
+        rate=accreditation.getRating();
+
+        SpannableString span1=new SpannableString( a );
+        SpannableString span2=new SpannableString( rate );
+        SpannableString span3=new SpannableString( c );
+
+        int textSize3 = getResources().getDimensionPixelSize(R.dimen.text_size_3);
+        int textSize1 = getResources().getDimensionPixelSize(R.dimen.text_size_1);
+        span1.setSpan( new AbsoluteSizeSpan(textSize3),0,a.length(),SPAN_INCLUSIVE_INCLUSIVE );
+        span2.setSpan( new AbsoluteSizeSpan( textSize1 ),0,rate.length(),SPAN_INCLUSIVE_INCLUSIVE );
+        span3.setSpan( new AbsoluteSizeSpan(textSize3),0,c.length(),SPAN_INCLUSIVE_INCLUSIVE );
+        if(rate.equalsIgnoreCase( "Best" )){
+
+            span2.setSpan( new ForegroundColorSpan(Color.parseColor( "#208E5C" )) ,0,rate.length(),0);
+
+            SpannableString span4=new SpannableString( best );
+            span4.setSpan( new AbsoluteSizeSpan(textSize3),0,best.length(),SPAN_INCLUSIVE_INCLUSIVE );
+            accreditationtv.setText( span1 );
+            accreditationtv.append( span2 );
+            accreditationtv.append( span3 );
+            accreditationtv.append( span4 );
+        }else if(rate.equalsIgnoreCase( "Good" )){
+            span2.setSpan( new ForegroundColorSpan( Color.parseColor( "#f7912f" ) ) ,0,rate.length(),0);
+
+            SpannableString span4=new SpannableString( good );
+            span4.setSpan( new AbsoluteSizeSpan(textSize3),0,good.length(),SPAN_INCLUSIVE_INCLUSIVE );
+            accreditationtv.setText( span1 );
+            accreditationtv.append( span2 );
+            accreditationtv.append( span3 );
+            accreditationtv.append( span4 );
+
+        }else if(rate.equalsIgnoreCase( "Avoid" )){
+            span2.setSpan( new ForegroundColorSpan( Color.parseColor( "#FF4081" ) ) ,0,rate.length(),0);
+
+            span1=new SpannableString( avoid_a );
+            span1.setSpan( new AbsoluteSizeSpan(textSize3),0,avoid_a.length(),SPAN_INCLUSIVE_INCLUSIVE );
+            span3=new SpannableString( avoid_b );
+            span3.setSpan( new AbsoluteSizeSpan(textSize3),0,avoid_b.length(),SPAN_INCLUSIVE_INCLUSIVE );
+            accreditationtv.setText( span1 );
+            accreditationtv.append( span2 );
+            accreditationtv.append( span3 );
+        }else {
+            accreditationtv.setText( "" );
+        }
+
 
         final String brandname=product.getBrand_Name();
         final String category=product.getCategory();
@@ -97,7 +149,6 @@ public class DetailActivity extends AppCompatActivity {
 
         accreditationList = readAccreditation( sid );
         AccreditationAdapter accreditationAdapter=new AccreditationAdapter( this,accreditationList );
-        listView.setAdapter( accreditationAdapter );
         Log.d("detail",String.valueOf( accreditationList.size() ));
 
 
@@ -115,27 +166,6 @@ public class DetailActivity extends AppCompatActivity {
         location_info.setText( available );
 
 
-//        // test collect click data
-//        String[] result=readFromFile().split( ";" );
-//        String[] profile= result[1].split( "," );
-//        String userID="1";
-//        String gender=profile[0];
-//        String birthday=profile[1];
-//        date=getDate();
-//        age=getAge( birthday );
-//        times=1;
-//        String count ="1";
-//        String info=sid+"; "+date+"; "+times+"; "+userID+"; "+gender+"; "+age+"; ";
-//        Log.d("statistics add record",info);
-//       StatisticsDatabase statisticsDatabase=new StatisticsDatabase(this);
-//        SQLiteDatabase database= statisticsDatabase.getWritableDatabase();
-//        statisticsDatabase.addProduct( sid,date,gender,age,count,database );
-//        statisticsDatabase.close();
-//
-//        Log.d("statistic","one row insert");
-
-
-//        new AddClickData( ).execute( sid,period,times,userid,gender,age );
 
         toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setVisibility(View.VISIBLE);
@@ -154,22 +184,11 @@ public class DetailActivity extends AppCompatActivity {
             {
 
                 if(page.equalsIgnoreCase( "browse" )){
-                    Intent intent = new Intent(DetailActivity.this, MainActivity.class);
+                    Intent intent = new Intent(Detail2Activity.this, MainActivity.class);
                     intent.putExtra("id",5);
                     startActivity(intent);
                 }
-//                else {
-//                    finish();
-////                    Intent intent = new Intent(DetailActivity.this, MainActivity.class);
-////                    intent.putExtra("id",5);
-////                    startActivity(intent);
-//                }
-//                toolbar.setVisibility( View.GONE );
-//                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//                getSupportActionBar().setTitle( "Back" );
-//                toolbar.setVisibility( View.INVISIBLE );
-//                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//                getSupportActionBar().setTitle( "Back" );
+//
                 finish();
             }
         });
@@ -184,13 +203,9 @@ public class DetailActivity extends AppCompatActivity {
         availabletv.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent = new Intent(DetailActivity.this, MainActivity.class);
+                Intent intent = new Intent(Detail2Activity.this, MainActivity.class);
                 intent.putExtra("id",1);
                 startActivity(intent);
-                toolbar.setVisibility( View.GONE );
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                getSupportActionBar().setTitle( "Back" );
                 finish();
 
 
@@ -202,39 +217,32 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(DetailActivity.this, MainActivity.class);
+                Intent intent = new Intent(Detail2Activity.this, MainActivity.class);
                 intent.putExtra("id",2);
                 intent.putExtra( "sid",sid );
-                intent.putExtra("key",1);
-                startActivity(intent);
+                intent.putExtra("key",2);
+
+//
 //                Fragment reportAddressFragment=new ReportAddressFragment();
 //                Bundle bundle=new Bundle(  );
 //                bundle.putString( "sid",sid );
 //                bundle.putString( "accid",accId );
-//                bundle.putInt( "key",1 );
+//                bundle.putInt( "key",2 );
 //                bundle.putString( "brand_name",brandname );
 //                bundle.putString( "type",category );
 //                reportAddressFragment.setArguments( bundle );
-                finish();
-//                toolbar.setVisibility( View.INVISIBLE );
-//                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//                getSupportActionBar().setTitle( "Back" );
-//                getSupportFragmentManager()
-//                        .beginTransaction()
-//                        .replace(DetailActivity.this,new ReportFragment())
-//                        .addToBackStack(null)
-//                        .commit();
+
+                startActivity(intent);
                 finish();
 
             }
         } );
-
         learntv.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 toolbar.setVisibility( View.INVISIBLE );
                 toolbar.setVisibility( View.GONE );
-                Intent intent = new Intent(DetailActivity.this, MainActivity.class);
+                Intent intent = new Intent(Detail2Activity.this, MainActivity.class);
                 intent.putExtra("id",3);
                 startActivity(intent);
                 finish();
@@ -250,9 +258,7 @@ public class DetailActivity extends AppCompatActivity {
     private class AddClickData extends AsyncTask<String, String, String> {
         Context context;
 //
-//        public AddClickData(Context context) {
-//            this.context=context;
-//        }
+//
 
         @Override
         protected String doInBackground(String... strings) {
@@ -264,8 +270,8 @@ public class DetailActivity extends AppCompatActivity {
             String gender="";
             String birthday="";
             if(profile.length==2){
-                 gender=profile[0];
-                 birthday=profile[1];
+                gender=profile[0];
+                birthday=profile[1];
             }
 
             String date=getDate();
@@ -383,14 +389,14 @@ public class DetailActivity extends AppCompatActivity {
         if(string!=null){
             Date birth=new Date(  );
             try {
-                    birth=sdf.parse( string );
-                    Date d=new Date();
+                birth=sdf.parse( string );
+                Date d=new Date();
 
-                    if(birth.getDay()>d.getDay()&& birth.getMonth()>d.getMonth()){
-                        age=d.getYear()-birth.getYear()-1;
-                    }else {
-                        age=d.getYear()-birth.getYear();
-                    }
+                if(birth.getDay()>d.getDay()&& birth.getMonth()>d.getMonth()){
+                    age=d.getYear()-birth.getYear()-1;
+                }else {
+                    age=d.getYear()-birth.getYear();
+                }
 
 
             } catch (ParseException e) {
@@ -484,6 +490,7 @@ public class DetailActivity extends AppCompatActivity {
         }
         return ret;
     }
+
 
 
 }

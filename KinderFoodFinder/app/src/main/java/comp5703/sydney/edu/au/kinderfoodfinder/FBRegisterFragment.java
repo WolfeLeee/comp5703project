@@ -53,11 +53,11 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class FBRegisterFragment extends Fragment {
     private Toolbar toolbar;
     private Fragment fragmentLogin;
-    private String name,id;
+    private String name,id,email;
 
     private Button btnRegister;
     private EditText  inputBirthday,inputName, inputEmail;
-    private CheckBox checkAgreement, checkIfDiscloseDOB;
+    private CheckBox checkAgreement, checkIfDiscloseDOB,checkIfDiscloseGender;
     private RadioGroup radioGroup;
     private RadioButton radioButton;
     private ImageView datePicker;
@@ -72,6 +72,7 @@ public class FBRegisterFragment extends Fragment {
         super.onCreate( savedInstanceState );
         name = getArguments().getString( "fb_name" );
 
+        email=getArguments().getString( "fb_email" );
         id = getArguments().getString( "fb_id" );
     }
 
@@ -99,9 +100,15 @@ public class FBRegisterFragment extends Fragment {
         checkIfDiscloseDOB = (CheckBox) view.findViewById(R.id.checkIfDiscloseDOB);
         checkAgreement = (CheckBox) view.findViewById(R.id.checkAgreement);
 
+        inputEmail=view.findViewById( R.id.inputEmailR );
+
         btnRegister = (Button) view.findViewById(R.id.btnRegister);
 
         fragmentLogin=new LoginFragment();
+
+        if(email.length()>3){
+            inputEmail.setVisibility( View.GONE );
+        }
         // tool bar listener
         toolbar.setNavigationOnClickListener(new View.OnClickListener()
         {
@@ -111,7 +118,9 @@ public class FBRegisterFragment extends Fragment {
                 // go to login fragment
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                        .replace(R.id.fragment_container, fragmentLogin).commit();
+                        .replace(R.id.fragment_container, fragmentLogin).addToBackStack( null ).commit();
+                LoginManager.getInstance().logOut();
+
 
 
 
@@ -284,7 +293,6 @@ public class FBRegisterFragment extends Fragment {
 
                 registerProgressDialog.dismiss();
                 Intent intent = new Intent(getActivity(), MainActivity.class);
-
                 startActivity(intent);
                 getActivity().finish();
                 deletefile();
@@ -302,7 +310,6 @@ public class FBRegisterFragment extends Fragment {
                         registerProgressDialog.dismiss();
                         Toast.makeText(getActivity(), "Registered Failed!", Toast.LENGTH_SHORT).show();
                         Log.d("Send query error:", error.toString());
-                        LoginManager.getInstance().logOut();
 
                     }
                 });

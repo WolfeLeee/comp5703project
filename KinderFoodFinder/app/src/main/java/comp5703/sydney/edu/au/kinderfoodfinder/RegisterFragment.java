@@ -48,7 +48,7 @@ public class RegisterFragment extends Fragment
     private Fragment fragmentLogin;
     private Button btnRegister;
     private EditText inputName, inputEmail, inputPwd, inputConfirmPwd, inputBirthday;
-    private CheckBox checkAgreement, checkIfDiscloseDOB;
+    private CheckBox checkAgreement, checkIfDiscloseDOB,checkIfDiscloseGender;
     private RadioGroup radioGroup;
     private RadioButton radioButton;
     private ImageView datePicker;
@@ -139,6 +139,7 @@ public class RegisterFragment extends Fragment
                 String birthday = inputBirthday.getText().toString();
                 boolean showBirthday = checkIfDiscloseDOB.isChecked();
 
+
                 if(checkAgreement.isChecked())
                     registerUser(name, gender, email, password, passwordConfirm, birthday, showBirthday);
                 else
@@ -151,7 +152,7 @@ public class RegisterFragment extends Fragment
             public void onClick(View v) {
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                        .replace(R.id.fragment_container, fragmentLogin).commit();
+                        .replace(R.id.fragment_container, fragmentLogin).addToBackStack( null ).commit();
             }
         } );
 

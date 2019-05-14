@@ -278,12 +278,6 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
             }
         }
 
-
-        Intent intent =getActivity().getIntent();
-        final String userID=intent.getStringExtra( "userID" );
-        final String gender=intent.getStringExtra( "gender" );
-        final String birthday=intent.getStringExtra( "birthday" );
-
         RadioGroup catogryRadioes = view.findViewById(R.id.radioCatogory);
         catogryRadioes.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -352,11 +346,12 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
                 rating=accreditations.get( 0 ).getRating();
                 ProductDao productDao= MyApplication.getInstance().getDaoSession().getProductDao();
                 Product test=new Product(  );
+                String accId=p.getAccreditation().get( 0 ).getSid();
 
+                if(category==R.id.radioBrandName){
                     Intent intent = new Intent(getActivity(), DetailActivity.class);
                     if (intent != null) {
 //                        Accreditation accreditation= (Accreditation) p.getAccreditation();
-
                         intent.putExtra( "sid",p.getSid() );
                         intent.putExtra("brand", p.getBrand_Name());
                         intent.putExtra("type", p.getCategory());
@@ -366,25 +361,34 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
                         intent.putExtra( "stringId",p.getSid() );
                         intent.putExtra( "page","search" );
                         List<Accreditation> accreditation= (List<Accreditation>) p.getAccreditation();
+                        intent.putExtra( "accid",accId );
+
                         String a=accreditation.get( 0 ).getSid();
                         String b=accreditation.get( 0 ).getAccreditation();
                         String c=accreditation.get( 0 ).getRating();
-
-
 
                         String info=p.getSid()+"; "+p.getBrand_Name()+"; "+p.getCategory()+"; "+p.getImage()+"; "
                                 +a+"; "+b+"; "+c;
                         Log.d("statistics put record",info);
 //                    intent.putExtra("img", String.valueOf(c.getImg()));
                         startActivity( intent );
+
                     }
+                }else if(category==R.id.radioAccreditation) {
+                    Intent intent = new Intent( getActivity(), Detail2Activity.class );
+                    if (intent != null) {
+//                        Accreditation accreditation= (Accreditation) p.getAccreditation();
+                        intent.putExtra( "stringId", p.getSid() );
+                        intent.putExtra( "page", "search" );
+                        intent.putExtra( "accid", accId );
+                        startActivity( intent );
+                    }
+                }
             }
         } );
 
         return view;
     }
-
-
 
 
     private void readProduct() {

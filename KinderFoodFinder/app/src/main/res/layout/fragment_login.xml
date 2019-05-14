@@ -43,8 +43,9 @@
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:hint="Password..."
-        android:inputType="text"
+        android:inputType="textPassword"
         android:maxLines="1"
+
         />
 
     <Button

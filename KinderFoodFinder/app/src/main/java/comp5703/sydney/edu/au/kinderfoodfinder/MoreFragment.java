@@ -89,7 +89,7 @@ public class MoreFragment extends Fragment
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.fragment_container, fragmentreport)
-                        .addToBackStack(null).commit();
+                        .commit();
             }
         });
         glossary.setOnClickListener(new View.OnClickListener()

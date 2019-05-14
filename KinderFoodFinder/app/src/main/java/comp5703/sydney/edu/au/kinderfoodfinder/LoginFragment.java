@@ -73,7 +73,6 @@ public class LoginFragment extends Fragment {
 //    @Override
 //    public void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
-//
 //        brand_version=getArguments().getString( "brand_version" );
 //        brand_update=getArguments().getString( "brand_update" );
 //        store_version=getArguments().getString( "store_version" );
@@ -117,7 +116,7 @@ public class LoginFragment extends Fragment {
                 // go to register fragment
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragment_container, fragmentRegister).commit();
+                        .replace(R.id.fragment_container, fragmentRegister).addToBackStack( null ).commit();
             }
         });
 
@@ -283,38 +282,49 @@ public class LoginFragment extends Fragment {
             @Override
             public void onCompleted(JSONObject object, GraphResponse response) {
 
-                try {
-                    String first_name = object.getString( "first_name" );
-                    String last_name = object.getString( "last_name" );
-//                    String email=object.getString( "email" );
-                    String id = object.getString( "id" );
-                    String image_url = "https://graph.facebook.com/" + id + "/picture?type=normal";
+                String email="";
+                String name="";
+                String id="";
+                    Log.d( "facebook",response.toString());
 
-                    String name = first_name + " " + last_name;
-                    String fb_id = id;
-                    RequestOptions requestOptions = new RequestOptions();
-                    requestOptions.dontAnimate();
+                    try {
+                        String first_name = object.getString( "first_name" );
+                        String last_name = object.getString( "last_name" );
+                        id = object.getString( "id" );
+                        String image_url = "https://graph.facebook.com/" + id + "/picture?type=normal";
+                        name = first_name + " " + last_name;
+                        String fb_id = id;
+//                        RequestOptions requestOptions = new RequestOptions();
+//                        requestOptions.dontAnimate();
 
-//                    loginFBUser( name,id );
+                        Log.d( "facebook",name+" "+email +"; "+id);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
-                    loginwithFBUser( name,id );
+                    try{
+                        email=object.getString( "email" );
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                loginwithFBUser( name,id ,email);
+                Log.d( "facebook",name+"; "+email +"; "+id);
+
 
             }
         } );
 
         Bundle parameters = new Bundle();
-        parameters.putString( "fields", "first_name,last_name,id" );
+        parameters.putString( "fields", "first_name,last_name,id,email" );
         request.setParameters( parameters );
         request.executeAsync();
     }
 
 
 
-    private void loginwithFBUser(final String name,final String password) {
+    private void loginwithFBUser(final String name, final String password, final String email) {
 
         // set up
         String ipAddress = "10.16.206.194";  //100.101.72.250 Here should be changed to your server IP
@@ -338,11 +348,6 @@ public class LoginFragment extends Fragment {
                 if (response.equals("Yes")) {
                     Toast.makeText(getActivity(), "Login Successfully!", Toast.LENGTH_SHORT).show();
                     Log.d("Send query response:", response);
-//                    Intent intentDetail=new Intent( getActivity(),DetailActivity.class );
-//                    intentDetail.putExtra( "status","yes" );
-//                    intentDetail.putExtra( "gender","Male" );
-//                    intentDetail.putExtra( "birthday","Not Disclose " );
-//                    intentDetail.putExtra( "userID",password );
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
                     getActivity().finish();
@@ -354,11 +359,11 @@ public class LoginFragment extends Fragment {
                     Bundle bundle=new Bundle(  );
                     bundle.putString( "fb_name",name );
                     bundle.putString( "fb_id",password );
+                    bundle.putString( "fb_email",email );
                     fragmentFBRegister.setArguments( bundle );
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_container, fragmentFBRegister).commit();
                     LoginManager.getInstance().logOut();
-
                 }
             }
         },
@@ -371,7 +376,6 @@ public class LoginFragment extends Fragment {
                         Toast.makeText(getActivity(), "Login Failed!", Toast.LENGTH_SHORT).show();
                         Log.d("Send query error:", error.toString());
                         LoginManager.getInstance().logOut();
-
                     }
                 });
         ExampleRequestQueue.add(ExampleStringRequest);
@@ -452,6 +456,9 @@ public class LoginFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        LoginManager.getInstance().logOut();
+
+
     }
 
     @Override

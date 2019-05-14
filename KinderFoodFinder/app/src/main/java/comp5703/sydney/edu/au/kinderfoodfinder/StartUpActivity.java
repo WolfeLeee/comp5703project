@@ -137,6 +137,7 @@ public class StartUpActivity extends AppCompatActivity
 //        Log.d("VersionDatabase", version);
 //        Log.d("VersionDatabase1", test);
 
+//        testString();
         intent=new Intent(StartUpActivity.this,MainActivity.class  );
         startIntent=new Intent( StartUpActivity.this,StartUpActivity.class );
 //        testString();
@@ -148,6 +149,7 @@ public class StartUpActivity extends AppCompatActivity
         JsonParser jsonParser = new JsonParser();
         JsonArray jsonElements = jsonParser.parse(test).getAsJsonArray();
 //        Log.d("Statistics Size",String.valueOf( jsonElements.size() ));
+
         sendStatistics( test );
         readStore();
 
@@ -361,6 +363,7 @@ public class StartUpActivity extends AppCompatActivity
                 jsonString=buffer.toString();
 //            Log.d("json",result);
                 jsonString = jsonString.replace("_id","sid");
+                jsonString = jsonString.replace( "\"pig\"," ,"\"Pork\",");
 //            Log.d("JSON",result );
                 JsonParser jsonParser = new JsonParser();
                 JsonArray jsonElements = jsonParser.parse(jsonString).getAsJsonArray();

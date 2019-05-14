@@ -50,6 +50,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
 //        key = getArguments().getInt( "key" );
+
     }
 
     @Nullable
@@ -106,6 +107,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
             @Override
             public void onClick(View v) {
                 // go to login fragment
+
 //                if(key==1){
 //                    getActivity().getSupportFragmentManager().popBackStack();
 //
@@ -161,8 +163,10 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
                 Fragment reportAddressFragment=new ReportAddressFragment();
                 Bundle bundle=new Bundle(  );
                 bundle.putString( "sid",sidList.get( position ) );
-                bundle.putString( "brand_name",brandList.get( position ) );
-                bundle.putString( "type",items.get( category ) );
+//                bundle.putString( "brand_name",brandList.get( position ) );
+//                bundle.putString( "type",items.get( category ) );
+//                bundle.putString( "accid", "null");
+                bundle.putInt( "key",0 );
                 reportAddressFragment.setArguments( bundle );
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)

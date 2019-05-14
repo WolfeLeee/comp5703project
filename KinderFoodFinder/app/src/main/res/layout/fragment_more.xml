@@ -117,7 +117,7 @@
             android:textSize="19sp"
             android:background="@color/lightOrange"
             android:gravity="center_vertical"
-            android:text="Glossary of Term"/>
+            android:text="Glossary"/>
 
         <TextView
             android:id="@+id/tv_share"

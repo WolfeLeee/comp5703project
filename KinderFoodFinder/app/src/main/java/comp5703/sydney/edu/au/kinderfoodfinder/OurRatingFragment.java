@@ -78,7 +78,8 @@ public class OurRatingFragment extends Fragment implements View.OnClickListener{
                 // go to login fragment
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                        .replace(R.id.fragment_container, fragmentMore).commit();
+                        .replace(R.id.fragment_container, fragmentMore)
+                        .commit();
 
                 // remove toolbar again
                 toolbar.setVisibility(View.GONE);

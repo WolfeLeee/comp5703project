@@ -79,6 +79,7 @@ public class BrowseResultFragment extends Fragment {
         checkid = getArguments().getInt("checkid");
         position=getArguments().getInt( "position" );
         title=getArguments().getString( "title" );
+
     }
 
 
@@ -201,7 +202,7 @@ public class BrowseResultFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Product product = (Product) productAdpater.getItem(position);
-            Intent intent = new Intent(getActivity(), DetailActivity.class);
+            Intent intent = new Intent(getActivity(), Detail2Activity.class);
                 if (intent != null) {
                     ArrayList<Accreditation> accreditations= (ArrayList<Accreditation>) product.getAccreditation();
 //                    String acc=accreditations.get( 0 ).getAccreditation();
@@ -213,13 +214,15 @@ public class BrowseResultFragment extends Fragment {
                         rating=accreditations.get( 0 ).getRating();
                     }
 
-                    intent.putExtra("brand", product.getBrand_Name());
-                    intent.putExtra("type", product.getCategory());
-                    intent.putExtra("accreditation", acc);
-                    intent.putExtra("rating", rating);
-                    intent.putExtra("location", product.getAvailable());
+                    String accId=product.getAccreditation().get( 0 ).getSid();
+//                    intent.putExtra("brand", product.getBrand_Name());
+//                    intent.putExtra("type", product.getCategory());
+//                    intent.putExtra("accreditation", acc);
+//                    intent.putExtra("rating", rating);
+//                    intent.putExtra("location", product.getAvailable());
                     intent.putExtra( "stringId",product.getSid() );
                     intent.putExtra( "page","browse" );
+                    intent.putExtra( "accid",accId );
 
 //                    intent.putExtra("img", String.valueOf(c.getImg()));
                     startActivityForResult(intent, VIEW_ITEM_REQUEST_CODE);

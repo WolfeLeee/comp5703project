@@ -26,6 +26,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import comp5703.sydney.edu.au.kinderfoodfinder.Database.StoreDatabase;
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.DaoUnit;
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Product;
 import comp5703.sydney.edu.au.kinderfoodfinder.StatisticDatabase.StatisticContract;
 
 
@@ -42,7 +44,8 @@ public class ReportAddressFragment extends Fragment {
     private ProgressDialog reportProgressDialog;
     StoreDatabase storeDatabase;
     int key;
-    String sid, brandName,category;
+    String sid, brandName,category,accId;
+
 
     String IP_ADDRESS = "172.20.10.4";
 
@@ -52,8 +55,11 @@ public class ReportAddressFragment extends Fragment {
 //        key = getArguments().getInt( "key" );
 
         sid=getArguments().getString( "sid" );
-        brandName=getArguments().getString( "brand_name" );
-        category=getArguments().getString( "type" );
+//        brandName=getArguments().getString( "brand_name" );
+//        category=getArguments().getString( "type" );
+//        accId=getArguments().getString( "accid" );
+        key=getArguments().getInt( "key" );
+
     }
 
     @Nullable
@@ -82,6 +88,10 @@ public class ReportAddressFragment extends Fragment {
         fragmentlocation = new LocateFragment();
         fragmentmore = new MoreFragment();
 
+        Product product= DaoUnit.getInstance().searchBySid( sid );
+        brandName=product.getBrand_Name();
+        category=product.getCategory();
+        String accid=product.getAccreditation().get( 0 ).getSid();
         // Receive data
 //        String brand = getArguments().getString("BRAND_KEY");
 //        String category = getArguments().getString("CATEGORY_KEY");
@@ -91,6 +101,8 @@ public class ReportAddressFragment extends Fragment {
         // disable navigation bar at the bottom
         navigation = (BottomNavigationView) getActivity().findViewById(R.id.navigation);
         navigation.setVisibility(View.GONE);
+
+        Log.d("report7777",sid+"; "+ brandName+"; "+accId+"; "+key+"; "+category);
 
         // set up
         fragmentReport = new ReportFragment();
@@ -103,17 +115,35 @@ public class ReportAddressFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // go to login fragment
+
 //                if(key==1){
-//                    getActivity().getSupportFragmentManager().beginTransaction()
-//                            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-//                            .replace(R.id.fragment_container,fragmentlocation ).commit();
+//                    Intent intent=new Intent(getActivity(),DetailActivity.class);
 //
-//                }else if(key==2){
+//                    intent.putExtra( "stringId",sid );
+//                    intent.putExtra( "page","null" );
+//                    intent.putExtra( "accid",accId );
+//                    startActivity( intent );
+//                } else if (key == 2) {
+//                    Intent intent=new Intent(getActivity(),Detail2Activity.class);
+//
+//                    intent.putExtra( "stringId",sid );
+//                    intent.putExtra( "page","null" );
+//                    intent.putExtra( "accid",accId );
+//                    startActivity( intent );
+//
+//                }else {
 //                    getActivity().getSupportFragmentManager().beginTransaction()
 //                            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-//                            .replace(R.id.fragment_container, fragmentmore).commit();
+//                            .replace(R.id.fragment_container,fragmentReport ).commit();
+//
+//                    // remove toolbar again
+//                    toolbar.setVisibility(View.GONE);
+//
+//                    // enable navigation bar again
+//                    navigation.setVisibility(View.VISIBLE);
 //
 //                }
+//
 //                getActivity().getSupportFragmentManager().popBackStack();
 //                getActivity().getSupportFragmentManager().popBackStack();
 //                getActivity().getSupportFragmentManager().popBackStack();
@@ -127,6 +157,8 @@ public class ReportAddressFragment extends Fragment {
 
                 // enable navigation bar again
                 navigation.setVisibility(View.VISIBLE);
+
+
             }
         });
 

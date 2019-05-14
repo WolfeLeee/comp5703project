@@ -25,7 +25,7 @@ public class SqliteOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.i("Log","没有数据库,创建数据库");
+        Log.i("Log","create database");
         //建主表
         db.execSQL(
                 "CREATE TABLE \"products\" ( \"_id\" INTEGER NOT NULL," +
@@ -41,7 +41,7 @@ public class SqliteOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.i("updateLog","数据库更新了！");
+        Log.i("updateLog","update database！");
     }
 
     @Entity

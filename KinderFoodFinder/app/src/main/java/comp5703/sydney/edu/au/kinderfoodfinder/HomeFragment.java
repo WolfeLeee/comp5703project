@@ -3,17 +3,24 @@ package comp5703.sydney.edu.au.kinderfoodfinder;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.text.SpannableString;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -34,6 +41,8 @@ import comp5703.sydney.edu.au.kinderfoodfinder.Database.BackgroundTask;
 import comp5703.sydney.edu.au.kinderfoodfinder.Database.ProductContract;
 import comp5703.sydney.edu.au.kinderfoodfinder.Database.ProductDatabase;
 
+import static android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE;
+
 public class HomeFragment extends Fragment
 {
     // defined variables
@@ -43,6 +52,9 @@ public class HomeFragment extends Fragment
     private SearchView searchView;
     private ArrayList<Items> itemsArrayList=new ArrayList<Items>(  );
 
+    private TextView textView;
+    private TextView helptv;
+
 
     @Nullable
     @Override
@@ -50,32 +62,29 @@ public class HomeFragment extends Fragment
     {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        int textSize1 = getResources().getDimensionPixelSize(R.dimen.text_size_1);
+        int textSize2 = getResources().getDimensionPixelSize(R.dimen.text_size_2);
         navigation = (BottomNavigationView) getActivity().findViewById(R.id.navigation);
-
-        browse=view.findViewById( R.id.category_home );
-        searchView=view.findViewById( R.id.search_home );
-
-        browse.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigation.setSelectedItemId( R.id.navigation_browse );
-            }
-        } );
-
-        searchView.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigation.setSelectedItemId( R.id.navigation_search );
-            }
-        } );
-
+        textView=view.findViewById( R.id.kff_tv );
+        helptv=view.findViewById( R.id.help_tv );
+        String a="Welcome to \n";
+        String b="Finder Food Kinder";
+        SpannableString span1=new SpannableString( a );
+        span1.setSpan( new AbsoluteSizeSpan(textSize1),0,a.length(),SPAN_INCLUSIVE_INCLUSIVE );
+//        span1.setSpan( new ForegroundColorSpan( Color.BLUE) ,0,5,0);
+        SpannableString span2=new SpannableString( b );
+        span2.setSpan( new AbsoluteSizeSpan( textSize2 ),0, b.length(),SPAN_INCLUSIVE_INCLUSIVE);
+        helptv.getPaint().setFlags( Paint.FAKE_BOLD_TEXT_FLAG);
+        helptv.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+        textView.setText( span1);
+        textView.append( span2 );
 
 //
 
 
 
-        BackgroundTask backgroundTask1=new BackgroundTask( getActivity() );
-        backgroundTask1.execute( "read_info");
+//        BackgroundTask backgroundTask1=new BackgroundTask( getActivity() );
+//        backgroundTask1.execute( "read_info");
 
 
 //        Log.d( "Database itemlist",String.valueOf( itemsArrayList.size() ) );
@@ -90,7 +99,6 @@ public class HomeFragment extends Fragment
 //
 //        productDatabase.close();
 
-        checkDatabase();
 
 
 
@@ -135,7 +143,8 @@ public class HomeFragment extends Fragment
 
 
 
-//            productDatabase.addProduct( "brand","acc","rating","location","category",writableDatabase );
+
+            //            productDatabase.addProduct( "brand","acc","rating","location","category",writableDatabase );
         }
         productDatabase.close();
 

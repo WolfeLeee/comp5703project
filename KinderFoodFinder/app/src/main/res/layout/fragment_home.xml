@@ -8,55 +8,47 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
-
-        <TextView
-            android:id="@+id/text_home"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginBottom="10dp"
-            android:background="@color/orange"
-            android:text="@string/app_title"
-            android:textAlignment="center"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            android:layout_marginTop="20dp"/>
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:layout_marginBottom="10dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:contentDescription="farm_img"
-            android:background="@drawable/farm2"
-            android:layout_below="@+id/text_home"
-            android:layout_marginTop="100dp"/>
-
-        <SearchView
-            android:id="@+id/search_home"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/imageView"
             android:layout_marginTop="50dp"
-            android:background="@color/orange"
-            android:queryHint="Search by Brand Name">
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/farm2"
+            android:contentDescription="farm_img" />
 
-        </SearchView>
-
-        <Button
-            android:id="@+id/category_home"
+        <TextView
+            android:id="@+id/kff_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/search_home"
+            android:layout_below="@id/imageView"
+            android:layout_marginLeft="30dp"
             android:layout_marginTop="30dp"
-            android:layout_marginBottom="20dp"
-            android:layout_weight="1"
-            android:background="@color/orange"
-            android:onClick="BrowseClick"
-            android:text="Browse by Category" />
+            android:layout_marginRight="30dp"
+            android:text="TextView"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="@android:color/holo_orange_dark"/>
+
+        <TextView
+            android:id="@+id/help_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/kff_tv"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:text="Helping you find kinder eggs, chicken and pork"
+            android:gravity="center"
+            android:textStyle="italic"
+            android:textColor="@android:color/holo_orange_dark"
+            android:textSize="22sp"
+            />
 
 
     </RelativeLayout>

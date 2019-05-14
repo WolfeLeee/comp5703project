@@ -55,6 +55,12 @@ public class BrowseFragment extends Fragment
     private ArrayList<Accreditation> test=new ArrayList<>(  );
     private Fragment broseresultFragment;
     int type=1;
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState( outState );
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -114,7 +120,6 @@ public class BrowseFragment extends Fragment
                 broseresultFragment.setArguments( args );
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, broseresultFragment).commit();
-
             }
         } );
 
@@ -122,9 +127,9 @@ public class BrowseFragment extends Fragment
     }
 
     public void additem() {
-        categroylist.add( "Egg" );
-        categroylist.add( "pig" );
-        categroylist.add( "Chicken" );
+        categroylist=new ArrayList<>(  );
+
+
         ratinglist.add( "Best" );
         ratinglist.add( "Good" );
         ratinglist.add( "Avoid" );
@@ -132,7 +137,16 @@ public class BrowseFragment extends Fragment
         chickenlist=DaoUnit.getInstance().getcategoryList( "chicken" );
         piglist=DaoUnit.getInstance().getcategoryList( "pig" );
         test=DaoUnit.getInstance().getAcc();
+        String typeinfo="";
+        ArrayList<Product> ps =DaoUnit.getInstance().getProduct();
 
+        for (Product product:ps){
+            String type=product.getCategory().toUpperCase();
+            if(! typeinfo.contains( type)){
+                typeinfo=typeinfo+type+";";
+                categroylist.add( type );
+            }
+        }
 
         String info="";
         for (Accreditation accreditation:test){

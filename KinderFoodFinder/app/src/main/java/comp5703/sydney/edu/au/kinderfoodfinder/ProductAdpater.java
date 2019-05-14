@@ -57,13 +57,10 @@ public class ProductAdpater extends BaseAdapter implements Filterable {
             convertView = inflater.inflate(R.layout.listview_item, null);
         }
 
-
         TextView brand = convertView.findViewById(R.id.brand);
         TextView accreditation =convertView.findViewById( R.id.accreditation );
         TextView rating=convertView.findViewById( R.id.rating );
         TextView type=convertView.findViewById( R.id.type );
-
-
 
         List<Accreditation> accreditationList=productsList.get( position ).getAccreditation();
         String a=accreditationList.get( 0 ).getAccreditation();
@@ -71,8 +68,8 @@ public class ProductAdpater extends BaseAdapter implements Filterable {
 
         brand.setText(productsList.get(position).getBrand_Name());
         accreditation.setText( a );
-        String rate=a;
-        rating.setText( b );
+        String rate=b;
+        rating.setText( rate );
         type.setText( productsList.get( position ).getCategory() );
 
         if(rate.equalsIgnoreCase( "BEST" )){

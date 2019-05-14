@@ -16,6 +16,9 @@ import android.view.WindowManager;
 
 import java.util.ArrayList;
 
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.DaoUnit;
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Product;
+
 public class MainActivity extends AppCompatActivity
 {
     /* * * * * * * * * * *
@@ -69,6 +72,8 @@ public class MainActivity extends AppCompatActivity
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
 
         int id = getIntent().getIntExtra("id", 0);
+        String sid= getIntent().getStringExtra( "sid" );
+        int key=getIntent().getIntExtra( "key",0 );
         if (id == 1) {
 //            getSupportFragmentManager()
 //                    .beginTransaction()
@@ -86,14 +91,17 @@ public class MainActivity extends AppCompatActivity
         if (id == 2) {
             navigation.setSelectedItemId(R.id.navigation_more);
 
+
             Bundle bundle=new Bundle(  );
-            bundle.putInt( "key",3 );
-            Fragment reportFragment= new ReportFragment();
+
+            bundle.putString( "sid",sid );
+            bundle.putInt( "key",key );
+
+            Fragment reportFragment= new ReportAddressFragment();
             reportFragment.setArguments( bundle );
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container,reportFragment)
-                    .addToBackStack(null)
                     .commit();
 
         }
@@ -108,16 +116,16 @@ public class MainActivity extends AppCompatActivity
             navigation.setSelectedItemId( R.id.navigation_browse );
         }
 
-        Intent intent =getIntent();
-        final String brandVersion=intent.getStringExtra( "brand_version" );
-        final String brandUpdate=intent.getStringExtra( "brand_update" );
-        final String status=intent.getStringExtra( "status" );
-        final String userID=intent.getStringExtra( "userID" );
-        final String gender=intent.getStringExtra( "gender" );
-        final String birthday=intent.getStringExtra( "birthday" );
-        Log.d("statistic",brandVersion+", "+brandVersion+", "+status+", "+userID+", "+gender+", "+birthday);
-
-        Intent intent1=new Intent( MainActivity.this,DetailActivity.class );
+//        Intent intent =getIntent();
+//        final String brandVersion=intent.getStringExtra( "brand_version" );
+//        final String brandUpdate=intent.getStringExtra( "brand_update" );
+//        final String status=intent.getStringExtra( "status" );
+//        final String userID=intent.getStringExtra( "userID" );
+//        final String gender=intent.getStringExtra( "gender" );
+//        final String birthday=intent.getStringExtra( "birthday" );
+//        Log.d("statistic",brandVersion+", "+brandVersion+", "+status+", "+userID+", "+gender+", "+birthday);
+//
+//        Intent intent1=new Intent( MainActivity.this,DetailActivity.class );
     }
 
 
@@ -125,7 +133,7 @@ public class MainActivity extends AppCompatActivity
     /* * * * * *
      * Methods *
      * * * * * */
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+    public BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener()
     {
         @Override
@@ -185,8 +193,22 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+        Log.d( "back",String.valueOf( count ) );
+        Fragment fragment=getSupportFragmentManager().getPrimaryNavigationFragment();
 
 
+        navigation.setSelectedItemId( R.id.navigation_home );
+//        if (count == 0) {
+//            super.onBackPressed();
+//            //additional code
+//        } else {
+//            getSupportFragmentManager().popBackStack();
+//        }
 
-
+    }
 }

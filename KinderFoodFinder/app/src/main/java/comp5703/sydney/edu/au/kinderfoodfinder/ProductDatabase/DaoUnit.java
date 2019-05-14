@@ -193,6 +193,12 @@ public class DaoUnit {
         return product;
     }
 
+    public Accreditation searchAccBySid(String sid){
+        QueryBuilder accBuilder= accreditationManager.queryBuilder().where( AccreditationDao.Properties.Sid.eq(sid));
+
+        Accreditation accreditation= (Accreditation) accBuilder.list().get( 0 );
+        return accreditation;
+    }
 
     public ArrayList<Accreditation> getAccByParentId(long sid)
     {

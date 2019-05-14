@@ -55,10 +55,21 @@
 
     </RadioGroup>
 
+    <EditText
+        android:id="@+id/inputEmailR"
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:hint="Email..."
+        android:layout_gravity="center"
+        android:maxLines="1"
+        android:inputType="textEmailAddress"
+        android:layout_marginBottom="5dp" />
+
     <LinearLayout
         android:layout_width="340dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center">
+
 
         <EditText
             android:id="@+id/inputBirthday"

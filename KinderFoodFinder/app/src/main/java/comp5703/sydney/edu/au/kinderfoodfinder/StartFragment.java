@@ -81,7 +81,7 @@ public class StartFragment extends Fragment {
             public void onClick(View v) {
 
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, registerFragment).commit();
+                        .replace(R.id.fragment_container, registerFragment).addToBackStack( null ).commit();
 
             }
         } );
@@ -90,7 +90,7 @@ public class StartFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, loginFragment).commit();
+                        .replace(R.id.fragment_container, loginFragment).addToBackStack( null ).commit();
 
             }
         } );
