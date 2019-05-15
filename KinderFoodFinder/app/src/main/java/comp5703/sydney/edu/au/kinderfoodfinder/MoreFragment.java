@@ -40,6 +40,7 @@ public class MoreFragment extends Fragment
     private Fragment fragmentreport;
     private Fragment fragmentglossary;
     private Fragment fragmentreportaddress;
+    private Fragment fragmentaccount;
 
 //    private LoginButton fb_loginButton;
 //    private CallbackManager callbackManager;
@@ -57,6 +58,7 @@ public class MoreFragment extends Fragment
         fragmentreport = new ReportFragment();
         fragmentglossary = new GlossaryFragment();
         fragmentreportaddress = new ReportAddressFragment();
+        fragmentaccount = new AccountFragment();
 
         rating = view.findViewById(R.id.tv_rating);
         report = view.findViewById(R.id.tv_report);
@@ -135,6 +137,17 @@ public class MoreFragment extends Fragment
                 startActivity(intent);
                 getActivity().finish();
                 LoginManager.getInstance().logOut();
+
+            }
+        });
+        account.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragment_container, fragmentaccount).commit();
 
             }
         });
