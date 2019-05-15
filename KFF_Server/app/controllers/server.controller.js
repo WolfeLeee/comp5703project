@@ -2244,7 +2244,7 @@ module.exports.loginAndroidAppUsers = function(req, res, next)
         }
         else
         {
-            res.send("Yes," + user.gender + "," + user.birthday + "," + user._id.toString());
+            res.send("Yes," + user.gender + "," + user.birthday + "," + user._id.toString() + "," + user.name + "," + user.email);
         }
     });
 };
@@ -2456,9 +2456,6 @@ module.exports.createStatistic = function(req, res, next)
     // transfer json string back to json array
     var statisticData = JSON.parse(req.query.statistic);
     console.log(statisticData);
-    // console.log(statisticData[0].brandId);
-    // statisticData[0].brandName = "CCC";
-    // console.log(statisticData[0]);
 
     // add the brand name depending on the brand id
     Product.find({}, function(errorFindAll, brands)
