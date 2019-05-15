@@ -290,17 +290,42 @@ module.exports.goToFeature = function(req, res, next)
 
 module.exports.GenerateStatistics = async function(req,res,next)
 {
-    var ws = fs.createWriteStream("Statisticalreport.csv");
-    csv.write([
-        ["No.","Brand","Gender","Age","Timeline","Count"],
-        ["1","Gourmet Breakfast Cage Free Eggs","Female","24","12/05/2019","52"],
-        ["2","Captain Creek Vineyard & Winery","Female","20","04/04/2019","73"],
-        ["2","Campbell's Real Stock","Undefined","42","06/02/2019","91"],
-        ["3","Kelty Farm","Male","57","05/04/2019","17"],
-        ["3","Gourmet Breakfast Cage Free Eggs","Undefined","49","09/03/2019","3"],
-        ["4","Tonemade","Female","16","21/03/2019","4"]
-    ],{headers:true})
-        .pipe(ws);
+    User.findById(req.session.userId)
+        .exec(function (errorUser, user)
+        {
+            if (errorUser)
+            {
+                return next(errorUser);
+            }
+            else
+            {
+                if (user === null)
+                {
+                    res.redirect('/');
+                }
+                else
+                {
+                    var data = [];
+                    data.push
+                    data.push({
+                        "Number":"1",
+                        "Brand":"Gourmet Breakfast Cage Free Eggs",
+                        "Gender":"Female",
+                        "Age":"24",
+                        "Timeline":"12/05/2019",
+                        "Count":"52"
+                    })
+                        //     ["No.","Brand","Gender","Age","Timeline","Count"],
+                        // ["1","Gourmet Breakfast Cage Free Eggs","Female","24","12/05/2019","52"],
+                        // ["2","Captain Creek Vineyard & Winery","Female","20","04/04/2019","73"],
+                        // ["2","Campbell's Real Stock","Undefined","42","06/02/2019","91"],
+                        // ["3","Kelty Farm","Male","57","05/04/2019","17"],
+                        // ["3","Gourmet Breakfast Cage Free Eggs","Undefined","49","09/03/2019","3"],
+                        // ["4","Tonemade","Female","16","21/03/2019","4"]
+                    res.json(data);
+                }
+            }
+        });
 
 }
 
@@ -2256,6 +2281,7 @@ module.exports.reportedStoreFromAndroidAppUsers = function(req, res, next)
 {
     // testing
     var storeName = req.query.storeName;
+    console.log(req.query);
 
     // check if the product ID is existing or not in product collection
     var productIdNumber = req.query.productId;
