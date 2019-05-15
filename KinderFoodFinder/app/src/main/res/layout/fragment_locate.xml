@@ -15,6 +15,7 @@
         <!--app:mt_hint="Search Brand Name..."-->
         <!--app:mt_maxSuggestionsCount="10"-->
         <!--android:background="@drawable/style_shadow"/>-->
+
     <SearchView
         android:id="@+id/search_bar"
         android:layout_width="match_parent"
@@ -24,6 +25,13 @@
         android:iconifiedByDefault="false"
         android:queryHint="Search Product ..." />
 
+    <!--<ListView-->
+        <!--android:id="@+id/listview_suggest"-->
+        <!--android:layout_below="@+id/search_bar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="300dp"-->
+        <!--android:layout_marginTop="5dp"/>-->
+
     <fragment
         android:id="@+id/map"
         android:layout_below="@+id/search_bar"
@@ -32,16 +40,27 @@
         android:layout_height="350dp"
         android:layout_marginTop="10dp"/>
 
+    <TextView
+        android:id="@+id/range"
+        android:layout_below="@+id/map"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:text="Distance Range(m):"
+        android:gravity="center_vertical"
+        android:textSize="12sp"
+        android:textStyle="bold"
+    />
 
     <Button
         android:id="@+id/five_km"
         android:layout_below="@id/map"
+        android:layout_toRightOf="@+id/range"
         android:layout_marginTop="3dp"
         android:layout_marginLeft="5dp"
-        android:layout_width="70dp"
+        android:layout_width="65dp"
         android:layout_height="40dp"
         android:text="5 KM"
-        android:background="@drawable/button_distance" />
+        android:background="@drawable/button_selector" />
 
     <Button
         android:id="@+id/ten_km"
@@ -49,10 +68,10 @@
         android:layout_toRightOf="@+id/five_km"
         android:layout_marginTop="3dp"
         android:layout_marginLeft="5dp"
-        android:layout_width="70dp"
+        android:layout_width="65dp"
         android:layout_height="40dp"
         android:text="10 KM"
-        android:background="@drawable/button_distance" />
+        android:background="@drawable/button_selector" />
 
     <Button
         android:id="@+id/twenty_km"
@@ -60,10 +79,10 @@
         android:layout_marginTop="3dp"
         android:layout_toRightOf="@+id/ten_km"
         android:layout_marginLeft="5dp"
-        android:layout_width="70dp"
+        android:layout_width="65dp"
         android:layout_height="40dp"
         android:text="20 KM"
-        android:background="@drawable/button_distance" />
+        android:background="@drawable/button_selector" />
 
     <Button
         android:id="@+id/ft_km"
@@ -71,10 +90,33 @@
         android:layout_toRightOf="@+id/twenty_km"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="3dp"
-        android:layout_width="70dp"
+        android:layout_width="65dp"
         android:layout_height="40dp"
         android:text="50 KM"
-        android:background="@drawable/button_distance" />
+        android:background="@drawable/button_selector" />
+
+    <!--<TextView-->
+        <!--android:id="@+id/range"-->
+        <!--android:layout_below="@+id/map"-->
+        <!--android:layout_width="160dp"-->
+        <!--android:layout_height="30dp"-->
+        <!--android:text="Distance Range(m):"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:textSize="17sp"-->
+        <!--android:textStyle="bold"-->
+        <!--android:textColor="@color/orange"-->
+        <!--/>-->
+
+    <!--<Spinner-->
+        <!--android:id="@+id/spinner"-->
+        <!--android:layout_below="@+id/map"-->
+        <!--android:layout_toRightOf="@+id/range"-->
+        <!--android:layout_width="160dp"-->
+        <!--android:layout_height="30dp"-->
+        <!--android:background="@android:drawable/btn_dropdown"-->
+        <!--android:spinnerMode="dropdown"-->
+        <!--android:layout_marginTop="2dp"-->
+        <!--android:layout_gravity="center"/>-->
 
     <ImageView
         android:id="@+id/add_report"
@@ -91,7 +133,6 @@
     <ListView
         android:id="@+id/listview_search"
         android:layout_below="@+id/add_report"
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"/>
