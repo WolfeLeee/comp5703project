@@ -2244,7 +2244,7 @@ module.exports.loginAndroidAppUsers = function(req, res, next)
         }
         else
         {
-            res.send("Yes," + user.gender + "," + user.birthday);
+            res.send("Yes," + user.gender + "," + user.birthday + "," + user._id.toString());
         }
     });
 };
@@ -2349,7 +2349,8 @@ module.exports.loginRegisterAndroidAppFbUsers = function(req, res, next)
                     name: req.query.name,
                     facebookId: req.query.facebookId,
                     gender: req.query.gender,
-                    birthday: req.query.birthday
+                    birthday: req.query.birthday,
+                    email: req.query.email
                 };
 
                 // create the user account
