@@ -76,7 +76,7 @@ public class FAQsFragment extends Fragment
                 // go to login fragment
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                        .replace(R.id.fragment_container, fragmentMore).commit();
+                        .replace(R.id.fragment_container, fragmentMore).addToBackStack( null ).commit();
 
                 // remove toolbar again
                 toolbar.setVisibility(View.GONE);
@@ -93,7 +93,7 @@ public class FAQsFragment extends Fragment
             {
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragment_container, fragmentOurRating).commit();
+                        .replace(R.id.fragment_container, fragmentOurRating).addToBackStack( null ).commit();
             }
         });
 

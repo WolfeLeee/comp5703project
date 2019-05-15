@@ -149,15 +149,17 @@ public class BrowseResultFragment extends Fragment {
             public void onClick(View v)
             {
                 // go to login fragment
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                        .replace(R.id.fragment_container, browseFragment).commit();
+//                getActivity().getSupportFragmentManager().beginTransaction()
+//                        .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+//                        .replace(R.id.fragment_container, browseFragment).commit();
                 // remove toolbar again
                 toolbar.setVisibility(View.GONE);
                 textView.setText( "Back" );
 
                 // enable navigation bar again
                 navigation.setVisibility(View.VISIBLE);
+                getActivity().getSupportFragmentManager().popBackStack();
+
             }
         });
 

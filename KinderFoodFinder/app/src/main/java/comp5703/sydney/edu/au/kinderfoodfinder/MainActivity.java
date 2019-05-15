@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container,locatefragment)
-                    .addToBackStack(null)
+                    .addToBackStack(null).addToBackStack( null )
                     .commit();
         }
 
@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity
         if(id==5){
             navigation.setSelectedItemId( R.id.navigation_browse );
         }
+
 
 //        Intent intent =getIntent();
 //        final String brandVersion=intent.getStringExtra( "brand_version" );
@@ -172,7 +173,7 @@ public class MainActivity extends AppCompatActivity
                     break;
             }
 
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).addToBackStack( null ).commit();
 
             return true;
         }

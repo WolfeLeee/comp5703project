@@ -119,7 +119,7 @@ public class BrowseFragment extends Fragment
 //                args.putStringArrayList( "list", finalList );
                 broseresultFragment.setArguments( args );
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, broseresultFragment).commit();
+                        .replace(R.id.fragment_container, broseresultFragment).addToBackStack( null ).commit();
             }
         } );
 

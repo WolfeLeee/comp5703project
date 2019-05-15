@@ -74,7 +74,7 @@ public class MoreFragment extends Fragment
             {
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragment_container, fragmentOurRating).commit();
+                        .replace(R.id.fragment_container, fragmentOurRating).addToBackStack( null ).commit();
             }
         });
         report.setOnClickListener(new View.OnClickListener()
@@ -89,7 +89,7 @@ public class MoreFragment extends Fragment
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.fragment_container, fragmentreport)
-                        .commit();
+                        .addToBackStack( null ).commit();
             }
         });
         glossary.setOnClickListener(new View.OnClickListener()
@@ -99,7 +99,7 @@ public class MoreFragment extends Fragment
             {
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragment_container, fragmentglossary).commit();
+                        .replace(R.id.fragment_container, fragmentglossary).addToBackStack( null ).commit();
             }
         });
         aboutus.setOnClickListener(new View.OnClickListener()
@@ -110,7 +110,7 @@ public class MoreFragment extends Fragment
 
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragment_container, fragmentaboutus).commit();
+                        .replace(R.id.fragment_container, fragmentaboutus).addToBackStack( null ).commit();
             }
         });
 
@@ -121,7 +121,7 @@ public class MoreFragment extends Fragment
             {
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragment_container, fragmentfaqs).commit();
+                        .replace(R.id.fragment_container, fragmentfaqs).addToBackStack( null ).commit();
             }
         });
 

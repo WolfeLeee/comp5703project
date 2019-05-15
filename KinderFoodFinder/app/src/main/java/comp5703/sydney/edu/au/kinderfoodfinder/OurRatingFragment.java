@@ -79,7 +79,7 @@ public class OurRatingFragment extends Fragment implements View.OnClickListener{
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
                         .replace(R.id.fragment_container, fragmentMore)
-                        .commit();
+                        .addToBackStack( null ).commit();
 
                 // remove toolbar again
                 toolbar.setVisibility(View.GONE);
@@ -156,7 +156,7 @@ public class OurRatingFragment extends Fragment implements View.OnClickListener{
                 ft.show(fragmentAvoid);
                 break;
         }
-        ft.commit();
+        ft.addToBackStack( null ).commit();
 
     }
 

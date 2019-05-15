@@ -81,7 +81,6 @@ public class DetailActivity extends AppCompatActivity {
 //        final String birthday=intent.getStringExtra( "birthday" );
 
         brand_info=findViewById( R.id.dtlbrand );
-//
         location_info=findViewById( R.id.location_info );
         imageView=findViewById( R.id.imgdetail );
         reporttv=findViewById( R.id.report );
@@ -98,6 +97,8 @@ public class DetailActivity extends AppCompatActivity {
         accreditationList = readAccreditation( sid );
         AccreditationAdapter accreditationAdapter=new AccreditationAdapter( this,accreditationList );
         listView.setAdapter( accreditationAdapter );
+        Utility.setListViewHeightBasedOnChildren( listView );
+
         Log.d("detail",String.valueOf( accreditationList.size() ));
 
 
@@ -154,6 +155,7 @@ public class DetailActivity extends AppCompatActivity {
             {
 
                 if(page.equalsIgnoreCase( "browse" )){
+
                     Intent intent = new Intent(DetailActivity.this, MainActivity.class);
                     intent.putExtra("id",5);
                     startActivity(intent);
@@ -207,16 +209,7 @@ public class DetailActivity extends AppCompatActivity {
                 intent.putExtra( "sid",sid );
                 intent.putExtra("key",1);
                 startActivity(intent);
-//
-                finish();
-//                toolbar.setVisibility( View.INVISIBLE );
-//                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//                getSupportActionBar().setTitle( "Back" );
-//                getSupportFragmentManager()
-//                        .beginTransaction()
-//                        .replace(DetailActivity.this,new ReportFragment())
-//                        .addToBackStack(null)
-//                        .commit();
+
                 finish();
 
             }

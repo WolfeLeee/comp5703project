@@ -53,13 +53,16 @@ public class ReportAddressFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
 //        key = getArguments().getInt( "key" );
+        if(getArguments()!=null){
+            sid=getArguments().getString( "sid" );
+            key=getArguments().getInt( "key" );
+        }
 
-        sid=getArguments().getString( "sid" );
+
+
 //        brandName=getArguments().getString( "brand_name" );
 //        category=getArguments().getString( "type" );
 //        accId=getArguments().getString( "accid" );
-        key=getArguments().getInt( "key" );
-
     }
 
     @Nullable
@@ -88,10 +91,16 @@ public class ReportAddressFragment extends Fragment {
         fragmentlocation = new LocateFragment();
         fragmentmore = new MoreFragment();
 
-        Product product= DaoUnit.getInstance().searchBySid( sid );
-        brandName=product.getBrand_Name();
-        category=product.getCategory();
-        String accid=product.getAccreditation().get( 0 ).getSid();
+        String accid="";
+        if(sid.length()>3){
+            Product product= DaoUnit.getInstance().searchBySid( sid );
+            brandName=product.getBrand_Name();
+            category=product.getCategory();
+            accid=product.getAccreditation().get( 0 ).getSid();
+        }
+
+
+
         // Receive data
 //        String brand = getArguments().getString("BRAND_KEY");
 //        String category = getArguments().getString("CATEGORY_KEY");
@@ -148,15 +157,27 @@ public class ReportAddressFragment extends Fragment {
 //                getActivity().getSupportFragmentManager().popBackStack();
 //                getActivity().getSupportFragmentManager().popBackStack();
 
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                        .replace(R.id.fragment_container,fragmentReport ).commit();
+//                getActivity().getSupportFragmentManager().beginTransaction()
+//                        .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+//                        .replace(R.id.fragment_container,fragmentReport ).commit();
+
+
 
                 // remove toolbar again
                 toolbar.setVisibility(View.GONE);
 
                 // enable navigation bar again
                 navigation.setVisibility(View.VISIBLE);
+                if(key==0){
+                    getActivity().getSupportFragmentManager().popBackStack();
+                    getActivity().getSupportFragmentManager().popBackStack();
+                } else {
+                    Intent intent=new Intent( getActivity(),MainActivity.class );
+                    intent.putExtra( "id",3 );
+                    startActivity( intent );
+                    getActivity().finish();
+                }
+
 
 
             }
@@ -174,6 +195,8 @@ public class ReportAddressFragment extends Fragment {
                 String brand =content_brand.getText().toString();
                 reportInfomation( storeName,streetAddress,state,postCode,id);
                 AddStore(brand, storeName, streetAddress, postCode, state);
+
+
 
             }
         } );
@@ -237,12 +260,16 @@ public class ReportAddressFragment extends Fragment {
                 //The String 'response' contains the server's response.
                 //You can test it by printing response.substring(0,500) to the screen.
 //
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                        .replace(R.id.fragment_container, fragmentReport).commit();
+//                getActivity().getSupportFragmentManager().beginTransaction()
+//                        .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+//                        .replace(R.id.fragment_container, fragmentReport).commit();
 
                 toolbar.setVisibility( View.GONE );
 //                getActivity().getSupportFragmentManager().popBackStack();
+
+                navigation.setVisibility( View.VISIBLE );
+                getActivity().getSupportFragmentManager().popBackStack();
+                getActivity().getSupportFragmentManager().popBackStack();
 
                 Toast.makeText(getActivity(), "Report Successfully!", Toast.LENGTH_SHORT).show();
                 Log.d("Send query response:", response);

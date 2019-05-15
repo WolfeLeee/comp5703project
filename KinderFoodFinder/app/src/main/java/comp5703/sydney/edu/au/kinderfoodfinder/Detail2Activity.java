@@ -183,11 +183,11 @@ public class Detail2Activity extends AppCompatActivity {
             public void onClick(View v)
             {
 
-                if(page.equalsIgnoreCase( "browse" )){
-                    Intent intent = new Intent(Detail2Activity.this, MainActivity.class);
-                    intent.putExtra("id",5);
-                    startActivity(intent);
-                }
+//                if(page.equalsIgnoreCase( "browse" )){
+//                    Intent intent = new Intent(Detail2Activity.this, MainActivity.class);
+//                    intent.putExtra("id",5);
+//                    startActivity(intent);
+//                }
 //
                 finish();
             }

@@ -143,15 +143,14 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
 
 //                getActivity().getSupportFragmentManager().popBackStack();
 
-                getActivity().getSupportFragmentManager().beginTransaction()
-                            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                            .replace(R.id.fragment_container,fragmentMore ).commit();
-                // remove toolbar again
+//                getActivity().getSupportFragmentManager().popBackStack();
 
                 toolbar.setVisibility(View.GONE);
 
                 // enable navigation bar again
                 navigation.setVisibility(View.VISIBLE);
+                getActivity().getSupportFragmentManager().popBackStack();
+
 
             }
         });
@@ -170,7 +169,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
                 reportAddressFragment.setArguments( bundle );
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                        .replace(R.id.fragment_container, reportAddressFragment).commit();
+                        .replace(R.id.fragment_container, reportAddressFragment).addToBackStack( null ).commit();
                 toolbar.setVisibility( View.GONE );
 
             }

@@ -196,7 +196,7 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.fragment_container, fragmentreport)
-                        .commit();
+                        .addToBackStack( null ).commit();
 
             }
         });
