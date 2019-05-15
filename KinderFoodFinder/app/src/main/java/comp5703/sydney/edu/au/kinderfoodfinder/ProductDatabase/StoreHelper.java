@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import comp5703.sydney.edu.au.kinderfoodfinder.Database.ProductContract;
 
@@ -56,6 +57,35 @@ public class StoreHelper extends SQLiteOpenHelper {
         contentValues.put( Contract.StoreContract.Brandid,store.getBrandid());
         contentValues.put( Contract.StoreContract.Brandname,store.getBrandname());
         database.insert( Contract.StoreContract.TABLE_NAME,null,contentValues );
+    }
+
+    public List<String> getAllBrand() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor data = db.rawQuery(
+                "SELECT * FROM store_table WHERE Brandname ", new String[]{});
+
+        List<String> AllBrandList = new ArrayList<>();
+
+        String brandName = null;
+        if (data.moveToFirst()) {
+            do {
+                String brandname = data.getString(data.getColumnIndex("Brandname"));
+
+                brandName = brandname;
+                AllBrandList.add(brandName);
+
+            } while (data.moveToNext());
+        }
+        data.close();
+
+
+//        String address = data.getString(data.getColumnIndex(StoreContract.StoreEntry.STORE_NAME + ","+ StoreContract.StoreEntry.STREET + "," +
+//                StoreContract.StoreEntry.POSTCODE + "," + StoreContract.StoreEntry.STATE));
+//
+//        Log.d("QueryAddress",address);
+
+
+        return AllBrandList;
     }
     public ArrayList<String> getAddress(String brand) {
         SQLiteDatabase db = this.getWritableDatabase();
