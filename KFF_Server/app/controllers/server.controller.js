@@ -2454,6 +2454,7 @@ module.exports.createStatistic = function(req, res, next)
     // console.log(testJson);
 
     // transfer json string back to json array
+    // var statisticData = JSON.parse(testJson);
     var statisticData = JSON.parse(req.query.statistic);
     console.log(statisticData);
 
@@ -2470,8 +2471,33 @@ module.exports.createStatistic = function(req, res, next)
         }
         else
         {
+            // add brand name into each document based on their brand ID
+            // (this step could implement in view as brand name may change later)
+            // convert the date from string to date format
+            // deal with the age into a range
             for(var i = 0; i < statisticData.length; i++)
             {
+                // process the date
+                var splitStr = statisticData[i].date.split("-");
+                var formatDate = splitStr[2] + "-" + splitStr[1] + "-" + splitStr[0];
+                statisticData[i].date = new Date(formatDate);
+
+                // deal with the age
+                var age = parseInt(statisticData[i].age);
+                if(age < 18)
+                    statisticData[i].age = "0-18";
+                else if(age >= 18 && age <= 29)
+                    statisticData[i].age = "18-29";
+                else if(age >= 30 && age <= 39)
+                    statisticData[i].age = "30-39";
+                else if(age >= 40 && age <= 49)
+                    statisticData[i].age = "40-49";
+                else if(age >= 50 && age <= 59)
+                    statisticData[i].age = "50-59";
+                else
+                    statisticData[i].age = "60+";
+
+                // add the brand name
                 for(var j = 0; j < brands.length; j++)
                 {
                     if(statisticData[i].brandId == brands[j]._id.toString())
@@ -2482,7 +2508,7 @@ module.exports.createStatistic = function(req, res, next)
             }
             // console.log(statisticData);
 
-            // check if the statistic data is existing in the database
+            // check if the statistic data is existing already in the database
             Statistic.find({}, function(errorFindAllSta, statistics)
             {
                 if(errorFindAllSta)
@@ -2491,7 +2517,7 @@ module.exports.createStatistic = function(req, res, next)
                 }
                 else if(!statistics)
                 {
-                    // create statistic documents into mongo db
+                    // create statistic documents into mongo db if database is empty
                     Statistic.create(statisticData, function(errorCreate, result)
                     {
                         if(errorCreate)
@@ -2506,14 +2532,14 @@ module.exports.createStatistic = function(req, res, next)
                 }
                 else
                 {
-                    // check
+                    // check if database is not empty
                     var markStatisticData = [];
                     for(var i = 0; i < statisticData.length; i++)
                     {
                         var check = false;
                         for(var j = 0; j < statistics.length; j++)
                         {
-                            if(statisticData[i].brandId == statistics[j].brandId && statisticData[i].date == statistics[j].date
+                            if(statisticData[i].brandId == statistics[j].brandId && statisticData[i].date.getTime() === statistics[j].date.getTime()
                             && statisticData[i].gender == statistics[j].gender && statisticData[i].age == statistics[j].age)
                             {
                                 var sumCount = (parseInt(statisticData[i].count) + parseInt(statistics[j].count)).toString();

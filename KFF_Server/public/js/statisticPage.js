@@ -1,9 +1,10 @@
 
 $(document).ready(function()
 {
-    $('.pagebody_inputform__generatebrandcsvstatistics').click(function()
+    $("#btnTest").click(function(event)
     {
-        alert("something");
+        event.preventDefault();
+        location.href = "/android-app-statistic";
     })
 
 });
