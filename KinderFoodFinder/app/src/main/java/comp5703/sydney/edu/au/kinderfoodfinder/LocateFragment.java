@@ -2,7 +2,7 @@ package comp5703.sydney.edu.au.kinderfoodfinder;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -15,24 +15,24 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -43,6 +43,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -56,15 +57,11 @@ import java.util.List;
 
 import comp5703.sydney.edu.au.kinderfoodfinder.Adapter.SearchAdapter;
 import comp5703.sydney.edu.au.kinderfoodfinder.Database.StoreDatabase;
-import comp5703.sydney.edu.au.kinderfoodfinder.Model.MyPlaces;
-import comp5703.sydney.edu.au.kinderfoodfinder.Model.Results;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.StoreHelper;
 import comp5703.sydney.edu.au.kinderfoodfinder.Remote.IGoogleAPIService;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class LocateFragment extends Fragment implements OnMapReadyCallback,
+public class LocateFragment extends Fragment implements
+        OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
@@ -80,19 +77,29 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
     private Marker mMarker, NearbyMarker;
     private Fragment fragmentreport, fragmentreportaddress;
 
+
     IGoogleAPIService mService;
 
     ImageView add_report;
+    TextView range;
     SearchAdapter adapter;
     private StoreDatabase storedatabase;
     StoreHelper storeHelper;
     SearchView searchView;
-    ListView listView;
+    ListView listView, suggestView;
     NearbyAdapter listAdapter;
     ArrayAdapter ListAdapter;
     int Locate_key, Distance_key;
     String Brand;
     Button twenty, five, ten, fifty;
+    ArrayList<LocateItem> locateItems;
+    LinearLayoutManager layoutManager;
+    private LocateAdapter locateAdapter;
+    MaterialSearchBar materialSearchBar;
+    Spinner dropdown;
+
+    List<String> suggestList = new ArrayList<>();
+
 
 
     // Keys for storing activity state.
@@ -114,22 +121,48 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
         mapFragment.getMapAsync(this);
 
         //Init Service
+
         mService = Common.getGoogleAPIService();
+//        range = mView.findViewById(R.id.range);
         add_report = mView.findViewById(R.id.add_report);
         searchView = mView.findViewById(R.id.search_bar);
         listView = mView.findViewById(R.id.listview_search);
+//        suggestView = mView.findViewById(R.id.listview_suggest);
         searchView.setFocusable(false);
+
+//        //get the spinner from the xml.
+//        dropdown = mView.findViewById(R.id.spinner);
+//        String[] distances = new String[]{"2000", "5000", "10000", "20000", "50000"};
+//        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, distances);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        dropdown.setAdapter(adapter);
+//
+//        dropdown.setClickable(false);
+//        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                Locate_key = Integer.parseInt(parent.getItemAtPosition(position).toString());
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
+
+
 
         twenty = mView.findViewById(R.id.twenty_km);
         five = mView.findViewById(R.id.five_km);
         ten = mView.findViewById(R.id.ten_km);
         fifty = mView.findViewById(R.id.ft_km);
-        Distance_key = 1000;
+        Distance_key = 2000;
 
         twenty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Distance_key = 20000;
+
             }
         });
 
@@ -159,6 +192,8 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
 //        recyclerView.setLayoutManager(layoutManager);
 //        recyclerView.setHasFixedSize(true);
 
+
+
         //Request Runtime permission
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             checkLocationPermission();
@@ -177,10 +212,56 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
 
         ArrayList<String> NearbyList = new ArrayList<>();
 
-        // click on available of the detailed activity
-
-
-
+//        materialSearchBar = mView.findViewById(R.id.search_bar);
+//        // Setup search bar
+//
+//        materialSearchBar.setHint("Search Brand Name...");
+//        materialSearchBar.setCardViewElevation(10);
+//        loadSuggestList();
+//
+//        materialSearchBar.addTextChangeListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//                List<String> suggest = new ArrayList<>();
+//                for(String search:suggestList) {
+//                    if (search != null) {
+//                        if (search.toLowerCase().contains(materialSearchBar.getText().toLowerCase()))
+//                        {
+//                            suggest.add(search);
+//                        } materialSearchBar.setLastSuggestions(suggest);
+//                    }
+//                }
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//
+//            }
+//        });
+//
+//        materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
+//            @Override
+//            public void onSearchStateChanged(boolean enabled) {
+//
+//            }
+//
+//            @Override
+//            public void onSearchConfirmed(CharSequence text) {
+//                startSearch(text.toString());
+//            }
+//
+//            @Override
+//            public void onButtonClicked(int buttonCode) {
+//
+//            }
+//        });
 
         // Jump to Report Page
 
@@ -196,70 +277,123 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(R.id.fragment_container, fragmentreport)
-                        .addToBackStack( null ).commit();
+                        .addToBackStack(null).commit();
 
             }
         });
+
+
+
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
 
-                 String brandName = searchView.getQuery().toString();
-                 String BrandName = storeHelper.getBrand(brandName);
+                startSearch(query);
+                return false;
 
-                ArrayList<String> locationlist = storeHelper.getAddress(brandName);
-                List<Address> addressList = null;
-                ArrayList<Nearbydistance> DistanceList = new ArrayList<>();
-                ArrayList<String> NearbyList = new ArrayList<>();
-                mMap.clear();
+            }
 
-                for(int i = 1; i< locationlist.size(); i++){
+            @Override
+            public boolean onQueryTextChange(String s) {
+//                FillbrandSuggest();
+//                List<String> brandlist = storeHelper.getAllBrand();
+//
+//                for(int i = 1; i < brandlist.size(); i++){
+//                    locateItems.add(new LocateItem(brandlist.get(i)));
+//                }
+//                locateAdapter = new LocateAdapter(getContext(), locateItems);
+//                locateAdapter.getFilter().filter(s);
+//                suggestView.setAdapter(locateAdapter);
 
-                    String location = locationlist.get(i);
-                    Geocoder geocoder = new Geocoder(getActivity());
-                    try {
-                        addressList = geocoder.getFromLocationName(location, 10);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                return false;
+            }
+        });
 
-                    if (addressList != null) {
+        return mView;
+    }
+//
+//    private void loadSuggestList() {
+//    }
 
-                        for (int j = 0; j < addressList.size(); j++){
-                            final Address address = addressList.get(j);
-                            double lat = address.getLatitude();
-                            double lng = address.getLongitude();
-                            final LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-                            int distance = getDistance(lat, lng);
+//    private void FillbrandSuggest() {
+//        List<String> brandlist = storeHelper.getAllBrand();
+//
+//        for(int i = 1; i < brandlist.size(); i++){
+//
+//            locateItems.add(new LocateItem(brandlist.get(i)));
+//        }
+//    }
 
 
-                            if(distance <= Distance_key){
 
-                                MarkerOptions markerOptions = new MarkerOptions().position(latLng).title(location);
-                                NearbyMarker =  mMap.addMarker(markerOptions);
-                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
+    private void startSearch(String text) {
+
+        String BrandName = storeHelper.getBrand(text);
+        if(BrandName == null){
+            Toast.makeText(getActivity(), "Do not find the store :(", Toast.LENGTH_SHORT).show();
+        }
+
+        ArrayList<String> locationlist = storeHelper.getAddress(BrandName);
+        List<Address> addressList = null;
+        ArrayList<Nearbydistance> DistanceList = new ArrayList<>();
+        ArrayList<String> NearbyList = new ArrayList<>();
+        mMap.clear();
+
+        for(int i = 1; i< locationlist.size(); i++){
+
+            String location = locationlist.get(i);
+            Geocoder geocoder = new Geocoder(getActivity());
+            try {
+                addressList = geocoder.getFromLocationName(location, 10);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (addressList != null) {
+
+                for (int j = 0; j < addressList.size(); j++){
+                    final Address address = addressList.get(j);
+                    double lat = address.getLatitude();
+                    double lng = address.getLongitude();
+                    final LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                    int distance = getDistance(lat, lng);
+
+
+                    if(distance <= Distance_key){
+
+                        CircleOptions circleOptions = new CircleOptions();
+                        circleOptions.center(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
+                        circleOptions.radius(Distance_key);
+                        circleOptions.fillColor(0x150099ff);
+                        circleOptions.strokeWidth(3);
+                        circleOptions.strokeColor(0x150099ff);
+                        mMap.addCircle(circleOptions);
+
+                        MarkerOptions markerOptions = new MarkerOptions().position(latLng).title(location);
+                        NearbyMarker =  mMap.addMarker(markerOptions);
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
 //                                NearbyList.add(location  + " Distance : " + distance + " m");
 //                                String Distance = String.valueOf(distance);
 
-                                Nearbydistance near = new Nearbydistance(BrandName, location, distance);
-                                DistanceList.add(near);
+                        Nearbydistance near = new Nearbydistance(BrandName, location, distance);
+                        DistanceList.add(near);
 
-                                listAdapter = new NearbyAdapter(getContext(), DistanceList);
-                                listView.setAdapter(listAdapter);
-                                Collections.sort(DistanceList, new Comparator<Nearbydistance>() {
-                                    @Override
-                                    public int compare(Nearbydistance d1, Nearbydistance d2) {
-                                        if(d1.getDistance() < d2.getDistance()){
-                                            return 1;
-                                        }else {
-                                            return 0;
-                                        }
+                        listAdapter = new NearbyAdapter(getContext(), DistanceList);
+                        listView.setAdapter(listAdapter);
+                        Collections.sort(DistanceList, new Comparator<Nearbydistance>() {
+                            @Override
+                            public int compare(Nearbydistance d1, Nearbydistance d2) {
+                                if(d1.getDistance() < d2.getDistance()){
+                                    return 1;
+                                }else {
+                                    return 0;
+                                }
 //                                        return d1.getDistance().compareTo(d2.getDistance());
-                                    }
-                                });
+                            }
+                        });
 //                                Collections.sort(DistanceList, new Sorting());
-                                listAdapter.notifyDataSetChanged();
+                        listAdapter.notifyDataSetChanged();
 
 //                                listAdapter.refresh();
 
@@ -272,32 +406,24 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
 //                                ((ArrayAdapter) listView.getAdapter()).notifyDataSetChanged();
 
 
-                            }
-
-                        }
                     }
 
-
                 }
-
-
-//                adapter = new SearchAdapter(getActivity(),NearbyList);
-//                recyclerView.setAdapter(adapter);
-                return false;
             }
 
-            @Override
-            public boolean onQueryTextChange(String s) {
-                return false;
-            }
-        });
 
-        return mView;
-    }
-
-    public void List(){
+        }
 
     }
+
+
+    private void loadSuggestList() {
+        suggestList = storeHelper.getAllBrand();
+        materialSearchBar.setLastSuggestions(suggestList);
+    }
+
+
+
 
     // calculate the distance between two locations
     public int getDistance(double lat,double lng) {
@@ -492,6 +618,7 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
 
         // get current location
         LatLng latLng = new LatLng(latitude, longitude);
+
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(latLng)
                 .title("Your position")
@@ -510,6 +637,7 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
 
         if(mGoogleApiClient != null)
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+
 
         if(Locate_key ==1){
 
@@ -538,7 +666,16 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
                         int distance = getDistance(lat, lng);
 
 
-                        if(distance <= 5000){
+                        if(distance <= 2000){
+
+                            CircleOptions circleOptions = new CircleOptions();
+                            circleOptions.center(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
+                            circleOptions.radius(2000);
+                            circleOptions.fillColor(0x150099ff);
+                            circleOptions.strokeWidth(3);
+                            circleOptions.strokeColor(0x150099ff);
+                            mMap.addCircle(circleOptions);
+
                             MarkerOptions marker = new MarkerOptions().position(latLn).title(loc);
                             NearbyMarker =  mMap.addMarker(marker);
                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLn, 14));
@@ -592,6 +729,8 @@ public class LocateFragment extends Fragment implements OnMapReadyCallback,
 
 
     }
+
+
 
 
 }

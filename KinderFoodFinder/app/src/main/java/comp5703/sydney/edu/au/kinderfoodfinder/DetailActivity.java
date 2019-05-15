@@ -189,6 +189,7 @@ public class DetailActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(DetailActivity.this, MainActivity.class);
                 intent.putExtra("id",1);
+                intent.putExtra("LOCATE", brandname);
                 startActivity(intent);
                 toolbar.setVisibility( View.GONE );
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);

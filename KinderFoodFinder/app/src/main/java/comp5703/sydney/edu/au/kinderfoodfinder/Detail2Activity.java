@@ -205,6 +205,7 @@ public class Detail2Activity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(Detail2Activity.this, MainActivity.class);
                 intent.putExtra("id",1);
+                intent.putExtra("LOCATE", brandname);
                 startActivity(intent);
                 finish();
 
