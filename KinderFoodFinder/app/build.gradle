@@ -27,7 +27,7 @@ android {
     }
 
     greendao {
-        schemaVersion 3
+        schemaVersion 33
         generateTests false
         daoPackage 'comp5703.sydney.edu.au.greendao.gen'
         targetGenDir 'src/main/java'
