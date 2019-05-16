@@ -2520,8 +2520,10 @@ module.exports.createStatistic = function(req, res, next)
                     statisticData[i].age = "40-49";
                 else if(age >= 50 && age <= 59)
                     statisticData[i].age = "50-59";
-                else
+                else if(age >= 60)
                     statisticData[i].age = "60+";
+                else
+                    statisticData[i].age = "Not Disclose";
 
                 // add the brand name
                 for(var j = 0; j < brands.length; j++)
