@@ -1,6 +1,14 @@
 
 $(document).ready(function()
 {
+    /***********************
+     * Radiobutton onclick listener. Whenever the admin clicks on a radio button, the other will be disabled
+     ***********************/
+    $('.pagebody_inputform__radiobutton').unbind().click(function()
+    {
+        $('.pagebody_inputform__radiobutton').next().find('*').css('visibility','hidden');
+        $(this).next().find('*').css('visibility','visible');
+    })
 
     /***********************
      *Generate csv file function;
@@ -10,23 +18,83 @@ $(document).ready(function()
 
     $('.pagebody_inputform__generatebrandcsvstatistics').unbind().click(function()
     {
-        var jqxhr = $.get( "/GenerateStatistics")
-            .done(function(data){
-                const csvfile = data.map(row => ({
-                    "No.": row.Number,
-                    "Brand":row.Brand,
-                    "Gender":row.Gender,
-                    "Age":row.Age,
-                    "Timeline":row.Timeline,
-                    "Count":row.Count
-                }))
-                const csvData = objectToCsv(csvfile);
-                downloadcsv(csvData);
+        var Timeline = $('.pagebody_inputform__radiobutton:checked').next().text();
+        var Brand = $('.pagebody_inputform__statisticsbrand').first().val();
+        var Gender = $('.pagebody_inputform__statisticsgender').first().val();
+        if(new String(Timeline).toLowerCase().valueOf() == new String("All").toLowerCase().valueOf())
+        {
+            if(new String(Brand).toLowerCase().valueOf() == "" )
+            {
+                alert("Please enter the brand you want to get information");
+            }
+            else
+            {
+                var params = {
+                    Timeline: Timeline,
+                    Brand: Brand,
+                    Gender: Gender
                 }
-            )
-            .fail(function(jqXHR) {
-                console.log(jqXHR.status);
-            })
+                var jqxhr = $.get( "/GenerateStatistics",params)
+                    .done(function(data){
+                            const csvfile = data.map(row => ({
+                                "Brand":row.brandName,
+                                "Gender":row.gender,
+                                "Age":row.age,
+                                "Timeline":row.date,
+                                "Count":row.count
+                            }))
+                            const csvData = objectToCsv(csvfile);
+                            downloadcsv(csvData);
+                        }
+                    )
+                    .fail(function(jqXHR) {
+                        console.log(jqXHR.status);
+                    })
+            }
+        }
+        else if (new String(Timeline).toLowerCase().valueOf() == new String("Period").toLowerCase().valueOf())
+        {
+            if($('#pagebody_inputform__startdate').val() == "" || $('#pagebody_inputform__startdate').val() == ""){
+                alert("Please enter the start date and end date");
+            }
+            else
+            {
+                if(new String(Brand).toLowerCase().valueOf() == "" )
+                {
+                    alert("Please enter the brand you want to get information");
+                }
+                else
+                {
+                    var params = {
+                        Timeline: Timeline,
+                        Brand: Brand,
+                        Gender: Gender,
+                        Startdate: $('#pagebody_inputform__startdate').val(),
+                        Enddate: $('#pagebody_inputform__enddate').val()
+                    }
+                    var jqxhr = $.get( "/GenerateStatistics",params)
+                        .done(function(data){
+                                const csvfile = data.map(row => ({
+                                    "Brand":row.brandName,
+                                    "Gender":row.gender,
+                                    "Age":row.age,
+                                    "Timeline":row.date,
+                                    "Count":row.count
+                                }))
+                                const csvData = objectToCsv(csvfile);
+                                downloadcsv(csvData);
+                            }
+                        )
+                        .fail(function(jqXHR) {
+                            console.log(jqXHR.status);
+                        })
+                }
+
+            }
+
+        }
+
+
     })
 
     /***********************

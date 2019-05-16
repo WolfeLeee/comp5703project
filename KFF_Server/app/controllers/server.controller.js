@@ -305,24 +305,57 @@ module.exports.GenerateStatistics = async function(req,res,next)
                 }
                 else
                 {
-                    var data = [];
-                    data.push
-                    data.push({
-                        "Number":"1",
-                        "Brand":"Gourmet Breakfast Cage Free Eggs",
-                        "Gender":"Female",
-                        "Age":"24",
-                        "Timeline":"12/05/2019",
-                        "Count":"52"
-                    })
-                        //     ["No.","Brand","Gender","Age","Timeline","Count"],
-                        // ["1","Gourmet Breakfast Cage Free Eggs","Female","24","12/05/2019","52"],
-                        // ["2","Captain Creek Vineyard & Winery","Female","20","04/04/2019","73"],
-                        // ["2","Campbell's Real Stock","Undefined","42","06/02/2019","91"],
-                        // ["3","Kelty Farm","Male","57","05/04/2019","17"],
-                        // ["3","Gourmet Breakfast Cage Free Eggs","Undefined","49","09/03/2019","3"],
-                        // ["4","Tonemade","Female","16","21/03/2019","4"]
-                    res.json(data);
+                    // We are here
+                    var condition = {};
+                    if(new String(req.query.Timeline).toLowerCase().valueOf() == new String("All").toLowerCase().valueOf())
+                    {
+
+                    }
+                    else if (new String(req.query.Timeline).toLowerCase().valueOf() == new String("Period").toLowerCase().valueOf())
+                    {
+
+                        if(req.query.Startdate !== null && req.query.Enddate !== null)
+                        {
+                            condition.date = {
+                                $gt: req.query.Startdate,
+                                $lt: req.query.Enddate
+                            }
+                        }
+                        else if(req.query.Enddate == null && req.query.Startdate !== null)
+                        {
+                            condition.date = {
+                                $gt: req.query.Startdate,
+                            }
+                        }
+                        else if (req.query.Startdate == null && req.query.Enddate !== null){
+                            condition.date = {
+                                $lt: req.query.Enddate
+                            }
+                        }
+                    }
+                    if(new String(req.query.Brand).toLowerCase().valueOf() == new String("All").toLowerCase().valueOf()){
+
+                    }
+                    else {
+                        condition.brandName = req.query.Brand;
+                    }
+                    if(new String(req.query.Gender).toLowerCase().valueOf() == new String("All").toLowerCase().valueOf()){
+
+                    }
+                    else {
+                        condition.gender = req.query.Gender;
+                    }
+                    Statistic.find(condition)
+                        .exec(async function(errStatistics,statistics){
+                            if(errStatistics)
+                            {
+                                return next(errStatistics);
+                            }
+                            else
+                            {
+                                res.json(statistics);
+                            }
+                        })
                 }
             }
         });

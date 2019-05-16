@@ -62,17 +62,17 @@ body
                                     label.pagebody_inputform__hundred
                                         input.pagebody_inputform__radiobutton(type="radio" name="timeline" value = "All")
                                         label.pagebody_inputform__radiobuttontext Period
-                                        input(type="date")
-                                        input(type="date")
+                                            input#pagebody_inputform__startdate(type="date")
+                                            input#pagebody_inputform__enddate(type="date")
                                 div.pagebody_inputform__hundred.pagebody_inputform__inputheader Choose brand
-                                input.pagebody_inputform__hundred.pagebody_inputform__brandratinginput(name = "brandrating",list = "pagebody_inputform__BrandRating",placeholder ="Choose or type a brand", autocomplete ="off")
+                                input.pagebody_inputform__hundred.pagebody_inputform__statisticsbrand(name = "brandrating",list = "pagebody_inputform__BrandRating",placeholder ="Choose or type a brand", autocomplete ="off")
                                 datalist(autocomplete ="off")#pagebody_inputform__BrandRating
                                     option(value="All" selected)
                                     - for ( var i = 0 ; i < products.length ; i++)
                                         option(value=products[i].Brand_Name)
                                     #{products[0]}
                                 div.pagebody_inputform__fifty.pagebody_inputform__inputheader Gender
-                                select(autocomplete ="off")#pagebody_inputform__BrandRating
+                                select(autocomplete ="off").pagebody_inputform__statisticsgender
                                     option(value="All" selected) All
                                     option(value="Female") Female
                                     option(value="Male") Male
