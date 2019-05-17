@@ -35,24 +35,24 @@ body
                                     span
                                 div
                                     input(type="submit" value="LOGIN" class="login_register_box_button")
-                    button(onclick="document.getElementById('modal-reset').style.display='block'" class="login_register_button") Reset
-                    div(id="modal-reset" class="modal" style="text-align:center")
-                        form(class="modal-content animateLOGIN" action="/" method="post")
-                            div(class="imgcontainer")
-                                span(onclick="document.getElementById('modal-reset').style.display='none'" class="close" title="Close PopUp") &times;
-                                h1(style="text-align:center") RESET
-                                img(src="../images/login.png" class="loginImage")
-                            div(class="container")
-                                div(class="login_field")
-                                    label(for="usernameLoginR") New Username
-                                    input(type="text" id="usernameLoginR" name="logusernameR" placeholder="New Username" required onblur="checkUsernameLogin(this)" size="25")
-                                    span
-                                div(class="login_field")
-                                    label(for="passwordLoginR") New Password
-                                    input(type="password" id="passwordLoginR" name="logpasswordR" placeholder="New Password" required onblur="checkPassword(this)" size="25")
-                                    span
-                                div
-                                    input(type="submit" value="RESET" class="login_register_box_button")
+                    button(onclick="location.href='/forgot'" class="login_register_button") Forgot Password
+                    //div(id="modal-reset" class="modal" style="text-align:center")
+                    //    form(class="modal-content animateLOGIN" action="/" method="post")
+                    //        div(class="imgcontainer")
+                    //            span(onclick="document.getElementById('modal-reset').style.display='none'" class="close" title="Close PopUp") &times;
+                    //            h1(style="text-align:center") RESET
+                    //            img(src="../images/login.png" class="loginImage")
+                    //        div(class="container")
+                    //            div(class="login_field")
+                    //                label(for="usernameLoginR") New Username
+                    //                input(type="text" id="usernameLoginR" name="logusernameR" placeholder="New Username" required onblur="checkUsernameLogin(this)" size="25")
+                    //                span
+                    //            div(class="login_field")
+                    //                label(for="passwordLoginR") New Password
+                    //                input(type="password" id="passwordLoginR" name="logpasswordR" placeholder="New Password" required onblur="checkPassword(this)" size="25")
+                    //                span
+                    //            div
+                    //                input(type="submit" value="RESET" class="login_register_box_button")
         div(class="landing_page_body")
             div(class="middle_body")
                 div(class="overall_feature")

@@ -1,0 +1,17 @@
+doctype html
+
+html
+head
+    title Reset Password Page
+body
+    block content
+        form(method='POST')
+            legend Reset Username and Password
+            .form-group
+                label(for='password') New Password
+                input.form-control(id="password" type='password', name='password', value='', placeholder='New password', autofocus=true)
+            .form-group
+                label(for='confirm') Confirm Password
+                input.form-control(id="confirm" type='password', name='confirm', value='', placeholder='Confirm password')
+            .form-group
+                button.btn.btn-primary(type='submit') Update Password

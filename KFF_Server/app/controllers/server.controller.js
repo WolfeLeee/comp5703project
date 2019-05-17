@@ -14,6 +14,9 @@ var mongoose = require('mongoose');
 var csv = require('fast-csv');
 var fs = require('fs');
 var request = require('request');
+var crypto = require('crypto');
+var nodemailer = require('nodemailer');
+var xoauth2 = require('xoauth2');
 
 // Global variables
 var adminId = "";
@@ -50,7 +53,7 @@ module.exports.goToLogin = function(req, res, next)
                        var userData = {
                            username: "admin",
                            password: "admin",
-                           email: "kinder.foodfinder@gmail.com"
+                           email: "blockboard08@gmail.com"
                        };
 
                        User.create(userData, function(errorCreateUser, user)
@@ -693,6 +696,10 @@ module.exports.getLocation = async function (req,res,next)
     })
 }
 
+/* * * * * * * * *
+ * Wolfe's Code  *
+ * * * * * * * * */
+
 module.exports.logout = function(req, res, next)
 {
     if (req.session)
@@ -729,6 +736,159 @@ module.exports.reset = function(req, res, next)
                 }
             }
         });
+};
+
+module.exports.forgot = function(req, res)
+{
+    res.render('forgotPwd.pug');
+};
+
+module.exports.forgotPwd = function(req, res, next)
+{
+    crypto.randomBytes(20, function (errResetToken, buf)
+    {
+        var token = buf.toString('hex');
+        if(errResetToken)
+        {
+            res.send("Something wrong while creating reset token!");
+        }
+        else
+        {
+            User.findOne({ email: req.body.email }, function(err, user)
+            {
+                if (!user)
+                {
+                    return res.send('No account with that email address exists.');
+                }
+
+                user.resetPasswordToken = token;
+                user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+
+                user.save(function(errSave)
+                {
+                    if(errSave)
+                    {
+                        res.send("Something wrong while saving user's reset token and expire");
+                    }
+                    else
+                    {
+                        var smtpTransport = nodemailer.createTransport({
+                            service: 'Gmail',
+                            auth: {
+                                user: 'wildwolfeorld@wolfbbs.net', //email address to send from
+                                pass: 'XXXX' //the actual password for that account
+                            }
+                        });
+
+                        var mailOptions = {
+                            to: user.email,
+                            from: 'wildwolfeorld@wolfbbs.net',
+                            subject: 'KinderFoodFinder Server Password Reset',
+                            text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+                                'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+                                'http://' + req.headers.host + '/reset/token/' + token + '\n\n' +
+                                'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+                        };
+
+                        smtpTransport.sendMail(mailOptions, function(error, response)
+                        {
+                            if (error)
+                            {
+                                // console.log(error);
+                                res.send(error);
+                            }
+                            else
+                            {
+                                // console.log(response);
+                                res.send('An e-mail has been sent to ' + user.email + ' with further instructions.');
+                            }
+                            smtpTransport.close();
+                        });
+                    }
+                });
+            });
+        }
+    });
+};
+
+module.exports.resetPwd = function(req, res)
+{
+    User.findOne({resetPasswordToken: req.params.token, resetPasswordExpires: {$gt: Date.now()}}, function(err, user)
+    {
+        if(err)
+        {
+            res.send("Something wrong while finding the user with token!")
+        }
+        else if (!user)
+        {
+            res.send("Password reset token is invalid or has expired!");
+        }
+        else
+        {
+            res.render('resetPwd.pug');
+        }
+    });
+};
+module.exports.resetPwd2 = function(req, res)
+{
+    User.findOne({resetPasswordToken: req.params.token, resetPasswordExpires: {$gt: Date.now()}}, function(err, user)
+    {
+        if(err)
+        {
+            res.send("Something wrong while finding the user with token!")
+        }
+        else if (!user)
+        {
+            res.send("Password reset token is invalid or has expired!");
+        }
+        else
+        {
+            user.password = req.body.password;
+            user.resetPasswordToken = undefined;
+            user.resetPasswordExpires = undefined;
+
+            user.save(function(errSave)
+            {
+                if(errSave)
+                {
+                    res.send("Something wrong while saving user's info!")
+                }
+                else
+                {
+                    var smtpTransport = nodemailer.createTransport({
+                        service: 'Gmail',
+                        auth: {
+                            user: 'wildwolfeorld@wolfbbs.net', //email address to send from
+                            pass: 'XXXX' //the actual password for that account
+                        }
+                    });
+
+                    var mailOptions = {
+                        to: user.email,
+                        from: 'wildwolfeorld@wolfbbs.net',
+                        subject: 'Your password for KinderFoodFinder server has been changed!',
+                        text: 'Hello,\n\n' +
+                            'This is a confirmation that the password for your account ' + user.username + ' with email ' + user.email + ' has just been changed.\n'
+                    };
+
+                    smtpTransport.sendMail(mailOptions, function(error, response)
+                    {
+                        if (error)
+                        {
+                            // console.log(error);
+                            res.send(error);
+                        }
+                        else
+                        {
+                            // console.log(response);
+                            res.send('Success! Your password has been changed.');
+                        }
+                        smtpTransport.close();
+                    });
+                }
+            });
+        }
+    });
 };
 
 module.exports.backFromSuccess = function(req, res, next)

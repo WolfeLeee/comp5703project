@@ -1,0 +1,13 @@
+doctype html
+
+html
+head
+    title Forgot Password Page
+body
+    block content
+        form(method='POST' action="/forgot-password")
+            legend Forgot Password
+            .form-group
+                label(for='email') Email
+                input.form-control(id="email" type='text', name='email', autofocus)
+            button.btn.btn-primary(type='submit') Reset Password

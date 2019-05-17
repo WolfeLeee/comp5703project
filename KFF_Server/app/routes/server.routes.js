@@ -8,6 +8,10 @@ router.get('/landing', controller.showLandingPage);
 router.post('/', controller.registerLogin);
 router.get('/logout', controller.logout);
 router.get('/reset', controller.reset);
+router.get('/forgot', controller.forgot);
+router.post('/forgot-password', controller.forgotPwd);
+router.get('/reset/token/:token', controller.resetPwd);
+router.post('/reset/token/:token', controller.resetPwd2);
 
 //Statistics
 router.get('/feature', controller.goToFeature);
