@@ -2,20 +2,22 @@ doctype html
 
 html
 head
-    title Publish Page
+    title Import Insert Page
     link(rel='stylesheet',type='text/css',href='css/fontawesome-free/all.min.css')
     link(rel='stylesheet',type='text/css',href='css/dataTables/dataTables.bootstrap4.css')
     link(rel='stylesheet',type='text/css', href='css/shared.css')
-    link(rel='stylesheet',type='text/css', href='css/importInsertPage.css')
+    link(rel='stylesheet',type='text/css', href='css/Statistics.css')
     link(rel='stylesheet',type='text/css',href='css/sb-admin.min.css')
     link(rel='stylesheet',type='text/css',href='https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css')
+    link(href="css/styleMain.css" rel="stylesheet" type="text/css")
     script(src="http://code.jquery.com/jquery-1.9.1.min.js")
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
-    script(src="js/publishPage.js" type="text/javascript")
+    script(src="js/statisticsPage.js" type="text/javascript")
+    script(src="js/landingFunction.js" type="text/javascript")
+    script(src="js/formValidation.js" type="text/javascript")
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
     script.
-        window.jQuery || document.write('script(src="js/jquery.js")');
-        var versions = !{JSON.stringify(versions).replace(/<\//g, '<\\/')};
+        window.jQuery || document.write('script(src="js/jquery.js")')
 body
     div(class="pageheader")
         div(class="pageheader_title")
@@ -48,30 +50,23 @@ body
         div(class="pagebody_mainbody")
             div(class="brand")
                 div(class="pagebody_mainbody__sectionheader__brand")
-                    p Publish/ Release New Data
-                div(class="pagebody_inputform__choosedata")
-                    p Which data do you want to publish the new version to the app
-                    select(name="Category" id="inputform_choosedata__data")
-                        option(value="None") Select
-                        option(value="Brand") Brand
-                        option(value="Store") Store
+                    p Reset Account
                 div.pagebody_inputform__brand.pagebody_inputform__chosenresult
                     div.pagebody_inputform__section.pagebody_inputform__brand__section__first
-                        p.pagebody_inputform__header Publish New Data
+                        p.pagebody_inputform__header Reset Account
                         div.pagebody_inputform__dialog
-                            p Guideline: This function enables the admin to publish the new version of data to the app; Thus, the data will be updated while the app detects there's newer version on server.
-                        div.pagebody_inputform__input.pagebody_inputform__inputcsvbrandfile
-                            label(style="margin-right: 10px") Brand:
-                            input(type="button" id="btnPublishBrand" value="Publish")
-                        div.pagebody_inputform__input.pagebody_inputform__inputcsvbrandfile
-                            label(style="margin-right: 10px") Version: #{versions[0].version}
-                div.pagebody_inputform__store.pagebody_inputform__chosenresult
-                    div.pagebody_inputform__section.pagebody_inputform__brand__section__first
-                        p.pagebody_inputform__header Publish New Data
-                        div.pagebody_inputform__dialog
-                            p Guideline: This function enables the admin to publish the new version of data to the app; Thus, the data will be updated while the app detects there's newer version on server.
-                        div.pagebody_inputform__input.pagebody_inputform__inputcsvbrandfile
-                            label(style="margin-right: 10px") Store:
-                            input(type="button" id="btnPublishStore" value="Publish")
-                        div.pagebody_inputform__input.pagebody_inputform__inputcsvbrandfile
-                            label(style="margin-right: 10px") Version: #{versions[1].version}
+                            p Guideline: This function enables the admin to reset the account's username and password
+                        div.pagebody_inputform__input.pagebody_inputform__inputnewbrand
+                            form(action="/" method="post")
+                                div
+                                    div(class="login_field")
+                                        label(for="usernameLoginR" style="margin-left: 25px; font-weight: bold") New Username:
+                                        input(type="text" id="usernameLoginR" name="logusernameR" placeholder="New Username" required onblur="checkUsernameLogin(this)" size="25")
+                                        span(style="text-align: center")
+                                    div(class="login_field")
+                                        label(for="passwordLoginR" style="margin-left: 25px; font-weight: bold") New Password:
+                                        input(type="password" id="passwordLoginR" name="logpasswordR" placeholder="New Password" required onblur="checkPassword(this)" size="25")
+                                        span(style="text-align: center")
+                                    div
+                                        input(type="submit" value="RESET" class="login_register_box_button")
+                    div.pagebody_inputform__section

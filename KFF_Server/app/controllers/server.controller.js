@@ -49,7 +49,8 @@ module.exports.goToLogin = function(req, res, next)
                        // create admin acc at the beginning
                        var userData = {
                            username: "admin",
-                           password: "admin"
+                           password: "admin",
+                           email: "kinder.foodfinder@gmail.com"
                        };
 
                        User.create(userData, function(errorCreateUser, user)
@@ -221,16 +222,20 @@ module.exports.registerLogin = function(req, res, next)
 
         User.findByIdAndUpdate(adminId, newAdmin, function (error, user)
         {
-            if (error || !user)
+            if (error)
             {
                 var err = new Error('Something wrong when reset admin account!');
                 err.status = 401;
                 return next(err);
             }
+            else if(!user)
+            {
+                res.send("No admin account found!");
+            }
             else
             {
                 console.log("Admin account has been reset!");
-                res.redirect('/landing');
+                res.redirect('/logout');
             }
         });
     }
@@ -242,9 +247,11 @@ module.exports.registerLogin = function(req, res, next)
         return next(err);
     }
 };
+
 /* * * * * * * * * * * * * * * * * *
  * Statistics Page                 *
  * * * * * * * * * * * * * * * * * */
+
 module.exports.goToFeature = function(req, res, next)
 {
     User.findById(req.session.userId)
@@ -699,6 +706,29 @@ module.exports.logout = function(req, res, next)
                 return res.redirect('/');
         });
     }
+};
+
+module.exports.reset = function(req, res, next)
+{
+    User.findById(req.session.userId)
+        .exec(function (errorUser, user)
+        {
+            if (errorUser)
+            {
+                return next(errorUser);
+            }
+            else
+            {
+                if (user === null)
+                {
+                    res.redirect('/');
+                }
+                else
+                {
+                    res.render('reset.pug');
+                }
+            }
+        });
 };
 
 module.exports.backFromSuccess = function(req, res, next)
@@ -2458,21 +2488,6 @@ module.exports.checkBrandVersion = function(req, res, next)
         }
     });
 };
-
-// module.exports.checkStoreVersion = function(req, res, next)
-// {
-//     Version.findOne({type: "store"}, function(error, version)
-//     {
-//         if(error)
-//         {
-//             res.send("Error");
-//         }
-//         else
-//         {
-//             res.send(version.version);
-//         }
-//     });
-// };
 
 module.exports.createStatistic = function(req, res, next)
 {

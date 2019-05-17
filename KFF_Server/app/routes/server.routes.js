@@ -7,6 +7,7 @@ router.get('/', controller.goToLogin);
 router.get('/landing', controller.showLandingPage);
 router.post('/', controller.registerLogin);
 router.get('/logout', controller.logout);
+router.get('/reset', controller.reset);
 
 //Statistics
 router.get('/feature', controller.goToFeature);
