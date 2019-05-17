@@ -264,7 +264,6 @@ module.exports.goToFeature = function(req, res, next)
                 }
                 else
                 {
-                    Statistic.find({})
                     Product.find({})
                         .exec(function(errProduct,products)
                         {
