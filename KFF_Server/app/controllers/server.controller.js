@@ -53,7 +53,7 @@ module.exports.goToLogin = function(req, res, next)
                        var userData = {
                            username: "admin",
                            password: "admin",
-                           email: "blockboard08@gmail.com"
+                           email: "kinder.foodfinder@gmail.com"
                        };
 
                        User.create(userData, function(errorCreateUser, user)
@@ -775,14 +775,14 @@ module.exports.forgotPwd = function(req, res, next)
                         var smtpTransport = nodemailer.createTransport({
                             service: 'Gmail',
                             auth: {
-                                user: 'wildwolfeorld@wolfbbs.net', //email address to send from
-                                pass: 'XXXX' //the actual password for that account
+                                user: 'kinder.foodfinder@gmail.com', //email address to send from
+                                pass: '0466078428' //the actual password for that account
                             }
                         });
 
                         var mailOptions = {
                             to: user.email,
-                            from: 'wildwolfeorld@wolfbbs.net',
+                            from: 'kinder.foodfinder@gmail.com',
                             subject: 'KinderFoodFinder Server Password Reset',
                             text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
                                 'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
@@ -858,14 +858,14 @@ module.exports.resetPwd2 = function(req, res)
                     var smtpTransport = nodemailer.createTransport({
                         service: 'Gmail',
                         auth: {
-                            user: 'wildwolfeorld@wolfbbs.net', //email address to send from
-                            pass: 'XXXX' //the actual password for that account
+                            user: 'kinder.foodfinder@gmail.com', //email address to send from
+                            pass: '0466078428' //the actual password for that account
                         }
                     });
 
                     var mailOptions = {
                         to: user.email,
-                        from: 'wildwolfeorld@wolfbbs.net',
+                        from: 'kinder.foodfinder@gmail.com',
                         subject: 'Your password for KinderFoodFinder server has been changed!',
                         text: 'Hello,\n\n' +
                             'This is a confirmation that the password for your account ' + user.username + ' with email ' + user.email + ' has just been changed.\n'
