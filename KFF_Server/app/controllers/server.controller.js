@@ -2467,7 +2467,7 @@ module.exports.registerAndroidAppUsers = function(req, res, next)
         }
         else
         {
-            res.send("Server has got your data!");
+            res.send("Create," + appUser._id.toString());
         }
     });
 };
@@ -2526,7 +2526,8 @@ module.exports.reportedStoreFromAndroidAppUsers = function(req, res, next)
                 state: req.query.state,
                 postCode: req.query.postCode,
                 brandId: productIdNumber,
-                brandName: product.Brand_Name
+                brandName: product.Brand_Name,
+                userId: req.query.userId
             };
 
             // create the store document

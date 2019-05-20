@@ -11,7 +11,8 @@ var ReportedStoreSchema = new mongoose.Schema(
         state: String,
         postCode: String,
         brandId: String,
-        brandName: String
+        brandName: String,
+        userId: String
     },
     {
         versionKey: false
