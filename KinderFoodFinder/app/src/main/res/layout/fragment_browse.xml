@@ -48,7 +48,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:checked="false"
-                android:text="Category" />
+                android:text="Category"
+                android:layout_gravity="center"/>
 
             <RadioButton
                 android:id="@+id/radioAcc"
@@ -56,7 +57,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:checked="false"
-                android:text="Accreditation" />
+                android:text="Accreditation"
+                android:layout_gravity="center"/>
 
             <RadioButton
                 android:id="@+id/radioRate"
@@ -64,7 +66,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:checked="false"
-                android:text="Rating" />
+                android:text="Rating"
+                android:layout_gravity="center"/>
         </RadioGroup>
 
         <ListView

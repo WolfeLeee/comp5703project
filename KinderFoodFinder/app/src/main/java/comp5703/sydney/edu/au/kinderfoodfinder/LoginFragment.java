@@ -179,32 +179,20 @@ public class LoginFragment extends Fragment {
         // show the progress dialog until the login validation is complete
         loginProgressDialog.setMessage("Login...");
         loginProgressDialog.show();
-
         // only for developer to test the app
         if (email.equals("test") && password.equals("test")) {
             loginProgressDialog.dismiss();
-            Intent intentDetail=new Intent( getActivity(),DetailActivity.class );
-            intentDetail.putExtra( "status","yes" );
-            intentDetail.putExtra( "gender","Male" );
-            intentDetail.putExtra( "birthday","Not Disclose " );
-            intentDetail.putExtra( "userID",password );
             Intent intent = new Intent(getActivity(), MainActivity.class);
-            intent.putExtra( "status","yes" );
-            intent.putExtra( "gender","Male" );
-            intent.putExtra( "birthday","Not Disclose " );
-            intent.putExtra( "userID","test" );
             deletefile();
-            writeToFile( "1;"+"Male,"+"7-5-2008");
-
+            writeToFile( "1;"+"Male,"+"7-5-2009,null,test,test");
             startActivity(intent);
             getActivity().finish();
             return;
         }
-
+        checkProfileFile();
         // set up
         String ipAddress = "10.16.206.194";  //100.101.72.250 Here should be changed to your server IP
         String url = "http://" + StatisticContract.StatisticEntry.IP_Address + ":3000/android-app-login?email=" + email + "&password=" + password;
-
         // send the request to the server for checking user login info
         RequestQueue ExampleRequestQueue = Volley.newRequestQueue(getActivity());
         StringRequest ExampleStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -212,34 +200,28 @@ public class LoginFragment extends Fragment {
             public void onResponse(String response) {
                 //This code is executed if the server responds, whether or not the response contains data.
                 //The String 'response' contains the server's response.
-                //You can test it by printing response.substring(0,500) to the screen.
-
-
                 String[] rep=response.split( "," ,2);
-                if(rep.length==2){
-                    Log.d("Send query response:", rep[1]);
-
-                    deletefile();
-                    writeToFile( "1;"+rep[1] );
-                }
-
                 loginProgressDialog.dismiss();
+                // if the email and password are correct, it will turns to MainActivity.
                 if (rep[0].equals("Yes")) {
                     Toast.makeText(getActivity(), "Login Successfully!", Toast.LENGTH_SHORT).show();
                     Log.d("Send query response:", response);
+                    // rewrite profile.txt which contains id, gender and birthday.
+                    if(rep.length==2){
+                        Log.d("Send profilefile:", rep[1]);
+                        deletefile();
+                        writeToFile( "1;"+rep[1] );
+                    }
                     Intent intent = new Intent(getActivity(), MainActivity.class);
-//                    intent.putExtra( "status","yes" );
-//                    intent.putExtra( "gender",rep[1] );
-//                    intent.putExtra( "birthday",rep[2] );
-//                    intent.putExtra( "userID",email );
                     startActivity(intent);
                     getActivity().finish();
-                } else {
-                    Toast.makeText(getActivity(), "Wrong email or password!", Toast.LENGTH_SHORT).show();
+                }// login failed,
+                else {
+                    Toast.makeText(getActivity(), "Wrong email or password! Please try it again", Toast.LENGTH_SHORT).show();
                     Log.d("Send query response:", rep[0]);
                 }
             }
-        },
+        },// Not connect to the server.
                 new Response.ErrorListener()  //Create an error listener to handle errors appropriately.
                 {
                     @Override
@@ -286,7 +268,6 @@ public class LoginFragment extends Fragment {
                 String name="";
                 String id="";
                     Log.d( "facebook",response.toString());
-
                     try {
                         String first_name = object.getString( "first_name" );
                         String last_name = object.getString( "last_name" );
@@ -339,12 +320,11 @@ public class LoginFragment extends Fragment {
                 String[] rep=response.split( "," ,2);
                 if(rep.length==2){
                     Log.d("Send query response:", rep[1]);
-
                     deletefile();
                     writeToFile( "1;"+rep[1] );
                 }
                 deletefile();
-                writeToFile( "1;"+"Male,"+"7-5-2009");
+                writeToFile( "1;"+"Male,"+"7-5-2009,null,test,test");
                 if (response.equals("Yes")) {
                     Toast.makeText(getActivity(), "Login Successfully!", Toast.LENGTH_SHORT).show();
                     Log.d("Send query response:", response);
@@ -380,11 +360,8 @@ public class LoginFragment extends Fragment {
                 });
         ExampleRequestQueue.add(ExampleStringRequest);
     }
-
-
-
+    // if profile.txt not exit, create it.
     public void checkProfileFile(){
-
         File fileVersion = new File(getApplicationContext().getFilesDir(), "profile.txt");
         if(!(fileVersion.exists())) {
             writeToFile( "0;1" );
@@ -393,13 +370,39 @@ public class LoginFragment extends Fragment {
             Log.d("profile", "Existing!");
     }
 
+    // write user information in the profile.txt
+    private void writeToFile(String version)
+    {
+        try
+        {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getActivity().openFileOutput("profile.txt", Context.MODE_PRIVATE));
+            outputStreamWriter.write(version);
+            outputStreamWriter.close();
+        }
+        catch (IOException e)
+        {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+
+    }
+    // delete previous user information
+    public void deletefile() {
+        try {
+            //
+            File file = new File(getApplicationContext().getFilesDir(), "profile.txt");
+            file.delete();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
     private String readFromFile()
     {
         String ret = "";
         try
         {
             InputStream inputStream = getActivity().openFileInput("profile.txt");
-
             if (inputStream != null )
             {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -428,36 +431,10 @@ public class LoginFragment extends Fragment {
         return ret;
     }
 
-    private void writeToFile(String version)
-    {
-        try
-        {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getActivity().openFileOutput("profile.txt", Context.MODE_PRIVATE));
-            outputStreamWriter.write(version);
-            outputStreamWriter.close();
-        }
-        catch (IOException e)
-        {
-            Log.e("Exception", "File write failed: " + e.toString());
-        }
-
-    }
-
-    public void deletefile() {
-        try {
-            //
-            File file = new File(getApplicationContext().getFilesDir(), "profile.txt");
-            file.delete();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void onStart() {
         super.onStart();
         LoginManager.getInstance().logOut();
-
 
     }
 

@@ -29,6 +29,9 @@ public class AccEntityDao extends AbstractDao<AccEntity, Long> {
         public final static Property ParentId = new Property(2, String.class, "parentId", false, "PARENT_ID");
         public final static Property Accreditation = new Property(3, String.class, "accreditation", false, "ACCREDITATION");
         public final static Property Rating = new Property(4, String.class, "rating", false, "RATING");
+        public final static Property Brandname = new Property(5, String.class, "brandname", false, "BRANDNAME");
+        public final static Property Type = new Property(6, String.class, "type", false, "TYPE");
+        public final static Property BrandID = new Property(7, String.class, "brandID", false, "BRAND_ID");
     }
 
 
@@ -48,7 +51,10 @@ public class AccEntityDao extends AbstractDao<AccEntity, Long> {
                 "\"SID\" TEXT," + // 1: sid
                 "\"PARENT_ID\" TEXT," + // 2: parentId
                 "\"ACCREDITATION\" TEXT," + // 3: accreditation
-                "\"RATING\" TEXT);"); // 4: rating
+                "\"RATING\" TEXT," + // 4: rating
+                "\"BRANDNAME\" TEXT," + // 5: brandname
+                "\"TYPE\" TEXT," + // 6: type
+                "\"BRAND_ID\" TEXT);"); // 7: brandID
         // Add Indexes
         db.execSQL("CREATE UNIQUE INDEX " + constraint + "IDX_ACC_ENTITY_SID ON \"ACC_ENTITY\"" +
                 " (\"SID\" ASC);");
@@ -84,6 +90,21 @@ public class AccEntityDao extends AbstractDao<AccEntity, Long> {
         if (rating != null) {
             stmt.bindString(5, rating);
         }
+ 
+        String brandname = entity.getBrandname();
+        if (brandname != null) {
+            stmt.bindString(6, brandname);
+        }
+ 
+        String type = entity.getType();
+        if (type != null) {
+            stmt.bindString(7, type);
+        }
+ 
+        String brandID = entity.getBrandID();
+        if (brandID != null) {
+            stmt.bindString(8, brandID);
+        }
     }
 
     @Override
@@ -110,6 +131,21 @@ public class AccEntityDao extends AbstractDao<AccEntity, Long> {
         if (rating != null) {
             stmt.bindString(5, rating);
         }
+ 
+        String brandname = entity.getBrandname();
+        if (brandname != null) {
+            stmt.bindString(6, brandname);
+        }
+ 
+        String type = entity.getType();
+        if (type != null) {
+            stmt.bindString(7, type);
+        }
+ 
+        String brandID = entity.getBrandID();
+        if (brandID != null) {
+            stmt.bindString(8, brandID);
+        }
     }
 
     @Override
@@ -124,7 +160,10 @@ public class AccEntityDao extends AbstractDao<AccEntity, Long> {
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // sid
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // parentId
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // accreditation
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // rating
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // rating
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // brandname
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // type
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7) // brandID
         );
         return entity;
     }
@@ -136,6 +175,9 @@ public class AccEntityDao extends AbstractDao<AccEntity, Long> {
         entity.setParentId(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setAccreditation(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setRating(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setBrandname(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setType(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setBrandID(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
      }
     
     @Override

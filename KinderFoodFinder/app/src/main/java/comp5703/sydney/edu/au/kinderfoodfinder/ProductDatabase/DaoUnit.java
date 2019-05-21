@@ -6,12 +6,14 @@ package comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase;
 
 import org.greenrobot.greendao.query.Join;
 import org.greenrobot.greendao.query.QueryBuilder;
+import org.greenrobot.greendao.query.WhereCondition;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import comp5703.sydney.edu.au.greendao.gen.AccreditationDao;
 import comp5703.sydney.edu.au.greendao.gen.ProductDao;
+import comp5703.sydney.edu.au.kinderfoodfinder.Items;
 import comp5703.sydney.edu.au.kinderfoodfinder.R;
 
 
@@ -103,50 +105,158 @@ public class DaoUnit {
         return covertproducts(productBuilder.list());
     }
 
-    public ArrayList<Product> searchByAcc(int type, String category, String searchKey)
+    public ArrayList<Items> searchByAcc(int type, String category, String searchKey)
     {
-        QueryBuilder productBuilder = productManager.queryBuilder();
-        productBuilder.where(ProductDao.Properties.Category.eq(category));
+//        QueryBuilder productBuilder = productManager.queryBuilder();
+//        productBuilder.where(ProductDao.Properties.Category.eq(category));
+       QueryBuilder accBuilder=accreditationManager.queryBuilder();
+        if (type == R.id.radioAccreditation){
+            accBuilder.where(AccreditationDao.Properties.Accreditation.like(searchKey+"%") );
+        }
+        Join join=accBuilder.join( AccreditationDao.Properties.ParentId,Product.class,ProductDao.Properties.Id );
+        if(category.equalsIgnoreCase( "All" )){
+            productManager.loadAll();
+//            join.where( ProductDao.Properties.Category. );
+        }else {
+            join.where( ProductDao.Properties.Category.eq( category ) );
+        }
 
+        ArrayList<Accreditation> accreditationArrayList=(ArrayList<Accreditation>) accBuilder.list();
+        ArrayList<Items> itemsArrayList=new ArrayList<>(  );
+        for(Accreditation acc:accreditationArrayList){
+            Items items=new Items(  );
+            Product product=searchById( acc.getParentId() );
+            items.setAccreditation( acc.getAccreditation() );
+            items.setBrand( product.getBrand_Name() );
+            items.setType( product.getCategory() );
+            items.setRating( acc.getRating() );
+            items.setSid( product.getSid() );
+            items.setAccID( acc.getSid() );
 
-        if ( type == R.id.radioBrandName)productBuilder.where(ProductDao.Properties.Brand_Name.like(searchKey+"%"));
-        //
-        Join join= productBuilder.join(ProductDao.Properties.Id,Accreditation.class,AccreditationDao.Properties.ParentId);
-        if (type == R.id.radioAccreditation)join.where(AccreditationDao.Properties.Accreditation.like(searchKey+"%"));
-        return covertproducts(productBuilder.list());
+            itemsArrayList.add( items );
+        }
+
+        return itemsArrayList;
+
     }
 
     public ArrayList<Product> searchByBrand(int type,String category,String searchKey){
         QueryBuilder productBuilder = productManager.queryBuilder();
-        productBuilder.where(ProductDao.Properties.Category.eq(category));
+        if(category.equalsIgnoreCase( "All" )){
+            productManager.loadAll();
+        }else {
+            productBuilder.where(ProductDao.Properties.Category.eq(category));
+
+        }
         if ( type == R.id.radioBrandName)productBuilder.where(ProductDao.Properties.Brand_Name.like(searchKey+"%"));
         ArrayList<Product> productArrayList= (ArrayList<Product>) productBuilder.list();
         return productArrayList;
 
     }
 
-    public ArrayList<Product> getcategoryList(String type){
-        QueryBuilder productBuilder=productManager.queryBuilder();
-        productBuilder.where( ProductDao.Properties.Category.like( "%"+type+"%" ) );
-        Join join= productBuilder.join(ProductDao.Properties.Id,Accreditation.class,AccreditationDao.Properties.ParentId);
-        return covertproducts( productBuilder.list() );
+    public ArrayList<Product> getAllinsearchBrand(String category){
+        QueryBuilder productBuilder = productManager.queryBuilder();
+        if(category.equalsIgnoreCase( "All" )){
+            productManager.loadAll();
+        }else {
+            productBuilder.where(ProductDao.Properties.Category.eq(category));
+
+        }
+        ArrayList<Product> productArrayList= (ArrayList<Product>) productBuilder.list();
+        return productArrayList;
+
+    }
+    public ArrayList<Items> getAllinsearchAcc( String category)
+    {
+//        QueryBuilder productBuilder = productManager.queryBuilder();
+//        productBuilder.where(ProductDao.Properties.Category.eq(category));
+        QueryBuilder accBuilder=accreditationManager.queryBuilder();
+        Join join=accBuilder.join( AccreditationDao.Properties.ParentId,Product.class,ProductDao.Properties.Id );
+        if(category.equalsIgnoreCase( "All" )){
+            productManager.loadAll();
+//            join.where( ProductDao.Properties.Category. );
+        }else {
+            join.where( ProductDao.Properties.Category.eq( category ) );
+        }
+        ArrayList<Accreditation> accreditationArrayList=(ArrayList<Accreditation>) accBuilder.list();
+        ArrayList<Items> itemsArrayList=new ArrayList<>(  );
+        for(Accreditation acc:accreditationArrayList){
+            Items items=new Items(  );
+            Product product=searchById( acc.getParentId() );
+            items.setAccreditation( acc.getAccreditation() );
+            items.setBrand( product.getBrand_Name() );
+            items.setType( product.getCategory() );
+            items.setRating( acc.getRating() );
+            items.setSid( product.getSid() );
+            items.setAccID( acc.getSid() );
+
+            itemsArrayList.add( items );
+        }
+
+        return itemsArrayList;
+
     }
 
-    public ArrayList<Product> getRatingList(String type){
+    public ArrayList<Product> getcategoryList(String type){
+//        QueryBuilder productBuilder=productManager.queryBuilder();
+//        productBuilder.where( ProductDao.Properties.Category.like( "%"+type+"%" ) );
+//        Join join= productBuilder.join(ProductDao.Properties.Id,Accreditation.class,AccreditationDao.Properties.ParentId);
+//        return covertproducts( productBuilder.list() );
+
+        QueryBuilder productBuilder = productManager.queryBuilder();
+        if(type.equalsIgnoreCase( "All" )){
+            productManager.loadAll();
+        }else {
+            productBuilder.where(ProductDao.Properties.Category.eq(type));
+
+        }
+        ArrayList<Product> productArrayList= (ArrayList<Product>) productBuilder.list();
+        return productArrayList;
+    }
+
+    public ArrayList<Items> getRatingList(String type){
 
         QueryBuilder accBuilder=accreditationManager.queryBuilder();
         accBuilder.where( AccreditationDao.Properties.Rating.eq( type ) );
-        Join join=accBuilder.join( AccreditationDao.Properties.ParentId,Product.class,ProductDao.Properties.Id );
-        return covertAccs( accBuilder.list() );
+        ArrayList<Accreditation> accreditationArrayList=(ArrayList<Accreditation>) accBuilder.list();
+        ArrayList<Items> itemsArrayList=new ArrayList<>(  );
+        for(Accreditation acc:accreditationArrayList){
+            Items items=new Items(  );
+            Product product=searchById( acc.getParentId() );
+            items.setAccreditation( acc.getAccreditation() );
+            items.setBrand( product.getBrand_Name() );
+            items.setType( product.getCategory() );
+            items.setRating( acc.getRating() );
+            items.setSid( product.getSid() );
+            items.setAccID( acc.getSid() );
+
+            itemsArrayList.add( items );
+        }
+        return itemsArrayList;
     }
 
-    public ArrayList<Product> getAccList(String type){
+    public ArrayList<Items> getAccList(String type){
 
         QueryBuilder accBuilder=accreditationManager.queryBuilder();
         accBuilder.where( AccreditationDao.Properties.Accreditation.eq( type ) );
-        Join join=accBuilder.join( AccreditationDao.Properties.ParentId,Product.class,ProductDao.Properties.Id );
-        return covertAccs( accBuilder.list() );
+
+        ArrayList<Accreditation> accreditationArrayList=(ArrayList<Accreditation>) accBuilder.list();
+        ArrayList<Items> itemsArrayList=new ArrayList<>(  );
+        for(Accreditation acc:accreditationArrayList){
+            Items items=new Items(  );
+            Product product=searchById( acc.getParentId() );
+            items.setAccreditation( acc.getAccreditation() );
+            items.setBrand( product.getBrand_Name() );
+            items.setType( product.getCategory() );
+            items.setRating( acc.getRating() );
+            items.setSid( product.getSid() );
+            items.setAccID( acc.getSid() );
+            itemsArrayList.add( items );
+        }
+        return itemsArrayList;
     }
+
+
 
 
 
@@ -159,7 +269,7 @@ public class DaoUnit {
         return product;
     }
 
-    public Product getProductAccc(long id){
+    public Product getProductbyAcc(long id){
 
         QueryBuilder accBuilder = accreditationManager.queryBuilder();
         Join productJoin = accBuilder.join(AccreditationDao.Properties.ParentId,Product.class,ProductDao.Properties.Id);

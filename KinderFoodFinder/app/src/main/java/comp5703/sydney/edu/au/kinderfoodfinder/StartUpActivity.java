@@ -472,9 +472,6 @@ public class StartUpActivity extends AppCompatActivity
                 jsonString = jsonString.replace("_id","sid");
                 JsonParser jsonParser = new JsonParser();
                 JsonArray jsonElements = jsonParser.parse(jsonString).getAsJsonArray();
-
-
-
                 StoreHelper storeHelper=new StoreHelper(getApplicationContext());
 //
                 SQLiteDatabase database= storeHelper.getWritableDatabase();
@@ -834,6 +831,13 @@ public class StartUpActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+
+        Fragment startFragment=new StartFragment();
+
+        // directly make the view to login fragment first
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, startFragment).commit();
+
     }
+
 }

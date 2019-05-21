@@ -19,7 +19,7 @@
                     android:layout_height="80dp"
                     android:layout_marginTop="10dp"/>
 
-        <RelativeLayout
+        <LinearLayout
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -39,7 +39,6 @@
 
         <TextView
             android:id="@+id/n_address"
-            android:layout_below="@+id/n_brand"
             android:layout_marginLeft="10dp"
             android:gravity="center_vertical|start"
             android:text="Address : "
@@ -50,7 +49,6 @@
 
         <TextView
             android:id="@+id/n_distance"
-            android:layout_below="@+id/n_address"
             android:layout_marginLeft="10dp"
             android:gravity="center_vertical|start"
             android:text="Distance :"
@@ -59,22 +57,10 @@
             android:layout_height="wrap_content"
             android:textAllCaps="true"
             />
-                <TextView
-                    android:id="@+id/n_unit"
-                    android:layout_below="@+id/n_address"
-                    android:layout_toRightOf="@+id/n_distance"
-                    android:layout_marginLeft="5dp"
-                    android:gravity="center_vertical|start"
-                    android:text=" M"
-                    android:textStyle="bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAllCaps="true"
-                    />
 
 
 
 
-        </RelativeLayout>
+        </LinearLayout>
         </LinearLayout>
 </LinearLayout>

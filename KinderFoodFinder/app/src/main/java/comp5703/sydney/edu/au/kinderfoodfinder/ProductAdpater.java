@@ -17,18 +17,20 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.AccEntity;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Accreditation;
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.DaoUnit;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Product;
 
 public class ProductAdpater extends BaseAdapter implements Filterable {
 
     private Context context;
-    private ArrayList<Product> itemsList;
-    private ArrayList<Product> filterList;
-    private ArrayList<Product> productsList;
+    private ArrayList<AccEntity> itemsList;
+    private ArrayList<AccEntity> filterList=new ArrayList<>(  );
+    private ArrayList<AccEntity> productsList=new ArrayList<>(  );
     CustomFilter filter;
 
-    public ProductAdpater (Context context, ArrayList<Product> productsList){
+    public ProductAdpater (Context context, ArrayList<AccEntity> productsList){
         this.context = context;
         this.productsList = productsList;
         this.filterList = productsList;
@@ -62,15 +64,15 @@ public class ProductAdpater extends BaseAdapter implements Filterable {
         TextView rating=convertView.findViewById( R.id.rating );
         TextView type=convertView.findViewById( R.id.type );
 
-        List<Accreditation> accreditationList=productsList.get( position ).getAccreditation();
-        String a=accreditationList.get( 0 ).getAccreditation();
-        String b=accreditationList.get( 0 ).getRating();
+//        List<Accreditation> accreditationList=productsList.get( position ).getAccreditation();
 
-        brand.setText(productsList.get(position).getBrand_Name());
-        accreditation.setText( a );
-        String rate=b;
+
+
+        brand.setText(productsList.get( position ).getBrandname());
+        accreditation.setText( productsList.get( position ).getAccreditation() );
+        String rate=productsList.get( position ).getRating();
         rating.setText( rate );
-        type.setText( productsList.get( position ).getCategory() );
+        type.setText( productsList.get( position ).getType() );
 
         if(rate.equalsIgnoreCase( "BEST" )){
             rating.setTextColor( Color.parseColor("#208E5C"));
@@ -104,14 +106,28 @@ public class ProductAdpater extends BaseAdapter implements Filterable {
             if(constraint != null && constraint.length()>0){
                 constraint = constraint.toString().toUpperCase();
 
-                ArrayList<Product> filters = new ArrayList<>();
+                ArrayList<AccEntity> filters = new ArrayList<>();
+
+//                for(int i=0; i<filterList.size();i++){
+////                    Long id=productsList.get( i ).getParentId();
+////                    Product product=DaoUnit.getInstance().searchById( id );
+////
+////                    String filter=product.getBrand_Name();
+//                    if(filters.get( i ).getAccreditation().toUpperCase().startsWith( (String) constraint )){
+//                        Accreditation acc = filterList.get(i);
+//                        filters.add(acc);
+//                    }
+//                }
+
 
                 for(int i=0; i<filterList.size();i++){
-                    if(filterList.get(i).getBrand_Name().toUpperCase().contains(constraint)){
-                        Product p = filterList.get(i);
+
+                    if(filters.get( i ).getBrandname().toUpperCase().startsWith( (String) constraint )){
+                        AccEntity p = filterList.get(i);
                         filters.add(p);
                     }
                 }
+
 
                 results.count = filters.size();
                 results.values = filters;
@@ -126,7 +142,7 @@ public class ProductAdpater extends BaseAdapter implements Filterable {
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
 
-            productsList = (ArrayList<Product>) results.values;
+            productsList = (ArrayList<AccEntity>) results.values;
             notifyDataSetChanged();
         }
     }

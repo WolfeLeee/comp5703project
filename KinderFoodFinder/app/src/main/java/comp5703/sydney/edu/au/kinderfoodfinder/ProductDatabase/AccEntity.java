@@ -15,14 +15,28 @@ public class AccEntity {
     private String parentId;
     private String accreditation;
     private String rating;
+    private String brandname;
+    private String type;
+    private String brandID;
 
-    @Generated(hash = 1637818586)
-    public AccEntity(long id, String sid, String parentId, String accreditation, String rating) {
+    @Generated(hash = 178373460)
+    public AccEntity(long id, String sid, String parentId, String accreditation, String rating,
+            String brandname, String type, String brandID) {
         this.id = id;
         this.sid = sid;
         this.parentId = parentId;
         this.accreditation = accreditation;
         this.rating = rating;
+        this.brandname = brandname;
+        this.type = type;
+        this.brandID = brandID;
+    }
+
+    public AccEntity(String brandname,String type,String acc,String rating){
+        this.brandname=brandname;
+        this.type=type;
+        this.accreditation=acc;
+        this.rating=rating;
     }
 
     @Generated(hash = 1852916788)
@@ -67,5 +81,29 @@ public class AccEntity {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getBrandname() {
+        return this.brandname;
+    }
+
+    public void setBrandname(String brandname) {
+        this.brandname = brandname;
+    }
+
+    public String getType() {
+        return this.type;
+    }
+
+    public String getBrandID() {
+        return brandID;
+    }
+
+    public void setBrandID(String brandID) {
+        this.brandID = brandID;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
