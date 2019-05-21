@@ -20,7 +20,10 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import java.io.File;
 import java.util.Arrays;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class MoreFragment extends Fragment
 {
@@ -133,10 +136,13 @@ public class MoreFragment extends Fragment
             public void onClick(View v)
             {
                 // login and register fragment are not in the same activity so need to go to start up activity
+                deletefile();
+
                 Intent intent = new Intent(getActivity(), StartUpActivity.class);
                 startActivity(intent);
                 getActivity().finish();
                 LoginManager.getInstance().logOut();
+
 
             }
         });
@@ -154,6 +160,15 @@ public class MoreFragment extends Fragment
         return view;
     }
 
+    public void deletefile() {
+        try {
+            //
+            File file = new File(getApplicationContext().getFilesDir(), "profile.txt");
+            file.delete();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
 

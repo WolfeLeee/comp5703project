@@ -324,13 +324,14 @@ public class LoginFragment extends Fragment {
                     writeToFile( "1;"+rep[1] );
                 }
                 deletefile();
-                writeToFile( "1;"+"Male,"+"7-5-2009,null,test,test");
                 if (response.equals("Yes")) {
                     Toast.makeText(getActivity(), "Login Successfully!", Toast.LENGTH_SHORT).show();
                     Log.d("Send query response:", response);
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
                     getActivity().finish();
+                    writeToFile( "1;"+"Male,"+"7-5-2009,null,test,test");
+
 
                 } else {
                     Toast.makeText(getActivity(), "Login Failed!", Toast.LENGTH_SHORT).show();

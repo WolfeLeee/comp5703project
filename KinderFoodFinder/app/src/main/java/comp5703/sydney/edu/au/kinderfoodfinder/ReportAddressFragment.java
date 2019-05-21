@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -114,6 +113,7 @@ public class ReportAddressFragment extends Fragment {
         input_statae=view.findViewById( R.id.input_state );
 
         btn_submit = view.findViewById(R.id.btn_submit);
+        refresh=view.findViewById( R.id.update );
         
         storeDatabase = new StoreDatabase(getActivity());
         fragmentlocation = new LocateFragment();
@@ -379,7 +379,7 @@ public class ReportAddressFragment extends Fragment {
                 }
                 // if the server brand version is higher than local version it will send update request.
                 if(serverbrand>appbrand){
-                    Toast.makeText(getActivity(), "Update database!", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), "Updating database!, Please wai...", Toast.LENGTH_SHORT).show();
                     Log.d("Send brand Update :", "yes");
                     DaoUnit.getInstance().clearProductsTable();
                     DaoUnit.getInstance().clearAccreditationTable();
@@ -389,13 +389,13 @@ public class ReportAddressFragment extends Fragment {
                     accreditationHelper.deleteAll( database );
                     new JsonTask().execute("http://" + StatisticContract.StatisticEntry.IP_Address + ":3000/GetAllBrand");
                 }else {
-                    Toast.makeText(getActivity(), "Same Version!", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), "Already up to date!", Toast.LENGTH_SHORT).show();
                     Log.d("Send Brand Update:", "no");
                 }
 
                 // if the server store version is higher than local version it will send update request.
                 if(serverstore>appstore){
-                    Toast.makeText(getActivity(), "Update Store database!", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), "Update Store database!", Toast.LENGTH_SHORT).show();
                     Log.d("Send Store Update :", "yes");
                     //write the new data to the store database
                     StoreHelper storeHelper=new StoreHelper( getApplicationContext());
@@ -403,7 +403,7 @@ public class ReportAddressFragment extends Fragment {
                     storeHelper.deleteAll( database );
                     new StoreJsonTask().execute("http://" + StatisticContract.StatisticEntry.IP_Address + ":3000/GetAllBrandinStore");
                 }else {
-                    Toast.makeText(getActivity(), "Same Version!", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), "Already up to date", Toast.LENGTH_SHORT).show();
                     Log.d("Send Store Update:", "no");
 //
                 }
@@ -413,6 +413,11 @@ public class ReportAddressFragment extends Fragment {
                     String ver=response+","+"0";
                     writeToFile( ver );
                     Log.d("Send write file:", "yes");
+                    Toast.makeText(getActivity(), "Updating database!, Please wai...", Toast.LENGTH_SHORT).show();
+
+                }else {
+                    Toast.makeText(getActivity(), "Already up to date", Toast.LENGTH_SHORT).show();
+
                 }
             }
         },
@@ -615,7 +620,6 @@ public class ReportAddressFragment extends Fragment {
         }
         return ret;
     }
-
     private void writeToFile(String version)
     {
         try

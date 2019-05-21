@@ -112,7 +112,7 @@ public class StartUpActivity extends AppCompatActivity
         toolbar.setVisibility(View.GONE);
 
         // check if the file of version.txt has been created
-        checkProfileFile();
+//        checkProfileFile();
         File fileVersion = new File(getApplicationContext().getFilesDir(), "version.txt");
         if(!(fileVersion.exists())) {
             writeToFile( "1,1,0" );
@@ -781,8 +781,6 @@ public class StartUpActivity extends AppCompatActivity
         accrediationDatabase.deleteAll( database );
         accrediationDatabase.onCreate( database );
     }
-
-
     public Boolean checkVersionFile(){
 
         File fileVersion = new File(getApplicationContext().getFilesDir(), "version.txt");
@@ -831,13 +829,27 @@ public class StartUpActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-
         Fragment startFragment=new StartFragment();
-
         // directly make the view to login fragment first
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, startFragment).commit();
 
     }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        File fileVersion = new File(getApplicationContext().getFilesDir(), "profile.txt");
+        if((fileVersion.exists())) {
+
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+
+        }else{
+            Log.d("profile", "Existing!");
+
+        }
+    }
 }
