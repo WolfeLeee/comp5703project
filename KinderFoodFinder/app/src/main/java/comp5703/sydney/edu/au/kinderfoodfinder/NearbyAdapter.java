@@ -49,6 +49,7 @@ public class NearbyAdapter extends BaseAdapter {
         TextView address = convertView.findViewById(R.id.n_address);
         TextView distance = convertView.findViewById(R.id.n_distance);
         TextView brand = convertView.findViewById(R.id.n_brand);
+        TextView unit = convertView.findViewById(R.id.n_unit);
 
 
 

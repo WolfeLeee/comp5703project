@@ -87,6 +87,8 @@ public class MainActivity extends AppCompatActivity
 //                    .replace(R.id.fragment_container, selectedFragment).commit();
 //            navigation.setSelectedItemId(R.id.navigation_locate);
 
+            navigation.setSelectedItemId(R.id.navigation_locate);
+
             Bundle bundle=new Bundle(  );
             String brand_name = getIntent().getStringExtra("LOCATE");
             bundle.putInt( "LOCATE_KEY", 1 );
@@ -98,6 +100,7 @@ public class MainActivity extends AppCompatActivity
                     .replace(R.id.fragment_container,locatefragment)
                     .addToBackStack(null).addToBackStack( null )
                     .commit();
+
         }
 
         if (id == 2) {

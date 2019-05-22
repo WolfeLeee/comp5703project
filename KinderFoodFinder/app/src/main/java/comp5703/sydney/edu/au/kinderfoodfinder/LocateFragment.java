@@ -122,8 +122,9 @@ public class LocateFragment extends Fragment implements
 
         //Init Service
 
+        Distance_key = 1000;
         mService = Common.getGoogleAPIService();
-//        range = mView.findViewById(R.id.range);
+        range = mView.findViewById(R.id.range);
         add_report = mView.findViewById(R.id.add_report);
         searchView = mView.findViewById(R.id.search_bar);
         listView = mView.findViewById(R.id.listview_search);
@@ -131,61 +132,75 @@ public class LocateFragment extends Fragment implements
         searchView.setFocusable(false);
 
 //        //get the spinner from the xml.
-//        dropdown = mView.findViewById(R.id.spinner);
-//        String[] distances = new String[]{"2000", "5000", "10000", "20000", "50000"};
-//        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, distances);
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        dropdown.setAdapter(adapter);
-//
-//        dropdown.setClickable(false);
-//        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        dropdown = mView.findViewById(R.id.distance);
+        final String[] distances = new String[]{"2000", "5000", "10000", "20000", "50000"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, distances);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dropdown.setAdapter(adapter);
+
+        dropdown.setClickable(false);
+        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                int index = parent.getSelectedItemPosition();
 //                Locate_key = Integer.parseInt(parent.getItemAtPosition(position).toString());
-//            }
-//
+
+                if(distances[index].equals("2000")){
+                    Distance_key = 2000;
+                }else if(distances[index].equals("5000")){
+                    Distance_key = 5000;
+                }else if(distances[index].equals("10000")){
+                    Distance_key = 10000;
+                }else if(distances[index].equals("20000")){
+                    Distance_key = 20000;
+                }else if(distances[index].equals("50000")){
+                    Distance_key = 50000;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+
+//        twenty = mView.findViewById(R.id.twenty_km);
+//        five = mView.findViewById(R.id.five_km);
+//        ten = mView.findViewById(R.id.ten_km);
+//        fifty = mView.findViewById(R.id.ft_km);
+
+
+//        twenty.setOnClickListener(new View.OnClickListener() {
 //            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
+//            public void onClick(View v) {
+//                Distance_key = 20000;
 //
 //            }
 //        });
-
-
-
-        twenty = mView.findViewById(R.id.twenty_km);
-        five = mView.findViewById(R.id.five_km);
-        ten = mView.findViewById(R.id.ten_km);
-        fifty = mView.findViewById(R.id.ft_km);
-        Distance_key = 2000;
-
-        twenty.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Distance_key = 20000;
-
-            }
-        });
-
-        five.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Distance_key = 5000;
-            }
-        });
-
-        ten.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Distance_key = 10000;
-            }
-        });
-
-        fifty.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Distance_key = 50000;
-            }
-        });
+//
+//        five.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Distance_key = 5000;
+//            }
+//        });
+//
+//        ten.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Distance_key = 10000;
+//            }
+//        });
+//
+//        fifty.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Distance_key = 50000;
+//            }
+//        });
 
 //        recyclerView = mView.findViewById(R.id.recycler_search);
 //        layoutManager = new LinearLayoutManager(getActivity());
@@ -351,14 +366,12 @@ public class LocateFragment extends Fragment implements
             }
 
             if (addressList != null) {
-
                 for (int j = 0; j < addressList.size(); j++){
                     final Address address = addressList.get(j);
                     double lat = address.getLatitude();
                     double lng = address.getLongitude();
                     final LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
                     int distance = getDistance(lat, lng);
-
 
                     if(distance <= Distance_key){
 
@@ -639,7 +652,7 @@ public class LocateFragment extends Fragment implements
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
 
 
-        if(Locate_key ==1){
+        if(Locate_key == 1){
 
             ArrayList<String> locationlist = storeHelper.getAddress(Brand);
             List<Address> addressList = null;
@@ -666,11 +679,11 @@ public class LocateFragment extends Fragment implements
                         int distance = getDistance(lat, lng);
 
 
-                        if(distance <= 2000){
+                        if(distance <= Distance_key){
 
                             CircleOptions circleOptions = new CircleOptions();
                             circleOptions.center(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
-                            circleOptions.radius(2000);
+                            circleOptions.radius(Distance_key);
                             circleOptions.fillColor(0x150099ff);
                             circleOptions.strokeWidth(3);
                             circleOptions.strokeColor(0x150099ff);

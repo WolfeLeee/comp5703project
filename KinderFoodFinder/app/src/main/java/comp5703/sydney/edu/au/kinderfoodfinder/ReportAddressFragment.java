@@ -293,8 +293,15 @@ public class ReportAddressFragment extends Fragment {
                 // go to more page
                 toolbar.setVisibility( View.GONE );
                 navigation.setVisibility( View.VISIBLE );
-                getActivity().getSupportFragmentManager().popBackStack();
-                getActivity().getSupportFragmentManager().popBackStack();
+                if(key==0){
+                    getActivity().getSupportFragmentManager().popBackStack();
+                    getActivity().getSupportFragmentManager().popBackStack();
+                } else {
+                    Intent intent=new Intent( getActivity(),MainActivity.class );
+                    intent.putExtra( "id",3 );
+                    startActivity( intent );
+                    getActivity().finish();
+                }
                 Toast.makeText(getActivity(), "Report Successfully!", Toast.LENGTH_SHORT).show();
                 Log.d("Send query response:", response);
             }
