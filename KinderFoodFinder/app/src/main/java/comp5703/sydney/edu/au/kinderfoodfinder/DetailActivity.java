@@ -97,7 +97,7 @@ public class DetailActivity extends AppCompatActivity {
         accreditationList = readAccreditation( sid );
         AccreditationAdapter accreditationAdapter=new AccreditationAdapter( this,accreditationList );
         listView.setAdapter( accreditationAdapter );
-        Utility.setListViewHeightBasedOnChildren( listView );
+//        Utility.setListViewHeightBasedOnChildren( listView );
 
         Log.d("detail",String.valueOf( accreditationList.size() ));
 
@@ -250,7 +250,7 @@ public class DetailActivity extends AppCompatActivity {
             String userID="1";
             String gender="";
             String birthday="";
-            if(profile.length==2){
+            if(profile.length>2){
                  gender=profile[0];
                  birthday=profile[1];
             }

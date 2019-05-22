@@ -270,7 +270,7 @@ public class Detail2Activity extends AppCompatActivity {
             String userID="1";
             String gender="";
             String birthday="";
-            if(profile.length==2){
+            if(profile.length>2){
                 gender=profile[0];
                 birthday=profile[1];
             }

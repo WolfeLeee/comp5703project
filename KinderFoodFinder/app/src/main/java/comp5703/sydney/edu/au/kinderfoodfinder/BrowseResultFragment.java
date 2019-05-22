@@ -26,6 +26,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.AccEntity;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Accreditation;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.DaoUnit;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Product;
@@ -60,6 +61,7 @@ public class BrowseResultFragment extends Fragment {
     ArrayList<Items> avoidList=new ArrayList<>(  );
     ArrayList<Items> resultList =new ArrayList<>(  );
     ArrayList<Product> myresult;
+    ArrayList<Items> myAccResult;
 
 
     int checkid;
@@ -93,6 +95,9 @@ public class BrowseResultFragment extends Fragment {
         final String gender=intent.getStringExtra( "gender" );
         final String birthday=intent.getStringExtra( "birthday" );
 
+
+        myresult=new ArrayList<>(  );
+        myAccResult=new ArrayList<>(  );
 
 
 
@@ -175,16 +180,28 @@ public class BrowseResultFragment extends Fragment {
             Log.d("result",String.valueOf( checkid ));
 
         }else if(checkid==2){
-            myresult=DaoUnit.getInstance().getAccList( title );
+            myAccResult=DaoUnit.getInstance().getAccList( title );
 
         }else if(checkid==3){
-            myresult=DaoUnit.getInstance().getRatingList( title );
+            myAccResult=DaoUnit.getInstance().getRatingList( title );
         }else{
         }
 
-        final ProductAdpater productAdpater=new ProductAdpater( getActivity(),myresult );
-        resultlv.setAdapter( productAdpater );
-        Utility.setListViewHeightBasedOnChildren(resultlv);
+        final BrandAdapter brandAdapter=new BrandAdapter( getActivity(),myresult );
+        final ItemsAdapter productAdpater=new ItemsAdapter( getActivity(),myAccResult );
+//        resultlv.setAdapter( productAdpater );
+//        Utility.setListViewHeightBasedOnChildren(resultlv);
+
+        if(checkid>1){
+            resultlv.setAdapter( productAdpater );
+            Utility.setListViewHeightBasedOnChildren(resultlv);
+
+
+        }else if(checkid==1){
+            resultlv.setAdapter( brandAdapter );
+            Utility.setListViewHeightBasedOnChildren(resultlv);
+
+        }
 
         eggsv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -194,42 +211,56 @@ public class BrowseResultFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                productAdpater.getFilter().filter(newText);
-                productAdpater.notifyDataSetChanged();
+                if(checkid>1){
+                    productAdpater.getFilter().filter(newText);
+                    productAdpater.notifyDataSetChanged();
+                }else if(checkid==1){
+                    brandAdapter.getFilter().filter( newText );
+                    brandAdapter.notifyDataSetChanged();
+                }
+
                 return true;
             }
         });
-
         resultlv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Product product = (Product) productAdpater.getItem(position);
-            Intent intent = new Intent(getActivity(), Detail2Activity.class);
-                if (intent != null) {
-                    ArrayList<Accreditation> accreditations= (ArrayList<Accreditation>) product.getAccreditation();
-//                    String acc=accreditations.get( 0 ).getAccreditation();
-//                    String rating=accreditations.get( 0 ).getRating();
-                    String acc="null";
-                    String rating="Avoid";
-                    if(accreditations.size()>0){
-                        acc=accreditations.get( 0 ).getAccreditation();
-                        rating=accreditations.get( 0 ).getRating();
-                    }
-
-                    String accId=product.getAccreditation().get( 0 ).getSid();
-//                    intent.putExtra("brand", product.getBrand_Name());
-//                    intent.putExtra("type", product.getCategory());
-//                    intent.putExtra("accreditation", acc);
-//                    intent.putExtra("rating", rating);
-//                    intent.putExtra("location", product.getAvailable());
-                    intent.putExtra( "stringId",product.getSid() );
-                    intent.putExtra( "page","browse" );
-                    intent.putExtra( "accid",accId );
+                if(checkid==1){
+                    Product product = (Product) brandAdapter.getItem(position);
+                    Intent intent = new Intent(getActivity(), Detail2Activity.class);
+                    if (intent != null) {
+                        ArrayList<Accreditation> accreditations= (ArrayList<Accreditation>) product.getAccreditation();
+                        String acc="null";
+                        String rating="Avoid";
+                        if(accreditations.size()>0){
+                            acc=accreditations.get( 0 ).getAccreditation();
+                            rating=accreditations.get( 0 ).getRating();
+                        }
+                        String accId=product.getAccreditation().get( 0 ).getSid();
+                        intent.putExtra( "stringId",product.getSid() );
+                        intent.putExtra( "page","browse" );
+                        intent.putExtra( "accid",accId );
 
 //                    intent.putExtra("img", String.valueOf(c.getImg()));
-                    startActivityForResult(intent, VIEW_ITEM_REQUEST_CODE);
+                        startActivityForResult(intent, VIEW_ITEM_REQUEST_CODE);
+                    }
+                }else if(checkid>1) {
+                    Items items = (Items) productAdpater.getItem( position );
+                    Intent intent = new Intent( getActivity(), Detail2Activity.class );
+                    if (intent != null) {
 
+                        String accId = items.getAccID();
+//
+                        intent.putExtra( "stringId", items.getSid() );
+                        intent.putExtra( "page", "browse" );
+                        intent.putExtra( "accid", accId );
+
+//                    intent.putExtra("img", String.valueOf(c.getImg()));
+                        startActivityForResult( intent, VIEW_ITEM_REQUEST_CODE );
+
+                    }
                 }
+
             }
         });
 
@@ -237,18 +268,7 @@ public class BrowseResultFragment extends Fragment {
         return view;
     }
 
-    public void browseList(int id,String value){
 
-        if(id==R.id.radioCategory){
-            myresult= DaoUnit.getInstance().getcategoryList( value );
-        }else if(id==R.id.radioAcc){
-            myresult=DaoUnit.getInstance().getAccList( value );
-
-        }else if(id==R.id.radioRate){
-            myresult=DaoUnit.getInstance().getRatingList( value );
-        }
-
-    }
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null) {
@@ -282,7 +302,6 @@ public class BrowseResultFragment extends Fragment {
         try{
             int i=0;
             while ((line=reader.readLine())!= null){
-
 
                 String[] token= line.split(",(?=(?:[^\\\"]*\\\"[^\\\"]*\\\")*[^\\\"]*$)",-1);
 
@@ -419,10 +438,6 @@ public class BrowseResultFragment extends Fragment {
                     }
 
                     pigList.add( items );
-
-
-
-
                     itemsArrayList.add(items);
                 }
                 else {

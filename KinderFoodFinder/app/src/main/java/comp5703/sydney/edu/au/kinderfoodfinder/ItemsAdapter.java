@@ -101,7 +101,7 @@ public class ItemsAdapter extends BaseAdapter implements Filterable {
                 ArrayList<Items> filters = new ArrayList<>();
 
                 for(int i=0; i<filterList.size();i++){
-                    if(filterList.get(i).getBrand().toUpperCase().contains(constraint)){
+                    if(filterList.get(i).getBrand().toUpperCase().startsWith( (String) constraint )){
                         Items p = filterList.get(i);
                         filters.add(p);
                     }

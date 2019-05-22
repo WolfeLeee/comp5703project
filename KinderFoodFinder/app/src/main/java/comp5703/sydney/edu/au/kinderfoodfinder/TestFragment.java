@@ -28,8 +28,6 @@ import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.DaoUnit;
 
 public class TestFragment extends Fragment {
 
-
-
     public static final String ARGS_PAGE = "args_page";
     public final int VIEW_ITEM_REQUEST_CODE = 647;
     public final int VIEW_PLAYER_REQUEST_CODE = 648;

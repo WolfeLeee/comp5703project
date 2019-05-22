@@ -214,14 +214,11 @@ public class MainActivity extends AppCompatActivity
         Log.d( "back",String.valueOf( count ) );
         Fragment fragment=getSupportFragmentManager().getPrimaryNavigationFragment();
 
+        toolbar.setVisibility( View.GONE );
+        navigation.setVisibility( View.VISIBLE );
 
         navigation.setSelectedItemId( R.id.navigation_home );
-//        if (count == 0) {
-//            super.onBackPressed();
-//            //additional code
-//        } else {
-//            getSupportFragmentManager().popBackStack();
-//        }
+
 
     }
 }

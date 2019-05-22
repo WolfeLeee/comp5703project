@@ -107,6 +107,7 @@ public class FBRegisterFragment extends Fragment {
         fragmentLogin=new LoginFragment();
 
         if(email.length()>3){
+            inputEmail.setText( email );
             inputEmail.setVisibility( View.GONE );
         }
         // tool bar listener
@@ -155,6 +156,7 @@ public class FBRegisterFragment extends Fragment {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth)
             {
+                month=month+1;
                 String date = dayOfMonth + "/" + month + "/" + year;
                 inputBirthday.setText(date);
             }
@@ -174,9 +176,9 @@ public class FBRegisterFragment extends Fragment {
                 String gender = radioButton.getText().toString();
                 String birthday = inputBirthday.getText().toString();
                 boolean showBirthday = checkIfDiscloseDOB.isChecked();
-
+                email=inputEmail.getText().toString();
                 if(checkAgreement.isChecked())
-                    registerUser(name, gender, id, birthday, showBirthday);
+                    registerUser(name, gender, id, birthday, showBirthday,email);
                 else
                     Toast.makeText(getActivity(), "Sorry, you have to agree before register!", Toast.LENGTH_SHORT).show();
             }
@@ -246,7 +248,7 @@ public class FBRegisterFragment extends Fragment {
         request.executeAsync();
     }
 
-    private void registerUser(String name, final String gender, final String id, final String birthday, boolean showBirthday)
+    private void registerUser(String name, final String gender, final String id, final String birthday, boolean showBirthday,String email)
     {
 
         if(TextUtils.isEmpty(birthday))
@@ -275,10 +277,10 @@ public class FBRegisterFragment extends Fragment {
         String ipAddress = "10.16.206.194";  //100.101.72.250 Here should be changed to your server IP
         if(!showBirthday)
             url = "http://" + StatisticContract.StatisticEntry.IP_Address + ":3000/android-app-login-register-fb?name=" + name + "&facebookId=" + id + "&gender=" +
-                    genderModified +  "&birthday=" + birthdayModified;
+                    genderModified +  "&birthday=" + birthdayModified+"&email=" + email;
         else
             url = "http://" + StatisticContract.StatisticEntry.IP_Address + ":3000/android-app-login-register-fb??name=" + name + "&facebookId=" + id + "&gender=" +
-                    genderModified + "&birthday=Not+Disclose";
+                    genderModified + "&birthday=Not+Disclose"+"&email=" + email;
 
         // send the data to the server
         RequestQueue ExampleRequestQueue = Volley.newRequestQueue(getActivity());

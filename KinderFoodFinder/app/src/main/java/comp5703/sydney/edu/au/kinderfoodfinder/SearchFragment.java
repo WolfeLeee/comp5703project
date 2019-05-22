@@ -33,6 +33,7 @@ import java.util.List;
 import comp5703.sydney.edu.au.greendao.gen.ProductDao;
 import comp5703.sydney.edu.au.kinderfoodfinder.Database.ProductContract;
 import comp5703.sydney.edu.au.kinderfoodfinder.Database.ProductDatabase;
+import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.AccEntity;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Accreditation;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.DaoUnit;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.MyApplication;
@@ -70,8 +71,10 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
     public final int VIEW_ITEM_REQUEST_CODE = 647;
     ArrayList<Items> eggsdata=new ArrayList<>(  );
     private ArrayList<Product> result=new ArrayList<>(  );
-    ProductAdpater productAdapter;
+    ItemsAdapter productAdapter;
+    BrandAdapter brandAdapter;
 
+    private ArrayList<Items> accResult;
 
     private int category,type;
 
@@ -101,177 +104,17 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
         searchView=view.findViewById( R.id.searchProduct );
         product=view.findViewById( R.id.productListView );
 
-
-// initial function
-//         search view listener for searching result
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
-//        {
-//            @Override
-//            public boolean onQueryTextSubmit(String query)
-//            {
-//                // search by the input from user
-//                if(categoryID == 1) // egg
-//                {
-//                    Toast.makeText(getActivity(), "Searching egg product...", Toast.LENGTH_SHORT).show();
-////                    eggAdapter.getFilter().filter(query);
-////                    egglv.setAdapter( eggAdapter );
-//                    eggDataAp.getFilter().filter(query);
-//                    product.setAdapter( eggDataAp );
-//                    Utility.setListViewHeightBasedOnChildren(product);
-//
-//                    return false;
-//                }
-//                else if(categoryID == 2) // chicken
-//                {
-//
-//                    Toast.makeText(getActivity(), "Searching chicken product...", Toast.LENGTH_SHORT).show();
-//
-//                    product.setAdapter( chickenAdapter );
-//                    Utility.setListViewHeightBasedOnChildren(product);
-//                }
-//                else if(categoryID == 3) // pigs
-//                {
-//                    Toast.makeText(getActivity(), "Searching pig product...", Toast.LENGTH_SHORT).show();
-//
-//                    product.setAdapter( pigAdapter );
-//                    Utility.setListViewHeightBasedOnChildren(product);
-//                }
-//                else // nothing selected
-//                {
-//                    Toast.makeText(getActivity(), "Please select the category before searching!", Toast.LENGTH_SHORT).show();
-//
-//
-//                }
-////                Log.d(TAG, "onQueryTextSubmit: "+query);
-////                GetProductsData getProductsData = new GetProductsData(SearchFragment.this,SearchFragment.this.getContext());
-////                getProductsData.execute(query);
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText)
-//            {
-//
-//                if(categoryID == 1) // egg
-//                {
-//                    Toast.makeText(getActivity(), "Searching egg product...", Toast.LENGTH_SHORT).show();
-////                    eggAdapter.getFilter().filter(query);
-////                    egglv.setAdapter( eggAdapter );
-//                    eggDataAp.getFilter().filter(newText);
-//                    product.setAdapter( eggDataAp );
-//                    Utility.setListViewHeightBasedOnChildren(product);
-//
-//                    return false;
-//                }
-//                else if(categoryID == 2) // chicken
-//                {
-//
-//                    Toast.makeText(getActivity(), "Searching chicken product...", Toast.LENGTH_SHORT).show();
-//
-//                    chickenAdapter.getFilter().filter(newText);
-//
-//                    product.setAdapter( chickenAdapter );
-//                    Utility.setListViewHeightBasedOnChildren(product);
-//                }
-//                else if(categoryID == 3) // pigs
-//                {
-//                    Toast.makeText(getActivity(), "Searching pig product...", Toast.LENGTH_SHORT).show();
-//
-//                    pigAdapter.getFilter().filter(newText);
-//
-//                    product.setAdapter( pigAdapter );
-//                    Utility.setListViewHeightBasedOnChildren(product);
-//                }
-//                else // nothing selected
-//                {
-//                    Toast.makeText(getActivity(), "Please select the category before searching!", Toast.LENGTH_SHORT).show();
-//
-//                }
-//                return false;
-//            }
-//        });
-
-
-//        product.setOnItemClickListener( new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//                if(categoryID == 1) // egg
-//                {
-//                    Toast.makeText(getActivity(), "Searching egg product...", Toast.LENGTH_SHORT).show();
-//                    Items c= (Items) eggDataAp.getItem(position);
-//                    Intent intent = new Intent(getActivity(), DetailActivity.class);
-//                    if (intent != null) {
-//
-//                        intent.putExtra("brand", c.getBrand());
-//                        intent.putExtra("type", c.getType());
-//                        intent.putExtra("accreditation", c.getAccreditation());
-//                        intent.putExtra("rating", c.getRating());
-//                        intent.putExtra("location", c.getAvailable());
-//
-////                    intent.putExtra("img", String.valueOf(c.getImg()));
-//                        startActivity( intent );
-//
-//
-//                    }
-//                }
-//                else if(categoryID == 2) // chicken
-//                {
-//
-//                    Items c= (Items) chickenAdapter.getItem(position);
-//                    Intent intent = new Intent(getActivity(), DetailActivity.class);
-//                    if (intent != null) {
-//
-//                        intent.putExtra("brand", c.getBrand());
-//                        intent.putExtra("type", c.getType());
-//                        intent.putExtra("accreditation", c.getAccreditation());
-//                        intent.putExtra("rating", c.getRating());
-//                        intent.putExtra("location", c.getAvailable());
-//
-////                    intent.putExtra("img", String.valueOf(c.getImg()));
-//                        startActivity( intent );
-//
-//
-//                    }
-//                    Toast.makeText(getActivity(), "Searching chicken product...", Toast.LENGTH_SHORT).show();
-//                }
-//                else if(categoryID == 3) // pigs
-//                {
-//                    Items c= (Items) pigAdapter.getItem(position);
-//                    Intent intent = new Intent(getActivity(), DetailActivity.class);
-//                    if (intent != null) {
-//
-//                        intent.putExtra("brand", c.getBrand());
-//                        intent.putExtra("type", c.getType());
-//                        intent.putExtra("accreditation", c.getAccreditation());
-//                        intent.putExtra("rating", c.getRating());
-//                        intent.putExtra("location", c.getAvailable());
-//
-////                    intent.putExtra("img", String.valueOf(c.getImg()));
-//                        startActivity( intent );
-//
-//                    }
-//                    Toast.makeText(getActivity(), "Searching pig product...", Toast.LENGTH_SHORT).show();
-//                }
-//                else // nothing selected
-//                {
-//                    Toast.makeText(getActivity(), "Please select the category before searching!", Toast.LENGTH_SHORT).show();
-//                }
-//
-//            }
-//        } );
-
-
-///***********************************************************
+        accResult=new ArrayList<>(  );
 
         items=new ArrayList<>(  );
-        String info="";
+        String info="All;";
         ArrayList<Product> test=new ArrayList<>(  );
 
         test=DaoUnit.getInstance().getProduct();
 
-        for (Product product:test){
-            String brand=product.getCategory();
+        items.add( "All" );
+        for (Product products:test){
+            String brand=products.getCategory();
             if(! info.contains( brand)){
                 info=info+brand+";";
                 items.add( brand );
@@ -279,12 +122,7 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
         }
 
         RadioGroup catogryRadioes = view.findViewById(R.id.radioCatogory);
-        catogryRadioes.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                category = checkedId;
-            }
-        });
+
 
         Spinner spinner = view.findViewById(R.id.spinner);
         //create a list of items for the spinner.
@@ -295,30 +133,55 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
         spinner.setClickable( false );
 
         spinner.setOnItemSelectedListener( this );
+
+        catogryRadioes.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                category = checkedId;
+
+                if(category==R.id.radioBrandName){
+                    result=DaoUnit.getInstance().getAllinsearchBrand(items.get( temp ) );
+                    brandAdapter=new BrandAdapter( getActivity(),result );
+                    product.setAdapter( brandAdapter );
+                    Utility.setListViewHeightBasedOnChildren( product );
+
+                }else {
+                    accResult=DaoUnit.getInstance().getAllinsearchAcc( items.get( temp ) );
+                    productAdapter=new ItemsAdapter( getActivity(),accResult );
+                    product.setAdapter( productAdapter );
+                    productAdapter.notifyDataSetChanged();
+                    Utility.setListViewHeightBasedOnChildren(product);
+                }
+            }
+        });
+
+
+
         searchView.setOnSearchClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
 
             }
         });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Log.d("spiner", String.valueOf( temp ));
-                if(category==R.id.radioBrandName){
-                    result=DaoUnit.getInstance().searchByBrand( category,items.get( temp ),query );
-                    BrandAdapter brandAdapter=new BrandAdapter( getActivity(),result );
-                    product.setAdapter( brandAdapter );
-                    brandAdapter.notifyDataSetChanged();
-                    Utility.setListViewHeightBasedOnChildren( product );
-                }else if(category==R.id.radioAccreditation){
-                    result=DaoUnit.getInstance().searchByAcc( category,items.get( temp ),query );
-                    ProductAdpater productAdapter=new ProductAdpater( getActivity(),result );
-                    product.setAdapter( productAdapter );
-                    productAdapter.notifyDataSetChanged();
-                    Utility.setListViewHeightBasedOnChildren(product);
-                }
-                Log.d("search result",String.valueOf( result.size() ));
+//                Log.d("spiner", String.valueOf( temp ));
+//                if(category==R.id.radioBrandName){
+//                    result=DaoUnit.getInstance().searchByBrand( category,items.get( temp ),query );
+//                    BrandAdapter brandAdapter=new BrandAdapter( getActivity(),result );
+//                    product.setAdapter( brandAdapter );
+//                    brandAdapter.notifyDataSetChanged();
+//                    Utility.setListViewHeightBasedOnChildren( product );
+//                }else if(category==R.id.radioAccreditation){
+//                    accResult=DaoUnit.getInstance().searchByAcc( category,items.get( temp ),query );
+//                    ItemsAdapter productAdapter=new ItemsAdapter( getActivity(),accResult );
+//                    product.setAdapter( productAdapter );
+//                    productAdapter.notifyDataSetChanged();
+//                    Utility.setListViewHeightBasedOnChildren(product);
+//                }
+//                Log.d("search result",String.valueOf( result.size() ));
 
                 Toast.makeText( getActivity(),"Total Find "+String.valueOf(result.size())+" Records",Toast.LENGTH_LONG ).show();
 //                BToast.success(MainActivity.this).text("Total Searching Result"+String.valueOf(ps.size())+" Records").show();
@@ -327,6 +190,21 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if(category==R.id.radioBrandName){
+                    result=DaoUnit.getInstance().searchByBrand( category,items.get( temp ),newText );
+                    BrandAdapter brandAdapter=new BrandAdapter( getActivity(),result );
+
+                    product.setAdapter( brandAdapter );
+                    brandAdapter.notifyDataSetChanged();
+                    Utility.setListViewHeightBasedOnChildren( product );
+                }else if(category==R.id.radioAccreditation){
+                    accResult=DaoUnit.getInstance().searchByAcc( category,items.get( temp ),newText );
+                    ItemsAdapter productAdapter=new ItemsAdapter( getActivity(),accResult );
+                    product.setAdapter( productAdapter );
+                    productAdapter.notifyDataSetChanged();
+                    Utility.setListViewHeightBasedOnChildren(product);
+                }
+
                 return false;
             }
         });
@@ -335,20 +213,18 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                Product p= (Product) productAdapter.getItem( position );
-                Product p=result.get( position );
-
-
-                List<Accreditation> accreditations=p.getAccreditation();
-
-                String acc="ACC";
-                String rating= "GOOD";
-                acc=accreditations.get( 0 ).getAccreditation();
-                rating=accreditations.get( 0 ).getRating();
-                ProductDao productDao= MyApplication.getInstance().getDaoSession().getProductDao();
-                Product test=new Product(  );
-                String accId=p.getAccreditation().get( 0 ).getSid();
 
                 if(category==R.id.radioBrandName){
+                    Product p=result.get( position );
+                    List<Accreditation> accreditations=p.getAccreditation();
+
+                    String acc="ACC";
+                    String rating= "GOOD";
+                    acc=accreditations.get( 0 ).getAccreditation();
+                    rating=accreditations.get( 0 ).getRating();
+                    ProductDao productDao= MyApplication.getInstance().getDaoSession().getProductDao();
+                    Product test=new Product(  );
+                    String accId=p.getAccreditation().get( 0 ).getSid();
                     Intent intent = new Intent(getActivity(), DetailActivity.class);
                     if (intent != null) {
 //                        Accreditation accreditation= (Accreditation) p.getAccreditation();
@@ -362,25 +238,18 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
                         intent.putExtra( "page","search" );
                         List<Accreditation> accreditation= (List<Accreditation>) p.getAccreditation();
                         intent.putExtra( "accid",accId );
-
-                        String a=accreditation.get( 0 ).getSid();
-                        String b=accreditation.get( 0 ).getAccreditation();
-                        String c=accreditation.get( 0 ).getRating();
-
-                        String info=p.getSid()+"; "+p.getBrand_Name()+"; "+p.getCategory()+"; "+p.getImage()+"; "
-                                +a+"; "+b+"; "+c;
-                        Log.d("statistics put record",info);
 //                    intent.putExtra("img", String.valueOf(c.getImg()));
                         startActivity( intent );
 
                     }
                 }else if(category==R.id.radioAccreditation) {
                     Intent intent = new Intent( getActivity(), Detail2Activity.class );
+                    Items acc=accResult.get( position );
                     if (intent != null) {
 //                        Accreditation accreditation= (Accreditation) p.getAccreditation();
-                        intent.putExtra( "stringId", p.getSid() );
+                        intent.putExtra( "stringId", acc.getSid());
                         intent.putExtra( "page", "search" );
-                        intent.putExtra( "accid", accId );
+                        intent.putExtra( "accid", acc.getAccID() );
                         startActivity( intent );
                     }
                 }
@@ -601,6 +470,22 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
         Log.d("spinner",String.valueOf( position ));
         Log.d("spinner",items.get( position ));
         temp=position;
+        if(category==R.id.radioBrandName){
+            result=DaoUnit.getInstance().getAllinsearchBrand(items.get( temp ) );
+
+            BrandAdapter brandAdapter=new BrandAdapter( getActivity(),result );
+            product.setAdapter( brandAdapter );
+            Utility.setListViewHeightBasedOnChildren( product );
+
+        }else if(category==R.id.radioAccreditation) {
+
+            accResult=DaoUnit.getInstance().getAllinsearchAcc( items.get( temp ) );
+            ItemsAdapter productAdapter=new ItemsAdapter( getActivity(),accResult );
+            product.setAdapter( productAdapter );
+            productAdapter.notifyDataSetChanged();
+            Utility.setListViewHeightBasedOnChildren(product);
+
+        }
     }
 
     @Override

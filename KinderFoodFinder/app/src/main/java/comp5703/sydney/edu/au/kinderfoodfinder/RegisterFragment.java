@@ -116,6 +116,7 @@ public class RegisterFragment extends Fragment
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth)
             {
+                month=month+1;
                 String date = dayOfMonth + "/" + month + "/" + year;
                 inputBirthday.setText(date);
             }
@@ -232,14 +233,19 @@ public class RegisterFragment extends Fragment
                 //This code is executed if the server responds, whether or not the response contains data.
                 //The String 'response' contains the server's response.
                 //You can test it by printing response.substring(0,500) to the screen.
-                registerProgressDialog.dismiss();
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                deletefile();
-                writeToFile( "1;"+gender+birthday);
-                startActivity(intent);
-                getActivity().finish();
-                Toast.makeText(getActivity(), "Registered Successfully!", Toast.LENGTH_SHORT).show();
-                Log.d("Send query response:", response);
+                String[] result=response.split( "," );
+                if(result.length==2 && result[0].equalsIgnoreCase( "Create" )){
+                    registerProgressDialog.dismiss();
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    deletefile();
+                    writeToFile( "1;"+gender+","+birthday+","+result[1]+","+name+","+email);
+                    startActivity(intent);
+                    getActivity().finish();
+                    Toast.makeText(getActivity(), "Registered Successfully!", Toast.LENGTH_SHORT).show();
+                    Log.d("Send query response:", response);
+                }
+
+
             }
         },
                 new Response.ErrorListener()  //Create an error listener to handle errors appropriately.
@@ -249,20 +255,22 @@ public class RegisterFragment extends Fragment
                     {
                         //This code is executed if there is an error.
                         registerProgressDialog.dismiss();
-                        Toast.makeText(getActivity(), "Registered Failed!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Registered Failed!, the email has already registered!", Toast.LENGTH_SHORT).show();
                         Log.d("Send query error:", error.toString());
                     }
                 });
         ExampleRequestQueue.add(ExampleStringRequest);
     }
 
-    private void writeToFile(String version)
+    private void writeToFile(String file)
     {
         try
         {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getActivity().openFileOutput("profile.txt", Context.MODE_PRIVATE));
-            outputStreamWriter.write(version);
+            outputStreamWriter.write(file);
             outputStreamWriter.close();
+            Log.d("Send profile:", file);
+
         }
         catch (IOException e)
         {
