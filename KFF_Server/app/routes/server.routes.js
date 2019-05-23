@@ -17,8 +17,6 @@ router.post('/reset/token/:token', controller.resetPwd2);
 router.get('/feature', controller.goToFeature);
 router.get('/GenerateStatistics', controller.GenerateStatistics);
 
-
-
 // Main page and some features
 router.post('/insertnewStore',controller.insertnewStore);
 router.post('/insertnewBrand',controller.insertnewBrand);
@@ -54,6 +52,8 @@ router.get('/detailproductPage_Accreditation__Delete', controller.ProductDetailP
 router.get('/detailproductPage_Accreditation__Update', controller.ProductDetailPage_Accreditation__Update);
 router.get('/detailproductPage_Accreditation__Insert', controller.ProductDetailPage_Accreditation__Insert);
 router.post('/detailproductPage_updateBrandSummary', controller.ProductDetailPage_updateBrandSummary);
+router.get('/detailproductPage_Store', controller.ProductDetailPage_Store);
+router.get('/detailproductPage_Store__Delete', controller.ProductDetailPage_Store__Delete);
 
 // Store Detail Page
 router.get('/detailstorePage', controller.goToStoreDetailPage);

@@ -13,7 +13,7 @@ head
     script(src="http://code.jquery.com/jquery-1.9.1.min.js")
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
     script(src="https://code.jquery.com/ui/1.12.1/jquery-ui.js")
-    script(src="js/productDetailPage/productDetailPage_Accreditation.js" type="text/javascript")
+    script(src="js/productDetailPage/productDetailPage_Store.js" type="text/javascript")
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js")
     script.
@@ -54,18 +54,17 @@ body
                 div(class="pagebody_controlpanel")
                     - var id = brandid
                     a.pagebody_controlpanel_item(href="/detailproductPage?productid=" + id) Brand Summary
-                    a.pagebody_controlpanel_item.selected_item(href="/detailproductPage_Accreditation?productid=" + id) Accreditation
-                    a.pagebody_controlpanel_item(href="/detailproductPage_Store?productid=" + id) Store
+                    a.pagebody_controlpanel_item(href="/detailproductPage_Accreditation?productid=" + id) Accreditation
+                    a.pagebody_controlpanel_item.selected_item(href="/detailproductPage_Store?productid=" + id) Store
                 div(class="pagebody_mainbody__infodisplay")
                     - var id = brandid
-                    input.pagebody_mainbody__infodisplay__searchinput(type="search",title = id, placeholder ="Please enter the Accreditation . . .")
+                    input.pagebody_mainbody__infodisplay__searchinput(type="search",title = id, placeholder ="Please enter the store name . . .")
                     div.pagebody_mainbody_infodisplay__searchsubmitbutton Search
                     div.pagebody_mainbody_infodisplay__deletebutton
                         label.deletebutton_button.deletebutton_selectall.button Select All
                             input.button_selectall(type='checkbox')
                             span.checkmark
                         - var id = brandid
-                        div.deletebutton_button.deletebutton_addAccreditation(data-toggle="modal", data-target="#myModal") _
                         div.deletebutton_button.deletebutton_deletemarked(value=id)
                             svg(xmlns="http://www.w3.org/2000/svg",width="24",height="24",viewBox = "0 0 24 24")
                                 path(d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z")
@@ -74,35 +73,25 @@ body
                         table.accreditationlist_table
                             thead
                                 tr(role="row")
-                                    th.accreditationlist_table__item Accreditation
-                                    th.accreditationlist_table__item Rating
-                                    th.accreditationlist_table__item
-                                    th.accreditationlist_table__item
+                                    th.accreditationlist_table__item Store name
+                                    th.accreditationlist_table__item Address
                                     th.accreditationlist_table__item
                             tfoot
                                 tr(role="row")
-                                    th.accreditationlist_table__item Accreditation
-                                    th.accreditationlist_table__item Rating
-                                    th.accreditationlist_table__item
-                                    th.accreditationlist_table__item
+                                    th.accreditationlist_table__item Store name
+                                    th.accreditationlist_table__item Address
                                     th.accreditationlist_table__item
                             tbody
-                                - for (var i =0 ; i < accreditation.length ; i++)
+                                - for (var i =0 ; i < storeaddress.length ; i++)
                                     tr.accreditationlist_table_tablerow(role="row")
                                         - var id = brandid;
-                                        td.accreditationlist_table__item.accreditationlist_table__Accreditation #{accreditation[i].Accreditation}
-                                        td.accreditationlist_table__item.accreditationlist_table__Accreditation #{accreditation[i].Rating}
+                                        td.accreditationlist_table__item.accreditationlist_table__Accreditation #{storeaddress[i].storeName}
+                                        td.accreditationlist_table__item.accreditationlist_table__Accreditation #{storeaddress[i].storeAddress}
                                         td.accreditationlist_table__item.accreditationlist_table__Accreditation
                                             label.button
-                                                - var accrid = accreditation[i]._id
+                                                - var accrid = storeaddress[i].storeaddressid
                                                 input.accreditationlist_table__Delete(value = accrid, type='checkbox')
                                                 span.checkmark
-                                        td.accreditationlist_table__item.accreditationlist_table__Accreditation
-                                            div.accreditationlist_table__Edit Edit
-                                        td.accreditationlist_table__item.accreditationlist_table__Accreditation.accreditationlist_table__Buttons
-                                            - var accrid = accreditation[i]._id
-                                            button.accreditationlist_table__Confirm(value = id, title = accrid) Confirm
-                                            button.accreditationlist_table__Cancel Cancel
                         if(pages > 0)
                             ul.pagination
                                 if(current == 1)
@@ -131,21 +120,3 @@ body
                                     else
                                         li.pagination_button.page-item.next#dataTable_next(title = searchstring)
                                             a.page-link(href="#",aria-controls="dataTable", data-dt-idx="0", tabindex="0") Next
-
-    div.modal.fade#myModal(role="dialog")
-        div.modal-dialog
-            div.modal-content
-                div.modal-header
-                    h4.modal-title Adding an Accreditation to #{brandname}
-                    button.close(type='button', data-dismiss='modal') x
-                div.modal-body
-                    input.form-control(type='text', placeholder="Enter the Accreditation here")
-                    select.form-control
-                        option Best
-                        option Good
-                        option Avoid
-                    p.alert-paragraph
-                div.modal-footer
-                    - var productid = brandid
-                    button.btn.btn-default.modal-adding__Accreditation(type="button",value = productid) Add
-                    button.btn.btn-default(type="button", data-dismiss = "modal") Close
