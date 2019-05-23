@@ -283,10 +283,48 @@ module.exports.goToFeature = function(req, res, next)
                             }
                             else
                             {
-                                res.render('Statistics.pug',
+
+                                Statistic.aggregate([
+                                    {"$group":
+                                            {
+                                                _id: "$brandId",
+                                                totalsearch: {$sum:'$count'}
+                                            }
+                                    },
+                                    {"$project":
+                                            {
+                                                _id:1,
+                                                totalsearch:1
+                                            }
+                                    },
+                                    {"$sort":
+                                            {
+                                                totalsearch: -1
+                                            }},
+                                    {$limit: 10 }
+                                        ],function (err, data)
+                                {
+                                    var toptenbrands = [];
+                                    for(var i = 0 ; i<data.length; i++)
                                     {
-                                        products:products
-                                    });
+                                        for(var j = 0; j < products.length ; j++)
+                                        {
+                                            if(new String(data[i]._id).valueOf() == new String(products[j]._id).valueOf())
+                                            {
+                                                var topbrand = {
+                                                    brandname: products[j].Brand_Name,
+                                                    count: data[i].totalsearch
+                                                }
+                                                toptenbrands.push(topbrand);
+                                            }
+                                        }
+                                    }
+                                    res.render('Statistics.pug',
+                                        {
+                                            products:products,
+                                            topbrands:toptenbrands
+                                        });
+                                })
                             }
                         })
 
