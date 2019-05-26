@@ -75,9 +75,13 @@ body
                                 input#infodisplay_settings_item__form__File(type="file" accept="image/*" name="Image" class="inputform_brand__BrandImage")
                         div.infodisplay_settings_item
                     span.pagebody_mainbody__infodisplay__span__nonclickable
-                        div.infodisplay_settings_item There are
+                        div.infodisplay_settings_item
                         div.infodisplay_settings_item.infodisplay_settings_center #{accreditacount}
                         div.infodisplay_settings_item.infodisplay_settings_right Accreditations for this brand
+                    span.pagebody_mainbody__infodisplay__span__nonclickable
+                        div.infodisplay_settings_item
+                        div.infodisplay_settings_item.infodisplay_settings_center #{storecount}
+                        div.infodisplay_settings_item.infodisplay_settings_right Stores have this brand
                     span.pagebody_mainbody__infodisplay__span__submit
                         - var id = brandid
                         div.infodisplay_settings_item.infodisplay_settings__submitbutton.display_none(title = id) Submit

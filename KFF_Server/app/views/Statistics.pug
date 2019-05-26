@@ -81,29 +81,8 @@ body
                                 input.pagebody_inputform__reset(type="reset" value="Reset")
                                 div.pagebody_inputform__hundred.pagebody_inputform__errordialog
                     div.pagebody_inputform__section
-<!--                        p.pagebody_inputform__header Insert new brand-->
-<!--                        div.pagebody_inputform__dialog-->
-<!--                            p Guideline: This function enables the admin to insert a new brand to the database. Likewise, only one accreditation should be recorded at this stage. If the admin wants to input more accreditation to a brand, please access the "Accreditation" tab in the "Detail Brand Page" (Update/ Delete Brand > Detail Brand > Accreditation).-->
-<!--                        div.pagebody_inputform__input.pagebody_inputform__inputnewbrand-->
-<!--                            form(action="/insertnewBrand" method="post" enctype="multipart/form-data")-->
-<!--                                div.pagebody_inputform__fifty.pagebody_inputform__inputheader Enter a Brand Name (*)-->
-<!--                                div.pagebody_inputform__fourty.pagebody_inputform__inputheader Category (*)-->
-<!--                                input.pagebody_inputform__fifty.pagebody_inputform__brandnameinput(type="text" name="brandname" Placeholder = "Please enter the brand name...", autocomplete ="off")-->
-<!--                                input.pagebody_inputform__fourty.pagebody_inputform__brandcategoryinput(name = "brandcategory",list = "pagebody_inputform__BrandCategory",placeholder ="Choose or type a category", autocomplete ="off")-->
-<!--                                datalist#pagebody_inputform__BrandCategory-->
-<!--                                    option(value="Egg")-->
-<!--                                    option(value="Pork")-->
-<!--                                    option(value="Chicken")-->
-<!--                                div.pagebody_inputform__hundred.pagebody_inputform__inputheader Choose an image for this brand-->
-<!--                                input(type="file" accept="image/*" name="brandimage")-->
-<!--                                div.pagebody_inputform__fifty.pagebody_inputform__inputheader Accreditation (*)-->
-<!--                                div.pagebody_inputform__fourty.pagebody_inputform__inputheader Rating (*)-->
-<!--                                input.pagebody_inputform__fifty.pagebody_inputform__brandaccreditationinput(type="text" name="brandaccreditation" Placeholder = "Please enter the Accreditation...", autocomplete ="off")-->
-<!--                                input.pagebody_inputform__fourty.pagebody_inputform__brandratinginput(name = "brandrating",list = "pagebody_inputform__BrandRating",placeholder ="Choose or type a rating", autocomplete ="off")-->
-<!--                                datalist#pagebody_inputform__BrandRating-->
-<!--                                    option(value="Good")-->
-<!--                                    option(value="Best")-->
-<!--                                    option(value="Avoid")-->
-<!--                                input.pagebody_inputform__submit.pagebody_inputform__brandsubmit(type="button" value="Submit")-->
-<!--                                input.pagebody_inputform__reset(type="reset" value="Reset")-->
-<!--                                div.pagebody_inputform__hundred.pagebody_inputform__errordialog-->
+                        p.pagebody_inputform__header 10 Most searched brands
+                            - for(var i = 0; i < topbrands.length ; i++)
+                                div #{i+1}. #{topbrands[i].brandname} - total searches: #{topbrands[i].count}
+                            - for(var j = topbrands.length; j < 10 ; j++)
+                                div #{j+1}.
