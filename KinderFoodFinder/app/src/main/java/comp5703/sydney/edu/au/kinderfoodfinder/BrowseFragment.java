@@ -140,9 +140,9 @@ public class BrowseFragment extends Fragment
         String typeinfo="";
         ArrayList<Product> ps =DaoUnit.getInstance().getProduct();
 
-        categroylist.add( "All" );
+        categroylist.add( "ALL" );
         for (Product product:ps){
-            String type=product.getCategory();
+            String type=product.getCategory().toUpperCase();
             if(! typeinfo.contains( type)){
                 typeinfo=typeinfo+type+";";
                 categroylist.add( type );

@@ -6,7 +6,6 @@ public class StatisticContract {
     private StatisticContract(){
 
     }
-
     public static class StatisticEntry{
         public static final String TABLE_NAME="statistics_table";
 //        public static final String ITEM_ID="item_id";

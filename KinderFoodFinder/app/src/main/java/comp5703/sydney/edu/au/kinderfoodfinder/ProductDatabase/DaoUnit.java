@@ -207,7 +207,7 @@ public class DaoUnit {
         if(type.equalsIgnoreCase( "All" )){
             productManager.loadAll();
         }else {
-            productBuilder.where(ProductDao.Properties.Category.eq(type));
+            productBuilder.where(ProductDao.Properties.Category.like(type));
 
         }
         ArrayList<Product> productArrayList= (ArrayList<Product>) productBuilder.list();

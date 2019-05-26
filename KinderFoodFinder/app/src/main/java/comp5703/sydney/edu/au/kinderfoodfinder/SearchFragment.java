@@ -1,8 +1,10 @@
 package comp5703.sydney.edu.au.kinderfoodfinder;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,7 +29,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import comp5703.sydney.edu.au.greendao.gen.ProductDao;
@@ -38,6 +44,7 @@ import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Accreditation;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.DaoUnit;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.MyApplication;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Product;
+import comp5703.sydney.edu.au.kinderfoodfinder.StatisticDatabase.StatisticsDatabase;
 
 /* * * * * * * * * * *
  * May be used later *
@@ -103,7 +110,6 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
 
         searchView=view.findViewById( R.id.searchProduct );
         product=view.findViewById( R.id.productListView );
-
         accResult=new ArrayList<>(  );
 
         items=new ArrayList<>(  );
@@ -112,9 +118,9 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
 
         test=DaoUnit.getInstance().getProduct();
 
-        items.add( "All" );
+        items.add( "ALL" );
         for (Product products:test){
-            String brand=products.getCategory();
+            String brand=products.getCategory().toUpperCase();
             if(! info.contains( brand)){
                 info=info+brand+";";
                 items.add( brand );
@@ -122,7 +128,6 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
         }
 
         RadioGroup catogryRadioes = view.findViewById(R.id.radioCatogory);
-
 
         Spinner spinner = view.findViewById(R.id.spinner);
         //create a list of items for the spinner.
@@ -137,25 +142,23 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
         catogryRadioes.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                // clear search view text
+                searchView.setQuery( "",false );
                 category = checkedId;
-
+                String type=items.get( temp );
+                new Searchbrand().doInBackground(   );
+                // set list view
                 if(category==R.id.radioBrandName){
-                    result=DaoUnit.getInstance().getAllinsearchBrand(items.get( temp ) );
-                    brandAdapter=new BrandAdapter( getActivity(),result );
                     product.setAdapter( brandAdapter );
+                    brandAdapter.notifyDataSetChanged();
                     Utility.setListViewHeightBasedOnChildren( product );
-
                 }else {
-                    accResult=DaoUnit.getInstance().getAllinsearchAcc( items.get( temp ) );
-                    productAdapter=new ItemsAdapter( getActivity(),accResult );
                     product.setAdapter( productAdapter );
                     productAdapter.notifyDataSetChanged();
                     Utility.setListViewHeightBasedOnChildren(product);
                 }
             }
         });
-
-
 
         searchView.setOnSearchClickListener(new View.OnClickListener() {
             @Override
@@ -191,14 +194,16 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
             @Override
             public boolean onQueryTextChange(String newText) {
                 if(category==R.id.radioBrandName){
-                    result=DaoUnit.getInstance().searchByBrand( category,items.get( temp ),newText );
+                    new Searchbrand().doInBackground( "brand",newText );
+//                    result=DaoUnit.getInstance().searchByBrand( category,items.get( temp ),newText );
                     BrandAdapter brandAdapter=new BrandAdapter( getActivity(),result );
-
                     product.setAdapter( brandAdapter );
                     brandAdapter.notifyDataSetChanged();
                     Utility.setListViewHeightBasedOnChildren( product );
                 }else if(category==R.id.radioAccreditation){
-                    accResult=DaoUnit.getInstance().searchByAcc( category,items.get( temp ),newText );
+                    new Searchbrand().doInBackground( "acc",newText );
+
+//                    accResult=DaoUnit.getInstance().searchByAcc( category,items.get( temp ),newText );
                     ItemsAdapter productAdapter=new ItemsAdapter( getActivity(),accResult );
                     product.setAdapter( productAdapter );
                     productAdapter.notifyDataSetChanged();
@@ -213,7 +218,6 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                Product p= (Product) productAdapter.getItem( position );
-
                 if(category==R.id.radioBrandName){
                     Product p=result.get( position );
                     List<Accreditation> accreditations=p.getAccreditation();
@@ -258,7 +262,6 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
 
         return view;
     }
-
 
     private void readProduct() {
         ProductDatabase productDatabase = new ProductDatabase( getActivity() );
@@ -469,9 +472,11 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Log.d("spinner",String.valueOf( position ));
         Log.d("spinner",items.get( position ));
+        searchView.setQuery( "",false );
         temp=position;
+        new Searchbrand().doInBackground( );
         if(category==R.id.radioBrandName){
-            result=DaoUnit.getInstance().getAllinsearchBrand(items.get( temp ) );
+//            result=DaoUnit.getInstance().getAllinsearchBrand(items.get( temp ) );
 
             BrandAdapter brandAdapter=new BrandAdapter( getActivity(),result );
             product.setAdapter( brandAdapter );
@@ -479,7 +484,7 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
 
         }else if(category==R.id.radioAccreditation) {
 
-            accResult=DaoUnit.getInstance().getAllinsearchAcc( items.get( temp ) );
+//            accResult=DaoUnit.getInstance().getAllinsearchAcc( items.get( temp ) );
             ItemsAdapter productAdapter=new ItemsAdapter( getActivity(),accResult );
             product.setAdapter( productAdapter );
             productAdapter.notifyDataSetChanged();
@@ -490,6 +495,49 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    //asyncTask for search features
+    private class Searchbrand extends AsyncTask<String, String, String> {
+        Context context;
+        @Override
+        protected String doInBackground(String... strings) {
+            //select search type brand name or accreditation
+            //select product type eggs, chicken or pork
+            if(strings.length==2){
+                if(strings[0].equalsIgnoreCase( "brand" )){
+                    result=DaoUnit.getInstance().searchByBrand( category,items.get( temp ),strings[1] );
+                }else if(strings[0].equalsIgnoreCase( "acc" )){
+                    accResult=DaoUnit.getInstance().searchByAcc( category,items.get( temp ),strings[1] );
+                }
+            }else {
+                if(category==R.id.radioBrandName){
+                    //get the result based on query condition
+                    result=DaoUnit.getInstance().getAllinsearchBrand(items.get( temp ) );
+                    //set listview adapter
+                    brandAdapter=new BrandAdapter( getActivity(),result );
+                }else {
+                    //get the result based on query condition
+                    accResult=DaoUnit.getInstance().getAllinsearchAcc( items.get( temp ) );
+                    //set listview adapter
+                    productAdapter=new ItemsAdapter( getActivity(),accResult );
+                }
+            }
+
+            return "One Row Insert";
+        }
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate( values );
+        }
+        @Override
+        protected void onPostExecute(String s) {
+        }
 
     }
 }

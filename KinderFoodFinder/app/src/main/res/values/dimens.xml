@@ -24,4 +24,7 @@
     <dimen name="text_size_1">30sp</dimen>
     <dimen name="text_size_2">35sp</dimen>
     <dimen name="text_size_3">25sp</dimen>
+    <dimen name="text_size_4">20sp</dimen>
+    <dimen name="text_size_5">17sp</dimen>
+
 </resources>

@@ -97,7 +97,6 @@ public class DetailActivity extends AppCompatActivity {
         accreditationList = readAccreditation( sid );
         AccreditationAdapter accreditationAdapter=new AccreditationAdapter( this,accreditationList );
         listView.setAdapter( accreditationAdapter );
-//        Utility.setListViewHeightBasedOnChildren( listView );
 
         Log.d("detail",String.valueOf( accreditationList.size() ));
 
@@ -288,62 +287,7 @@ public class DetailActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             Log.d("statistic",s);
         }
-        public String getDate(){
-            Calendar calendar = Calendar.getInstance();
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-            Date d=new Date();
 
-            String year=String.valueOf( calendar.get( Calendar.YEAR ) );
-            String month=String.valueOf( calendar.get( Calendar.MONTH ) +1);
-            String day=String.valueOf( calendar.get( Calendar.DAY_OF_MONTH ) );
-            String date= sdf.format( d );
-            return date;
-        }
-
-        public String getAge(String birthday)  {
-            String result="";
-            String string = birthday;
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-            int age=0;
-//        Log.d("brithday" ,birthday);
-
-            if(string!=null){
-                Date birth=new Date(  );
-                try {
-                    birth=sdf.parse( string );
-                    Date d=new Date();
-
-                    if(birth.getDay()>d.getDay()&& birth.getMonth()>d.getMonth()){
-                        age=d.getYear()-birth.getYear()-1;
-                    }else {
-                        age=d.getYear()-birth.getYear();
-                    }
-
-
-                } catch (ParseException e) {
-                    result=e.toString();
-                    e.printStackTrace();
-                    return "Not Disclose";
-                }
-            }
-            if(age<18){
-                result="Under 18 years";
-            }else if(age>=18&&age<30){
-                result="18-29 years";
-            }else if(age>=30&&age<40){
-                result="30-39 years";
-            }else if(age>=40&&age<50){
-                result="40-49 years";
-            }else if(age>=50&&age<60){
-                result="50-59 years";
-            }else {
-                result="60+ years";
-            }
-
-
-//        Log.d("date",birth.toString()+"；  " +String.valueOf( age ));
-            return result;
-        }
 
     }
 

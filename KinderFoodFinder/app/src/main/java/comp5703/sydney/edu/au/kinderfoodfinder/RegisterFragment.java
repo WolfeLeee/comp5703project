@@ -205,7 +205,7 @@ public class RegisterFragment extends Fragment
 //        String timeStamp = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
 
         // deal with the gender and birthday format
-        String genderModified, birthdayModified;
+        final String genderModified, birthdayModified;
         if(gender.equals("Not Disclose"))
             genderModified = "Not+Disclose";
         else
@@ -238,7 +238,7 @@ public class RegisterFragment extends Fragment
                     registerProgressDialog.dismiss();
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     deletefile();
-                    writeToFile( "1;"+gender+","+birthday+","+result[1]+","+name+","+email);
+                    writeToFile( "1;"+gender+","+birthdayModified+","+result[1]+","+name+","+email);
                     startActivity(intent);
                     getActivity().finish();
                     Toast.makeText(getActivity(), "Registered Successfully!", Toast.LENGTH_SHORT).show();

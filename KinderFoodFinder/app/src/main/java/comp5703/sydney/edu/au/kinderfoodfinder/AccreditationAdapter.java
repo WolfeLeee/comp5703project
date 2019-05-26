@@ -87,7 +87,7 @@ public class AccreditationAdapter extends BaseAdapter implements Filterable {
         String acc=accList.get( position ).getAccreditation();
         String a =" is a ";
         String c=" choice, ";
-        String best="congratulation!";
+        String best="\ncongratulation!";
         String good="well done but try to buy in moderation.";
         String avoid_a="We suggest you ";
         String avoid_b=" choice, if you can.";
@@ -98,8 +98,8 @@ public class AccreditationAdapter extends BaseAdapter implements Filterable {
         SpannableString accspan=new SpannableString( acc );
 
 
-        int textSize3 =convertView.getResources().getDimensionPixelSize( R.dimen.text_size_3 );
-        int textSize1 = convertView.getResources().getDimensionPixelSize(R.dimen.text_size_1);
+        int textSize3 =convertView.getResources().getDimensionPixelSize( R.dimen.text_size_4 );
+        int textSize1 = convertView.getResources().getDimensionPixelSize(R.dimen.text_size_3);
         accspan.setSpan( new AbsoluteSizeSpan(textSize3),0,acc.length(),SPAN_INCLUSIVE_INCLUSIVE );
 
         span1.setSpan( new AbsoluteSizeSpan(textSize3),0,a.length(),SPAN_INCLUSIVE_INCLUSIVE );

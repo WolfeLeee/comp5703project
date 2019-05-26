@@ -79,9 +79,7 @@ public class StartUpActivity extends AppCompatActivity
     File file;
     String version;
     String IP_ADDRESS = "10.16.82.52";
-
     ProgressDialog pd;
-
     StartUpActivity startUpActivity;
 
 
@@ -829,6 +827,7 @@ public class StartUpActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+        toolbar.setVisibility( View.GONE );
         Fragment startFragment=new StartFragment();
         // directly make the view to login fragment first
         getSupportFragmentManager().beginTransaction()

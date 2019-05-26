@@ -1,6 +1,8 @@
 package comp5703.sydney.edu.au.kinderfoodfinder;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -103,9 +105,8 @@ public class BrowseResultFragment extends Fragment {
 
         browseFragment=new BrowseFragment();
 
-        readEggData();
-        readporkData();
-        readChickenData();
+//        readEggData();
+
 
 
         toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
@@ -118,30 +119,10 @@ public class BrowseResultFragment extends Fragment {
         int n=position+1;
         page=mPage;
 
-        Log.d( "pppp",String.valueOf( n ) );
 
-        if(n==1){
-            if(page==1){
-                resultList=eggsList;
-            }else if(page==3){
-                resultList=bestList;
-            }
-        }else if(n==2){
-            if(page==1){
-                resultList=pigList;
-            }else if(page==3) {
-                resultList = goodList;
-            }
-        }else if(n==3){
-            if(page==1){
-                resultList=chickenList;
-            }else if(page==3){
-                resultList=avoidList;
-            }else {
-            }
 
-        }else {
-        }
+
+
 
         textView.setText( title );
 
@@ -175,17 +156,18 @@ public class BrowseResultFragment extends Fragment {
 //        final ItemsAdapter itemsAdapter= new ItemsAdapter( getActivity(),resultList );
 
 
-        if(checkid==1){
-            myresult= DaoUnit.getInstance().getcategoryList( title );
-            Log.d("result",String.valueOf( checkid ));
-
-        }else if(checkid==2){
-            myAccResult=DaoUnit.getInstance().getAccList( title );
-
-        }else if(checkid==3){
-            myAccResult=DaoUnit.getInstance().getRatingList( title );
-        }else{
-        }
+//        if(checkid==1){
+//            myresult= DaoUnit.getInstance().getcategoryList( title );
+//            Log.d("result",String.valueOf( checkid ));
+//
+//        }else if(checkid==2){
+//            myAccResult=DaoUnit.getInstance().getAccList( title );
+//
+//        }else if(checkid==3){
+//            myAccResult=DaoUnit.getInstance().getRatingList( title );
+//        }else{
+//        }
+        new BrowseResult().doInBackground(  );
 
         final BrandAdapter brandAdapter=new BrandAdapter( getActivity(),myresult );
         final ItemsAdapter productAdpater=new ItemsAdapter( getActivity(),myAccResult );
@@ -227,7 +209,7 @@ public class BrowseResultFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(checkid==1){
                     Product product = (Product) brandAdapter.getItem(position);
-                    Intent intent = new Intent(getActivity(), Detail2Activity.class);
+                    Intent intent = new Intent(getActivity(), DetailActivity.class);
                     if (intent != null) {
                         ArrayList<Accreditation> accreditations= (ArrayList<Accreditation>) product.getAccreditation();
                         String acc="null";
@@ -345,114 +327,41 @@ public class BrowseResultFragment extends Fragment {
 
     }
 
-    public void readChickenData(){
-        Items items;
-        itemsArrayList=new ArrayList<Items>(  );
-        InputStream is=getResources().openRawResource(R.raw.chickens);
-        BufferedReader reader= new BufferedReader(
-                new InputStreamReader(is, Charset.forName("UTF-8"))
-        );
-        String line="";
-        try{
-            int i=0;
-            while ((line=reader.readLine())!= null){
+    private class BrowseResult extends AsyncTask<String, String, String> {
+        Context context;
+        @Override
+        protected String doInBackground(String... strings) {
+            //select search type brand name or accreditation
+            //select product type eggs, chicken or pork
+            if(checkid==1){
+                myresult= DaoUnit.getInstance().getcategoryList( title );
+                Log.d("result",String.valueOf( checkid ));
 
+            }else if(checkid==2){
+                myAccResult=DaoUnit.getInstance().getAccList( title );
 
-                String[] token= line.split(",(?=(?:[^\\\"]*\\\"[^\\\"]*\\\")*[^\\\"]*$)",-1);
-
-                Log.d("length :",String.valueOf( i )+"$$$"+String.valueOf( token.length ));
-
-                items=new Items();
-                i++;
-                Log.d("read",String.valueOf( token.length ));
-                if(token.length==4){
-                    Log.d("lines :",String.valueOf( i )+line);
-                    items.setType( "Chickens" );
-
-
-                    items.setAccreditation( token[0] );
-                    items.setBrand( token[1] );
-                    items.setRating( token[2] );
-                    items.setAvailable( token[3] );
-                    if(token[2].equalsIgnoreCase( "BEST" )){
-                        bestList.add( items );
-                    }else if(token[2].equalsIgnoreCase( "GOOD" )){
-                        goodList.add( items);
-                    }else if(token[2].equalsIgnoreCase( "AVOID" )){
-                        avoidList.add( items );
-                    }
-
-                    chickenList.add( items );
-                    itemsArrayList.add(items);
-                }
-                else {
-//
-                }
-
+            }else if(checkid==3){
+                myAccResult=DaoUnit.getInstance().getRatingList( title );
+            }else{
             }
-            Log.d("Size :",String.valueOf(itemsArrayList.size()));
 
-        } catch (IOException e) {
 
-            e.printStackTrace();
+            return "One Row Insert";
         }
-
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate( values );
+        }
+        @Override
+        protected void onPostExecute(String s) {
+        }
 
     }
 
-    public void readporkData(){
-        Items items;
-        itemsArrayList=new ArrayList<Items>(  );
-        InputStream is=getResources().openRawResource(R.raw.pigs);
-        BufferedReader reader= new BufferedReader(
-                new InputStreamReader(is, Charset.forName("UTF-8"))
-        );
-        String line="";
-        try{
-            int i=0;
-            while ((line=reader.readLine())!= null){
 
-
-                String[] token= line.split(",(?=(?:[^\\\"]*\\\"[^\\\"]*\\\")*[^\\\"]*$)",-1);
-
-                Log.d("length :",String.valueOf( i )+"$$$"+String.valueOf( token.length ));
-                items=new Items();
-                i++;
-                Log.d("read",String.valueOf( token.length ));
-                if(token.length==4){
-                    Log.d("lines :",String.valueOf( i )+line);
-                    items.setType( "Pork" );
-
-
-                    items.setAccreditation( token[0] );
-                    items.setBrand( token[1] );
-                    items.setRating( token[2] );
-                    items.setAvailable( token[3] );
-
-                    if(token[2].equalsIgnoreCase( "BEST" )){
-                        bestList.add( items );
-                    }else if(token[2].equalsIgnoreCase( "GOOD" )){
-                        goodList.add( items);
-                    }else if(token[2].equalsIgnoreCase( "AVOID" )){
-                        avoidList.add( items );
-                    }
-
-                    pigList.add( items );
-                    itemsArrayList.add(items);
-                }
-                else {
-//
-                }
-
-            }
-            Log.d("Size :",String.valueOf(itemsArrayList.size()));
-
-        } catch (IOException e) {
-
-            e.printStackTrace();
-        }
-
-
-    }
 
 }

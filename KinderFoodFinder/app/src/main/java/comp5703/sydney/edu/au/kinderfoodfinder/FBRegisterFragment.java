@@ -248,7 +248,7 @@ public class FBRegisterFragment extends Fragment {
         request.executeAsync();
     }
 
-    private void registerUser(String name, final String gender, final String id, final String birthday, boolean showBirthday,String email)
+    private void registerUser(final String name, final String gender, final String id, final String birthday, boolean showBirthday, final String email)
     {
 
         if(TextUtils.isEmpty(birthday))
@@ -264,7 +264,7 @@ public class FBRegisterFragment extends Fragment {
 //        String timeStamp = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
 
         // deal with the gender and birthday format
-        String genderModified, birthdayModified;
+        final String genderModified, birthdayModified;
         if(gender.equals("Not Disclose"))
             genderModified = "Not+Disclose";
         else
@@ -298,7 +298,8 @@ public class FBRegisterFragment extends Fragment {
                 startActivity(intent);
                 getActivity().finish();
                 deletefile();
-                writeToFile( "1;"+gender+birthday );
+                writeToFile( "1;"+gender+","+birthdayModified+","+id+","+name+","+email);
+
                 Toast.makeText(getActivity(), "Registered Successfully!", Toast.LENGTH_SHORT).show();
                 Log.d("Send query response:", response);
             }

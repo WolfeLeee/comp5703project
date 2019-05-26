@@ -1,6 +1,8 @@
 package comp5703.sydney.edu.au.kinderfoodfinder;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +48,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
     ArrayList<String> brandList,sidList;
     Spinner spinner;
     ListView listView;
+    ArrayList<Product> productArrayList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,7 +84,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
         ArrayList<Product> test=DaoUnit.getInstance().getProduct();
 
         for (Product product:test){
-            String brand=product.getCategory();
+            String brand=product.getCategory().toUpperCase();
             if(! info.contains( brand)){
                 info=info+brand+";";
                 items.add( brand );
@@ -90,11 +94,11 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
          spinner=view.findViewById( R.id.spinner );
          listView=view.findViewById( R.id.categoryListView );
 
-        ArrayList<Product> productArrayList=DaoUnit.getInstance().getcategoryList( items.get( 0));
-        getStringlist( 0 );
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(  getActivity(), android.R.layout.simple_list_item_1, brandList);
-        listView.setAdapter( arrayAdapter );
-        Utility.setListViewHeightBasedOnChildren( listView );
+//        ArrayList<Product> productArrayList=DaoUnit.getInstance().getcategoryList( items.get( 0));
+//        getStringlist( 0 );
+//        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(  getActivity(), android.R.layout.simple_list_item_1, brandList);
+//        listView.setAdapter( arrayAdapter );
+//        Utility.setListViewHeightBasedOnChildren( listView );
 
         ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, items);
         //set the spinners adapter to the previously created one.
@@ -183,7 +187,9 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         category=position;
-        getStringlist( position );
+        String value=items.get( position );
+        new ReportResult().doInBackground( value );
+//        getStringlist( position );
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(  getActivity(), android.R.layout.simple_list_item_1, brandList);
         listView.setAdapter( arrayAdapter );
         Utility.setListViewHeightBasedOnChildren( listView );
@@ -196,7 +202,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
 
 
     public void getStringlist(int position){
-        ArrayList<Product> productArrayList=DaoUnit.getInstance().getcategoryList( items.get( position));
+         productArrayList=DaoUnit.getInstance().getcategoryList( items.get( position));
             brandList=new ArrayList<>(  );
             sidList=new ArrayList<>(  );
             for(Product product:productArrayList){
@@ -205,6 +211,37 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
             }
 
         }
+
+
+    private class ReportResult extends AsyncTask<String, String, String> {
+        Context context;
+        @Override
+        protected String doInBackground(String... strings) {
+            //select search type brand name or accreditation
+            //select product type eggs, chicken or pork
+
+            productArrayList=DaoUnit.getInstance().getcategoryList( strings[0]);
+            brandList=new ArrayList<>(  );
+            sidList=new ArrayList<>(  );
+            for(Product product:productArrayList){
+                brandList.add( product.getBrand_Name() );
+                sidList.add( product.getSid() );
+            }
+            return "One Row Insert";
+        }
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate( values );
+        }
+        @Override
+        protected void onPostExecute(String s) {
+        }
+
+    }
 
 
 

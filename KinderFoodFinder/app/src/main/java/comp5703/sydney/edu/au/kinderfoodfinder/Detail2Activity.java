@@ -66,7 +66,7 @@ public class Detail2Activity extends AppCompatActivity {
     private  String sid,date,age,page,accId;
     private int times;
     private TextView brand_info, rate_info, accreditationtv, location_info;
-    private TextView reporttv,availabletv, learntv;
+    private TextView reporttv,availabletv, learntv,accNametv;
     ArrayList<AccEntity> accreditationList;
     Context ctx;
     @Override
@@ -86,6 +86,7 @@ public class Detail2Activity extends AppCompatActivity {
         availabletv=findViewById( R.id.location );
         learntv=findViewById( R.id.learnmore );
         accreditationtv=findViewById( R.id.dtlAcc );
+        accNametv=findViewById( R.id.dtlacc_name );
         Product product= DaoUnit.getInstance().searchBySid( sid );
 
         Accreditation accreditation=DaoUnit.getInstance().searchAccBySid( accId );
@@ -97,6 +98,8 @@ public class Detail2Activity extends AppCompatActivity {
         String avoid_a="We suggest you ";
         String avoid_b=" this choice, if you can.";
         rate=accreditation.getRating();
+        String accName=accreditation.getAccreditation();
+
 
         SpannableString span1=new SpannableString( a );
         SpannableString span2=new SpannableString( rate );
@@ -163,6 +166,7 @@ public class Detail2Activity extends AppCompatActivity {
 
 
         brand_info.setText( brandname );
+        accNametv.setText( accName );
         location_info.setText( available );
 
 
