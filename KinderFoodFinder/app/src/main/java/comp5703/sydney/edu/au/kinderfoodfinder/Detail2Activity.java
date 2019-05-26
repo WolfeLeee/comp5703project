@@ -51,6 +51,7 @@ import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Contract;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.DaoUnit;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.MyApplication;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Product;
+import comp5703.sydney.edu.au.kinderfoodfinder.StatisticDatabase.StatisticContract;
 import comp5703.sydney.edu.au.kinderfoodfinder.StatisticDatabase.StatisticsDatabase;
 
 import static android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE;
@@ -93,7 +94,7 @@ public class Detail2Activity extends AppCompatActivity {
         String a ="This is a ";
         String rate="";
         String c=" choice, ";
-        String best="congratulation!";
+        String best="congratulations!";
         String good="well done but try to buy in moderation.";
         String avoid_a="We suggest you ";
         String avoid_b=" this choice, if you can.";
@@ -157,10 +158,15 @@ public class Detail2Activity extends AppCompatActivity {
 
         image="https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQ8A0C9JxBqP_M27oZ8oF2PXG9y1hqZy_hjsIcOKHeGdKaj6N_rDrJfWZ9UmdNaTRSpFzKcqHeAeJz8cojEEU0HeqNvYzf6&usqp=CAc";
 
+
+        String url = "http://" + StatisticContract.StatisticEntry.IP_Address + ":3000/uploads/"+ product.getImage()+".jpg";
+
+        
+//        image=http://localhost:3000/uploads/5ce3ebf401380a59b94fadeb.jpg
         //for test load image
 
-        if(image!=null){
-            Picasso.with( this ).load( image ).into( imageView );
+        if(product.getImage()!=null){
+            Picasso.with( this ).load( url ).into( imageView );
         }
 //        String img = intent.getStringExtra("img");
 

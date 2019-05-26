@@ -118,7 +118,7 @@ public class DaoUnit {
             productManager.loadAll();
 //            join.where( ProductDao.Properties.Category. );
         }else {
-            join.where( ProductDao.Properties.Category.eq( category ) );
+            join.where( ProductDao.Properties.Category.like( category ) );
         }
 
         ArrayList<Accreditation> accreditationArrayList=(ArrayList<Accreditation>) accBuilder.list();
@@ -145,7 +145,7 @@ public class DaoUnit {
         if(category.equalsIgnoreCase( "All" )){
             productManager.loadAll();
         }else {
-            productBuilder.where(ProductDao.Properties.Category.eq(category));
+            productBuilder.where(ProductDao.Properties.Category.like(category));
 
         }
         if ( type == R.id.radioBrandName)productBuilder.where(ProductDao.Properties.Brand_Name.like(searchKey+"%"));
@@ -159,7 +159,7 @@ public class DaoUnit {
         if(category.equalsIgnoreCase( "All" )){
             productManager.loadAll();
         }else {
-            productBuilder.where(ProductDao.Properties.Category.eq(category));
+            productBuilder.where(ProductDao.Properties.Category.like(category));
 
         }
         ArrayList<Product> productArrayList= (ArrayList<Product>) productBuilder.list();
@@ -176,7 +176,7 @@ public class DaoUnit {
             productManager.loadAll();
 //            join.where( ProductDao.Properties.Category. );
         }else {
-            join.where( ProductDao.Properties.Category.eq( category ) );
+            join.where( ProductDao.Properties.Category.like( category ) );
         }
         ArrayList<Accreditation> accreditationArrayList=(ArrayList<Accreditation>) accBuilder.list();
         ArrayList<Items> itemsArrayList=new ArrayList<>(  );

@@ -19,6 +19,8 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +30,7 @@ import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.AccreditationHelp
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Contract;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.DaoUnit;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Product;
+import comp5703.sydney.edu.au.kinderfoodfinder.StatisticDatabase.StatisticContract;
 
 public class BrandAdapter extends BaseAdapter implements Filterable {
 
@@ -92,6 +95,13 @@ public class BrandAdapter extends BaseAdapter implements Filterable {
         best.setText( "Best: "+String.valueOf( best_count ) );
         good.setText( "Good: "+String.valueOf( good_count ) );
         avoid.setText( "Avoid: "+String.valueOf( avoid_count ) );
+        String image=productsList.get(position).getImage();
+
+        String url = "http://" + StatisticContract.StatisticEntry.IP_Address + ":3000/uploads/"+ image+".jpg";
+
+        if(image!=null){
+            Picasso.with( context ).load( url ).into( brangImage );
+        }
 
         return convertView;
     }
@@ -110,7 +120,6 @@ public class BrandAdapter extends BaseAdapter implements Filterable {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults results = new FilterResults();
-
             if(constraint != null && constraint.length()>0){
                 constraint = constraint.toString().toUpperCase();
 

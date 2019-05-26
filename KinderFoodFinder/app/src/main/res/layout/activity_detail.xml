@@ -51,8 +51,9 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="10dp">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        >
 
         <LinearLayout
             android:id="@+id/textLinearLayout"
@@ -62,7 +63,8 @@
             android:layout_marginLeft="40dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="20dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="20dp">
 
 
             <LinearLayout
@@ -134,7 +136,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Where a product you found"
+                    android:text="Where you found this product"
                     android:textSize="18sp" />
             </LinearLayout>
 

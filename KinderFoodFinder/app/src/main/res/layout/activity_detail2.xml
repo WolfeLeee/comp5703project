@@ -154,7 +154,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Where a product you found"
+                    android:text="Where you found this product"
                     android:textSize="18sp" />
             </LinearLayout>
 

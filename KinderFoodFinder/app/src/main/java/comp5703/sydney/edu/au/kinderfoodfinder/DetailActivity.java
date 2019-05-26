@@ -47,6 +47,7 @@ import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Contract;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.DaoUnit;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.MyApplication;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.Product;
+import comp5703.sydney.edu.au.kinderfoodfinder.StatisticDatabase.StatisticContract;
 import comp5703.sydney.edu.au.kinderfoodfinder.StatisticDatabase.StatisticsDatabase;
 
 public class DetailActivity extends AppCompatActivity {
@@ -97,6 +98,7 @@ public class DetailActivity extends AppCompatActivity {
         accreditationList = readAccreditation( sid );
         AccreditationAdapter accreditationAdapter=new AccreditationAdapter( this,accreditationList );
         listView.setAdapter( accreditationAdapter );
+//        Utility.setListViewHeightBasedOnChildren( listView );
 
         Log.d("detail",String.valueOf( accreditationList.size() ));
 
@@ -105,8 +107,10 @@ public class DetailActivity extends AppCompatActivity {
 
         //for test load image
 
-        if(image!=null){
-            Picasso.with( this ).load( image ).into( imageView );
+        String url = "http://" + StatisticContract.StatisticEntry.IP_Address + ":3000/uploads/"+ product.getImage()+".jpg";
+
+        if(product.getImage()!=null){
+            Picasso.with( this ).load( url ).into( imageView );
         }
 //        String img = intent.getStringExtra("img");
 

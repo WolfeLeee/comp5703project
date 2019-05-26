@@ -6,11 +6,18 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import comp5703.sydney.edu.au.kinderfoodfinder.UserInfomation.UserDBHelper;
 
@@ -40,6 +47,17 @@ public class AccountFragment extends Fragment {
 
         userlogo = view.findViewById(R.id.account);
         fragmentMore = new MoreFragment();
+
+
+        String profile=readFromFile().split( ";" )[1];
+        String[] result=profile.split( "," );
+
+        if(result.length==5){
+            tv_birthday.setText( result[0] );
+            tv_gender.setText( result[1] );
+
+            tv_username.setText( result[3] );
+        }
 
 //        String id = userDBHelper.getContats("user_db", "")
 //        String gender = getArguments().getString("gender");
@@ -76,5 +94,38 @@ public class AccountFragment extends Fragment {
         return view;
 
 
+    }
+
+    private String readFromFile()
+    {
+        String ret = "";
+        try
+        {
+            InputStream inputStream = getActivity().openFileInput("profile.txt");
+            if (inputStream != null )
+            {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null )
+                {
+                    stringBuilder.append(receiveString);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+            }
+        }
+        catch (FileNotFoundException e)
+        {
+            Log.e("login activity", "File not found: " + e.toString());
+        }
+        catch (IOException e)
+        {
+            Log.e("login activity", "Can not read file: " + e.toString());
+        }
+        return ret;
     }
 }

@@ -87,7 +87,7 @@ public class AccreditationAdapter extends BaseAdapter implements Filterable {
         String acc=accList.get( position ).getAccreditation();
         String a =" is a ";
         String c=" choice, ";
-        String best="\ncongratulation!";
+        String best="\ncongratulations!";
         String good="well done but try to buy in moderation.";
         String avoid_a="We suggest you ";
         String avoid_b=" choice, if you can.";
