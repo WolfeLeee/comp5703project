@@ -364,19 +364,19 @@ module.exports.GenerateStatistics = async function(req,res,next)
                         if(req.query.Startdate !== null && req.query.Enddate !== null)
                         {
                             condition.date = {
-                                $gt: req.query.Startdate,
-                                $lt: req.query.Enddate
+                                $gte: req.query.Startdate,
+                                $lte: req.query.Enddate
                             }
                         }
                         else if(req.query.Enddate == null && req.query.Startdate !== null)
                         {
                             condition.date = {
-                                $gt: req.query.Startdate,
+                                $gte: req.query.Startdate,
                             }
                         }
                         else if (req.query.Startdate == null && req.query.Enddate !== null){
                             condition.date = {
-                                $lt: req.query.Enddate
+                                $lte: req.query.Enddate
                             }
                         }
                     }
