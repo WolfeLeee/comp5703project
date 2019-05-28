@@ -202,6 +202,10 @@ html
                                                     th(tabindex="0",
                                                         rowspan="1",
                                                         colspan="1",
+                                                        style = "width:55px;") Email
+                                                    th(tabindex="0",
+                                                        rowspan="1",
+                                                        colspan="1",
                                                         style = "width:55px;") Delete
                                                     th(tabindex="0",
                                                         rowspan="1",
@@ -213,6 +217,7 @@ html
                                                     th(rowspan="1", colspan="1") Brand Name
                                                     th(rowspan="1", colspan="1") Store Name
                                                     th(rowspan="1", colspan="1") Address
+                                                    th(rowspan="1", colspan="1") Email
                                                     th(rowspan="1", colspan="1") Delete
                                                     th(rowspan="1", colspan="1") Add report
                                             tbody(id="table_body")
@@ -221,6 +226,12 @@ html
                                                         td(data-brandid = displaydata[i].brandId) #{displaydata[i].brandName}
                                                         td #{displaydata[i].storeName}
                                                         td(data-streetAddress = displaydata[i].streetAddress, data-postcode = displaydata[i].postCode, data-state = displaydata[i].state ) #{displaydata[i].streetAddress},#{displaydata[i].postCode}, #{displaydata[i].state}
+                                                        var email;
+                                                        // we are here
+                                                        - for (var j = 0; j < appuseremail.length ; j++)
+                                                            if(displaydata[i].userId == appuseremail[j].userid)
+                                                                td
+                                                                    div #{appuseremail[j].email}
                                                         td.deletecheckbox
                                                             label.button
                                                                 - var id = displaydata[i]._id
