@@ -2764,7 +2764,7 @@ module.exports.loginRegisterAndroidAppFbUsers = function(req, res, next)
             }
             else
             {
-                res.send("Yes");
+                res.send("Yes," + user.gender + "," + user.birthday);
             }
         });
     }
@@ -2812,7 +2812,7 @@ module.exports.loginRegisterAndroidAppFbUsers = function(req, res, next)
             }
             else
             {
-                res.send("Yes");
+                res.send("Yes," + user.gender + "," + user.birthday);
             }
         });
     }
