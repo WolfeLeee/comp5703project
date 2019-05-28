@@ -364,19 +364,19 @@ module.exports.GenerateStatistics = async function(req,res,next)
                         if(req.query.Startdate !== null && req.query.Enddate !== null)
                         {
                             condition.date = {
-                                $gt: req.query.Startdate,
-                                $lt: req.query.Enddate
+                                $gte: req.query.Startdate,
+                                $lte: req.query.Enddate
                             }
                         }
                         else if(req.query.Enddate == null && req.query.Startdate !== null)
                         {
                             condition.date = {
-                                $gt: req.query.Startdate,
+                                $gte: req.query.Startdate,
                             }
                         }
                         else if (req.query.Startdate == null && req.query.Enddate !== null){
                             condition.date = {
-                                $lt: req.query.Enddate
+                                $lte: req.query.Enddate
                             }
                         }
                     }
@@ -975,6 +975,8 @@ module.exports.goToImportPage = function(req, res, next)
         });
 };
 
+
+
 module.exports.goToReportPage = function(req, res, next)
 {
     User.findById(req.session.userId)
@@ -1045,21 +1047,45 @@ module.exports.goToReportPage = function(req, res, next)
                                             }
                                         }
                                     }
+                                    var appuserid = [];
                                     for (var i = ((perPage * page) - perPage); i < reportsList.length && i < (perPage * (page + 1) - perPage); i++) {
                                         displayreports.push(reportsList[i]);
+                                        appuserid.push(reportsList[i].userId);
                                     }
-                                    res.render('report_dbmanagement.pug'
-                                        , {
-                                            displaydata: displayreports,
-                                            numPerPage: perPage,
-                                            count: reportsList.length,
-                                            current: page,
-                                            pages: Math.ceil(reportsList.length / perPage),
-                                            countentries: displayreports.length,
-                                            searchstring : req.query.searchstring||"",
-                                            sortquery:req.query.sortquery
-                                        }
-                                    );
+                                    AppUser.find({_id:{$in:appuserid}})
+                                        .exec(function(errAppUser,AppUser)
+                                        {
+                                          if(errAppUser)
+                                          {
+                                              return next(errAppUser);
+                                          }
+                                          else
+                                          {
+                                              var useremail = [];
+                                              for(var i = 0 ; i<AppUser.length ; i++)
+                                              {
+                                                  var appuseremail = {
+                                                      email : AppUser[i].email,
+                                                      userid : AppUser[i]._id
+                                                  }
+                                                  useremail.push(appuseremail);
+                                              }
+                                              res.render('report_dbmanagement.pug'
+                                                  , {
+                                                      displaydata: displayreports,
+                                                      numPerPage: perPage,
+                                                      count: reportsList.length,
+                                                      current: page,
+                                                      pages: Math.ceil(reportsList.length / perPage),
+                                                      countentries: displayreports.length,
+                                                      searchstring : req.query.searchstring||"",
+                                                      sortquery:req.query.sortquery,
+                                                      appuseremail : useremail
+                                                  }
+                                              );
+
+                                          }
+                                        })
                                 }
                             }
                         });
@@ -2764,7 +2790,7 @@ module.exports.loginRegisterAndroidAppFbUsers = function(req, res, next)
             }
             else
             {
-                res.send("Yes");
+                res.send("Yes," + user.gender + "," + user.birthday);
             }
         });
     }
@@ -2812,7 +2838,7 @@ module.exports.loginRegisterAndroidAppFbUsers = function(req, res, next)
             }
             else
             {
-                res.send("Yes");
+                res.send("Yes," + user.gender + "," + user.birthday);
             }
         });
     }
