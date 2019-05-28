@@ -121,11 +121,12 @@ public class ReportResultActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //get user_ID from the profile.txt
-                String[] profile=readVersionFile().split( "," );
+                String[] profile=readProfile().split( "," );
                 String user_id="";
                 if(profile.length>=3){
                     user_id=profile[2];
                 }
+                Log.d("UserID",user_id);
                 //get address,store name, state, postcode and brand id from the edit text.
                 String storeName=input_store.getText().toString();
                 String streetAddress=input_location.getText().toString();
@@ -498,5 +499,39 @@ public class ReportResultActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    private String readProfile()
+    {
+        String ret = "";
+        try
+        {
+            InputStream inputStream = this.openFileInput("profile.txt");
+
+            if (inputStream != null )
+            {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null )
+                {
+                    stringBuilder.append(receiveString);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+
+            }
+        }
+        catch (FileNotFoundException e)
+        {
+            Log.e("login activity", "File not found: " + e.toString());
+        }
+        catch (IOException e)
+        {
+            Log.e("login activity", "Can not read file: " + e.toString());
+        }
+        return ret;
     }
 }

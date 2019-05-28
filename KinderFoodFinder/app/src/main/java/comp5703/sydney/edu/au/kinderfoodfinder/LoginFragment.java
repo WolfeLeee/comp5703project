@@ -320,17 +320,17 @@ public class LoginFragment extends Fragment {
                 String[] rep=response.split( "," ,2);
                 if(rep.length==2){
                     Log.d("Send query response:", rep[1]);
-                    deletefile();
-                    writeToFile( "1;"+rep[1] );
+
                 }
-                deletefile();
-                if (response.equals("Yes")) {
+                if (rep[0].equals("Yes")) {
                     Toast.makeText(getActivity(), "Login Successfully!", Toast.LENGTH_SHORT).show();
                     Log.d("Send query response:", response);
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
                     getActivity().finish();
-                    writeToFile( "1;"+"Male,"+"7-5-2009,null,test,test");
+                    deletefile();
+                    writeToFile( "1;"+rep[1]+","+password+","+email);
+                    Log.d( "Profile","1;"+rep[1]+","+password+","+name+","+email );
 
 
                 } else {
