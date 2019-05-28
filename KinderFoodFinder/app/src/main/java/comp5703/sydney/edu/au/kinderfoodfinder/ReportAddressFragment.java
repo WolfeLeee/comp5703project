@@ -85,11 +85,6 @@ public class ReportAddressFragment extends Fragment {
             key=getArguments().getInt( "key" );
         }
 
-
-
-//        brandName=getArguments().getString( "brand_name" );
-//        category=getArguments().getString( "type" );
-//        accId=getArguments().getString( "accid" );
     }
 
     @Nullable
@@ -97,7 +92,6 @@ public class ReportAddressFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_report_address, container, false);
-
 
         tv_product = view.findViewById(R.id.tv_product);
         tv_brand = view.findViewById(R.id.tv_brand);
@@ -151,45 +145,6 @@ public class ReportAddressFragment extends Fragment {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // go to login fragment
-//                if(key==1){
-//                    Intent intent=new Intent(getActivity(),DetailActivity.class);
-//
-//                    intent.putExtra( "stringId",sid );
-//                    intent.putExtra( "page","null" );
-//                    intent.putExtra( "accid",accId );
-//                    startActivity( intent );
-//                } else if (key == 2) {
-//                    Intent intent=new Intent(getActivity(),Detail2Activity.class);
-//
-//                    intent.putExtra( "stringId",sid );
-//                    intent.putExtra( "page","null" );
-//                    intent.putExtra( "accid",accId );
-//                    startActivity( intent );
-//
-//                }else {
-//                    getActivity().getSupportFragmentManager().beginTransaction()
-//                            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-//                            .replace(R.id.fragment_container,fragmentReport ).commit();
-//
-//                    // remove toolbar again
-//                    toolbar.setVisibility(View.GONE);
-//
-//                    // enable navigation bar again
-//                    navigation.setVisibility(View.VISIBLE);
-//
-//                }
-//
-//                getActivity().getSupportFragmentManager().popBackStack();
-//                getActivity().getSupportFragmentManager().popBackStack();
-//                getActivity().getSupportFragmentManager().popBackStack();
-
-//                getActivity().getSupportFragmentManager().beginTransaction()
-//                        .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-//                        .replace(R.id.fragment_container,fragmentReport ).commit();
-
-
-
                 // remove toolbar again
                 toolbar.setVisibility(View.GONE);
 
@@ -204,8 +159,6 @@ public class ReportAddressFragment extends Fragment {
                     startActivity( intent );
                     getActivity().finish();
                 }
-
-
 
             }
         });

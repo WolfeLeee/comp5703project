@@ -119,25 +119,6 @@ public class DetailActivity extends AppCompatActivity {
         location_info.setText( available );
 
 
-//        // test collect click data
-//        String[] result=readFromFile().split( ";" );
-//        String[] profile= result[1].split( "," );
-//        String userID="1";
-//        String gender=profile[0];
-//        String birthday=profile[1];
-//        date=getDate();
-//        age=getAge( birthday );
-//        times=1;
-//        String count ="1";
-//        String info=sid+"; "+date+"; "+times+"; "+userID+"; "+gender+"; "+age+"; ";
-//        Log.d("statistics add record",info);
-//       StatisticsDatabase statisticsDatabase=new StatisticsDatabase(this);
-//        SQLiteDatabase database= statisticsDatabase.getWritableDatabase();
-//        statisticsDatabase.addProduct( sid,date,gender,age,count,database );
-//        statisticsDatabase.close();
-//
-//        Log.d("statistic","one row insert");
-
 
 //        new AddClickData( ).execute( sid,period,times,userid,gender,age );
 
@@ -163,18 +144,7 @@ public class DetailActivity extends AppCompatActivity {
                     intent.putExtra("id",5);
                     startActivity(intent);
                 }
-//                else {
-//                    finish();
-////                    Intent intent = new Intent(DetailActivity.this, MainActivity.class);
-////                    intent.putExtra("id",5);
-////                    startActivity(intent);
-//                }
-//                toolbar.setVisibility( View.GONE );
-//                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//                getSupportActionBar().setTitle( "Back" );
-//                toolbar.setVisibility( View.INVISIBLE );
-//                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//                getSupportActionBar().setTitle( "Back" );
+//
                 finish();
             }
         });
@@ -208,13 +178,16 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(DetailActivity.this, MainActivity.class);
-                intent.putExtra("id",2);
+//                Intent intent = new Intent(DetailActivity.this, MainActivity.class);
+//                intent.putExtra("id",2);
+//                intent.putExtra( "sid",sid );
+//                intent.putExtra("key",1);
+//                startActivity(intent);
+//
+//                finish();
+                Intent intent=new Intent( DetailActivity.this,ReportResultActivity.class );
                 intent.putExtra( "sid",sid );
-                intent.putExtra("key",1);
-                startActivity(intent);
-
-                finish();
+                startActivity( intent );
 
             }
         } );

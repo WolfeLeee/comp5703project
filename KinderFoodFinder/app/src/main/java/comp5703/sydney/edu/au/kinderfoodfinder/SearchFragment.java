@@ -138,6 +138,7 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
         spinner.setClickable( false );
 
         spinner.setOnItemSelectedListener( this );
+        result=new ArrayList<>(  );
 
         catogryRadioes.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -146,17 +147,19 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
                 searchView.setQuery( "",false );
                 category = checkedId;
                 String type=items.get( temp );
-                new Searchbrand().doInBackground(   );
                 // set list view
                 if(category==R.id.radioBrandName){
+                    brandAdapter=new BrandAdapter( getActivity(),result );
                     product.setAdapter( brandAdapter );
                     brandAdapter.notifyDataSetChanged();
                     Utility.setListViewHeightBasedOnChildren( product );
                 }else {
+                    productAdapter=new ItemsAdapter( getActivity(),accResult );
                     product.setAdapter( productAdapter );
                     productAdapter.notifyDataSetChanged();
                     Utility.setListViewHeightBasedOnChildren(product);
                 }
+                new Searchbrand().doInBackground(   );
             }
         });
 
@@ -170,21 +173,6 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-//                Log.d("spiner", String.valueOf( temp ));
-//                if(category==R.id.radioBrandName){
-//                    result=DaoUnit.getInstance().searchByBrand( category,items.get( temp ),query );
-//                    BrandAdapter brandAdapter=new BrandAdapter( getActivity(),result );
-//                    product.setAdapter( brandAdapter );
-//                    brandAdapter.notifyDataSetChanged();
-//                    Utility.setListViewHeightBasedOnChildren( product );
-//                }else if(category==R.id.radioAccreditation){
-//                    accResult=DaoUnit.getInstance().searchByAcc( category,items.get( temp ),query );
-//                    ItemsAdapter productAdapter=new ItemsAdapter( getActivity(),accResult );
-//                    product.setAdapter( productAdapter );
-//                    productAdapter.notifyDataSetChanged();
-//                    Utility.setListViewHeightBasedOnChildren(product);
-//                }
-//                Log.d("search result",String.valueOf( result.size() ));
 
                 Toast.makeText( getActivity(),"Total Find "+String.valueOf(result.size())+" Records",Toast.LENGTH_LONG ).show();
 //                BToast.success(MainActivity.this).text("Total Searching Result"+String.valueOf(ps.size())+" Records").show();
@@ -194,7 +182,6 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
             @Override
             public boolean onQueryTextChange(String newText) {
                 if(category==R.id.radioBrandName){
-                    new Searchbrand().doInBackground( "brand",newText );
 //                    result=DaoUnit.getInstance().searchByBrand( category,items.get( temp ),newText );
                     BrandAdapter brandAdapter=new BrandAdapter( getActivity(),result );
                     product.setAdapter( brandAdapter );
@@ -202,13 +189,13 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
                     Utility.setListViewHeightBasedOnChildren( product );
                 }else if(category==R.id.radioAccreditation){
                     new Searchbrand().doInBackground( "acc",newText );
-
 //                    accResult=DaoUnit.getInstance().searchByAcc( category,items.get( temp ),newText );
                     ItemsAdapter productAdapter=new ItemsAdapter( getActivity(),accResult );
                     product.setAdapter( productAdapter );
                     productAdapter.notifyDataSetChanged();
                     Utility.setListViewHeightBasedOnChildren(product);
                 }
+                new Searchbrand().doInBackground( "brand",newText );
 
                 return false;
             }
@@ -446,10 +433,6 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
                     }
 
                     pigList.add( items );
-
-
-
-
                     itemsArrayList.add(items);
                 }
                 else {
@@ -474,23 +457,25 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
         Log.d("spinner",items.get( position ));
         searchView.setQuery( "",false );
         temp=position;
-        new Searchbrand().doInBackground( );
         if(category==R.id.radioBrandName){
 //            result=DaoUnit.getInstance().getAllinsearchBrand(items.get( temp ) );
 
-            BrandAdapter brandAdapter=new BrandAdapter( getActivity(),result );
+            brandAdapter=new BrandAdapter( getActivity(),result );
+            brandAdapter.notifyDataSetChanged();
             product.setAdapter( brandAdapter );
             Utility.setListViewHeightBasedOnChildren( product );
 
         }else if(category==R.id.radioAccreditation) {
 
 //            accResult=DaoUnit.getInstance().getAllinsearchAcc( items.get( temp ) );
-            ItemsAdapter productAdapter=new ItemsAdapter( getActivity(),accResult );
+            productAdapter=new ItemsAdapter( getActivity(),accResult );
             product.setAdapter( productAdapter );
             productAdapter.notifyDataSetChanged();
             Utility.setListViewHeightBasedOnChildren(product);
-
         }
+
+        new Searchbrand().doInBackground( );
+
     }
 
     @Override
@@ -517,11 +502,13 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
                     result=DaoUnit.getInstance().getAllinsearchBrand(items.get( temp ) );
                     //set listview adapter
                     brandAdapter=new BrandAdapter( getActivity(),result );
+                    brandAdapter.notifyDataSetChanged();
                 }else {
                     //get the result based on query condition
                     accResult=DaoUnit.getInstance().getAllinsearchAcc( items.get( temp ) );
                     //set listview adapter
                     productAdapter=new ItemsAdapter( getActivity(),accResult );
+                    productAdapter.notifyDataSetChanged();
                 }
             }
 

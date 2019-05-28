@@ -228,23 +228,9 @@ public class Detail2Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(Detail2Activity.this, MainActivity.class);
-                intent.putExtra("id",2);
+                Intent intent=new Intent( Detail2Activity.this,ReportResultActivity.class );
                 intent.putExtra( "sid",sid );
-                intent.putExtra("key",2);
-
-//
-//                Fragment reportAddressFragment=new ReportAddressFragment();
-//                Bundle bundle=new Bundle(  );
-//                bundle.putString( "sid",sid );
-//                bundle.putString( "accid",accId );
-//                bundle.putInt( "key",2 );
-//                bundle.putString( "brand_name",brandname );
-//                bundle.putString( "type",category );
-//                reportAddressFragment.setArguments( bundle );
-
-                startActivity(intent);
-                finish();
+                startActivity( intent );
 
             }
         } );

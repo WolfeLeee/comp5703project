@@ -110,44 +110,6 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // go to login fragment
-
-//                if(key==1){
-//                    getActivity().getSupportFragmentManager().popBackStack();
-//
-//                    getActivity().getSupportFragmentManager().beginTransaction()
-//                            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-//                            .replace(R.id.fragment_container,fragmentLocation ).commit();
-//                    navigation.setVisibility(View.VISIBLE);
-//
-//
-//                }else if(key==2){
-//                    getActivity().getSupportFragmentManager().popBackStack();
-//
-//                    getActivity().getSupportFragmentManager().beginTransaction()
-//                            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-//                            .replace(R.id.fragment_container, fragmentMore).commit();
-//                    navigation.setVisibility(View.VISIBLE);
-//
-//
-//                }else if(key==3){
-//
-//                    toolbar.setVisibility(View.GONE);
-//                    Intent intent = new Intent(getActivity(), DetailActivity.class);
-//                    startActivity( intent );
-//                    getActivity().finish();
-//
-//
-//                }else {
-//                    getActivity().getSupportFragmentManager().popBackStack();
-//
-//
-//                }
-
-
-//                getActivity().getSupportFragmentManager().popBackStack();
-
-//                getActivity().getSupportFragmentManager().popBackStack();
 
                 toolbar.setVisibility(View.GONE);
 
@@ -163,19 +125,21 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Fragment reportAddressFragment=new ReportAddressFragment();
-                Bundle bundle=new Bundle(  );
-                bundle.putString( "sid",sidList.get( position ) );
-//                bundle.putString( "brand_name",brandList.get( position ) );
-//                bundle.putString( "type",items.get( category ) );
-//                bundle.putString( "accid", "null");
-                bundle.putInt( "key",0 );
-                reportAddressFragment.setArguments( bundle );
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                        .replace(R.id.fragment_container, reportAddressFragment).addToBackStack( null ).commit();
-                toolbar.setVisibility( View.GONE );
+//                Fragment reportAddressFragment=new ReportAddressFragment();
+//                Bundle bundle=new Bundle(  );
+//                bundle.putString( "sid",sidList.get( position ) );
+////
+//
+//                bundle.putInt( "key",0 );
+//                reportAddressFragment.setArguments( bundle );
+//                getActivity().getSupportFragmentManager().beginTransaction()
+//                        .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+//                        .replace(R.id.fragment_container, reportAddressFragment).addToBackStack( null ).commit();
+//                toolbar.setVisibility( View.GONE );
 
+                Intent intent=new Intent( getActivity(),ReportResultActivity.class );
+                intent.putExtra( "sid",sidList.get( position ) );
+                startActivity( intent );
             }
         } );
 
