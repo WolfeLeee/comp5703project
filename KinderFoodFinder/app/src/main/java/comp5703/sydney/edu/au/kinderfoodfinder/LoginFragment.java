@@ -27,6 +27,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
+import com.facebook.FacebookAuthorizationException;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
@@ -67,6 +68,7 @@ public class LoginFragment extends Fragment {
     private Fragment fragmentFBRegister;
     private boolean fblogin=true;
     String brand_version, store_version,brand_update,store_update;
+    private MD5Util md5Util=new MD5Util();
 
     String IP_ADDRESS = "10.16.82.52";
 
@@ -104,6 +106,7 @@ public class LoginFragment extends Fragment {
                 String email = inputEmail.getText().toString().trim();
                 String pwd = inputPwd.getText().toString().trim();
 
+
                 // login function
                 loginUser(email, pwd);
             }
@@ -120,13 +123,7 @@ public class LoginFragment extends Fragment {
             }
         });
 
-//                SQLiteDatabase database= contactDbHelper.getWritableDatabase();
-//                contactDbHelper.addContact( Integer.parseInt( id ),name,email,database );
-//                contactDbHelper.close();
-
-
-        UserDBHelper userDBHelper=new UserDBHelper( getActivity() );
-        SQLiteDatabase database=userDBHelper.getReadableDatabase();
+//
 
         Intent intent =getActivity().getIntent();
          brand_version=intent.getStringExtra( "brand_version" );
@@ -161,6 +158,12 @@ public class LoginFragment extends Fragment {
             @Override
             public void onError(FacebookException error) {
 
+                if (error instanceof FacebookAuthorizationException) {
+                    if (AccessToken.getCurrentAccessToken() != null) {
+                        LoginManager.getInstance().logOut();
+                    }
+                }
+
             }
         } );
 
@@ -183,13 +186,13 @@ public class LoginFragment extends Fragment {
         if (email.equals("test") && password.equals("test")) {
             loginProgressDialog.dismiss();
             Intent intent = new Intent(getActivity(), MainActivity.class);
-            deletefile();
-            writeToFile( "1;"+"Male,"+"7-5-2009,null,test,test");
+            deleteProfile();
+            writeProfile( "1;"+"Male,"+"7-5-2009,null,test,test");
             startActivity(intent);
             getActivity().finish();
             return;
         }
-        checkProfileFile();
+
         // set up
         String ipAddress = "10.16.206.194";  //100.101.72.250 Here should be changed to your server IP
         String url = "http://" + StatisticContract.StatisticEntry.IP_Address + ":3000/android-app-login?email=" + email + "&password=" + password;
@@ -209,8 +212,8 @@ public class LoginFragment extends Fragment {
                     // rewrite profile.txt which contains id, gender and birthday.
                     if(rep.length==2){
                         Log.d("Send profilefile:", rep[1]);
-                        deletefile();
-                        writeToFile( "1;"+rep[1] );
+                        deleteProfile();
+                        writeProfile( "1;"+rep[1] );
                     }
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
@@ -275,8 +278,7 @@ public class LoginFragment extends Fragment {
                         String image_url = "https://graph.facebook.com/" + id + "/picture?type=normal";
                         name = first_name + " " + last_name;
                         String fb_id = id;
-//                        RequestOptions requestOptions = new RequestOptions();
-//                        requestOptions.dontAnimate();
+//
 
                         Log.d( "facebook",name+" "+email +"; "+id);
                     } catch (JSONException e) {
@@ -328,8 +330,8 @@ public class LoginFragment extends Fragment {
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
                     getActivity().finish();
-                    deletefile();
-                    writeToFile( "1;"+rep[1]+","+password+","+email);
+                    deleteProfile();
+                    writeProfile( "1;"+rep[1]+","+password+","+email);
                     Log.d( "Profile","1;"+rep[1]+","+password+","+name+","+email );
 
 
@@ -365,14 +367,14 @@ public class LoginFragment extends Fragment {
     public void checkProfileFile(){
         File fileVersion = new File(getApplicationContext().getFilesDir(), "profile.txt");
         if(!(fileVersion.exists())) {
-            writeToFile( "0;1" );
+            writeProfile( "0;1" );
             Log.d( "profile", "Creating!" );
         }else
             Log.d("profile", "Existing!");
     }
 
     // write user information in the profile.txt
-    private void writeToFile(String version)
+    private void writeProfile(String version)
     {
         try
         {
@@ -387,7 +389,7 @@ public class LoginFragment extends Fragment {
 
     }
     // delete previous user information
-    public void deletefile() {
+    public void deleteProfile() {
         try {
             //
             File file = new File(getApplicationContext().getFilesDir(), "profile.txt");
@@ -398,7 +400,7 @@ public class LoginFragment extends Fragment {
     }
 
 
-    private String readFromFile()
+    private String readProfile()
     {
         String ret = "";
         try

@@ -110,13 +110,12 @@ public class StartUpActivity extends AppCompatActivity
         toolbar.setVisibility(View.GONE);
 
         // check if the file of version.txt has been created
-//        checkProfileFile();
         File fileVersion = new File(getApplicationContext().getFilesDir(), "version.txt");
         if(!(fileVersion.exists())) {
             writeToFile( "1,1,0" );
             Log.d( "VersionDatabase", "Creating!" );
         }
-        version = readFromFile();
+        version = readVersionFile();
         String[] v=version.split( "," );
         brand_version=v[0];
         store_version=v[1];
@@ -160,7 +159,7 @@ public class StartUpActivity extends AppCompatActivity
                 .replace(R.id.fragment_container, startFragment).commit();
     }
 
-    private String readFromFile()
+    private String readVersionFile()
     {
         String ret = "";
 
@@ -213,7 +212,7 @@ public class StartUpActivity extends AppCompatActivity
 
     }
 
-    public void deletefile() {
+    public void deleteVersionfile() {
         try {
             //
             File file = new File(getApplicationContext().getFilesDir(), "version.txt");
@@ -243,13 +242,13 @@ public class StartUpActivity extends AppCompatActivity
             //You can test it by printing response.substring(0,500) to the screen.
             Boolean loaddata=checkVersionFile();
             String[] result=response.split( "," );
-            String[] version=readFromFile().split( "," );
+            String[] version=readVersionFile().split( "," );
             int appbrand=1;
             int appstore=1;
             int serverbrand=1;
             int serverstore=1;
             Log.d("Send Update response:", response);
-            Log.d("Send Update version:", readFromFile());
+            Log.d("Send Update version:", readVersionFile());
 
             try{
                 serverbrand=Integer.parseInt( result[0] );
@@ -309,7 +308,7 @@ public class StartUpActivity extends AppCompatActivity
 //
             }
             if(serverbrand>appbrand|| serverstore>appstore){
-                deletefile();
+                deleteVersionfile();
                 String ver=response+","+"0";
                 writeToFile( ver );
                 Log.d("Send write file:", "yes");
@@ -841,14 +840,50 @@ public class StartUpActivity extends AppCompatActivity
         super.onStart();
         File fileVersion = new File(getApplicationContext().getFilesDir(), "profile.txt");
         if((fileVersion.exists())) {
-
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            finish();
+            String profile=readProfile();
+            if(profile.split( "," ).length>=3) {
+                Intent intent = new Intent( this, MainActivity.class );
+                startActivity( intent );
+                finish();
+            }
 
         }else{
             Log.d("profile", "Existing!");
 
         }
+    }
+
+    private String readProfile()
+    {
+        String ret = "";
+        try
+        {
+            InputStream inputStream = this.openFileInput("profile.txt");
+            if (inputStream != null )
+            {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null )
+                {
+                    stringBuilder.append(receiveString);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+
+            }
+        }
+        catch (FileNotFoundException e)
+        {
+            Log.e("login activity", "File not found: " + e.toString());
+        }
+        catch (IOException e)
+        {
+            Log.e("login activity", "Can not read file: " + e.toString());
+        }
+        return ret;
     }
 }

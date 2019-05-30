@@ -8,73 +8,44 @@
     tools:visibility="visible">
 
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tabLayout"
+    <RadioGroup
+        android:id="@+id/radioBrowse"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="70dp"
+        android:orientation="horizontal">
 
-        android:visibility="gone"
-        app:tabGravity="center"
-        app:tabIndicatorColor="@color/colorAccent"
-        app:tabMode="scrollable"
-        app:tabSelectedTextColor="@color/colorPrimaryDark"
-        app:tabTextColor="@color/colorPrimary" />
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewPager"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_below="@id/tabLayout"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp"
-        android:visibility="gone">
-
-    </android.support.v4.view.ViewPager>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-        <RadioGroup
-            android:id="@+id/radioBrowse"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/radioCategory"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:checked="false"
-                android:text="Category"
-                android:layout_gravity="center"/>
-
-            <RadioButton
-                android:id="@+id/radioAcc"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:checked="false"
-                android:text="Accreditation"
-                android:layout_gravity="center"/>
-
-            <RadioButton
-                android:id="@+id/radioRate"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:checked="false"
-                android:text="Rating"
-                android:layout_gravity="center"/>
-        </RadioGroup>
-
-        <ListView
-            android:id="@+id/browselv"
-            android:layout_width="match_parent"
+        <RadioButton
+            android:id="@+id/radioCategory"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_below="@+id/radioBrowse"/>
-    </RelativeLayout>
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:checked="false"
+            android:text="Category" />
+
+        <RadioButton
+            android:id="@+id/radioAcc"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:checked="false"
+            android:text="Accreditation" />
+
+        <RadioButton
+            android:id="@+id/radioRate"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:checked="false"
+            android:text="Rating" />
+    </RadioGroup>
+    <ListView
+        android:id="@+id/browselv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/radioBrowse"/>
+
 
 </RelativeLayout>

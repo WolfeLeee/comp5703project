@@ -69,7 +69,8 @@ public class MainActivity extends AppCompatActivity
         selectedFragment = homeFragment;
 
         // make the navigation page when first to using app
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, selectedFragment).commit();
 
         int id = getIntent().getIntExtra("id", 0);
         String sid= getIntent().getStringExtra( "sid" );

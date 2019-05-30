@@ -30,14 +30,7 @@ public class BrowseFragment extends Fragment
 {
     // defined variables
 
-    TabLayout tabLayout;
-    ViewPager viewPager;
     View view;
-    String[] mTitle = new String[3];
-    String[] mData = new String[3];
-    private List<String> mTitles;
-    private List<Fragment> mFragment;
-    private HomeFragment homeFragment;
 
     private List<String> tabs;
     private RadioGroup browsegorup;
@@ -56,45 +49,26 @@ public class BrowseFragment extends Fragment
     private Fragment broseresultFragment;
     int type=1;
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState( outState );
-    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_browse, container, false);
 
         view = inflater.inflate(R.layout.fragment_browse, container, false);
-        tabLayout= (TabLayout) view.findViewById(R.id.tabLayout);
 
-        tabLayout.addTab(tabLayout.newTab().setText("Category"));
 
-        tabLayout.addTab(tabLayout.newTab().setText("Accredation"));
-
-        tabLayout.addTab(tabLayout.newTab().setText("Rating"));
-        tabLayout.setTabMode(TabLayout.MODE_FIXED);
-
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewPager);
 
         categroylist=new ArrayList<>(  );
         ratinglist=new ArrayList<>(  );
         accreditationlist=new ArrayList<>(  );
 
         BrowsePageAdapter adapter = new BrowsePageAdapter(getChildFragmentManager());
-        viewPager.setAdapter(adapter);
-        tabLayout.setupWithViewPager( viewPager );
         listView=view.findViewById( R.id.browselv );
 
         browsegorup=view.findViewById( R.id.radioBrowse );
         additem();
         final Bundle args= new Bundle(  );
-
-//        result=categroylist;
-//        ArrayAdapter<String> intialAdapter=new ArrayAdapter<String>( getActivity(), android.R.layout.simple_list_item_1,result);
-//        listView.setAdapter( intialAdapter );
         Utility.setListViewHeightBasedOnChildren( listView );
         browsegorup.setOnCheckedChangeListener( new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -133,9 +107,9 @@ public class BrowseFragment extends Fragment
         ratinglist.add( "Best" );
         ratinglist.add( "Good" );
         ratinglist.add( "Avoid" );
-        egglist=DaoUnit.getInstance().getcategoryList( "egg" );
-        chickenlist=DaoUnit.getInstance().getcategoryList( "chicken" );
-        piglist=DaoUnit.getInstance().getcategoryList( "pig" );
+//        egglist=DaoUnit.getInstance().getcategoryList( "egg" );
+//        chickenlist=DaoUnit.getInstance().getcategoryList( "chicken" );
+//        piglist=DaoUnit.getInstance().getcategoryList( "pig" );
         test=DaoUnit.getInstance().getAcc();
         String typeinfo="";
         ArrayList<Product> ps =DaoUnit.getInstance().getProduct();
@@ -157,8 +131,6 @@ public class BrowseFragment extends Fragment
                 accreditationlist.add( acc );
             }
         }
-        Log.d("accsize",String.valueOf( test.size() )+"; "+String.valueOf( accreditationlist.size() )+"; "+String.valueOf( chickenlist.size() )+"; ");
-
     }
 
     public void selectList(int i){
@@ -181,4 +153,19 @@ public class BrowseFragment extends Fragment
                 break;
         }
     }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate( savedInstanceState );
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        browsegorup.clearCheck();
+        listView.setAdapter( null );
+
+    }
+
 }

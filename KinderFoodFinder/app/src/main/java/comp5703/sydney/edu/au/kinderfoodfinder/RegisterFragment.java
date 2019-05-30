@@ -58,6 +58,10 @@ public class RegisterFragment extends Fragment
     private ProgressDialog registerProgressDialog;
 
     private Toolbar toolbar;
+    private MD5Util md5Util = new MD5Util();
+
+
+
     String IP_ADDRESS = "10.16.82.52";
     @Nullable
     @Override
@@ -106,7 +110,6 @@ public class RegisterFragment extends Fragment
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                         mDateSetListener,
                         year, month, day);
-
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
@@ -213,6 +216,7 @@ public class RegisterFragment extends Fragment
         String[] temp = birthday.split("/");
         birthdayModified = temp[0] + "-" + temp[1] + "-" + temp[2];
 
+
         // modify the user data to the server
         String url;
         String ipAddress = "10.16.206.194";  //100.101.72.250 Here should be changed to your server IP
@@ -237,15 +241,13 @@ public class RegisterFragment extends Fragment
                 if(result.length==2 && result[0].equalsIgnoreCase( "Create" )){
                     registerProgressDialog.dismiss();
                     Intent intent = new Intent(getActivity(), MainActivity.class);
-                    deletefile();
+                    deleteProfile();
                     writeToFile( "1;"+gender+","+birthdayModified+","+result[1]+","+name+","+email);
                     startActivity(intent);
                     getActivity().finish();
                     Toast.makeText(getActivity(), "Registered Successfully!", Toast.LENGTH_SHORT).show();
                     Log.d("Send query response:", response);
                 }
-
-
             }
         },
                 new Response.ErrorListener()  //Create an error listener to handle errors appropriately.
@@ -279,7 +281,7 @@ public class RegisterFragment extends Fragment
 
     }
 
-    public void deletefile() {
+    public void deleteProfile() {
         try {
             //
             File file = new File(getApplicationContext().getFilesDir(), "profile.txt");

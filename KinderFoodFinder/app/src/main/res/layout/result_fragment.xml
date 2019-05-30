@@ -18,12 +18,21 @@
         android:id="@+id/eggsv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:queryHint="Search by Product Brand" />
+        android:queryHint="Search by Brand Name">
 
-    <ListView
-        android:id="@+id/resultlv"
+    </SearchView>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="600dp" />
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/recyclerlist"
+            android:scrollbars="vertical"
+            />
+    </RelativeLayout>
 
 
 </LinearLayout>

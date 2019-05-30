@@ -123,8 +123,6 @@ public class FBRegisterFragment extends Fragment {
                 LoginManager.getInstance().logOut();
 
 
-
-
                 // remove toolbar again
                 toolbar.setVisibility(View.GONE);
             }
@@ -201,7 +199,8 @@ public class FBRegisterFragment extends Fragment {
         @Override
         protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
 
-            if(currentAccessToken==null){
+            if(currentAccessToken!=null){
+
 
             }
             else {
