@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import comp5703.sydney.edu.au.kinderfoodfinder.Database.ProductContract;
+import comp5703.sydney.edu.au.kinderfoodfinder.LocateItem;
 
 public class StoreHelper extends SQLiteOpenHelper {
 
@@ -70,6 +71,10 @@ public class StoreHelper extends SQLiteOpenHelper {
         if (data.moveToFirst()) {
             do {
                 String brandname = data.getString(data.getColumnIndex("Brandname"));
+                String store = data.getString(data.getColumnIndex("storeName"));
+                String street = data.getString(data.getColumnIndex("StreetAddress"));
+                String postcode = data.getString(data.getColumnIndex("Postcode"));
+                String state = data.getString(data.getColumnIndex("State"));
 
                 brandName = brandname;
                 AllBrandList.add(brandName);
@@ -118,6 +123,41 @@ public class StoreHelper extends SQLiteOpenHelper {
 
 
         return LocationList;
+    }
+
+    public ArrayList<String> getLocateItem() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor data = db.rawQuery(
+                "SELECT Brandname FROM store_table GROUP BY Brandname", new String[]{});
+
+        ArrayList<String> LocateList = new ArrayList<>();
+
+//        String location;
+
+        if (data.moveToFirst()) {
+            do {
+                String brandname = data.getString(data.getColumnIndex("Brandname"));
+//                String store = data.getString(data.getColumnIndex("storeName"));
+//                String street = data.getString(data.getColumnIndex("StreetAddress"));
+//                String postcode = data.getString(data.getColumnIndex("Postcode"));
+//                String state = data.getString(data.getColumnIndex("State"));
+
+//                location = store + ", " + street + ", " + postcode + ", " + state;
+
+                LocateList.add(brandname);
+
+            } while (data.moveToNext());
+        }
+        data.close();
+
+
+//        String address = data.getString(data.getColumnIndex(StoreContract.StoreEntry.STORE_NAME + ","+ StoreContract.StoreEntry.STREET + "," +
+//                StoreContract.StoreEntry.POSTCODE + "," + StoreContract.StoreEntry.STATE));
+//
+//        Log.d("QueryAddress",address);
+
+
+        return LocateList;
     }
 
     public String getBrand(String brand) {
