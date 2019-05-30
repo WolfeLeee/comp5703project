@@ -1,6 +1,7 @@
 package comp5703.sydney.edu.au.kinderfoodfinder;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
@@ -48,6 +49,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mancj.materialsearchbar.MaterialSearchBar;
+import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -59,6 +61,7 @@ import comp5703.sydney.edu.au.kinderfoodfinder.Adapter.SearchAdapter;
 import comp5703.sydney.edu.au.kinderfoodfinder.Database.StoreDatabase;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.StoreHelper;
 import comp5703.sydney.edu.au.kinderfoodfinder.Remote.IGoogleAPIService;
+
 
 public class LocateFragment extends Fragment implements
         OnMapReadyCallback,
@@ -76,6 +79,8 @@ public class LocateFragment extends Fragment implements
     private LocationRequest mLocationRequest;
     private Marker mMarker, NearbyMarker;
     private Fragment fragmentreport, fragmentreportaddress;
+    private LocateAdapter locateAdapter;
+    private List<LocateItem> itemList = new ArrayList<>();
 
 
     IGoogleAPIService mService;
@@ -86,15 +91,13 @@ public class LocateFragment extends Fragment implements
     private StoreDatabase storedatabase;
     StoreHelper storeHelper;
     SearchView searchView;
-    ListView listView, suggestView;
+    ListView listView;
     NearbyAdapter listAdapter;
     ArrayAdapter ListAdapter;
     int Locate_key, Distance_key;
     String Brand;
     Button twenty, five, ten, fifty;
-    ArrayList<LocateItem> locateItems;
     LinearLayoutManager layoutManager;
-    private LocateAdapter locateAdapter;
     MaterialSearchBar materialSearchBar;
     Spinner dropdown;
 
@@ -114,7 +117,8 @@ public class LocateFragment extends Fragment implements
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        View mView = inflater.inflate(R.layout.fragment_locate, container, false);
+//        buildGoogleApiClienr();
+        final View mView = inflater.inflate(R.layout.fragment_locate, container, false);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
@@ -126,14 +130,14 @@ public class LocateFragment extends Fragment implements
         mService = Common.getGoogleAPIService();
         range = mView.findViewById(R.id.range);
         add_report = mView.findViewById(R.id.add_report);
-        searchView = mView.findViewById(R.id.search_bar);
+//        searchView = mView.findViewById(R.id.search_bar);
         listView = mView.findViewById(R.id.listview_search);
 //        suggestView = mView.findViewById(R.id.listview_suggest);
-        searchView.setFocusable(false);
+//        searchView.setFocusable(false);
 
-//        //get the spinner from the xml.
+        //get the spinner of the distance.
         dropdown = mView.findViewById(R.id.distance);
-        final String[] distances = new String[]{"2000", "5000", "10000", "20000", "50000"};
+        final String[] distances = new String[]{"1 km", "5 km", "10 km", "20 km", "50 km"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, distances);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dropdown.setAdapter(adapter);
@@ -146,15 +150,15 @@ public class LocateFragment extends Fragment implements
                 int index = parent.getSelectedItemPosition();
 //                Locate_key = Integer.parseInt(parent.getItemAtPosition(position).toString());
 
-                if(distances[index].equals("2000")){
-                    Distance_key = 2000;
-                }else if(distances[index].equals("5000")){
+                if(distances[index].equals("1 km")){
+                    Distance_key = 1000;
+                }else if(distances[index].equals("5 km")){
                     Distance_key = 5000;
-                }else if(distances[index].equals("10000")){
+                }else if(distances[index].equals("10 km")){
                     Distance_key = 10000;
-                }else if(distances[index].equals("20000")){
+                }else if(distances[index].equals("20 km")){
                     Distance_key = 20000;
-                }else if(distances[index].equals("50000")){
+                }else if(distances[index].equals("50 km")){
                     Distance_key = 50000;
                 }
             }
@@ -225,58 +229,82 @@ public class LocateFragment extends Fragment implements
         storeHelper = new StoreHelper(getActivity());
         fragmentreportaddress = new ReportAddressFragment();
 
-        ArrayList<String> NearbyList = new ArrayList<>();
 
-//        materialSearchBar = mView.findViewById(R.id.search_bar);
-//        // Setup search bar
-//
-//        materialSearchBar.setHint("Search Brand Name...");
-//        materialSearchBar.setCardViewElevation(10);
+
+
+
+        // Setup search bar
+        materialSearchBar = mView.findViewById(R.id.search_bar);
+        inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        locateAdapter = new LocateAdapter(inflater);
+
+        materialSearchBar.setHint("Search Brand Name...");
+        materialSearchBar.setCardViewElevation(10);
+        materialSearchBar.setMaxSuggestionCount(5);
 //        loadSuggestList();
-//
-//        materialSearchBar.addTextChangeListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
+        final ArrayList<String> locateList = storeHelper.getLocateItem();
+        final ArrayList<LocateItem> suggestions = new ArrayList<>();
+        for (int i = 1; i < locateList.size(); i++) {
+            suggestions.add(new LocateItem(locateList.get(i)));
+        }
+
+        locateAdapter.setSuggestions(suggestions);
+        materialSearchBar.setCustomSuggestionAdapter(locateAdapter);
+
+        materialSearchBar.addTextChangeListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                Log.d("LOG_TAG", getClass().getSimpleName() + " text changed " + materialSearchBar.getText());
+                // send the entered text to our filter and let it manage everything
+                locateAdapter.getFilter().filter(materialSearchBar.getText());
+//                materialSearchBar.setLastSuggestions(locateList);
+
 //                List<String> suggest = new ArrayList<>();
-//                for(String search:suggestList) {
-//                    if (search != null) {
-//                        if (search.toLowerCase().contains(materialSearchBar.getText().toLowerCase()))
-//                        {
-//                            suggest.add(search);
-//                        } materialSearchBar.setLastSuggestions(suggest);
-//                    }
+//                for(String search:suggestList){
+//                    if(search.toLowerCase().contains(materialSearchBar.getText().toLowerCase()))
 //                }
-//
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+//        materialSearchBar.setSuggestionsClickListener(new LocateAdapter.OnItemViewClickListener() {
+//            @Override
+//            public void OnItemClickListener(int position, View v) {
+//                LocateItem l = suggestions.get(position);
 //            }
 //
 //            @Override
-//            public void afterTextChanged(Editable s) {
+//            public void OnItemDeleteListener(int position, View v) {
 //
 //            }
 //        });
-//
-//        materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
-//            @Override
-//            public void onSearchStateChanged(boolean enabled) {
-//
-//            }
-//
-//            @Override
-//            public void onSearchConfirmed(CharSequence text) {
-//                startSearch(text.toString());
-//            }
-//
-//            @Override
-//            public void onButtonClicked(int buttonCode) {
-//
-//            }
-//        });
+
+        materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
+            @Override
+            public void onSearchStateChanged(boolean enabled) {
+
+            }
+
+            @Override
+            public void onSearchConfirmed(CharSequence text) {
+                startSearch(text.toString());
+            }
+
+            @Override
+            public void onButtonClicked(int buttonCode) {
+
+            }
+        });
 
         // Jump to Report Page
 
@@ -300,30 +328,38 @@ public class LocateFragment extends Fragment implements
 
 
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-
-                startSearch(query);
-                return false;
-
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-//                FillbrandSuggest();
-//                List<String> brandlist = storeHelper.getAllBrand();
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
 //
-//                for(int i = 1; i < brandlist.size(); i++){
-//                    locateItems.add(new LocateItem(brandlist.get(i)));
-//                }
-//                locateAdapter = new LocateAdapter(getContext(), locateItems);
-//                locateAdapter.getFilter().filter(s);
+////                startSearch(query);
+//                ListView suggestView = mView.findViewById(R.id.listview_suggest);
+//                final ArrayList<LocateItem> locatelist = storeHelper.getLocateItem(query);
+//                LocateAdapter locateAdapter = new LocateAdapter(getActivity(), locatelist);
 //                suggestView.setAdapter(locateAdapter);
+//                locateAdapter.notifyDataSetChanged();
+//
+//                suggestView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//                        LocateItem item = locatelist.get(position);
+//                        String brand = item.getBrand();
+//                        startSearch(brand);
+//
+//                    }
+//                });
+//                return false;
+//
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String s) {
+//
+//                return false;
+//            }
+//        });
 
-                return false;
-            }
-        });
 
         return mView;
     }
@@ -430,10 +466,10 @@ public class LocateFragment extends Fragment implements
     }
 
 
-    private void loadSuggestList() {
-        suggestList = storeHelper.getAllBrand();
-        materialSearchBar.setLastSuggestions(suggestList);
-    }
+//    private void loadSuggestList() {
+//        suggestList = storeHelper.getLocateItem();
+//        materialSearchBar.setLastSuggestions(suggestList);
+//    }
 
 
 

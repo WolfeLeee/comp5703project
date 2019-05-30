@@ -17,11 +17,11 @@ class SearchViewHolder extends RecyclerView.ViewHolder{
     public TextView brand_name, category, accreditation, rating, location;
     public SearchViewHolder(@NonNull View itemView) {
         super(itemView);
-        brand_name = itemView.findViewById(R.id.brand_name);
-        category = itemView.findViewById(R.id.category);
-        accreditation = itemView.findViewById(R.id.accreditation);
-        rating = itemView.findViewById(R.id.rating);
-        location = itemView.findViewById(R.id.location);
+//        brand_name = itemView.findViewById(R.id.brand_name);
+//        category = itemView.findViewById(R.id.category);
+//        accreditation = itemView.findViewById(R.id.accreditation);
+//        rating = itemView.findViewById(R.id.rating);
+//        location = itemView.findViewById(R.id.location);
 
     }
 }
