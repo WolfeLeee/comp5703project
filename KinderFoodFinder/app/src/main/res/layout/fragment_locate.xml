@@ -45,7 +45,7 @@
         android:layout_below="@+id/map"
         android:layout_width="100dp"
         android:layout_height="30dp"
-        android:text="Distance (m):"
+        android:text="Distance :"
         android:gravity="center_vertical"
         android:textSize="15sp"
         android:textStyle="bold"

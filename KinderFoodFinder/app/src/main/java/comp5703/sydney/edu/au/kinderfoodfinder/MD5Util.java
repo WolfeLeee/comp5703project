@@ -6,14 +6,12 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-/**
-
- */
 public class MD5Util {
     private static final String TAG = "MD5Util";
 
     /***
-     *
+     * Convert byte array to hex string
+     * return hex value String
      */
     public static String string2MD5(String inStr) {
         Log.e(TAG, "string2MD5: -------------------------");
@@ -53,14 +51,14 @@ public class MD5Util {
         }
         String s = new String(a);
         return s;
-
     }
-
-
+    /**
+     * MD5 encoding
+     * @return Results after MD5 encryption
+     */
 
     public String encrypt(String str) {
         // String s = new String(str);
-
         // MD5
         String s1 = string2MD5(str);
         //

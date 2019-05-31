@@ -76,18 +76,6 @@ public class MainActivity extends AppCompatActivity
         String sid= getIntent().getStringExtra( "sid" );
         int key=getIntent().getIntExtra( "key",0 );
         if (id == 1) {
-//            getSupportFragmentManager()
-//                    .beginTransaction()
-//                    .replace(R.id.fragment_container,new LocateFragment())
-//                    .addToBackStack(null)
-//                    .commit();
-//            selectedFragment=locateFragment;
-//
-//            getSupportFragmentManager().beginTransaction()
-//                    .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-//                    .replace(R.id.fragment_container, selectedFragment).commit();
-//            navigation.setSelectedItemId(R.id.navigation_locate);
-
             navigation.setSelectedItemId(R.id.navigation_locate);
 
             Bundle bundle=new Bundle(  );
@@ -133,16 +121,6 @@ public class MainActivity extends AppCompatActivity
         }
 
 
-//        Intent intent =getIntent();
-//        final String brandVersion=intent.getStringExtra( "brand_version" );
-//        final String brandUpdate=intent.getStringExtra( "brand_update" );
-//        final String status=intent.getStringExtra( "status" );
-//        final String userID=intent.getStringExtra( "userID" );
-//        final String gender=intent.getStringExtra( "gender" );
-//        final String birthday=intent.getStringExtra( "birthday" );
-//        Log.d("statistic",brandVersion+", "+brandVersion+", "+status+", "+userID+", "+gender+", "+birthday);
-//
-//        Intent intent1=new Intent( MainActivity.this,DetailActivity.class );
     }
 
 

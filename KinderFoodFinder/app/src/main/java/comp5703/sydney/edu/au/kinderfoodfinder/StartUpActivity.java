@@ -252,7 +252,7 @@ public class StartUpActivity extends AppCompatActivity
 
             try{
                 serverbrand=Integer.parseInt( result[0] );
-                serverstore=Integer.parseInt( result[0] );
+                serverstore=Integer.parseInt( result[1] );
 
                 appbrand=Integer.parseInt( version[0] );
                 appstore=Integer.parseInt( version[1] );
@@ -281,17 +281,8 @@ public class StartUpActivity extends AppCompatActivity
 
 
             }else {
-                Toast.makeText(StartUpActivity.this, "Same Version!", Toast.LENGTH_SHORT).show();
                 Log.d("Send Brand Update:", "no");
-//                if(status.equals( "0" )){
-//                    startIntent.putExtra( "brand_version",response );
-//                    startIntent.putExtra( "brand_update","yes" );
-//                }else {
-////                    Intent intent=new Intent(StartUpActivity.this,MainActivity.class  );
-//                    intent.putExtra( "brand_version",response );
-//                    intent.putExtra( "brand_update","yes" );
-//                }
-//                Log.d("update versionDatabase","brand"+brand_version+"   "+"store"+store_version)
+//
             }
 
             if(serverstore>appstore||loaddata){
@@ -303,15 +294,17 @@ public class StartUpActivity extends AppCompatActivity
                 new StoreJsonTask().execute("http://" + StatisticContract.StatisticEntry.IP_Address + ":3000/GetAllBrandinStore");
 
             }else {
-                Toast.makeText(StartUpActivity.this, "Same Version!", Toast.LENGTH_SHORT).show();
                 Log.d("Send Store Update:", "no");
 //
             }
             if(serverbrand>appbrand|| serverstore>appstore){
                 deleteVersionfile();
-                String ver=response+","+"0";
+                String ver=response;
                 writeToFile( ver );
                 Log.d("Send write file:", "yes");
+            }else {
+                Toast.makeText(StartUpActivity.this, "Same Version!", Toast.LENGTH_SHORT).show();
+
             }
         }
     },

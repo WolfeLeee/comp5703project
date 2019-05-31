@@ -30,12 +30,10 @@ public class BrandRecyclerAdapter extends RecyclerView.Adapter<BrandRecyclerAdap
 
     private ArrayList<Product> productsList;
     private Context context;
-
     private ArrayList<Product> filterList=new ArrayList<>(  );
-
     private CustomFilter filter;
 
-
+    // set variables into the constructor
     public BrandRecyclerAdapter(Context context,ArrayList<Product> products){
         this.context=context;
         this.productsList=products;
@@ -43,23 +41,25 @@ public class BrandRecyclerAdapter extends RecyclerView.Adapter<BrandRecyclerAdap
     }
     @NonNull
     @Override
+    // inflates the item layout from xml
     public BrandViewHolder onCreateViewHolder( ViewGroup viewGroup, int i) {
         View view= LayoutInflater.from( viewGroup.getContext() ).inflate( R.layout.recycler_brand, viewGroup,false );
         BrandViewHolder brandViewHolder=new BrandViewHolder( view,context,productsList );
         return brandViewHolder;
     }
 
+
     @Override
+    // binds the data to the viewHolder in each row
     public void onBindViewHolder(BrandViewHolder viewHolder, int i) {
-
-
         int best_count=0;
         int good_count=0;
         int avoid_count=0;
-
-//        List<Accreditation> accreditationList=productsList.get( position ).getAccreditation();
-
         String sid=productsList.get( i ).getSid();
+
+        Product product=productsList.get( i );
+        viewHolder.brandImage.setTag(productsList.get(i));
+
         List<AccEntity> accreditationList= readAccreditation( sid );
         viewHolder.brand.setText(productsList.get(i).getBrand_Name());
         for(AccEntity acc:accreditationList){
@@ -71,21 +71,31 @@ public class BrandRecyclerAdapter extends RecyclerView.Adapter<BrandRecyclerAdap
                 avoid_count++;
             }
         }
+        String image=product.getImage();
+        String url = "http://" + StatisticContract.StatisticEntry.IP_Address + ":3000/uploads/"+ image+".jpg";
+//        if(image!=null){
+////            Picasso.with(viewHolder.brandImage.getContext()).cancelRequest(viewHolder.brandImage);
+//
+//
+//            Picasso.with(viewHolder.brandImage.getContext()).load(url).into(viewHolder.brandImage);
+//
+////            Picasso.with( context ).load( url ).into( viewHolder.brandImage );
+//        }
+
+        if (productsList.get(i).getImage()!=null) {
+            Picasso.with(viewHolder.brandImage.getContext()).load(url).into(viewHolder.brandImage);
+
+        } else {
+            viewHolder.brandImage.setImageResource(R.drawable.logo);
+        }
         viewHolder.best.setText( "Best: "+String.valueOf( best_count ) );
         viewHolder.good.setText( "Good: "+String.valueOf( good_count ) );
         viewHolder.avoid.setText( "Avoid: "+String.valueOf( avoid_count ) );
-        String image=productsList.get(i).getImage();
-
-        String url = "http://" + StatisticContract.StatisticEntry.IP_Address + ":3000/uploads/"+ image+".jpg";
-
-        if(image!=null){
-            Picasso.with( context ).load( url ).into( viewHolder.brandImage );
-        }
-
 
     }
 
     @Override
+    // total number of rows in the recycler view
     public int getItemCount() {
         return productsList.size();
     }
@@ -97,7 +107,6 @@ public class BrandRecyclerAdapter extends RecyclerView.Adapter<BrandRecyclerAdap
         }
         return filter;
     }
-
     class CustomFilter extends Filter{
 
         @Override
@@ -133,6 +142,7 @@ public class BrandRecyclerAdapter extends RecyclerView.Adapter<BrandRecyclerAdap
         }
     }
 
+    // stores and recycles views as they are scrolled off screen
     public static class BrandViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView brand;
         TextView best ;
@@ -141,6 +151,7 @@ public class BrandRecyclerAdapter extends RecyclerView.Adapter<BrandRecyclerAdap
         ImageView brandImage;
         Context context;
         ArrayList<Product> productArrayList=new ArrayList<>(  );
+        // set variables in to constructor and find views id
         public BrandViewHolder( View itemView,Context context,ArrayList<Product> productArrayList) {
             super( itemView );
             this.productArrayList=productArrayList;
@@ -151,24 +162,22 @@ public class BrandRecyclerAdapter extends RecyclerView.Adapter<BrandRecyclerAdap
              good=itemView.findViewById( R.id.good );
              avoid=itemView.findViewById( R.id.avoid );
              brandImage = itemView.findViewById( R.id.brand_image );
-
-
         }
 
         @Override
+        // set on item click and go to the detail page
         public void onClick(View v) {
-
             int position=getAdapterPosition();
             Product product=this.productArrayList.get( position );
             Intent intent = new Intent(context, DetailActivity.class);
             String accId=product.getAccreditation().get( 0 ).getSid();
-
             if (intent != null) {
                         intent.putExtra( "stringId", product.getSid() );
                         intent.putExtra( "page", "search" );
                         intent.putExtra( "accid", accId );
                         this.context.startActivity( intent );
-                    }
+
+            }
 
         }
     }

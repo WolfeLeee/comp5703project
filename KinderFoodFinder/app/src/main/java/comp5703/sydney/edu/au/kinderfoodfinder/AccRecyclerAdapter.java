@@ -19,15 +19,13 @@ public class AccRecyclerAdapter extends RecyclerView.Adapter<AccRecyclerAdapter.
     private ArrayList<Items> itemsList;
     private ArrayList<Items> filterList;
     private CustomFilter filter;
-
-
+    // set variables into the constructor
     public AccRecyclerAdapter(Context context,ArrayList<Items> items){
         this.context=context;
         this.itemsList=items;
         this.filterList = itemsList;
-
     }
-
+    // inflates the item layout from xml
     @NonNull
     @Override
     public AccViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -36,9 +34,10 @@ public class AccRecyclerAdapter extends RecyclerView.Adapter<AccRecyclerAdapter.
         return accViewHolder;
     }
 
+    // binds the data to the viewHolder in each row
     @Override
     public void onBindViewHolder(AccViewHolder viewHolder, int position) {
-
+        // set view data
         viewHolder.brand.setText(itemsList.get(position).getBrand());
         viewHolder.accreditation.setText( itemsList.get( position ).getAccreditation() );
         String rate=itemsList.get( position ).getRating();
@@ -55,36 +54,34 @@ public class AccRecyclerAdapter extends RecyclerView.Adapter<AccRecyclerAdapter.
 
         }
     }
-
+    // total number of rows in the recycler view
     @Override
     public int getItemCount() {
         return itemsList.size();
     }
 
 
-
+    // stores and recycles views as they are scrolled off screen
     public static class AccViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView brand ;
         TextView accreditation;
         TextView rating;
         TextView type;
-
         Context context;
         ArrayList<Items> itemsArrayList=new ArrayList<>(  );
-
+        // set variables in to constructor and find views id
         public AccViewHolder( View itemView,Context context,ArrayList<Items> items) {
             super( itemView );
             this.context=context;
             this.itemsArrayList=items;
             itemView.setOnClickListener( this );
-
             brand = itemView.findViewById(R.id.brand);
              accreditation =itemView.findViewById( R.id.accreditation );
              rating=itemView.findViewById( R.id.rating );
              type=itemView.findViewById( R.id.type );
 
         }
-
+        // set on item click and go to the detail page
         @Override
         public void onClick(View v) {
             int position=getAdapterPosition();
@@ -97,8 +94,6 @@ public class AccRecyclerAdapter extends RecyclerView.Adapter<AccRecyclerAdapter.
                         intent.putExtra( "accid", items.getAccID() );
                         this.context.startActivity( intent );
                     }
-
-
         }
     }
 
