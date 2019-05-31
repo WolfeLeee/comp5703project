@@ -166,7 +166,7 @@ public class RegisterFragment extends Fragment
     /* * * * * * * * * * * *
      * Register Functions  *
      * * * * * * * * * * * */
-    private void registerUser(final String name, final String gender, final String email, String pwd, String confirmPwd, final String birthday, boolean showBirthday)
+    private void registerUser(final String name, final String gender, final String email, String pwd, String confirmPwd, final String birthday, final boolean showBirthday)
     {
         // check if the texts are empty
         if(TextUtils.isEmpty(name))
@@ -242,6 +242,13 @@ public class RegisterFragment extends Fragment
                     registerProgressDialog.dismiss();
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     deleteProfile();
+                    if(!showBirthday){
+                        writeToFile( "1;"+gender+","+birthdayModified+","+result[1]+","+name+","+email);
+
+                    }else {
+                        writeToFile( "1;"+gender+","+"Not Disclose"+","+result[1]+","+name+","+email);
+
+                    }
                     writeToFile( "1;"+gender+","+birthdayModified+","+result[1]+","+name+","+email);
                     startActivity(intent);
                     getActivity().finish();

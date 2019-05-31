@@ -136,7 +136,7 @@ public class MoreFragment extends Fragment
             public void onClick(View v)
             {
                 // login and register fragment are not in the same activity so need to go to start up activity
-                deletefile();
+                deleteProfile();
 
                 Intent intent = new Intent(getActivity(), StartUpActivity.class);
                 startActivity(intent);
@@ -160,7 +160,7 @@ public class MoreFragment extends Fragment
         return view;
     }
 
-    public void deletefile() {
+    public void deleteProfile() {
         try {
             //
             File file = new File(getApplicationContext().getFilesDir(), "profile.txt");

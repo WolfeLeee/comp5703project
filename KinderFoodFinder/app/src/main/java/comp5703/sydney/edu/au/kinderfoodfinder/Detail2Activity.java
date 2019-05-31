@@ -412,8 +412,10 @@ public class Detail2Activity extends AppCompatActivity {
             result="40-49 years";
         }else if(age>=50&&age<60){
             result="50-59 years";
-        }else {
+        }else if(age>=60){
             result="60+ years";
+        }else {
+            result="Not Disclose";
         }
 
 

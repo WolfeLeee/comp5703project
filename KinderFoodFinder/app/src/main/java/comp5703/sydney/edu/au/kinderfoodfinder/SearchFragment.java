@@ -113,19 +113,14 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
                 searchView.setQuery( "",false );
                 category = checkedId;
                 String type=items.get( temp );
-                new Searchbrand().doInBackground(   );
+                new SearchResult().doInBackground(   );
                 // set list view
                 if(category==R.id.radioBrandName){
-//                    product.setAdapter( brandAdapter );
-//                    brandAdapter.notifyDataSetChanged();
-//                    Utility.setListViewHeightBasedOnChildren( product );
                     brandRecyclerAdapter=new BrandRecyclerAdapter( getActivity(),result );
                     recyclerView.setAdapter( brandRecyclerAdapter );
                     brandRecyclerAdapter.notifyDataSetChanged();
                 }else {
-//                    product.setAdapter( productAdapter );
-//                    productAdapter.notifyDataSetChanged();
-//                    Utility.setListViewHeightBasedOnChildren(product);
+
                     accRecyclerAdapter=new AccRecyclerAdapter( getActivity(),accResult );
                     recyclerView.setAdapter( accRecyclerAdapter );
                     accRecyclerAdapter.notifyDataSetChanged();
@@ -133,13 +128,7 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
             }
         });
 
-//        searchView.setOnSearchClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//
-//            }
-//        });
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -150,23 +139,12 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
             @Override
             public boolean onQueryTextChange(String newText) {
                 if(category==R.id.radioBrandName){
-                    new Searchbrand().doInBackground( "brand",newText );
-//                    result=DaoUnit.getInstance().searchByBrand( category,items.get( temp ),newText );
-//                    BrandAdapter brandAdapter=new BrandAdapter( getActivity(),result );
-//                    product.setAdapter( brandAdapter );
-//                    brandAdapter.notifyDataSetChanged();
-//                    Utility.setListViewHeightBasedOnChildren( product );
+                    new SearchResult().doInBackground( "brand",newText );
                     brandRecyclerAdapter=new BrandRecyclerAdapter( getActivity(),result );
                     recyclerView.setAdapter( brandRecyclerAdapter );
                     brandRecyclerAdapter.notifyDataSetChanged();
                 }else if(category==R.id.radioAccreditation){
-                    new Searchbrand().doInBackground( "acc",newText );
-
-//                    accResult=DaoUnit.getInstance().searchByAcc( category,items.get( temp ),newText );
-//                    ItemsAdapter productAdapter=new ItemsAdapter( getActivity(),accResult );
-//                    product.setAdapter( productAdapter );
-//                    productAdapter.notifyDataSetChanged();
-//                    Utility.setListViewHeightBasedOnChildren(product);
+                    new SearchResult().doInBackground( "acc",newText );
                     accRecyclerAdapter=new AccRecyclerAdapter( getActivity(),accResult );
                     recyclerView.setAdapter( accRecyclerAdapter );
                     accRecyclerAdapter.notifyDataSetChanged();
@@ -176,40 +154,6 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
             }
         });
 
-//        product.setOnItemClickListener( new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-////                Product p= (Product) productAdapter.getItem( position );
-//                if(category==R.id.radioBrandName){
-//                    Product p=result.get( position );
-//                    String accId=p.getAccreditation().get( 0 ).getSid();
-//                    Intent intent = new Intent(getActivity(), DetailActivity.class);
-//                    if (intent != null) {
-////
-//                        intent.putExtra( "stringId",p.getSid() );
-//                        intent.putExtra( "page","search" );
-//                        List<Accreditation> accreditation= (List<Accreditation>) p.getAccreditation();
-//                        intent.putExtra( "accid",accId );
-////                    intent.putExtra("img", String.valueOf(c.getImg()));
-//                        startActivity( intent );
-//
-//                    }
-//                }else if(category==R.id.radioAccreditation) {
-//                    Intent intent = new Intent( getActivity(), Detail2Activity.class );
-//                    Items acc=accResult.get( position );
-//                    if (intent != null) {
-////                        Accreditation accreditation= (Accreditation) p.getAccreditation();
-//                        intent.putExtra( "stringId", acc.getSid());
-//                        intent.putExtra( "page", "search" );
-//                        intent.putExtra( "accid", acc.getAccID() );
-//                        startActivity( intent );
-//                    }
-//                }
-//            }
-//        } );
-
-        //*************************************************************************
-        //Recyclerview
 
         layoutManager=new LinearLayoutManager( getContext() );
         recyclerView.setHasFixedSize( true );
@@ -230,7 +174,7 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
         Log.d("spinner",items.get( position ));
         searchView.setQuery( "",false );
         temp=position;
-        new Searchbrand().doInBackground( );
+        new SearchResult().doInBackground( );
         if(category==R.id.radioBrandName){
 //            result=DaoUnit.getInstance().getAllinsearchBrand(items.get( temp ) );
 
@@ -262,7 +206,7 @@ public class SearchFragment extends Fragment implements AdapterView.OnItemSelect
     }
 
     //asyncTask for search features
-    private class Searchbrand extends AsyncTask<String, String, String> {
+    private class SearchResult extends AsyncTask<String, String, String> {
         Context context;
         @Override
         protected String doInBackground(String... strings) {
