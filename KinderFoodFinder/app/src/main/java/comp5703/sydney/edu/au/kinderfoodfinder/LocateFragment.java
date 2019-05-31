@@ -241,15 +241,15 @@ public class LocateFragment extends Fragment implements
         materialSearchBar.setHint("Search Brand Name...");
         materialSearchBar.setCardViewElevation(10);
         materialSearchBar.setMaxSuggestionCount(5);
-//        loadSuggestList();
-        final ArrayList<String> locateList = storeHelper.getLocateItem();
-        final ArrayList<LocateItem> suggestions = new ArrayList<>();
-        for (int i = 1; i < locateList.size(); i++) {
-            suggestions.add(new LocateItem(locateList.get(i)));
-        }
-
-        locateAdapter.setSuggestions(suggestions);
-        materialSearchBar.setCustomSuggestionAdapter(locateAdapter);
+        loadSuggestList();
+//        final ArrayList<String> locateList = storeHelper.getLocateItem();
+//        final ArrayList<LocateItem> suggestions = new ArrayList<>();
+//        for (int i = 1; i < locateList.size(); i++) {
+//            suggestions.add(new LocateItem(locateList.get(i)));
+//        }
+//
+//        locateAdapter.setSuggestions(suggestions);
+//        materialSearchBar.setCustomSuggestionAdapter(locateAdapter);
 
         materialSearchBar.addTextChangeListener(new TextWatcher() {
             @Override
@@ -262,13 +262,14 @@ public class LocateFragment extends Fragment implements
 
                 Log.d("LOG_TAG", getClass().getSimpleName() + " text changed " + materialSearchBar.getText());
                 // send the entered text to our filter and let it manage everything
-                locateAdapter.getFilter().filter(materialSearchBar.getText());
-//                materialSearchBar.setLastSuggestions(locateList);
+//                locateAdapter.getFilter().filter(materialSearchBar.getText());
+                List<String> suggest = new ArrayList<>();
+                for(String search : suggestList) {
+                    if(search.toLowerCase().contains(materialSearchBar.getText().toLowerCase()))
+                        suggest.add(search);
+                }
+                materialSearchBar.setLastSuggestions(suggest);
 
-//                List<String> suggest = new ArrayList<>();
-//                for(String search:suggestList){
-//                    if(search.toLowerCase().contains(materialSearchBar.getText().toLowerCase()))
-//                }
             }
 
             @Override
@@ -276,6 +277,18 @@ public class LocateFragment extends Fragment implements
 
             }
         });
+
+//        materialSearchBar.setSuggestionsClickListener(new SuggestionsAdapter.OnItemViewClickListener() {
+//            @Override
+//            public void OnItemClickListener(int position, View v) {
+//                materialSearchBar.setText(suggestions.get(position).toString());
+//            }
+//
+//            @Override
+//            public void OnItemDeleteListener(int position, View v) {
+//
+//            }
+//        });
 
 //        materialSearchBar.setSuggestionsClickListener(new LocateAdapter.OnItemViewClickListener() {
 //            @Override
@@ -362,6 +375,11 @@ public class LocateFragment extends Fragment implements
 
 
         return mView;
+    }
+
+    private void loadSuggestList() {
+        suggestList = storeHelper.getLocateItem();
+        materialSearchBar.setLastSuggestions(suggestList);
     }
 //
 //    private void loadSuggestList() {
