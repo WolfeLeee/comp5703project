@@ -2960,6 +2960,9 @@ module.exports.createStatistic = function(req, res, next)
                         statisticData[i].brandName = brands[j].Brand_Name;
                     }
                 }
+
+                // convert count to be number
+                statisticData[i].count = parseInt(statisticData[i].count);
             }
             // console.log(statisticData);
 
@@ -2997,7 +3000,7 @@ module.exports.createStatistic = function(req, res, next)
                             if(statisticData[i].brandId == statistics[j].brandId && statisticData[i].date.getTime() === statistics[j].date.getTime()
                             && statisticData[i].gender == statistics[j].gender && statisticData[i].age == statistics[j].age)
                             {
-                                var sumCount = (parseInt(statisticData[i].count) + parseInt(statistics[j].count)).toString();
+                                var sumCount = statisticData[i].count + statistics[j].count;
                                 check = true;
                                 Statistic.findByIdAndUpdate(statistics[j]._id, {count: sumCount}, function(errorUpdate, updateRes)
                                 {

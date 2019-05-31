@@ -11,7 +11,7 @@ var StatisticSchema = new mongoose.Schema(
         date: Date,
         gender: String,
         age: String,
-        count: String
+        count: Number
     },
     {
         versionKey: false
