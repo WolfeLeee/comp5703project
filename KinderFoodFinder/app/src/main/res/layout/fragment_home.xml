@@ -11,12 +11,21 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
+        <Button
+            android:id="@+id/update"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:layout_alignParentRight="true"
+            android:background="@drawable/button_style"
+            android:text="update" />
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
+            android:layout_below="@+id/update"
             android:layout_marginTop="50dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/farm2"

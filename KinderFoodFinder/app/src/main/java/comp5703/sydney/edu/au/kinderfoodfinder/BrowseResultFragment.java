@@ -165,6 +165,8 @@ public class BrowseResultFragment extends Fragment {
 //            recyclerView.setAdapter( accRecyclerAdapter );
 //            accRecyclerAdapter.notifyDataSetChanged();
 
+            accRecyclerAdapter=new AccRecyclerAdapter( getActivity(),accResult );
+            accRecyclerAdapter.notifyDataSetChanged();
             recyclerView.setAdapter( accRecyclerAdapter );
 
             Log.d("aaa result",String.valueOf( accResult.size() ));
@@ -178,8 +180,12 @@ public class BrowseResultFragment extends Fragment {
 //            brandresult= DaoUnit.getInstance().getcategoryList( title );
 
 //            brandRecyclerAdapter=new BrandRecyclerAdapter( getActivity(),brandresult );
-            recyclerView.setAdapter( brandRecyclerAdapter );
+            brandRecyclerAdapter=new BrandRecyclerAdapter( getActivity(),brandresult );
+            brandRecyclerAdapter.notifyDataSetChanged();
 //            brandRecyclerAdapter.notifyDataSetChanged();
+            recyclerView.setAdapter( brandRecyclerAdapter );
+
+
 
             Log.d("search result",String.valueOf( brandresult.size() ));
 
@@ -224,20 +230,20 @@ public class BrowseResultFragment extends Fragment {
             //select product type eggs, chicken or pork
             if(checkid==1){
                 brandresult= DaoUnit.getInstance().getcategoryList( title );
-                brandRecyclerAdapter=new BrandRecyclerAdapter( getActivity(),brandresult );
-                brandRecyclerAdapter.notifyDataSetChanged();
+//                brandRecyclerAdapter=new BrandRecyclerAdapter( getActivity(),brandresult );
+//                brandRecyclerAdapter.notifyDataSetChanged();
                 Log.d("result",String.valueOf( checkid ));
 
 
             }else if(checkid==2){
                 accResult=DaoUnit.getInstance().getAccList( title );
-                accRecyclerAdapter=new AccRecyclerAdapter( getActivity(),accResult );
-                accRecyclerAdapter.notifyDataSetChanged();
+//                accRecyclerAdapter=new AccRecyclerAdapter( getActivity(),accResult );
+//                accRecyclerAdapter.notifyDataSetChanged();
 
             }else if(checkid==3){
                 accResult=DaoUnit.getInstance().getRatingList( title );
-                accRecyclerAdapter=new AccRecyclerAdapter( getActivity(),accResult );
-                accRecyclerAdapter.notifyDataSetChanged();
+//                accRecyclerAdapter=new AccRecyclerAdapter( getActivity(),accResult );
+//                accRecyclerAdapter.notifyDataSetChanged();
             }else{
             }
 

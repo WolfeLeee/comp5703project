@@ -237,7 +237,7 @@ public class ReportResultActivity extends AppCompatActivity {
                 // try to parse the string to the integer
                 try{
                     serverbrand=Integer.parseInt( result[0] );
-                    serverstore=Integer.parseInt( result[0] );
+                    serverstore=Integer.parseInt( result[1] );
                     appbrand=Integer.parseInt( version[0] );
                     appstore=Integer.parseInt( version[1] );
                 }catch (Exception e){
