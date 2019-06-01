@@ -82,16 +82,10 @@ public class StoreHelper extends SQLiteOpenHelper {
             } while (data.moveToNext());
         }
         data.close();
-
-
-//        String address = data.getString(data.getColumnIndex(StoreContract.StoreEntry.STORE_NAME + ","+ StoreContract.StoreEntry.STREET + "," +
-//                StoreContract.StoreEntry.POSTCODE + "," + StoreContract.StoreEntry.STATE));
-//
-//        Log.d("QueryAddress",address);
-
-
         return AllBrandList;
     }
+
+    //搜索数据库里brand的所有的address信息
     public ArrayList<String> getAddress(String brand) {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor data = db.rawQuery(
@@ -114,17 +108,10 @@ public class StoreHelper extends SQLiteOpenHelper {
             } while (data.moveToNext());
         }
         data.close();
-
-
-//        String address = data.getString(data.getColumnIndex(StoreContract.StoreEntry.STORE_NAME + ","+ StoreContract.StoreEntry.STREET + "," +
-//                StoreContract.StoreEntry.POSTCODE + "," + StoreContract.StoreEntry.STATE));
-//
-//        Log.d("QueryAddress",address);
-
-
         return LocationList;
     }
 
+    //搜索数据库里所有的brand->在suggest drop down list里加载出来
     public ArrayList<String> getLocateItem() {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor data = db.rawQuery(
@@ -132,17 +119,9 @@ public class StoreHelper extends SQLiteOpenHelper {
 
         ArrayList<String> LocateList = new ArrayList<>();
 
-//        String location;
-
         if (data.moveToFirst()) {
             do {
                 String brandname = data.getString(data.getColumnIndex("Brandname"));
-//                String store = data.getString(data.getColumnIndex("storeName"));
-//                String street = data.getString(data.getColumnIndex("StreetAddress"));
-//                String postcode = data.getString(data.getColumnIndex("Postcode"));
-//                String state = data.getString(data.getColumnIndex("State"));
-
-//                location = store + ", " + street + ", " + postcode + ", " + state;
 
                 LocateList.add(brandname);
 
@@ -150,16 +129,10 @@ public class StoreHelper extends SQLiteOpenHelper {
         }
         data.close();
 
-
-//        String address = data.getString(data.getColumnIndex(StoreContract.StoreEntry.STORE_NAME + ","+ StoreContract.StoreEntry.STREET + "," +
-//                StoreContract.StoreEntry.POSTCODE + "," + StoreContract.StoreEntry.STATE));
-//
-//        Log.d("QueryAddress",address);
-
-
         return LocateList;
     }
 
+    //搜索数据库里单个brand（比如输入名字输一半那种）
     public String getBrand(String brand) {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor data = db.rawQuery(
@@ -181,14 +154,6 @@ public class StoreHelper extends SQLiteOpenHelper {
             } while (data.moveToNext());
         }
         data.close();
-
-
-//        String address = data.getString(data.getColumnIndex(StoreContract.StoreEntry.STORE_NAME + ","+ StoreContract.StoreEntry.STREET + "," +
-//                StoreContract.StoreEntry.POSTCODE + "," + StoreContract.StoreEntry.STATE));
-//
-//        Log.d("QueryAddress",address);
-
-
         return brandName;
     }
 
