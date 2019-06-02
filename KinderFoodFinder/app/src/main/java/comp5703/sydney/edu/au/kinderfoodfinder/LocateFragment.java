@@ -128,6 +128,7 @@ public class LocateFragment extends Fragment implements
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dropdown.setAdapter(adapter);
 
+        //设置distance的dropdown list
         dropdown.setClickable(false);
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
@@ -461,7 +462,6 @@ public class LocateFragment extends Fragment implements
             return locInfoList;
         }
 
-
         @Override
         protected void onProgressUpdate(String... values)
         {
@@ -528,7 +528,9 @@ public class LocateFragment extends Fragment implements
         {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
+
     }
+
 
     @Override
     public void onConnectionSuspended(int i)
@@ -542,6 +544,7 @@ public class LocateFragment extends Fragment implements
 
     }
 
+    //当user current location变化时，获取新的current location
     @Override
     public void onLocationChanged(Location location)
     {
