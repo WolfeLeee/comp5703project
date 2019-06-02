@@ -21,28 +21,16 @@ public class DaoMaster extends AbstractDaoMaster {
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(Database db, boolean ifNotExists) {
-<<<<<<< HEAD
         ProductDao.createTable(db, ifNotExists);
         AccreditationDao.createTable(db, ifNotExists);
         AccEntityDao.createTable(db, ifNotExists);
-=======
-        AccEntityDao.createTable(db, ifNotExists);
-        AccreditationDao.createTable(db, ifNotExists);
-        ProductDao.createTable(db, ifNotExists);
->>>>>>> 5fbd8979fc0d68655f4c625e1666f2634fc9eec8
     }
 
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
-<<<<<<< HEAD
         ProductDao.dropTable(db, ifExists);
         AccreditationDao.dropTable(db, ifExists);
         AccEntityDao.dropTable(db, ifExists);
-=======
-        AccEntityDao.dropTable(db, ifExists);
-        AccreditationDao.dropTable(db, ifExists);
-        ProductDao.dropTable(db, ifExists);
->>>>>>> 5fbd8979fc0d68655f4c625e1666f2634fc9eec8
     }
 
     /**
@@ -61,15 +49,9 @@ public class DaoMaster extends AbstractDaoMaster {
 
     public DaoMaster(Database db) {
         super(db, SCHEMA_VERSION);
-<<<<<<< HEAD
         registerDaoClass(ProductDao.class);
         registerDaoClass(AccreditationDao.class);
         registerDaoClass(AccEntityDao.class);
-=======
-        registerDaoClass(AccEntityDao.class);
-        registerDaoClass(AccreditationDao.class);
-        registerDaoClass(ProductDao.class);
->>>>>>> 5fbd8979fc0d68655f4c625e1666f2634fc9eec8
     }
 
     public DaoSession newSession() {

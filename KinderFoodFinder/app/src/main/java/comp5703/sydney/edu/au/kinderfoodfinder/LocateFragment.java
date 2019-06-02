@@ -201,7 +201,21 @@ public class LocateFragment extends Fragment implements
         materialSearchBar = mView.findViewById(R.id.search_bar);
         suggestList = storeHelper.getLocateItem();
         materialSearchBar.setLastSuggestions(suggestList);
-//        materialSearchBar.setHint("Search Brand Name...");
+
+        materialSearchBar.setSuggestionsClickListener(new SuggestionsAdapter.OnItemViewClickListener()
+        {
+            @Override
+            public void OnItemClickListener(int position, View v)
+            {
+                materialSearchBar.setText(materialSearchBar.getLastSuggestions().get(position).toString());
+            }
+
+            @Override
+            public void OnItemDeleteListener(int position, View v)
+            {
+                Toast.makeText(getActivity(), "You can't do that!", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         materialSearchBar.addTextChangeListener(new TextWatcher()
         {
@@ -255,7 +269,7 @@ public class LocateFragment extends Fragment implements
                 boolean checkBrand = false;
                 for(String brandName : suggestList)
                 {
-                    if(brandName.equals(materialSearchBar.getText()))
+                    if(materialSearchBar.getText().trim().equals(brandName))
                     {
                         checkBrand = true;
                     }
@@ -270,7 +284,11 @@ public class LocateFragment extends Fragment implements
                 else
                 {
                     Toast.makeText(getActivity(), "Please select a brand in suggestions!", Toast.LENGTH_SHORT).show();
+
+                    List<String> resetList = storeHelper.getLocateItem();
+                    materialSearchBar.setLastSuggestions(resetList);
                     materialSearchBar.disableSearch();
+                    Log.d("searchConfirmed", Integer.toString(materialSearchBar.getLastSuggestions().size()));
                 }
             }
 
