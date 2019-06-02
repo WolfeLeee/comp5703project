@@ -1,13 +1,15 @@
 package comp5703.sydney.edu.au.kinderfoodfinder;
 
-public class Nearbydistance {
+import android.support.annotation.NonNull;
 
-
+public class Nearbydistance implements Comparable
+{
     private int distance;
     private String location;
     private String brand;
 
-    public Nearbydistance(String brand, String location, int distance) {
+    public Nearbydistance(String brand, String location, int distance)
+    {
         this.distance = distance;
         this.location = location;
         this.brand = brand;
@@ -35,5 +37,12 @@ public class Nearbydistance {
 
     public void setBrand(String brand) {
         this.brand = brand;
+    }
+
+    @Override
+    public int compareTo(@NonNull Object o)
+    {
+        int compareDistance = (int) ((Nearbydistance) o).getDistance();
+        return this.distance - compareDistance;
     }
 }

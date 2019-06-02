@@ -11,15 +11,15 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class NearbyAdapter extends BaseAdapter {
-
+public class NearbyAdapter extends BaseAdapter
+{
     private Context context;
     ArrayList<Nearbydistance> distanceList;
 
-    public NearbyAdapter (Context context, ArrayList<Nearbydistance> distanceList){
+    public NearbyAdapter (Context context, ArrayList<Nearbydistance> distanceList)
+    {
         this.context = context;
         this.distanceList = distanceList;
-
     }
 
     @Override
@@ -38,20 +38,19 @@ public class NearbyAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
 
-        if(convertView == null) {
+        if(convertView == null)
+        {
             convertView = inflater.inflate(R.layout.listview_nearby, null);
         }
 
         TextView address = convertView.findViewById(R.id.n_address);
         TextView distance = convertView.findViewById(R.id.n_distance);
         TextView brand = convertView.findViewById(R.id.n_brand);
-        TextView unit = convertView.findViewById(R.id.n_unit);
-
-
 
         address.setText(String.valueOf(distanceList.get(position).getLocation()));
         distance.setText(String.valueOf(distanceList.get(position).getDistance()));
@@ -60,21 +59,27 @@ public class NearbyAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void notifyDataSetChanged(){
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            distanceList.sort(new Comparator<Nearbydistance>() {
+    public void notifyDataSetChanged()
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        {
+            distanceList.sort(new Comparator<Nearbydistance>()
+            {
                 @Override
-                public int compare(Nearbydistance d1, Nearbydistance d2) {
-                    if(d1.getDistance() < d2.getDistance()){
+                public int compare(Nearbydistance d1, Nearbydistance d2)
+                {
+                    if(d1.getDistance() < d2.getDistance())
+                    {
                         return 1;
-                    }else {
+                    }
+                    else
+                    {
                         return 0;
                     }
                 }
             });
         }
-
         super.notifyDataSetChanged();
     }
+
 }

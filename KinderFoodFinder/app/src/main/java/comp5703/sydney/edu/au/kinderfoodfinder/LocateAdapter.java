@@ -5,74 +5,73 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 
 import java.util.ArrayList;
 
 
-public class LocateAdapter extends SuggestionsAdapter<LocateItem, LocateAdapter.SuggestionHolder> {
+public class LocateAdapter extends SuggestionsAdapter<String, LocateAdapter.SuggestionHolder>
+{
+    private SuggestionsAdapter.OnItemViewClickListener listener;
+    private int viewHeight;
 
-    public LocateAdapter(LayoutInflater inflater) {
+    public LocateAdapter(LayoutInflater inflater, int viewHeight)
+    {
         super(inflater);
+        this.viewHeight = viewHeight;
+    }
+
+    public void setListener(SuggestionsAdapter.OnItemViewClickListener listener)
+    {
+        this.listener = listener;
     }
 
     @Override
-    public int getSingleViewHeight() {
-        return 80;
+    public int getSingleViewHeight()
+    {
+        return viewHeight;
     }
 
     @Override
-    public SuggestionHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SuggestionHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    {
         View view = getLayoutInflater().inflate(R.layout.layout_item, parent, false);
         return new SuggestionHolder(view);
     }
 
     @Override
-    public void onBindSuggestionHolder(LocateItem suggestion, SuggestionHolder holder, int position) {
-        holder.brand.setText(suggestion.getBrand());
-//        holder.address.setText(suggestion.getAddress());
+    public void onBindSuggestionHolder(String suggestion, SuggestionHolder holder, int position)
+    {
+        holder.brand.setText(suggestion);
     }
 
-    @Override
-    public Filter getFilter() {
-        return new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                FilterResults results = new FilterResults();
-                String term = constraint.toString();
-                if(term.isEmpty())
-                    suggestions = suggestions_clone;
-                else {
-                    suggestions = new ArrayList<>();
-                    for (LocateItem item: suggestions_clone)
-                        if(item.getBrand().toLowerCase().contains(term.toLowerCase()))
-                            suggestions.add(item);
-                }
-                results.values = suggestions;
-                return results;
-            }
+    public interface OnItemViewClickListener
+    {
+        void OnItemClickListener(int position, View v);
 
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                suggestions = (ArrayList<LocateItem>) results.values;
-                notifyDataSetChanged();
-            }
-        };
+        void OnItemDeleteListener(int position, View v);
     }
 
-    static class SuggestionHolder extends RecyclerView.ViewHolder{
+    class SuggestionHolder extends RecyclerView.ViewHolder
+    {
         protected TextView brand;
-//        protected TextView address;
-//        protected ImageView image;
 
-        public SuggestionHolder(View itemView) {
+        public SuggestionHolder(View itemView)
+        {
             super(itemView);
             brand = (TextView) itemView.findViewById(R.id.brand_name);
-//            address = (TextView) itemView.findViewById(R.id.address);
+            itemView.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    v.setTag(getSuggestions().get(getAdapterPosition()));
+                    listener.OnItemClickListener(getAdapterPosition(), v);
+                }
+            });
         }
     }
-
 }
