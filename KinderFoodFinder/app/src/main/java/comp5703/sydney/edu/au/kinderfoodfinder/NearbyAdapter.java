@@ -2,6 +2,8 @@ package comp5703.sydney.edu.au.kinderfoodfinder;
 
 import android.content.Context;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,53 +12,18 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
-public class NearbyAdapter extends BaseAdapter
-{
-    private Context context;
+class NearbyViewHolder extends RecyclerView.ViewHolder{
+
+    public TextView address, distance, brand;
     ArrayList<Nearbydistance> distanceList;
+    public NearbyViewHolder(@NonNull View convertView) {
+        super(convertView);
 
-    public NearbyAdapter (Context context, ArrayList<Nearbydistance> distanceList)
-    {
-        this.context = context;
-        this.distanceList = distanceList;
-    }
-
-    @Override
-    public int getCount() {
-        return distanceList.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return position;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent)
-    {
-
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-
-        if(convertView == null)
-        {
-            convertView = inflater.inflate(R.layout.listview_nearby, null);
-        }
-
-        TextView address = convertView.findViewById(R.id.n_address);
-        TextView distance = convertView.findViewById(R.id.n_distance);
-        TextView brand = convertView.findViewById(R.id.n_brand);
-
-        address.setText(String.valueOf(distanceList.get(position).getLocation()));
-        distance.setText(String.valueOf(distanceList.get(position).getDistance()));
-        brand.setText(String.valueOf(distanceList.get(position).getBrand()));
-
-        return convertView;
+        address = convertView.findViewById(R.id.n_address);
+        distance = convertView.findViewById(R.id.n_distance);
+        brand = convertView.findViewById(R.id.n_brand);
     }
 
     public void notifyDataSetChanged()
@@ -79,7 +46,49 @@ public class NearbyAdapter extends BaseAdapter
                 }
             });
         }
-        super.notifyDataSetChanged();
+        notifyDataSetChanged();
     }
+}
+
+public class NearbyAdapter extends RecyclerView.Adapter<NearbyViewHolder>
+{
+    private Context context;
+    ArrayList<Nearbydistance> distanceList;
+
+    public NearbyAdapter (Context context, ArrayList<Nearbydistance> distanceList)
+    {
+        this.context = context;
+        this.distanceList = distanceList;
+    }
+
+    @NonNull
+    @Override
+    public NearbyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View itemView = inflater.inflate(R.layout.listview_nearby,parent,false);
+
+        return new NearbyViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull NearbyViewHolder holder, int position) {
+
+        holder.address.setText(String.valueOf(distanceList.get(position).getLocation()));
+        holder.distance.setText(String.valueOf(distanceList.get(position).getDistance()));
+        holder.brand.setText(String.valueOf(distanceList.get(position).getBrand()));
+    }
+
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemCount() {
+        return distanceList.size();
+    }
+
+
 
 }

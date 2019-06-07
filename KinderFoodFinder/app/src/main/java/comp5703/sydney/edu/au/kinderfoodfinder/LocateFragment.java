@@ -14,6 +14,8 @@ import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.AdapterView;
@@ -81,13 +83,15 @@ public class LocateFragment extends Fragment implements
     TextView range;
     SearchAdapter adapter;
     StoreHelper storeHelper;
-    ListView listView;
+    RecyclerView listView;
     NearbyAdapter listAdapter;
     int Locate_key, Distance_key;
     String currentBrandInput;
     String Brand;
     MaterialSearchBar materialSearchBar;
     Spinner dropdown;
+    RecyclerView.LayoutManager layoutManager;
+
 
     List<String> suggestList = new ArrayList<>();
 
@@ -117,6 +121,9 @@ public class LocateFragment extends Fragment implements
         range = mView.findViewById(R.id.range);
         add_report = mView.findViewById(R.id.add_report);
         listView = mView.findViewById(R.id.listview_search);
+        layoutManager = new LinearLayoutManager(getActivity());
+        listView.setLayoutManager(layoutManager);
+        listView.setHasFixedSize(true);
         fragmentreport = new ReportFragment();
         storeHelper = new StoreHelper(getActivity());
         fragmentreportaddress = new ReportAddressFragment();
