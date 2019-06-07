@@ -14,7 +14,7 @@
         app:mt_speechMode="false"
         app:mt_hint="Search Brand Name..."
         app:mt_maxSuggestionsCount="10"
-        android:background="@drawable/style_shadow"/>
+        android:background="@drawable/style_shadow" />
 
     <!--<SearchView-->
         <!--android:id="@+id/search_bar"-->
@@ -37,7 +37,7 @@
         android:layout_below="@+id/search_bar"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="300dp"
         android:layout_marginTop="10dp"/>
 
     <TextView
@@ -130,18 +130,18 @@
         android:layout_alignParentEnd="true" />
 
 
-    <ListView
+    <!--<ListView-->
+        <!--android:id="@+id/listview_search"-->
+        <!--android:layout_below="@+id/add_report"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="5dp"/>-->
+
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/listview_search"
         android:layout_below="@+id/add_report"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"/>
-
-    <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:id="@+id/recycler_search"-->
-        <!--android:layout_below="@+id/add_report"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="300dp"-->
-        <!--android:layout_marginTop="5dp"/>-->
 
 </RelativeLayout>
