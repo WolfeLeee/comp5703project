@@ -142,7 +142,15 @@ public class LocateFragment extends Fragment implements
                     if (Distance_key != 1000)
                     {
                         Distance_key = 1000;
-                        new startSearch().execute(currentBrandInput);
+
+                        if(Locate_key == 1)
+                        {
+                            new startSearch().execute(Brand);
+
+                        }else{
+
+                            new startSearch().execute(currentBrandInput);
+                        }
                     }
                 }
                 else if (distances[index].equals("5 km"))
@@ -150,7 +158,16 @@ public class LocateFragment extends Fragment implements
                     if (Distance_key != 5000)
                     {
                         Distance_key = 5000;
-                        new startSearch().execute(currentBrandInput);
+
+                        if(Locate_key == 1)
+                        {
+                            new startSearch().execute(Brand);
+
+                        }else{
+
+                            new startSearch().execute(currentBrandInput);
+                        }
+
                     }
                 }
                 else if (distances[index].equals("10 km"))
@@ -158,7 +175,15 @@ public class LocateFragment extends Fragment implements
                     if (Distance_key != 10000)
                     {
                         Distance_key = 10000;
-                        new startSearch().execute(currentBrandInput);
+
+                        if(Locate_key == 1)
+                        {
+                            new startSearch().execute(Brand);
+
+                        }else{
+
+                            new startSearch().execute(currentBrandInput);
+                        }
                     }
                 }
                 else if (distances[index].equals("20 km"))
@@ -166,7 +191,15 @@ public class LocateFragment extends Fragment implements
                     if (Distance_key != 20000)
                     {
                         Distance_key = 20000;
-                        new startSearch().execute(currentBrandInput);
+
+                        if(Locate_key == 1)
+                        {
+                            new startSearch().execute(Brand);
+
+                        }else{
+
+                            new startSearch().execute(currentBrandInput);
+                        }
                     }
                 }
                 else if (distances[index].equals("50 km"))
@@ -174,7 +207,15 @@ public class LocateFragment extends Fragment implements
                     if (Distance_key != 50000)
                     {
                         Distance_key = 50000;
-                        new startSearch().execute(currentBrandInput);
+
+                        if(Locate_key == 1)
+                        {
+                            new startSearch().execute(Brand);
+
+                        }else{
+
+                            new startSearch().execute(currentBrandInput);
+                        }
                     }
                 }
             }
@@ -597,72 +638,8 @@ public class LocateFragment extends Fragment implements
 
         if(Locate_key == 1)
         {
-            ArrayList<String> locationlist = storeHelper.getAddress(Brand);
-            List<Address> addressList = null;
-            ArrayList<Nearbydistance> distanceList = new ArrayList<>();
-            ArrayList<String> Nearbylist = new ArrayList<>();
+            new startSearch().execute(Brand);
 
-            for(int i = 1; i< locationlist.size(); i++)
-            {
-                String loc = locationlist.get(i);
-                Geocoder geocoder = new Geocoder(getActivity());
-                try
-                {
-                    addressList = geocoder.getFromLocationName(loc, 10);
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-
-                if (addressList != null)
-                {
-                    for (int j = 0; j < addressList.size(); j++)
-                    {
-                        final Address address = addressList.get(j);
-                        double lat = address.getLatitude();
-                        double lng = address.getLongitude();
-                        final LatLng latLn = new LatLng(address.getLatitude(), address.getLongitude());
-                        int distance = getDistance(lat, lng);
-
-                        if(distance <= Distance_key)
-                        {
-                            CircleOptions circleOptions = new CircleOptions();
-                            circleOptions.center(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
-                            circleOptions.radius(Distance_key);
-                            circleOptions.fillColor(0x150099ff);
-                            circleOptions.strokeWidth(3);
-                            circleOptions.strokeColor(0x150099ff);
-                            mMap.addCircle(circleOptions);
-
-                            MarkerOptions marker = new MarkerOptions().position(latLn).title(loc);
-                            NearbyMarker =  mMap.addMarker(marker);
-                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLn, 14));
-
-                            Nearbydistance near = new Nearbydistance(Brand, loc, distance);
-                            distanceList.add(near);
-
-                            listAdapter = new NearbyAdapter(getContext(), distanceList);
-                            listView.setAdapter(listAdapter);
-                            Collections.sort(distanceList, new Comparator<Nearbydistance>()
-                            {
-                                @Override
-                                public int compare(Nearbydistance d1, Nearbydistance d2)
-                                {
-                                    if(d1.getDistance() < d2.getDistance())
-                                    {
-                                        return 1;
-                                    }
-                                    else
-                                    {
-                                        return 0;
-                                    }
-                                }
-                            });
-                        }
-                    }
-                }
-            }
         }
     }
 
