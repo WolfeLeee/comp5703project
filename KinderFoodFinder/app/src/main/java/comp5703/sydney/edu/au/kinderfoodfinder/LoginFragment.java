@@ -72,14 +72,6 @@ public class LoginFragment extends Fragment {
 
     String IP_ADDRESS = "10.16.82.52";
 
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        brand_version=getArguments().getString( "brand_version" );
-//        brand_update=getArguments().getString( "brand_update" );
-//        store_version=getArguments().getString( "store_version" );
-//        store_update=getArguments().getString( "store_update" );
-//    }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -105,9 +97,7 @@ public class LoginFragment extends Fragment {
                 // set up
                 String email = inputEmail.getText().toString().trim();
                 String pwd = inputPwd.getText().toString().trim();
-
-
-                // login function
+              // login function
                 loginUser(email, pwd);
             }
         });
@@ -157,21 +147,14 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onError(FacebookException error) {
-
                 if (error instanceof FacebookAuthorizationException) {
                     if (AccessToken.getCurrentAccessToken() != null) {
                         LoginManager.getInstance().logOut();
                     }
                 }
-
+                Log.d("Facebook Failed",error.toString());
             }
         } );
-
-
-
-
-
-
         return view;
     }
 
