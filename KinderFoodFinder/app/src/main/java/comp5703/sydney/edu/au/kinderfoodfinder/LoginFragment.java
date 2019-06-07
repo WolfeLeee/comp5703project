@@ -72,6 +72,14 @@ public class LoginFragment extends Fragment {
 
     String IP_ADDRESS = "10.16.82.52";
 
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        brand_version=getArguments().getString( "brand_version" );
+//        brand_update=getArguments().getString( "brand_update" );
+//        store_version=getArguments().getString( "store_version" );
+//        store_update=getArguments().getString( "store_update" );
+//    }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -97,7 +105,8 @@ public class LoginFragment extends Fragment {
                 // set up
                 String email = inputEmail.getText().toString().trim();
                 String pwd = inputPwd.getText().toString().trim();
-              // login function
+
+                // login function
                 loginUser(email, pwd);
             }
         });
@@ -113,7 +122,7 @@ public class LoginFragment extends Fragment {
             }
         });
 
-//
+
 
         Intent intent =getActivity().getIntent();
          brand_version=intent.getStringExtra( "brand_version" );
@@ -131,7 +140,9 @@ public class LoginFragment extends Fragment {
         //Login with Facebook
         fb_loginButton=view.findViewById( R.id.btn_fblogin );
         callbackManager= CallbackManager.Factory.create();
-        fb_loginButton.setReadPermissions( Arrays.asList("email","public_profile") );
+//        fb_loginButton.setReadPermissions( Arrays.asList("email","public_profile") );
+        fb_loginButton.setReadPermissions( Arrays.asList("public_profile") );
+
         fb_loginButton.setFragment( this );
         fb_loginButton.registerCallback( callbackManager, new FacebookCallback<LoginResult>() {
             @Override
