@@ -32,6 +32,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.LoginBehavior;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -144,6 +145,7 @@ public class LoginFragment extends Fragment {
         fb_loginButton.setReadPermissions( Arrays.asList("public_profile") );
 
         fb_loginButton.setFragment( this );
+        fb_loginButton.setLoginBehavior(LoginBehavior.WEB_ONLY);
         fb_loginButton.registerCallback( callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -153,7 +155,7 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onCancel() {
-
+                Log.d("FacebookCancelled", "login cancelled!");
             }
 
             @Override
