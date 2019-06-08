@@ -319,7 +319,7 @@ module.exports.goToFeature = function(req, res, next)
                                             }
                                         }
                                     }
-                                    res.render('Statistics.pug',
+                                    res.render('statistics.pug',
                                         {
                                             products:products,
                                             topbrands:toptenbrands
