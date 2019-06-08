@@ -49,10 +49,13 @@ import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Consumer;
 
 import comp5703.sydney.edu.au.kinderfoodfinder.Adapter.SearchAdapter;
 import comp5703.sydney.edu.au.kinderfoodfinder.ProductDatabase.DaoUnit;
@@ -324,10 +327,24 @@ public class LocateFragment extends Fragment implements
                 }
                 if(checkBrand)
                 {
-                    Log.d("searchBar", "Search the selected brand: " + materialSearchBar.getText());
-                    currentBrandInput = materialSearchBar.getText();
-                    materialSearchBar.disableSearch();
-                    new startSearch().execute(text.toString());
+                    if(isOnline())
+                    {
+                        if(mLastLocation != null)
+                        {
+                            Log.d("searchBar", "Search the selected brand: " + materialSearchBar.getText());
+                            currentBrandInput = materialSearchBar.getText();
+                            materialSearchBar.disableSearch();
+                            new startSearch().execute(text.toString());
+                        }
+                        else
+                        {
+                            Toast.makeText(getActivity(), "Please wait, still getting your current location...", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    else
+                    {
+                        Toast.makeText(getActivity(), "Please check your Internet connection!", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else
                 {
@@ -372,6 +389,56 @@ public class LocateFragment extends Fragment implements
 
         return mView;
     }
+
+    // ICMP
+    public boolean isOnline()
+    {
+        Runtime runtime = Runtime.getRuntime();
+        try
+        {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int     exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+        }
+        catch (IOException e)          { e.printStackTrace(); }
+        catch (InterruptedException e) { e.printStackTrace(); }
+
+        return false;
+    }
+
+//    private class InternetCheck extends AsyncTask<Void, Void, Boolean>
+//    {
+//        private Consumer mConsumer;
+//        public interface Consumer { void accept(Boolean internet); }
+//
+//        public InternetCheck(Consumer consumer)
+//        {
+//            mConsumer = consumer;
+//            execute();
+//        }
+//
+//        @Override
+//        protected Boolean doInBackground(Void... voids)
+//        {
+//            try
+//            {
+//                Socket sock = new Socket();
+//                sock.connect(new InetSocketAddress("8.8.8.8", 53), 1500);
+//                sock.close();
+//                return true;
+//            }
+//            catch(IOException e)
+//            {
+//                return false;
+//            }
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Boolean internet)
+//        {
+//            mConsumer.accept(internet);
+//        }
+//    }
 
     private synchronized void buildGoogleApiClient()
     {
