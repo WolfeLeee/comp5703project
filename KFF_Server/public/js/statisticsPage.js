@@ -35,7 +35,14 @@ $(document).ready(function()
                     Gender: Gender
                 }
                 var jqxhr = $.get( "/GenerateStatistics",params)
-                    .done(function(data){
+                    .done(function(data) {
+                        console.log(data);
+                        if (data.length == 0)
+                        {
+                            alert("There is no statistics in this period");
+                        }
+                        else
+                        {
                             const csvfile = data.map(row => ({
                                 "Brand":row.brandName,
                                 "Gender":row.gender,
@@ -45,6 +52,8 @@ $(document).ready(function()
                             }))
                             const csvData = objectToCsv(csvfile);
                             downloadcsv(csvData);
+                        }
+
                         }
                     )
                     .fail(function(jqXHR) {
@@ -74,6 +83,12 @@ $(document).ready(function()
                     }
                     var jqxhr = $.get( "/GenerateStatistics",params)
                         .done(function(data){
+                            if (data.length == 0)
+                            {
+                                alert("There is no statistics in this period");
+                            }
+                            else
+                            {
                                 const csvfile = data.map(row => ({
                                     "Brand":row.brandName,
                                     "Gender":row.gender,
@@ -83,6 +98,7 @@ $(document).ready(function()
                                 }))
                                 const csvData = objectToCsv(csvfile);
                                 downloadcsv(csvData);
+                            }
                             }
                         )
                         .fail(function(jqXHR) {

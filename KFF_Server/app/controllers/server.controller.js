@@ -952,6 +952,8 @@ module.exports.backFromSuccess = function(req, res, next)
         });
 };
 
+// Fe
+
 module.exports.goToImportPage = function(req, res, next)
 {
     User.findById(req.session.userId)
@@ -1052,40 +1054,123 @@ module.exports.goToReportPage = function(req, res, next)
                                         displayreports.push(reportsList[i]);
                                         appuserid.push(reportsList[i].userId);
                                     }
-                                    AppUser.find({_id:{$in:appuserid}})
+                                    AppUser.find({})
                                         .exec(function(errAppUser,AppUser)
                                         {
-                                          if(errAppUser)
-                                          {
-                                              return next(errAppUser);
-                                          }
-                                          else
-                                          {
-                                              var useremail = [];
-                                              for(var i = 0 ; i<AppUser.length ; i++)
-                                              {
-                                                  var appuseremail = {
-                                                      email : AppUser[i].email,
-                                                      userid : AppUser[i]._id
-                                                  }
-                                                  useremail.push(appuseremail);
-                                              }
-                                              res.render('report_dbmanagement.pug'
-                                                  , {
-                                                      displaydata: displayreports,
-                                                      numPerPage: perPage,
-                                                      count: reportsList.length,
-                                                      current: page,
-                                                      pages: Math.ceil(reportsList.length / perPage),
-                                                      countentries: displayreports.length,
-                                                      searchstring : req.query.searchstring||"",
-                                                      sortquery:req.query.sortquery,
-                                                      appuseremail : useremail
-                                                  }
-                                              );
+                                            if(errAppUser)
+                                            {
+                                                return next(errAppUser);
+                                            }
+                                            else
+                                            {
+                                                var useremail = [];
+                                                for(var i =0;i<appuserid.length ; i++)
+                                                {
+                                                    for (var j = 0 ; j < AppUser.length ; j++)
+                                                    {
+                                                        if(new String(appuserid[i]).valueOf() == new String(AppUser[j]._id))
+                                                        {
+                                                            var appuseremail = {
+                                                                email : AppUser[j].email,
+                                                                userid : AppUser[j]._id
+                                                            }
+                                                            useremail.push(appuseremail);
+                                                        }
+                                                    }
+                                                }
+                                                // We are here
+                                                AppFbUser.find({})
+                                                    .exec(function(errAppFbUser,AppFbUser)
+                                                    {
+                                                        if(errAppFbUser)
+                                                        {
+                                                            return next(errAppFbUser);
+                                                        }
+                                                        else
+                                                        {
+                                                            for(var i =0;i<appuserid.length ; i++)
+                                                            {
+                                                                for (var j = 0 ; j < AppFbUser.length ; j++)
+                                                                {
+                                                                    if(new String(appuserid[i]).valueOf() == new String(AppFbUser[j].facebookId))
+                                                                    {
+                                                                        var appuseremail = {
+                                                                            email : AppFbUser[j].email,
+                                                                            userid : AppFbUser[j].facebookId
+                                                                        }
+                                                                        useremail.push(appuseremail);
+                                                                    }
+                                                                }
+                                                            }
+                                                            var appuseremail = [];
+                                                            for (var i = 0 ; i < useremail.length ; i++)
+                                                            {
+                                                                var identical = false;
+                                                                for (var j = 0 ; j< appuseremail.length ; j++)
+                                                                {
+                                                                    if(new String(appuseremail[j].email).valueOf() == new String(useremail[i].email).valueOf())
+                                                                    {
+                                                                        identical = true;
+                                                                    }
+                                                                }
+                                                                if(!identical)
+                                                                {
+                                                                    appuseremail.push(useremail[i]);
+                                                                }
+                                                            }
 
-                                          }
+                                                            res.render('report_dbmanagement.pug'
+                                                                          , {
+                                                                              displaydata: displayreports,
+                                                                              numPerPage: perPage,
+                                                                              count: reportsList.length,
+                                                                              current: page,
+                                                                              pages: Math.ceil(reportsList.length / perPage),
+                                                                              countentries: displayreports.length,
+                                                                              searchstring : req.query.searchstring||"",
+                                                                              sortquery:req.query.sortquery,
+                                                                              appuseremail : appuseremail
+                                                                          }
+                                                                      );
+                                                        }
+                                                    })
+                                            }
                                         })
+                                    // AppUser.find({_id:{$in:appuserid}})
+                                    //     .exec(function(errAppUser,AppUser)
+                                    //     {
+                                    //       if(errAppUser)
+                                    //       {
+                                    //           console.log('fail to find id');
+                                    //           return next(errAppUser);
+                                    //       }
+                                    //       else
+                                    //       {
+                                    //           var useremail = [];
+                                    //           for(var i = 0 ; i<AppUser.length ; i++)
+                                    //           {
+                                    //               var appuseremail = {
+                                    //                   email : AppUser[i].email,
+                                    //                   userid : AppUser[i]._id
+                                    //               }
+                                    //               useremail.push(appuseremail);
+                                    //           }
+                                    //           res.render('report_dbmanagement.pug'
+                                    //               , {
+                                    //                   displaydata: displayreports,
+                                    //                   numPerPage: perPage,
+                                    //                   count: reportsList.length,
+                                    //                   current: page,
+                                    //                   pages: Math.ceil(reportsList.length / perPage),
+                                    //                   countentries: displayreports.length,
+                                    //                   searchstring : req.query.searchstring||"",
+                                    //                   sortquery:req.query.sortquery,
+                                    //                   appuseremail : useremail
+                                    //               }
+                                    //           );
+                                    //
+                                    //       }
+                                    //     })
                                 }
                             }
                         });

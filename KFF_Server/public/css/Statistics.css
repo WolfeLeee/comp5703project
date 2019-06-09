@@ -151,3 +151,8 @@ MODAL
 .editBox{
     width:100%;
 }
+
+.pagebody_inputform__radiobuttontext *
+{
+    visibility:hidden;
+}
