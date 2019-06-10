@@ -23,6 +23,7 @@ public class FAQsFragment extends Fragment
     private TextView a7,q7;
     private TextView a8,q8;
     private TextView a9,q9;
+    private TextView a10,q10;
     private TextView back;
 
     private Fragment fragmentMore;
@@ -60,6 +61,8 @@ public class FAQsFragment extends Fragment
         q8 =  view.findViewById(R.id.q8);
         a9 =  view.findViewById(R.id.a9);
         q9 =  view.findViewById(R.id.q9);
+        a10 =  view.findViewById(R.id.a10);
+        q10 =  view.findViewById(R.id.q10);
 
         fragmentMore = new MoreFragment();
         fragmentOurRating = new OurRatingFragment();

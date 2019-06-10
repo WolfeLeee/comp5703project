@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class RatingGoodFragment extends Fragment {
-    TextView tv_title_hen, tv_title_chicken, tv_title_pigs;
+    TextView tv_title_hen, tv_title_chicken, tv_title_pigs, chickens, line, note;
     TextView hens_good, chickens_good, pigs_good;
 
     @Nullable
@@ -25,6 +25,9 @@ public class RatingGoodFragment extends Fragment {
         hens_good = view.findViewById(R.id.hens_good);
         chickens_good = view.findViewById(R.id.chickens_good);
         pigs_good = view.findViewById(R.id.pigs_good);
+        chickens = view.findViewById(R.id.chickens);
+        line = view.findViewById(R.id.chickens_line);
+        note = view.findViewById(R.id.chickens_note);
         return view;
 
     }

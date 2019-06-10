@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 public class RatingBestFragment extends Fragment {
 
-    TextView tv_title_hen, tv_title_chicken, tv_title_pigs;
+    TextView tv_title_hen, tv_title_chicken, tv_title_pigs, hens, line, note;
     TextView hens_best, chickens_best, pigs_best;
     @Nullable
     @Override
@@ -25,6 +25,9 @@ public class RatingBestFragment extends Fragment {
         hens_best = view.findViewById(R.id.hens_best);
         chickens_best = view.findViewById(R.id.chickens_best);
         pigs_best = view.findViewById(R.id.pigs_best);
+        hens = view. findViewById(R.id.hens);
+        line = view.findViewById(R.id.hens_line);
+        note = view.findViewById(R.id.hens_note);
 
         return view;
 

@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class RatingAvoidFragment extends Fragment {
-    TextView tv_title_hen, tv_title_chicken, tv_title_pigs;
+    TextView tv_title_hen, tv_title_chicken, tv_title_pigs, pigs, line, note;
     TextView hens_avoid, chickens_avoid, pigs_avoid;
     @Nullable
     @Override
@@ -23,6 +23,9 @@ public class RatingAvoidFragment extends Fragment {
         hens_avoid = view.findViewById(R.id.hens_avoid);
         chickens_avoid = view.findViewById(R.id.chickens_avoid);
         pigs_avoid = view.findViewById(R.id.pigs_avoid);
+        pigs = view.findViewById(R.id.pigs);
+        line = view.findViewById(R.id.pigs_line);
+        note = view.findViewById(R.id.pigs_note);
         return view;
 
     }
