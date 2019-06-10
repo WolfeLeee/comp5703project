@@ -28,107 +28,124 @@
     <string name="layinghens">Laying Hens</string>
     <string name="hens_best">
         \n
-        √ No battery cage\n
-        √ 5-7 birds/m2 indoors\n
-        √ Outdoor access with adequate shade / shelter, 1,000-2,500birds/ha density\n
-        √ Nest boxes to lay eggs\n
-        √ Perches for roosting\n
-        √ High standard of litter for scratching, foraging / dust bathing\n
-        √ No beak-trimming (exceptions allowed by certain accreditations)\n
-        √ Regular on-farm assessments and enforcement\n
+        <font color="#208E5C">√</font> No battery cage\n
+        <font color="#208E5C">√</font> 5-7 birds/m2 indoors\n
+        <font color="#208E5C">√</font> Outdoor access with adequate shade / shelter, 1,000-2,500birds/ha density\n
+        <font color="#208E5C">√</font> Nest boxes to lay eggs\n
+        <font color="#208E5C">√</font> Perches for roosting\n
+        <font color="#208E5C">√</font> High standard of litter for scratching, foraging / dust bathing\n
+        <font color="#208E5C">√</font> No beak-trimming (exceptions allowed by certain accreditations)\n
+        <font color="#208E5C">√</font> Regular on-farm assessments and enforcement\n
+
     </string>
     <string name="hens_good">
         \n
-        √ No battery cages\n
-        × 7-9 birds/m2 indoors
-        × No outdoor access with adequate shade &amp; shelter\n
-        √ Nest boxes to lay eggs\n
-        √ Perches for roosting\n
-        √ High standard of litter for scratching, foraging &amp; dust bathing\n
-        × Use of beak-trimming\n
-        √ Regular on-farm assessments and enforcement\n
+        <font color="#208E5C">√</font> No battery cages\n
+        <font color="#ff0000">×</font> 7-9 birds/m2 indoors\n
+        <font color="#ff0000">×</font> No outdoor access with adequate shade &amp; shelter\n
+        <font color="#208E5C">√</font> Nest boxes to lay eggs\n
+        <font color="#208E5C">√</font> Perches for roosting\n
+        <font color="#208E5C">√</font> High standard of litter for scratching, foraging &amp; dust bathing\n
+        <font color="#ff0000">×</font> Use of beak-trimming\n
+        <font color="#208E5C">√</font> Regular on-farm assessments and enforcement\n
     </string>
     <string name="hens_avoid">
         \n
-        × Use of battery cages\n
-        × 15 birds/m2 indoors\n
-        × No outdoor access with adequate shade &amp; shelter\n
-        × No nest boxes to lay eggs\n
-        × No perches for roosting\n
-        × No litter for scratching, foraging &amp; dust bathing\n
-        × Use of beak-trimming\n
-        × No regular on-farm assessments and enforcement\n
+        <font color="#ff0000">×</font> Use of battery cages\n
+        <font color="#ff0000">×</font> 15 birds/m2 indoors\n
+        <font color="#ff0000">×</font> No outdoor access with adequate shade &amp; shelter\n
+        <font color="#ff0000">×</font> No nest boxes to lay eggs\n
+        <font color="#ff0000">×</font> No perches for roosting\n
+        <font color="#ff0000">×</font> No litter for scratching, foraging &amp; dust bathing\n
+        <font color="#ff0000">×</font> Use of beak-trimming\n
+        <font color="#ff0000">×</font> No regular on-farm assessments and enforcement\n
 
     </string>
     <string name="chickens">Broilers (Meat Chickens)</string>
     <string name="chickens_best">
         \n
-        √ 12-14 birds/m2indoors\n
-        √ Outdoor access with adequate shade &amp;shelter\n
-        √ Perches for roosting\n
-        √ High standard of litter for scratching, foraging&amp; dust bathing\n
-        √ No artificial light to speed up weight gain\n
-        × Use of fast-growing breeds\n
-        × Slaughtered at 35-70days old (Organic systems require minimum of 70 days)\n
-        √ Regular on-farm assessments and enforcement\n
+        <font color="#208E5C">√</font> 12-14 birds/m2indoors\n
+        <font color="#208E5C">√</font> Outdoor access with adequate shade &amp;shelter\n
+        <font color="#208E5C">√</font> Perches for roosting\n
+        <font color="#208E5C">√</font> High standard of litter for scratching, foraging&amp; dust bathing\n
+        <font color="#208E5C">√</font> No artificial light to speed up weight gain\n
+        <font color="#ff0000">×</font> Use of fast-growing breeds\n
+        <font color="#ff0000">×</font> Slaughtered at 35-70days old (Organic systems require minimum of 70 days)\n
+        <font color="#208E5C">√</font> Regular on-farm assessments and enforcement\n
     </string>
     <string name="chickens_good">
         \n
-        × 17 birds/m2 indoors\n
-        × No outdoor access with adequate shade &amp; shelter\n
-        √ Perches for roosting\n
-        √ High standard of litter for scratching, foraging &amp; dust bathing\n
-        × Use of artificial light to speed up weight gain\n
-        × Use of fast-growing breeds\n
-        × Slaughtered at 35-55 days old\n
-        √ Regular on-farm assessments and enforcement (RSPCA conducted 2-4 audits per year)\n
+        <font color="#ff0000">×</font> 17 birds/m2 indoors\n
+        <font color="#ff0000">×</font> No outdoor access with adequate shade &amp; shelter\n
+        <font color="#208E5C">√</font> Perches for roosting\n
+        <font color="#208E5C">√</font> High standard of litter for scratching, foraging &amp; dust bathing\n
+        <font color="#ff0000">×</font> Use of artificial light to speed up weight gain\n
+        <font color="#ff0000">×</font> Use of fast-growing breeds\n
+        <font color="#ff0000">×</font> Slaughtered at 35-55 days old\n
+        <font color="#208E5C">√</font> Regular on-farm assessments and enforcement (RSPCA conducted 2-4 audits per year)\n
     </string>
     <string name="chickens_avoid">
         \n
-        × 20 birds/m2 indoors\n
-        × No outdoor access with adequate shade &amp; shelter\n
-        × No perches for roosting\n
-        √ Litter for scratching, foraging &amp; dust bathing\n
-        × Use of artificial light to speed up weight gain\n
-        × Use of fast-growing breeds\n
-        ×Slaughtered at a minimum of 35 days old\n
-        × No regular on-farm assessments and enforcement\n
+         <font color="#ff0000">×</font> 20 birds/m2 indoors\n
+         <font color="#ff0000">×</font> No outdoor access with adequate shade &amp; shelter\n
+         <font color="#ff0000">×</font> No perches for roosting\n
+         <font color="#208E5C">√</font> Litter for scratching, foraging &amp; dust bathing\n
+         <font color="#ff0000">×</font> Use of artificial light to speed up weight gain\n
+         <font color="#ff0000">×</font> Use of fast-growing breeds\n
+         <font color="#ff0000">×</font>Slaughtered at a minimum of 35 days old\n
+         <font color="#ff0000">×</font> No regular on-farm assessments and enforcement\n
     </string>
     <string name="pigs">Pigs</string>
     <string name="pigs_best">
         \n
-        √ Outdoor access with adequate shade &amp; shelter\n
-        √ No confinement in sow stalls/ gestation stalls or farrowing crates\n
-        √ Enrichment material\n
-        √ No tail-docking for piglets\n
-        √ No teeth-clipping for piglets\n
-        √ No surgical castration for piglets (exceptions allowed by certain accreditations)\n
-        √ No early weaning for piglets\n
-        √ Regular on-farm assessments with enforceable compliance\n
+        <font color="#208E5C">√</font> Outdoor access with adequate shade &amp; shelter\n
+        <font color="#208E5C">√</font> No confinement in sow stalls/ gestation stalls or farrowing crates\n
+        <font color="#208E5C">√</font> Enrichment material\n
+        <font color="#208E5C">√</font> No tail-docking for piglets\n
+        <font color="#208E5C">√</font> No teeth-clipping for piglets\n
+        <font color="#208E5C">√</font> No surgical castration for piglets (exceptions allowed by certain accreditations)\n
+        <font color="#208E5C">√</font> No early weaning for piglets\n
+        <font color="#208E5C">√</font> Regular on-farm assessments with enforceable compliance\n
     </string>
     <string name="pigs_good">
         \n
-        √ Limited outdoor access with adequate shade &amp; shelter\n
-        √ No use of confinement in sow stalls/ gestation stalls or farrowing crates\n
-        √ Enrichment material\n
-        √ No tail-docking for piglets (exceptions allowed in APIQP OB and CSC where, if deemed necessary by a Veterinarian, it can be carried out by a suitably qualified person before the pigs are 7 days of age)\n
-        √ No teeth-clipping for piglets\n
-        √ No surgical castration for piglets (exceptions allowed by certain accreditations)\n
-        × Use of early weaning for piglets\n
-        √ Regular on-farm assessments and enforcement\n
+        <font color="#208E5C">√</font> Limited outdoor access with adequate shade &amp; shelter\n
+        <font color="#208E5C">√</font> No use of confinement in sow stalls/ gestation stalls or farrowing crates\n
+        <font color="#208E5C">√</font> Enrichment material\n
+        <font color="#208E5C">√</font> No tail-docking for piglets (exceptions allowed in APIQP OB and CSC where, if deemed necessary by a Veterinarian, it can be carried out by a suitably qualified person before the pigs are 7 days of age)\n
+        <font color="#208E5C">√</font> No teeth-clipping for piglets\n
+        <font color="#208E5C">√</font> No surgical castration for piglets (exceptions allowed by certain accreditations)\n
+        <font color="#ff0000">×</font> Use of early weaning for piglets\n
+        <font color="#208E5C">√</font> Regular on-farm assessments and enforcement\n
     </string>
     <string name="pigs_avoid">
         \n
-        × No outdoor access with adequate shade &amp; shelter\n
-        × Use of confinement in sow stalls/ gestation stalls or farrowing crates\n
-        × No enrichment material\n
-        × Use of tail-docking for piglets\n
-        × Use of teeth-clipping for piglets\n
-        × Use of surgical castration for piglets\n
-        × Use of early weaning for piglets\n
-        × No regular on-farm assessments and enforcement * APIQP does conduct regular independent audits\n
+         <font color="#ff0000">×</font> No outdoor access with adequate shade &amp; shelter\n
+         <font color="#ff0000">×</font> Use of confinement in sow stalls/ gestation stalls or farrowing crates\n
+         <font color="#ff0000">×</font> No enrichment material\n
+         <font color="#ff0000">×</font> Use of tail-docking for piglets\n
+         <font color="#ff0000">×</font> Use of teeth-clipping for piglets\n
+         <font color="#ff0000">×</font> Use of surgical castration for piglets\n
+         <font color="#ff0000">×</font> Use of early weaning for piglets\n
+         <font color="#ff0000">×</font> No regular on-farm assessments and enforcement * APIQP does conduct regular independent audits\n
+    </string>
+    <string name="line">
+        ------------------------------------------------------------
+    </string>
 
+    <string name="hens_nb">
 
+        <b>NB.</b> There are welfare issues associated with all egg production systems whereby male chicks having no commercial value (only female chickens lay eggs) and are routinely killed at birth. Additionally, hens are often considered \'spent\' and killed at approximately 18 months old in conventional systems, and approximately 30 months in free-range and organic system (layer hens natural lifespan is up to 12 years). Furthermore, under the guidelines outlinedin the Model Codes of Practice for the Welfare of Animals, organic and free-range chickens can be transported and slaughtered in the same way, at the same facilities as factory farmed chickens.
+        \n<b>NB.</b> RSPCA, FREPA and Egg Corp Assured Scheme allow for beak-trimming which is the partial removal of a layer hen\'s beak, which is done in an attempt to prevent the damage caused by feather pecking which could lead to cannibalism.
+        \n
+    </string>
+    <string name="chicken_nb">
+        <b>NB.</b> There are welfare issues associated with all chicken meat production systems where chicks that are deemed \'unviable\' are killed at birth. Furthermore, under the guidelines outlined in the Model Codes of Practice for the Welfare of Animals, organic and free-range chickens can be transported and slaughtered in the same way, at the same facilities as factory farmed chickens.
+        \n\n*There is the common misconception that chickens raised for meat are kept in cages liked chickens raised for egg production. In Australia, chickens raised for meat are never confined in cages; instead they are often grown on the floor of large sheds or barns. Therefore, claims such as cage-free are meaningless.
+        \n
+    </string>
+    <string name="pig_nb">
+        <b>NB.</b> There are welfare issues associated with all pig production such as that growing pigs and breeding pigs are often slaughtered at around 5-6 months and 3-5 years respectively (pigs natural lifespan is 10-12 years). Furthermore, under the guidelines outlined in the Model Codes of Practice for the Welfareof Animals, organic and free-range pigs can be transported and slaughtered in the same way, at the same facilities as factory farmed pigs.\n
     </string>
 
     <string name="aim">Our Aim</string>
@@ -174,18 +191,20 @@
          \n\u0020\u0020Currently, we cover only the production of eggs, chicken and pig products. The decision to focus on these products was made because of the seriousness and prevalence of welfare issues facing laying hens, broilers (meat chickens) and pigs. We plan to expand to include other animal production systems in later versions.
     </string>
     <string name="q9">Have a question for us?</string>
-    <string name="a9"> \u0020\u0020Get in touch by emailing us as <u>kinder.foodfinder@gmail.com</u></string>
+    <string name="a9"> \u0020\u0020Get in touch by emailing us as <u>acor3786@uni.sydney.edu.au</u></string>
+    <string name="q10">What does it mean when no rating appears for a product?</string>
+    <string name="a10">  \u0020\u0020It means the claim is not covered by an independent, third party accreditation and we cannot verify the animal welfare conditions behind the product. Often claims on products such as ‘free-roaming’, ‘natural’ or ‘naturally-raised’ to name a few, have no legal definition and are virtually meaningless.  If an animal-based product does not clearly state its production method, there is a strong likelihood that it has been sourced from so-called factory farms. True third-party accreditations are the most transparent animal welfare labels on the market. For a product to bear one of these labels, an independent third party organization must audit the farm to ensure their practices adhere to certain standards. If you find a product with no rating, please email us <u>acor3786@uni.sydney.edu.au</u></string>
 
     <string name="glossary">
-        •	<b>Beak-trimming</b> is the partial removal of a layer hen\'s beak done to avoid injuries from hens pecking each other, sometimes to death. (RSPCA, FREPA and Egg Corp Assured Scheme allow this procedure)
-         \n\n•	<b>Enrichment</b> refers to features of an environment that improve animals\' wellbeing by providing an opportunity to carry out natural behaviours
-        \n\n•	<b>On-farm assessment</b> refers to whether the accreditation visits the farm to ensure they meet the necessary standards
-        \n\n•	<b>Fast-growing breeds</b> refers to the use of chickens bred to grow at unnaturally fast rates (upwards of three times their natural rate). These fast-growing chicken breeds represent the majority of chickens raised for meat in Australia, and result in chickens being killed before reaching maturity, often at around 5-7 weeks of age and up to 8-10 weeks in organic system (broiler chickens\' natural lifespan is up to 8 years)
-        \n\n•	A <b>sow stall</b> is a highly confining type of housing used for pregnant pigs in which the sow (female pig) is unable to turn around
-         \n\n•	A <b>farrowing</b> crate is a highly confining type of housing in which the sow is unable to turn around and in which she is confined for approximately 4 weeks to give birth and suckle her piglets
-        \n\n•	<b>Tail-docking</b> is the removal of a portion of a piglet\'s tail
-        \n\n•	<b>Teeth-clipping</b> is the cutting or clipping of a piglet\'s canine teeth
-        \n\n•	<b>Weaning</b> is when piglets are taken from their mothers and receive nourishment from other food sources other than milk
+        •<b>Beak-trimming</b> is the partial removal of a layer hen\'s beak done to avoid injuries from hens pecking each other, sometimes to death. (RSPCA, FREPA and Egg Corp Assured Scheme allow this procedure)
+         \n\n•<b>Enrichment</b> refers to features of an environment that improve animals\' wellbeing by providing an opportunity to carry out natural behaviours
+        \n\n•<b>On-farm assessment</b> refers to whether the accreditation visits the farm to ensure they meet the necessary standards
+        \n\n•<b>Fast-growing breeds</b> refers to the use of chickens bred to grow at unnaturally fast rates (upwards of three times their natural rate). These fast-growing chicken breeds represent the majority of chickens raised for meat in Australia, and result in chickens being killed before reaching maturity, often at around 5-7 weeks of age and up to 8-10 weeks in organic system (broiler chickens\' natural lifespan is up to 8 years)
+        \n\n•A <b>sow stall</b> is a highly confining type of housing used for pregnant pigs in which the sow (female pig) is unable to turn around
+         \n\n•A <b>farrowing</b> crate is a highly confining type of housing in which the sow is unable to turn around and in which she is confined for approximately 4 weeks to give birth and suckle her piglets
+        \n\n•<b>Tail-docking</b> is the removal of a portion of a piglet\'s tail
+        \n\n•<b>Teeth-clipping</b> is the cutting or clipping of a piglet\'s canine teeth
+        \n\n•<b>Weaning</b> is when piglets are taken from their mothers and receive nourishment from other food sources other than milk
 
     </string>
 
