@@ -13,18 +13,30 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/pigs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Rating Pigs"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="#000000"/>
+
+        <TextView
             android:id="@+id/title_hens_avoid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/layinghens"
-            android:textSize="18sp"
+            android:text="BEST"
+            android:textSize="16sp"
             android:layout_gravity="center_vertical"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textColor="@color/green"/>
+
         <TextView
             android:id="@+id/hens_avoid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/hens_avoid"
+            android:text="@string/pigs_best"
             android:textSize="15sp"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
@@ -34,15 +46,16 @@
             android:id="@+id/title_chickens_avoid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/chickens"
-            android:textSize="18sp"
+            android:text="GOOD"
+            android:textSize="16sp"
             android:layout_gravity="center_vertical"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textColor="@color/orange"/>
         <TextView
             android:id="@+id/chickens_avoid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/chickens_avoid"
+            android:text="@string/pigs_good"
             android:textSize="15sp"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
@@ -52,16 +65,37 @@
             android:id="@+id/title_pigs_avoid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/pigs"
-            android:textSize="18sp"
+            android:text="AVOID"
+            android:textSize="16sp"
             android:layout_gravity="center_vertical"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textColor="@color/red"/>
         <TextView
             android:id="@+id/pigs_avoid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/pigs_avoid"
             android:textSize="15sp"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"/>
+
+        <TextView
+            android:id="@+id/pigs_line"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/line"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"/>
+
+        <TextView
+            android:id="@+id/pigs_note"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/pig_nb"
+            android:textSize="10sp"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"/>

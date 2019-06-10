@@ -23,7 +23,7 @@
                 android:layout_width="85dp"
                 android:layout_height="38dp"
                 android:gravity="center"
-                android:text="BEST"
+                android:text="EGGS"
                 android:textColor="#ffffff"
                 android:textStyle="bold"
                 android:textSize="18sp" />
@@ -48,7 +48,7 @@
                 android:layout_width="85dp"
                 android:layout_height="40dp"
                 android:gravity="center"
-                android:text="GOOD"
+                android:text="CHICKEN"
                 android:textColor="#ffffff"
                 android:textStyle="bold"
                 android:textSize="18sp" />
@@ -73,7 +73,7 @@
                 android:layout_width="85dp"
                 android:layout_height="38dp"
                 android:gravity="center"
-                android:text="AVOID"
+                android:text="PORK"
                 android:textColor="#ffffff"
                 android:textStyle="bold"
                 android:textSize="18sp" />
