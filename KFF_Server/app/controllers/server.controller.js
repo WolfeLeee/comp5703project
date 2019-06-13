@@ -301,7 +301,7 @@ module.exports.goToFeature = function(req, res, next)
                                             {
                                                 totalsearch: -1
                                             }},
-                                    {$limit: 10 }
+                                    {$limit: 11 }
                                         ],function (err, data)
                                 {
                                     var toptenbrands = [];
