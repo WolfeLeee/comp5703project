@@ -1,0 +1,14 @@
+#!/bin/sh
+sudo npm init
+sudo npm install express --save
+sudo npm install body-parser --save
+sudo npm install path --save
+sudo npm install ejs --save
+sudo npm install pug --save
+sudo npm install express-fileupload --save
+sudo npm install mongoose --save
+sudo npm install json2csv --save
+sudo npm install fast-csv --save
+sudo npm install express-flash --save
+sudo npm install nodemailer --save
+sudo npm install xoauth2 --save
