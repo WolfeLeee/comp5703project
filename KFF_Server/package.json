@@ -21,7 +21,7 @@
     "express-session": "^1.15.6",
     "fast-csv": "^2.4.1",
     "fs": "0.0.2",
-    "mongoose": "^5.5.2",
+    "mongoose": "^5.7.5",
     "nodemailer": "^6.1.1",
     "path": "^0.12.7",
     "pug": "^2.0.3",
