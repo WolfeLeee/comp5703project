@@ -22,7 +22,7 @@
     "fast-csv": "^2.4.1",
     "fs": "0.0.2",
     "mongoose": "^5.5.2",
-    "nodemailer": "^6.1.1",
+    "nodemailer": "^6.4.16",
     "path": "^0.12.7",
     "pug": "^2.0.3",
     "request": "^2.88.0",
